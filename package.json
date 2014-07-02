@@ -1,6 +1,6 @@
 {
 	"name":"excel4node",
-	"versoin":"0.0.1",
+	"version":"0.0.1",
 	"keywords":[
 		"excel",
 		"spreadsheet"
@@ -19,6 +19,13 @@
 	"dependencies":{
 		"xmlbuilder":"~2.2.1",
 		"jszip":"~2.3.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/natergj/excel4node.git"
+	},
+	"bugs": {
+		"url": "https://github.com/natergj/excel4node/issues"
 	},
   	"main": "./lib/index",  
   	"readmeFilename": "README.md"
