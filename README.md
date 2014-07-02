@@ -5,7 +5,7 @@ An OOXML (xlsx) generator that supports formatting options
 ### Installation:
 
 ```
-add dependency to your node package.json file
+npm install https://github.com/natergj/excel4node/tarball/master
 ```
 
 ### Usage:
