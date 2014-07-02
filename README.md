@@ -4,8 +4,8 @@ An OOXML (xlsx) generator that supports formatting options
 
 ### Installation:
 
-``` sh
-npm install excel4node
+```
+add dependency to your node package.json file
 ```
 
 ### Usage:
