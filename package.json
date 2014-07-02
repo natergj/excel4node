@@ -1,0 +1,25 @@
+{
+	"name":"excel4node",
+	"versoin":"0.0.1",
+	"keywords":[
+		"excel",
+		"spreadsheet"
+	],
+	"description":"Library to create Excel Files.",
+	"author":{
+		"name":"Nater",
+		"email":"nater@seas.harvard.edu"
+	},
+	"licenses": [
+		{
+			"type": "MIT",
+			"url": "http://opensource.org/licenses/mit-license.php"
+		}
+	],
+	"dependencies":{
+		"xmlbuilder":"~2.2.1",
+		"jszip":"~2.3.0"
+	},
+  	"main": "./lib/index",  
+  	"readmeFilename": "README.md"
+}
