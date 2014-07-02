@@ -1,9 +1,10 @@
 {
 	"name":"excel4node",
-	"version":"0.0.1",
+	"version":"0.0.3",
 	"keywords":[
 		"excel",
-		"spreadsheet"
+		"spreadsheet",
+		"xlsx"
 	],
 	"description":"Library to create Excel Files.",
 	"author":{

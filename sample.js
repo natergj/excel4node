@@ -51,7 +51,7 @@ ws2.Cell(2,3).Formula("A2-B2").Style(myStyle);
 ws2.Cell(2,4).Formula("A2/B2").Style(myStyle3);
 wb.write("Excel.xlsx");
 
-/*
+
 http.createServer(function(req, res){
+	wb.write("My Excel.xlsx",res);
 }).listen(3000);
-*/
