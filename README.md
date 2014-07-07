@@ -52,6 +52,9 @@ myStyle.Font.Underline();
 myStyle.Font.Family('Times New Roman');
 myStyle.Font.Color('FF0000');
 myStyle.Font.Size(16);
+myStyle.Font.Alignment.Vertical('top');
+myStyle.Font.Alignment.Horizontal('left');
+myStyle.Font.WrapText(true);
 
 var myStyle2 = wb.Style();
 myStyle2.Font.Size(14);
@@ -83,4 +86,4 @@ wb.write("My Excel File.xlsx",res);
 * Add Date functions
 * Add ability to apply styles to cell range
 * Add ability to merge cells
-* Add Text formatting options (alignment, cell with more than one font size/color/decoration)
+* Add Text formatting options (cell with more than one font size/color/decoration)
