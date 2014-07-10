@@ -74,6 +74,16 @@ ws.Cell(2,3).Style(myStyle2);
 ws.Cell(2,4).Style(myStyle3);
 ```
 
+Freeze Columns to prevent moving when scrolling horizontally
+First example will freeze the first two columns (everything prior to the specified column);
+Second example will freeze the first two columns and scroll to the 8th column.
+
+```
+ws.Column(3).Freeze();
+ws.Column(3).Freeze(8);
+
+```
+
 Write the Workbook to file or node response
 
 ```
