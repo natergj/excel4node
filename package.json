@@ -1,33 +1,34 @@
 {
-	"name":"excel4node",
-	"version":"0.0.5",
-	"keywords":[
-		"excel",
-		"spreadsheet",
-		"xlsx"
-	],
-	"description":"Library to create Excel Files.",
-	"author":{
-		"name":"Nater",
-		"email":"nater@seas.harvard.edu"
-	},
-	"licenses": [
-		{
-			"type": "MIT",
-			"url": "http://opensource.org/licenses/mit-license.php"
-		}
-	],
-	"dependencies":{
-		"xmlbuilder":"~2.2.1",
-		"jszip":"~2.3.0"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git://github.com/natergj/excel4node.git"
-	},
-	"bugs": {
-		"url": "https://github.com/natergj/excel4node/issues"
-	},
-  	"main": "./lib/index",  
-  	"readmeFilename": "README.md"
+  "name": "excel4node",
+  "version": "0.0.5",
+  "keywords": [
+    "excel",
+    "spreadsheet",
+    "xlsx"
+  ],
+  "description": "Library to create Excel Files.",
+  "author": {
+    "name": "Nater",
+    "email": "nater@seas.harvard.edu"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://opensource.org/licenses/mit-license.php"
+    }
+  ],
+  "dependencies": {
+    "jszip": "~2.3.0",
+    "mime": "^1.2.11",
+    "xmlbuilder": "~2.2.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/natergj/excel4node.git"
+  },
+  "bugs": {
+    "url": "https://github.com/natergj/excel4node/issues"
+  },
+  "main": "./lib/index",
+  "readmeFilename": "README.md"
 }

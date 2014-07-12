@@ -34,6 +34,13 @@ myStyle3.Number.Format("##%");
 var ws = wb.WorkSheet('my worksheet');
 var ws2 = wb.WorkSheet('my 2nd worksheet');
 
+var img = ws.Image('image1.png');
+img.Size(10,10);
+img.Position(1,2);
+var img2 = ws.Image('image1.png');
+img2.Size(20,20);
+img2.Position(3,4);
+
 ws.Row(1).Height(60);
 ws.Column(1).Width(120);
 ws.Cell(1,1).String('Cell A1').Style(myStyle2);
@@ -51,7 +58,8 @@ ws2.Cell(2,3).Formula("A2-B2").Style(myStyle);
 ws2.Cell(2,4).Formula("A2/B2").Style(myStyle3);
 wb.write("Excel.xlsx");
 
-
+/*
 http.createServer(function(req, res){
 	wb.write("My Excel.xlsx",res);
 }).listen(3000);
+*/
