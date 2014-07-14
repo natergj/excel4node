@@ -1,6 +1,6 @@
 {
   "name": "excel4node",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "keywords": [
     "excel",
     "spreadsheet",
@@ -18,8 +18,9 @@
     }
   ],
   "dependencies": {
+    "image-size": "~0.3.1",
     "jszip": "~2.3.0",
-    "mime": "^1.2.11",
+    "mime": "~1.2.11",
     "xmlbuilder": "~2.2.1"
   },
   "repository": {

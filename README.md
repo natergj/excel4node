@@ -23,8 +23,8 @@ Add a new WorkSheet to the workbook
 var ws = wb.WorkSheet('New Worksheet');
 ```
 
-Add a cell to a WorkSheet with some data. 
-Cell can take 3 data types: String, Number, Formula  
+Add a cell to a WorkSheet with some data.  
+Cell can take 3 data types: String, Number, Formula    
 Cell takes two arguments: row, col
 
 ```
@@ -74,14 +74,31 @@ ws.Cell(2,3).Style(myStyle2);
 ws.Cell(2,4).Style(myStyle3);
 ```
 
-Freeze Columns to prevent moving when scrolling horizontally
-First example will freeze the first two columns (everything prior to the specified column);
-Second example will freeze the first two columns and scroll to the 8th column.
+Freeze Columns to prevent moving when scrolling horizontally  
+First example will freeze the first two columns (everything prior to the specified column);  
+Second example will freeze the first two columns and scroll to the 8th column.  
 
 ```
 ws.Column(3).Freeze();
 ws.Column(3).Freeze(8);
 
+```
+Insert an image into a WorkSheet  
+Image takes one argument which is relative path to image from node script  
+Image can be passed optional Position which takes 4 arguments  
+img.Position(row, col, [rowOffset], [colOffset])  
+row = top left corner of image will be anchored to top of this row  
+col = top left corner of image will be anchored to left of this column  
+rowOffset = offset from top of row in EMUs  
+colOfset = offset from left of col in EMUs 
+  
+Currently images should be saved at a resolution of 96dpi. 
+
+```
+var img1 = ws.Image(imgPath);
+img1.Position(1,1);
+
+var img2 = ws.Image(imgPath2).Position(3,3,1000000,2000000);
 ```
 
 Write the Workbook to file or node response

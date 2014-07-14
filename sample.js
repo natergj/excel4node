@@ -10,6 +10,7 @@ function getAllMethods(object) {
 
 
 var wb = new xl.WorkBook();
+wb.debug=false;
 
 var myStyle = wb.Style();
 myStyle.Font.Underline();
@@ -34,12 +35,8 @@ myStyle3.Number.Format("##%");
 var ws = wb.WorkSheet('my worksheet');
 var ws2 = wb.WorkSheet('my 2nd worksheet');
 
-var img = ws.Image('image1.png');
-img.Size(10,10);
-img.Position(1,2);
-var img2 = ws.Image('image1.png');
-img2.Size(20,20);
-img2.Position(3,4);
+var img = ws.Image('sampleFiles/image1.png');
+var img2 = ws2.Image('sampleFiles/image2.jpg').Position(4,4,500000,500000);
 
 ws.Row(1).Height(60);
 ws.Column(1).Width(120);
