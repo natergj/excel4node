@@ -28,6 +28,22 @@ myStyle2.Fill.Pattern('solid');
 myStyle2.Fill.Color('FF54FF');
 
 var myStyle3 = wb.Style();
+myStyle3.Border(
+	{
+		left:{
+			style:'thin'
+		},
+		right:{
+			style:'thin'
+		},
+		top:{
+			style:'thin'
+		},
+		bottom:{
+			style:'thin'
+		}
+	}
+);
 myStyle3.Font.Color('222222');
 myStyle3.Number.Format("##%");
 
@@ -53,6 +69,7 @@ ws2.Cell(2,1).Style(myStyle);
 ws2.Cell(2,2).Number(10).Style(myStyle);
 ws2.Cell(2,3).Formula("A2-B2").Style(myStyle);
 ws2.Cell(2,4).Formula("A2/B2").Style(myStyle3);
+
 wb.write("Excel.xlsx");
 
 /*
