@@ -42,7 +42,60 @@ ws.Row(1).Height(30);
 ws.Column(1).Width(100);
 ```
 
-Create a Style and apply it to a cell
+Create a Style and apply it to a cell  
+
+* Font  
+  * Bold  
+    * Takes no arguments. Bolds text
+  * Italics
+  	* Takes no arguments. Italicizes text
+  * Underline
+  	* Takes no arguments. Underlines text
+  * Family
+  	* Takes one argument: name of font family.
+  * Color
+  	* Takes one argument: rbg color
+  * Size  
+  	* Takes one argument: size in Pts
+  * WrapText
+  	* Takes no arguments. Set text wrapping to true.
+* Number  
+  * Format
+  	* Takes one argument: Number style string
+* Fill  
+  * Color
+  	* Takes one argument: Color in rgb
+  * Pattern
+  	* Takes one argument: pattern style (solid, lightUp, etc)
+* Border 
+  * Takes one argument: object defining border
+  * each ordinal (top, right, etc) are only required if you want to define a border. If omitted, no border will be added to that side. 
+  * style is required if oridinal is defined. if color is omitted, it will default to black. 
+  * ```
+  {
+  		top:{
+  			style:'thin',
+  			color:'CCCCCC'
+  		},
+  		right:{
+  			style:'thin',
+  			color:'CCCCCC'
+  		},
+  		bottom:{
+  			style:'thin',
+  			color:'CCCCCC'
+  		},
+  		left:{
+  			style:'thin',
+  			color:'CCCCCC'
+  		},
+  		diagonal:{
+  			style:'thin',
+  			color:'CCCCCC'
+  		}
+  	}
+  ```
+
 
 ```
 var myStyle = wb.Style();
@@ -65,6 +118,21 @@ myStyle3.Font.Size(14);
 myStyle3.Number.Format("##%");
 myStyle3.Fill.Pattern('solid');
 mystyle3.Fill.Color('CCCCCC');
+myStyle3.Border({
+	top:{
+		style:'thin',
+		color:'CCCCCC'
+	},
+	bottom:{
+		style:'thick'
+	},
+	left:{
+		style:'thin'
+	},
+	right:{
+		style:'thin'
+	}
+});
 
 ws.Cell(1,1).Style(myStyle);
 ws.Cell(1,2).String('My 2nd String').Style(myStyle);
