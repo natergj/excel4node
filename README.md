@@ -59,6 +59,11 @@ Create a Style and apply it to a cell
   	* Takes one argument: size in Pts
   * WrapText
   	* Takes no arguments. Set text wrapping to true.
+  * Alignment
+  	* Vertical
+  		* Takes one argument of options top, center, bottom
+  	* Horizontal
+  		* Takes one argument of left, center, right
 * Number  
   * Format
   	* Takes one argument: Number style string
