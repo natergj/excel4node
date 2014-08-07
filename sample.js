@@ -50,6 +50,7 @@ myStyle3.Number.Format("##%");
 
 var ws = wb.WorkSheet('my worksheet');
 var ws2 = wb.WorkSheet('my 2nd worksheet');
+var ws3 = wb.WorkSheet('my 3rd worksheet');
 
 var img = ws.Image('sampleFiles/image1.png');
 var img2 = ws2.Image('sampleFiles/image2.jpg').Position(4,4,500000,500000);

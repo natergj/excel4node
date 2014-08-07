@@ -1,0 +1,29 @@
+0.0.9
+		fixed issue where if a WorkSheet was added, but then no cells added, execution would stop
+		fixed issue where workbooks would cause MS Excel for Windows to crash on print preview
+		fixed issue where if undefined or 0 value was passed to cell or row function, execution would stop
+		added changelog
+
+0.0.8
+		fixed issue where when adding a cell in a row not in sequence would cause corrupted excel data.
+
+0.0.7
+		added ability to add borders to cells
+
+0.0.6
+		added ability to include images in workbooks
+
+0.0.5
+		added ability to Freeze columns from horizontal scrolling
+		fixed bug where if a Cell had been previously set to a String and is changed to a Number, the cell would reference the shared string key of the number rather than displaying the number.
+
+0.0.4
+		added ability to set text alignment of cells
+		added ability to set text wrapping in cells
+		fixed issue where fill were not being applied in certain circumstances
+
+0.0.3	
+		fixed bug where excel data was corrupted if write function was called twice.
+
+0.0.1	
+		initial push
