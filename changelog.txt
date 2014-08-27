@@ -1,3 +1,6 @@
+0.0.10
+		merged pull request https://github.com/natergj/excel4node/pull/11
+
 0.0.9
 		fixed issue where if a WorkSheet was added, but then no cells added, execution would stop
 		fixed issue where workbooks would cause MS Excel for Windows to crash on print preview
