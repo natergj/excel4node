@@ -82,8 +82,7 @@ ws.Cell(1,5).String('newValue');
 ws.Cell(2,5).String('2ndValue');
 ws.Cell(2,1).Number(100).Style(myStyle);
 ws.Cell(23,1,24,4).String('abc');
-ws.Cell(25,1,26,4,true).String('something merged');
-ws.Cell(25,1,26,4,true).Style(myStyle3);
+ws.Cell(25,1,26,4,true).String('something merged').Style(myStyle3);
 
 ws2.Cell(1,4).String('cell data');
 ws2.Cell(2,1).Number(5);
