@@ -1,5 +1,11 @@
-var xl = require('./lib/index.js'),
-http = require('http');
+
+// Check if sample is running from downloaded module or elsewhere.
+if(require.resolve("excel4node")){
+	var xl = require('excel4node');
+}else{
+	var xl = require('./lib/index.js');
+}
+var http = require('http');
 
 var wb = new xl.WorkBook();
 wb.debug=false;

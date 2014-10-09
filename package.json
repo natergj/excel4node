@@ -1,12 +1,12 @@
 {
   "name": "excel4node",
-  "version": "0.0.6",
+  "version": "0.1.1",
   "keywords": [
     "excel",
     "spreadsheet",
     "xlsx"
   ],
-  "description": "Library to create Excel Files.",
+  "description": "Library to create Formatted Excel Files.",
   "author": {
     "name": "Nater",
     "email": "nater@seas.harvard.edu"
