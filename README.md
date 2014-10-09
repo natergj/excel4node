@@ -146,6 +146,25 @@ ws.Cell(2,2).Style(myStyle2);
 ws.Cell(2,3).Style(myStyle2);
 ws.Cell(2,4).Style(myStyle3);
 ```
+Apply Formatting to Cell
+Syntax similar to creating styles
+
+```
+ws.Cell(1,1).Format.Font.Color('FF0000');
+ws.Cell(1,1).Format.Fill.Pattern('solid');
+ws.Cell(1,1).Format.Fill.Color('AEAEAE');
+```
+
+Merge Cells and apply Styles or Formats to ranges
+ws.Cell(row1,col1,row2,col2,merge)
+
+```
+ws.Cell(1,1,2,5,true).String('Merged Cells');
+ws.Cell(3,1,4,5).String('Each Cell in Range Contains this String');
+ws.Cell(3,1,4,5).Style(myStyle);
+ws.Cell(1,1,2,5).Format.Font.Family('Arial');
+```
+
 
 Freeze Columns to prevent moving when scrolling horizontally  
 First example will freeze the first two columns (everything prior to the specified column);  
@@ -184,6 +203,5 @@ wb.write("My Excel File.xlsx",res);
 
 ### ToDo
 * Add Date functions
-* Add ability to apply styles to cell range
-* Add ability to merge cells
 * Add Text formatting options (cell with more than one font size/color/decoration)
+* Add ability to collapse rows

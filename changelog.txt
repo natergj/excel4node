@@ -1,3 +1,9 @@
+0.1.1
+		added ability to merge cells
+		added ability to apply styles to range of cells
+		added ability to apply formatting to cells and cell ranges without first creating a style
+		fixed issue that would cause error when applying a row height if row had populated cells
+
 0.0.10
 		merged pull request https://github.com/natergj/excel4node/pull/11
 
