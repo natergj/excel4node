@@ -91,6 +91,7 @@ myStyle5.Fill.Color('FF888888');
 
 var ws = wb.WorkSheet('Sample Invoice');
 var ws2 = wb.WorkSheet('Sample Budget');
+var ws3 = wb.WorkSheet('Departmental Spending Report')
 
 /*
 	Code to generate sample invoice
@@ -234,6 +235,26 @@ for(var curRow=4;curRow < Object.keys(expenses).length + 5; curRow++){
 	ws2.Cell(curRow,10).Formula("E"+curRow+"-H"+curRow).Format.Number("$#,##0.00");
 };
 
+/*
+	Begin Departmental Spending report
+*/
+ws3.Settings.Outline.SummaryBelow();
+ws3.Cell(1,1).String('cell A1');
+ws3.Cell(1,2).String('cell B1');
+ws3.Cell(2,1).String('cell A2');
+ws3.Cell(2,2).String('cell B2');
+ws3.Cell(3,1).String('cell A3');
+ws3.Cell(3,2).String('cell B3');
+ws3.Cell(4,1).String('cell A4');
+ws3.Cell(4,2).String('cell B4');
+ws3.Cell(5,1).String('cell A5');
+ws3.Cell(5,2).String('cell B5');
+ws3.Cell(6,1).String('cell A6');
+ws3.Cell(6,2).String('cell B6');
+ws3.Row(3).Group(1,false);
+ws3.Row(6).Group(1,false);
+ws3.Row(4).Group(2,true);
+ws3.Row(5).Group(2,true);
 wb.write("Excel.xlsx");
 
 /*
