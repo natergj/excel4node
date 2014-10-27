@@ -1,10 +1,11 @@
 
 // Check if sample is running from downloaded module or elsewhere.
-if(require.resolve("excel4node")){
-	var xl = require('excel4node');
-}else{
-	var xl = require('./lib/index.js');
+try {
+    var xl = require('excel4node');
+} catch(e) {
+    var xl = require('./lib/index.js');
 }
+
 var http = require('http');
 
 var wb = new xl.WorkBook();
@@ -110,6 +111,8 @@ ws.Cell(4,1).String('Item');
 ws.Cell(4,2).String('Quantity');
 ws.Cell(4,3).String('Price/Unit');
 ws.Cell(4,6).String('Subtotal');
+ws.Cell(4,6).Format.Font.Family('Arial');
+ws.Cell(4,6).Format.Font.Alignment.Horizontal('center');
 
 var columnDefinitions = {
 	item:1,

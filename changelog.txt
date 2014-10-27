@@ -1,3 +1,9 @@
+0.1.2
+		fixed issue with Font Alignment when applied directly to a cell
+		module will no longer crash when String is passed an undefined value
+		fixed sample to properly identify if it is running from within the module or not
+		fixed issue where border would not always be applied to the correct cell range.
+
 0.1.1
 		added ability to merge cells
 		added ability to apply styles to range of cells
