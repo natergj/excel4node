@@ -93,6 +93,7 @@ myStyle5.Fill.Color('FF888888');
 var ws = wb.WorkSheet('Sample Invoice');
 var ws2 = wb.WorkSheet('Sample Budget');
 var ws3 = wb.WorkSheet('Departmental Spending Report')
+var seriesWS = wb.WorkSheet('Series with frozen Row');
 
 /*
 	Code to generate sample invoice
@@ -258,6 +259,14 @@ ws3.Row(3).Group(1,false);
 ws3.Row(6).Group(1,false);
 ws3.Row(4).Group(2,true);
 ws3.Row(5).Group(2,true);
+
+
+for(var i = 1; i<=26; i++){
+	seriesWS.Cell(i,1).Number(i);
+	seriesWS.Cell(i,2).String(i.toExcelAlpha());
+}
+seriesWS.Row(5).Freeze(10);
+
 wb.write("Excel.xlsx");
 
 /*
