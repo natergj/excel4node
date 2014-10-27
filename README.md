@@ -166,13 +166,17 @@ ws.Cell(1,1,2,5).Format.Font.Family('Arial');
 ```
 
 
-Freeze Columns to prevent moving when scrolling horizontally  
+Freeze Columns and Rows to prevent moving when scrolling horizontally  
 First example will freeze the first two columns (everything prior to the specified column);  
 Second example will freeze the first two columns and scroll to the 8th column.  
+Third example will freeze the first two rows (everything prior to the specified row);  
+Forth example will freeze the first two rows and scroll to the 8th row.  
 
 ```
 ws.Column(3).Freeze();
 ws.Column(3).Freeze(8);
+ws.Row(3).Freeze();
+ws.Row(3).Freeze(8);
 
 ```
 Insert an image into a WorkSheet  
