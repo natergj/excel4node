@@ -110,6 +110,8 @@ ws.Cell(4,1).String('Item');
 ws.Cell(4,2).String('Quantity');
 ws.Cell(4,3).String('Price/Unit');
 ws.Cell(4,6).String('Subtotal');
+ws.Cell(4,6).Format.Font.Family('Arial');
+ws.Cell(4,6).Format.Font.Alignment.Horizontal('center');
 
 var columnDefinitions = {
 	item:1,
