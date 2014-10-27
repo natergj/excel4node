@@ -92,6 +92,7 @@ myStyle5.Fill.Color('FF888888');
 
 var ws = wb.WorkSheet('Sample Invoice');
 var ws2 = wb.WorkSheet('Sample Budget');
+var seriesWS = wb.WorkSheet('Series with frozen Row');
 
 /*
 	Code to generate sample invoice
@@ -236,6 +237,12 @@ ws2.Cell(3,10).Format.Fill.Color('FF000000');
 for(var curRow=4;curRow < Object.keys(expenses).length + 5; curRow++){
 	ws2.Cell(curRow,10).Formula("E"+curRow+"-H"+curRow).Format.Number("$#,##0.00");
 };
+
+for(var i = 1; i<=26; i++){
+	seriesWS.Cell(i,1).Number(i);
+	seriesWS.Cell(i,2).String(i.toExcelAlpha());
+}
+seriesWS.Row(5).Freeze(10);
 
 wb.write("Excel.xlsx");
 
