@@ -17,7 +17,7 @@ myStyle.Font.Bold();
 myStyle.Font.Italics();
 myStyle.Font.Size(16);
 myStyle.Font.Family('Helvetica');
-myStyle.Font.Color('FFFF0000');
+myStyle.Font.Color('FF0000');
 myStyle.Number.Format("$#,##0.00;($#,##0.00);-");
 myStyle.Border(
 	{
@@ -40,7 +40,7 @@ var myStyle2 = wb.Style();
 myStyle2.Font.Size(16);
 myStyle2.Font.Color('FFABABAB');
 myStyle2.Fill.Pattern('solid');
-myStyle2.Fill.Color('FF000000');
+myStyle2.Fill.Color('#333333');
 var myStyle3 = wb.Style();
 myStyle3.Border(
 	{
@@ -61,7 +61,7 @@ myStyle3.Border(
 myStyle3.Font.Alignment.Vertical('top');
 myStyle3.Font.Alignment.Horizontal('left');
 myStyle3.Font.WrapText(true);
-myStyle3.Font.Color('FF222222');
+myStyle3.Font.Color('#222222');
 
 var myStyle4 = wb.Style();
 myStyle4.Border(
@@ -266,6 +266,8 @@ for(var i = 1; i<=26; i++){
 	seriesWS.Cell(i,2).String(i.toExcelAlpha());
 }
 seriesWS.Row(5).Freeze(10);
+seriesWS.Column(2).Freeze(5);
+seriesWS.Row(2).Freeze(10);
 
 wb.write("Excel.xlsx");
 
