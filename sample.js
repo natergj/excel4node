@@ -90,9 +90,9 @@ myStyle5.Font.WrapText(true);
 myStyle5.Fill.Pattern('solid');
 myStyle5.Fill.Color('FF888888');
 
+var ws3 = wb.WorkSheet('Departmental Spending Report');
 var ws = wb.WorkSheet('Sample Invoice');
 var ws2 = wb.WorkSheet('Sample Budget');
-var ws3 = wb.WorkSheet('Departmental Spending Report')
 var seriesWS = wb.WorkSheet('Series with frozen Row');
 
 /*
@@ -242,7 +242,7 @@ for(var curRow=4;curRow < Object.keys(expenses).length + 5; curRow++){
 /*
 	Begin Departmental Spending report
 */
-ws3.Settings.Outline.SummaryBelow();
+ws3.Settings.Outline.SummaryBelow(false);
 ws3.Cell(1,1).String('cell A1');
 ws3.Cell(1,2).String('cell B1');
 ws3.Cell(2,1).String('cell A2');
@@ -255,10 +255,17 @@ ws3.Cell(5,1).String('cell A5');
 ws3.Cell(5,2).String('cell B5');
 ws3.Cell(6,1).String('cell A6');
 ws3.Cell(6,2).String('cell B6');
-ws3.Row(3).Group(1,false);
-ws3.Row(6).Group(1,false);
+ws3.Cell(7,1).String('cell A7');
+ws3.Cell(7,2).String('cell B7');
+ws3.Cell(8,1).String('cell A8');
+ws3.Cell(8,2).String('cell B8');
+
+ws3.Row(2).Group(1,true);
+ws3.Row(3).Group(1,true);
 ws3.Row(4).Group(2,true);
 ws3.Row(5).Group(2,true);
+ws3.Row(6).Group(3,true);
+ws3.Row(7).Group(3,true);
 
 
 for(var i = 1; i<=26; i++){
