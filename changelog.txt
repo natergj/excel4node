@@ -1,3 +1,7 @@
+0.1.5
+		fixed issue where some Excel features (sorting, grouping, etc) where not available on first sheet of workbook if more than one worksheet existed
+		continuing work on experimental Grouping features
+
 0.1.4
 		fixed issue where sheet would not scroll properly if Freezing both a row and a column
 		allowed for usage of color definitions in multiple formats
@@ -44,8 +48,8 @@
 		added ability to set text wrapping in cells
 		fixed issue where fill were not being applied in certain circumstances
 
-0.0.3	
+0.0.3
 		fixed bug where excel data was corrupted if write function was called twice.
 
-0.0.1	
+0.0.1
 		initial push
