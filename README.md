@@ -179,6 +179,15 @@ ws.Row(3).Freeze();
 ws.Row(3).Freeze(8);
 
 ```
+Set a row to be a filter row
+Optionally specify start and end columns
+If no arguments passed, will add filter to any populated columns
+
+```
+ws.Row(1).Filter();
+ws.Row(1).Filter(1,8);
+```
+
 Insert an image into a WorkSheet  
 Image takes one argument which is relative path to image from node script  
 Image can be passed optional Position which takes 4 arguments  

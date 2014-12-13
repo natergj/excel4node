@@ -90,10 +90,11 @@ myStyle5.Font.WrapText(true);
 myStyle5.Fill.Pattern('solid');
 myStyle5.Fill.Color('FF888888');
 
-var ws3 = wb.WorkSheet('Departmental Spending Report');
 var ws = wb.WorkSheet('Sample Invoice');
 var ws2 = wb.WorkSheet('Sample Budget');
+var ws3 = wb.WorkSheet('Departmental Spending Report');
 var seriesWS = wb.WorkSheet('Series with frozen Row');
+var groupings = wb.WorkSheet('Groupings');
 
 /*
 	Code to generate sample invoice
@@ -242,30 +243,40 @@ for(var curRow=4;curRow < Object.keys(expenses).length + 5; curRow++){
 /*
 	Begin Departmental Spending report
 */
-ws3.Settings.Outline.SummaryBelow(false);
-ws3.Cell(1,1).String('cell A1');
-ws3.Cell(1,2).String('cell B1');
-ws3.Cell(2,1).String('cell A2');
-ws3.Cell(2,2).String('cell B2');
-ws3.Cell(3,1).String('cell A3');
-ws3.Cell(3,2).String('cell B3');
-ws3.Cell(4,1).String('cell A4');
-ws3.Cell(4,2).String('cell B4');
-ws3.Cell(5,1).String('cell A5');
-ws3.Cell(5,2).String('cell B5');
-ws3.Cell(6,1).String('cell A6');
-ws3.Cell(6,2).String('cell B6');
-ws3.Cell(7,1).String('cell A7');
-ws3.Cell(7,2).String('cell B7');
-ws3.Cell(8,1).String('cell A8');
-ws3.Cell(8,2).String('cell B8');
 
-ws3.Row(2).Group(1,true);
-ws3.Row(3).Group(1,true);
-ws3.Row(4).Group(2,true);
-ws3.Row(5).Group(2,true);
-ws3.Row(6).Group(3,true);
-ws3.Row(7).Group(3,true);
+var deptSpending = {
+	'Dept 1':{
+		'food':100.00,
+		'coffee':200.00,
+		'paper':50.00,
+		'supplies':75.00
+	},
+	'Dept 2':{
+		'food':120.00,
+		'coffee':100.00,
+		'paper':10.00,
+		'supplies':25.00
+	},
+	'Dept 3':{
+		'food':400.00,
+		'coffee':300.00,
+		'paper':0.00,
+		'supplies':5.00
+	}
+}
+ws3.Row(1).Filter(1,3);
+ws3.Cell(1,1).String('Department');
+ws3.Cell(1,2).String('Item');
+ws3.Cell(1,3).String('Amount');
+curRow = 2;
+Object.keys(deptSpending).forEach(function(dept){
+	Object.keys(deptSpending[dept]).forEach(function(desc){
+		ws3.Cell(curRow,1).String(dept);
+		ws3.Cell(curRow,2).String(desc);
+		ws3.Cell(curRow,3).Number(deptSpending[dept][desc]);
+		curRow+=1;
+	});
+});
 
 
 for(var i = 1; i<=26; i++){
@@ -275,6 +286,88 @@ for(var i = 1; i<=26; i++){
 seriesWS.Row(5).Freeze(10);
 seriesWS.Column(2).Freeze(5);
 seriesWS.Row(2).Freeze(10);
+
+
+var groupingData = {
+	'GrandParentA':{
+		'ParentAA':{
+			'ChildAAA':[
+				'ToyAAA1',
+				'ToyAAA2',
+				'ToyAAA3'
+			],
+			'ChildAAB':[
+				'ToyAAB1',
+				'ToyAAB2',
+				'ToyAAB3'
+			]
+		},
+		'ParentAB':{
+			'ChildABA':[
+				'ToyABA1',
+				'ToyABA2',
+				'ToyABA3'
+			],
+			'ChildABB':[
+				'ToyABB1',
+				'ToyABB2',
+				'ToyABB3'
+			]
+		}
+	},
+	'GrandParentB':{
+		'ParentBA':{
+			'ChildBAA':[
+				'ToyBAA1',
+				'ToyBAA2',
+				'ToyBAA3'
+			],
+			'ChildBAB':[
+				'ToyBAB1',
+				'ToyBAB2',
+				'ToyBAB3'
+			]
+		},
+		'ParentBB':{
+			'ChildBBA':[
+				'ToyBBA1',
+				'ToyBBA2',
+				'ToyBBA3'
+			],
+			'ChildBBB':[
+				'ToyBBB1',
+				'ToyBBB2',
+				'ToyBBB3'
+			]
+		}
+	}
+}
+
+curRow = 1;
+Object.keys(groupingData).forEach(function(g){
+	groupings.Cell(curRow,1).String(g);
+	curRow+=1;
+	Object.keys(groupingData[g]).forEach(function(p){
+		groupings.Cell(curRow,2).String(p);
+		groupings.Row(curRow).Group(1,true);
+		curRow+=1;
+		Object.keys(groupingData[g][p]).forEach(function(c){
+			groupings.Cell(curRow,3).String(c);
+			groupings.Row(curRow).Group(2,true);
+			curRow+=1;
+			groupingData[g][p][c].forEach(function(t){
+				groupings.Cell(curRow,4).String(t);
+				groupings.Row(curRow).Group(3,true);
+				curRow+=1;
+			})
+		})
+	})
+})
+groupings.Settings.Outline.SummaryBelow(false);
+
+
+
+
 
 wb.write("Excel.xlsx");
 
