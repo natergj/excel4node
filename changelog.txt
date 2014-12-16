@@ -1,3 +1,7 @@
+0.1.6
+		added ability to set a row to be a Filter row
+		finished Grouping feature
+
 0.1.5
 		fixed issue where some Excel features (sorting, grouping, etc) where not available on first sheet of workbook if more than one worksheet existed
 		continuing work on experimental Grouping features
