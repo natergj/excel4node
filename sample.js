@@ -94,7 +94,8 @@ var ws = wb.WorkSheet('Sample Invoice');
 var ws2 = wb.WorkSheet('Sample Budget');
 var ws3 = wb.WorkSheet('Departmental Spending Report');
 var seriesWS = wb.WorkSheet('Series with frozen Row');
-var groupings = wb.WorkSheet('Groupings');
+var groupings = wb.WorkSheet('Groupings Summary Top');
+var groupings2 = wb.WorkSheet('Groupings Summary Bottom');
 
 /*
 	Code to generate sample invoice
@@ -344,20 +345,21 @@ var groupingData = {
 }
 
 curRow = 1;
-Object.keys(groupingData).forEach(function(g){
+Object.keys(groupingData).forEach(function(g,i){
+	var isCollapsed = i==0?true:false;
 	groupings.Cell(curRow,1).String(g);
 	curRow+=1;
 	Object.keys(groupingData[g]).forEach(function(p){
 		groupings.Cell(curRow,2).String(p);
-		groupings.Row(curRow).Group(1,true);
+		groupings.Row(curRow).Group(1,isCollapsed);
 		curRow+=1;
 		Object.keys(groupingData[g][p]).forEach(function(c){
 			groupings.Cell(curRow,3).String(c);
-			groupings.Row(curRow).Group(2,true);
+			groupings.Row(curRow).Group(2,isCollapsed);
 			curRow+=1;
 			groupingData[g][p][c].forEach(function(t){
 				groupings.Cell(curRow,4).String(t);
-				groupings.Row(curRow).Group(3,true);
+				groupings.Row(curRow).Group(3,isCollapsed);
 				curRow+=1;
 			})
 		})
@@ -366,6 +368,29 @@ Object.keys(groupingData).forEach(function(g){
 groupings.Settings.Outline.SummaryBelow(false);
 
 
+curRow = 1;
+Object.keys(groupingData).forEach(function(g,i){
+	var isCollapsed = i==0?true:false;
+	console.log([i,isCollapsed]);
+	Object.keys(groupingData[g]).forEach(function(p){
+		Object.keys(groupingData[g][p]).forEach(function(c){
+			groupingData[g][p][c].forEach(function(t){
+				groupings2.Cell(curRow,4).String(t);
+				groupings2.Row(curRow).Group(3,isCollapsed);
+				curRow+=1;
+			})
+			groupings2.Cell(curRow,3).String(c);
+			groupings2.Row(curRow).Group(2,isCollapsed);
+			curRow+=1;
+		})
+		groupings2.Cell(curRow,2).String(p);
+		groupings2.Row(curRow).Group(1,isCollapsed);
+		curRow+=1;
+	})
+	groupings2.Cell(curRow,1).String(g);
+	curRow+=1;
+})
+groupings2.Settings.Outline.SummaryBelow(true);
 
 
 

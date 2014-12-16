@@ -8,6 +8,13 @@ An OOXML (xlsx) generator that supports formatting options
 npm install excel4node
 ```
 
+### Sample:
+A sample.js script is provided in the code. Running this will output a sample excel workbook named Excel.xlsx
+
+```
+node sample.js
+```
+
 ### Usage:
 
 Instantiate a new workook
@@ -171,6 +178,7 @@ First example will freeze the first two columns (everything prior to the specifi
 Second example will freeze the first two columns and scroll to the 8th column.  
 Third example will freeze the first two rows (everything prior to the specified row);  
 Forth example will freeze the first two rows and scroll to the 8th row.  
+See "Series with frozen Row" tab in sample output workbook
 
 ```
 ws.Column(3).Freeze();
@@ -182,10 +190,18 @@ ws.Row(3).Freeze(8);
 Set a row to be a filter row
 Optionally specify start and end columns
 If no arguments passed, will add filter to any populated columns
+See "Departmental Spending Report" tab in sample output workbook
 
 ```
 ws.Row(1).Filter();
 ws.Row(1).Filter(1,8);
+```
+Set Groupings on Rows and optionally collapse them.
+See "Groupings Summary Top" and "Groupings Summary Bottom" in sample output.
+
+```
+ws.Row(rowNum).Group(level,isCollapsed)
+ws.Row(1).Group(1,true)
 ```
 
 Insert an image into a WorkSheet  
