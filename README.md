@@ -222,10 +222,13 @@ img1.Position(1,1);
 var img2 = ws.Image(imgPath2).Position(3,3,1000000,2000000);
 ```
 
-Write the Workbook to file or node response
+Write the Workbook to local file synchronously or
+Write the Workbook to local file asynchrously or
+Send file via node response
 
 ```
 wb.write("My Excel File.xlsx");
+wb.write("My Excel File.xlsx",function(err){ ... });
 wb.write("My Excel File.xlsx",res);
 
 ```

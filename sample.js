@@ -371,7 +371,6 @@ groupings.Settings.Outline.SummaryBelow(false);
 curRow = 1;
 Object.keys(groupingData).forEach(function(g,i){
 	var isCollapsed = i==0?true:false;
-	console.log([i,isCollapsed]);
 	Object.keys(groupingData[g]).forEach(function(p){
 		Object.keys(groupingData[g][p]).forEach(function(c){
 			groupingData[g][p][c].forEach(function(t){
@@ -393,10 +392,22 @@ Object.keys(groupingData).forEach(function(g,i){
 groupings2.Settings.Outline.SummaryBelow(true);
 
 
-
+// Synchronously write file
 wb.write("Excel.xlsx");
 
 /*
+// Asyncrhonously write file
+wb.write("Excel.xlsx", function(err){
+	if(err){
+		console.log(err);
+	}else{
+		console.log('File written');
+	}
+});
+*/
+
+/*
+// Write file to http response
 http.createServer(function(req, res){
 	wb.write("My Excel.xlsx",res);
 }).listen(3000);

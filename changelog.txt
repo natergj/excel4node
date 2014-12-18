@@ -1,3 +1,7 @@
+0.1.7
+		Merged pull request (https://github.com/natergj/excel4node/pull/18) from https://github.com/daviesjamie
+		Added Asynchronous abilty to write function
+
 0.1.6
 		added ability to set a row to be a Filter row
 		finished Grouping feature
