@@ -18,10 +18,11 @@
     }
   ],
   "dependencies": {
-    "image-size": "~0.3.1",
-    "jszip": "~2.3.0",
+    "image-size": "^0.3.1",
+    "jszip": "^2.4.0",
+    "lodash": "^2.4.1",
     "mime": "~1.2.11",
-    "xmlbuilder": "~2.2.1"
+    "xmlbuilder": "^2.4.5"
   },
   "repository": {
     "type": "git",
