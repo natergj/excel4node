@@ -22,6 +22,7 @@
     "jszip": "^2.4.0",
     "lodash": "^2.4.1",
     "mime": "~1.2.11",
+    "underscore": "^1.7.0",
     "xmlbuilder": "^2.4.5"
   },
   "repository": {

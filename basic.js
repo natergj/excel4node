@@ -8,10 +8,15 @@ try {
 var wb = new xl.WorkBook();
 wb.debug=false;
 
+var myStyle = wb.Style();
+myStyle.Font.Family('Helvetica');
+myStyle.Font.Bold();
+
 ws = wb.WorkSheet('First');
 
 ws.Row(1).Height(14);
-ws.Cell(3,2);
+ws.Cell(1,1).Style(myStyle);
+ws.Cell(1,1).String('My String');
 
-console.log(ws);
-process.exit();
+
+wb.write('basic.xlsx',process.exit);
