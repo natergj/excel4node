@@ -370,7 +370,8 @@ groupings.Settings.Outline.SummaryBelow(false);
 
 curRow = 1;
 Object.keys(groupingData).forEach(function(g,i){
-	var isCollapsed = i==0?true:false;
+	//var isCollapsed = i==0?true:false;
+	var isCollapsed = true;
 	Object.keys(groupingData[g]).forEach(function(p){
 		Object.keys(groupingData[g][p]).forEach(function(c){
 			groupingData[g][p][c].forEach(function(t){
