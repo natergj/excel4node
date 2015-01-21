@@ -106,7 +106,7 @@ ws.Cell(1,1,2,6,true);
 ws.Image('sampleFiles/image1.png').Position(1,1,0,0);
 ws.Row(3).Height(50);
 ws.Cell(3,1,3,6,true);
-ws.Row(17).Height(50);
+ws.Row(17).Height(80);
 ws.Cell(17,1,17,6,true).Style(myStyle5).String('Harvard School of Engineering and Applied Sciences\r\n29 Oxford St\r\nCambridge MA 02138\r\nhttp://www.seas.harvard.edu');
 ws.Cell(4,1,15,6).Style(myStyle3);
 ws.Cell(4,1,4,6).Style(myStyle2);

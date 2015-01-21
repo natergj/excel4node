@@ -17,6 +17,8 @@ myStyle.Font.Family('Helvetica');
 myStyle.Font.Bold();
 myStyle.Font.Alignment.Horizontal('right');
 myStyle.Font.WrapText();
+myStyle.Fill.Pattern('solid');
+myStyle.Fill.Color('light blue');
 
 ws = wb.WorkSheet('First');
 
@@ -25,5 +27,9 @@ ws.Column(1).Width(50);
 ws.Cell(1,1).Style(myStyle);
 ws.Cell(1,1).String('My String');
 ws.Cell(2,2).String('my\nwrapped\nstring').Style(myStyle);
+ws.Cell(8,1).String(' ');
+ws.Row(8).Height(300);
+ws.Column(1).Width(100);
+ws.Image('sampleFiles/image1.png').Position(8,1,0,0);
 
-wb.write('basic.xlsx',process.exit);
+wb.write('Excel.xlsx',process.exit);
