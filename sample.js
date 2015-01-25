@@ -14,7 +14,7 @@ var options = {
 	}
 }
 var wb = new xl.WorkBook(options);
-wb.debug=false;
+wb.debug=true;
 
 var myStyle = wb.Style();
 myStyle.Font.Underline();
@@ -103,6 +103,10 @@ var wsOpts = {
 		bottom: 1.0,
 		footer: .5,
 		header: .5
+	},
+	printOptions:{
+		centerHorizontal: true,
+		centerVertical: false
 	}
 }
 var ws = wb.WorkSheet('Sample Invoice',wsOpts);
