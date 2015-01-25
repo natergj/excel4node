@@ -14,7 +14,7 @@ var options = {
 	}
 }
 var wb = new xl.WorkBook(options);
-wb.debug=true;
+wb.debug=false;
 
 var myStyle = wb.Style();
 myStyle.Font.Underline();
@@ -107,14 +107,17 @@ var wsOpts = {
 	printOptions:{
 		centerHorizontal: true,
 		centerVertical: false
+	},
+	view:{
+		zoom: 100
 	}
 }
 var ws = wb.WorkSheet('Sample Invoice',wsOpts);
-var ws2 = wb.WorkSheet('Sample Budget');
-var ws3 = wb.WorkSheet('Auto Filter');
-var seriesWS = wb.WorkSheet('Series with frozen Row');
-var groupings = wb.WorkSheet('Groupings Summary Top');
-var groupings2 = wb.WorkSheet('Groupings Summary Bottom');
+var ws2 = wb.WorkSheet('Sample Budget',wsOpts);
+var ws3 = wb.WorkSheet('Auto Filter',wsOpts);
+var seriesWS = wb.WorkSheet('Series with frozen Row',wsOpts);
+var groupings = wb.WorkSheet('Groupings Summary Top',wsOpts);
+var groupings2 = wb.WorkSheet('Groupings Summary Bottom',wsOpts);
 
 /*
 	Code to generate sample invoice
@@ -125,7 +128,7 @@ ws.Cell(1,1,2,6,true);
 ws.Image('sampleFiles/image1.png').Position(1,1,0,0);
 ws.Row(3).Height(50);
 ws.Cell(3,1,3,6,true);
-ws.Row(17).Height(80);
+ws.Row(17).Height(60);
 ws.Cell(17,1,17,6,true).Style(myStyle5).String('Harvard School of Engineering and Applied Sciences\n29 Oxford St\nCambridge MA 02138\nhttp://www.seas.harvard.edu');
 ws.Cell(4,1,15,6).Style(myStyle3);
 ws.Cell(4,1,4,6).Style(myStyle2);
@@ -167,7 +170,7 @@ var curRow = 5;
 invoiceItems.forEach(function(i){
 	ws.Cell(curRow,columnDefinitions.item).String(i.item);
 	ws.Cell(curRow,columnDefinitions.quantity).Number(i.quantity).Format.Font.Alignment.Horizontal('right');;
-	ws.Cell(curRow,columnDefinitions.cost).Number(i.costPerUnit).Format.Number("$#,#00.00");
+	ws.Cell(curRow,columnDefinitions.cost).Number(i.costPerUnit).Format.Number("$#,##0.00");
 	ws.Cell(curRow,columnDefinitions.total)
 		.Formula(columnDefinitions.quantity.toExcelAlpha()+curRow+"*"+columnDefinitions.cost.toExcelAlpha()+curRow)
 		.Format.Number("$#,#00.00")
@@ -303,10 +306,12 @@ Object.keys(deptSpending).forEach(function(dept){
 	});
 });
 
-
+var now = new Date();
 for(var i = 1; i<=26; i++){
 	seriesWS.Cell(i,1).Number(i);
 	seriesWS.Cell(i,2).String(i.toExcelAlpha());
+	now.setDate(now.getDate()+1);
+	seriesWS.Cell(i,3).Date(now);
 }
 seriesWS.Row(5).Freeze(10);
 seriesWS.Column(2).Freeze(5);
