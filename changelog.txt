@@ -1,3 +1,8 @@
+0.2.0
+		Near complete refactor. adds efficiency and speed.
+		Added ability to create workbook with options. jszip options are first. more to come
+		
+
 0.1.7
 		Merged pull request (https://github.com/natergj/excel4node/pull/18) from https://github.com/daviesjamie
 		Added Asynchronous abilty to write function
