@@ -425,8 +425,9 @@ groupings2.Settings.Outline.SummaryBelow(true);
 // Synchronously write file
 wb.write("Excel.xlsx");
 
-/*
+
 // Asyncrhonously write file
+/*
 wb.write("Excel.xlsx", function(err){
 	if(err){
 		console.log(err);
@@ -436,9 +437,13 @@ wb.write("Excel.xlsx", function(err){
 });
 */
 
-/*
+
 // Write file to http response
+/*
 http.createServer(function(req, res){
 	wb.write("My Excel.xlsx",res);
-}).listen(3000);
+}).listen(3000,function(){
+	console.log('Download your file at http://localhost:3000');
+});
 */
+

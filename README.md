@@ -18,20 +18,48 @@ node sample.js
 ### Usage:
 
 Instantiate a new workook
+Takes optional params object to specify jszip options. More to come.
 
 ```
 var xl = require('excel4node');
 var wb = new xl.WorkBook();
+
+var wbOpts = {
+	jszip:{
+		compression:'DEFLATE'
+	}
+}
+var wb2 = new xl.WorkBook(wbOpts);
 ```
 
 Add a new WorkSheet to the workbook
+Takes optional params object to specify page margins, zoom and print view centering
 
 ```
 var ws = wb.WorkSheet('New Worksheet');
+
+var wsOpts = {
+	margins:{
+		left: .75,
+		right: .75,
+		top: 1.0,
+		bottom: 1.0,
+		footer: .5,
+		header: .5
+	},
+	printOptions:{
+		centerHorizontal: true,
+		centerVertical: false
+	},
+	view:{
+		zoom: 100
+	}
+}
+var ws2 = wb.WorkSheet('New Worksheet', wsOpts);
 ```
 
 Add a cell to a WorkSheet with some data.  
-Cell can take 3 data types: String, Number, Formula    
+Cell can take 4 data types: String, Number, Formula, Date.  
 Cell takes two arguments: row, col
 
 ```
@@ -40,6 +68,7 @@ ws.Cell(2,1).Number(5);
 ws.Cell(2,2).Number(10);
 ws.Cell(2,3).Formula("A2+B2");
 ws.Cell(2,4).Formula("A2/C2");
+ws.Cell(2,5).Date(new Date());
 ```
 
 Set Dimensions of Rows or Columns
@@ -196,7 +225,7 @@ See "Departmental Spending Report" tab in sample output workbook
 ws.Row(1).Filter();
 ws.Row(1).Filter(1,8);
 ```
-Set Groupings on Rows and optionally collapse them.
+Set Groupings on Rows and optionally collapse them.  
 See "Groupings Summary Top" and "Groupings Summary Bottom" in sample output.
 
 ```
@@ -204,7 +233,7 @@ ws.Row(rowNum).Group(level,isCollapsed)
 ws.Row(1).Group(1,true)
 ```
 
-Insert an image into a WorkSheet  
+Insert an image into a WorkSheet  for
 Image takes one argument which is relative path to image from node script  
 Image can be passed optional Position which takes 4 arguments  
 img.Position(row, col, [rowOffset], [colOffset])  
@@ -233,7 +262,3 @@ wb.write("My Excel File.xlsx",res);
 
 ```
 
-### ToDo
-* Add Date functions
-* Add Text formatting options (cell with more than one font size/color/decoration)
-* Add ability to collapse rows

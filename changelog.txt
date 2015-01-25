@@ -1,7 +1,10 @@
 0.2.0
-		Near complete refactor. adds efficiency and speed.
-		Added ability to create workbook with options. jszip options are first. more to come
-		
+		Near complete refactor. adds efficiency and speed and much more readable code.
+		Added ability to create workbook with options. jszip options are first. more to come. Issue #20
+		Added ability to create workshets with options. margins, zoom and centering on print first. more to come. Issue #19
+		Added ability to add a Date to worksheet and set type as Date
+		Fixed issue #22 where empty string would print 'undefined' in cell
+		Fixed issue #21 where foreign characters would cause issue.
 
 0.1.7
 		Merged pull request (https://github.com/natergj/excel4node/pull/18) from https://github.com/daviesjamie
