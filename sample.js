@@ -8,7 +8,12 @@ try {
 
 var http = require('http');
 
-var wb = new xl.WorkBook();
+var options = {
+	jszip:{
+		compression:'DEFLATE'
+	}
+}
+var wb = new xl.WorkBook(options);
 wb.debug=false;
 
 var myStyle = wb.Style();
@@ -92,7 +97,7 @@ myStyle5.Fill.Color('FF888888');
 
 var ws = wb.WorkSheet('Sample Invoice');
 var ws2 = wb.WorkSheet('Sample Budget');
-var ws3 = wb.WorkSheet('Departmental Spending Report');
+var ws3 = wb.WorkSheet('Auto Filter');
 var seriesWS = wb.WorkSheet('Series with frozen Row');
 var groupings = wb.WorkSheet('Groupings Summary Top');
 var groupings2 = wb.WorkSheet('Groupings Summary Bottom');
@@ -107,11 +112,13 @@ ws.Image('sampleFiles/image1.png').Position(1,1,0,0);
 ws.Row(3).Height(50);
 ws.Cell(3,1,3,6,true);
 ws.Row(17).Height(80);
-ws.Cell(17,1,17,6,true).Style(myStyle5).String('Harvard School of Engineering and Applied Sciences\r\n29 Oxford St\r\nCambridge MA 02138\r\nhttp://www.seas.harvard.edu');
+ws.Cell(17,1,17,6,true).Style(myStyle5).String('Harvard School of Engineering and Applied Sciences\n29 Oxford St\nCambridge MA 02138\nhttp://www.seas.harvard.edu');
 ws.Cell(4,1,15,6).Style(myStyle3);
 ws.Cell(4,1,4,6).Style(myStyle2);
 ws.Cell(4,1).String('Item');
+ws.Column(1).Width(20);
 ws.Cell(4,2).String('Quantity');
+ws.Column(2).Width(10);
 ws.Cell(4,3).String('Price/Unit');
 ws.Cell(4,6).String('Subtotal');
 ws.Cell(4,6).Format.Font.Family('Arial');
@@ -145,9 +152,12 @@ var invoiceItems = [
 var curRow = 5;
 invoiceItems.forEach(function(i){
 	ws.Cell(curRow,columnDefinitions.item).String(i.item);
-	ws.Cell(curRow,columnDefinitions.quantity).Number(i.quantity);
-	ws.Cell(curRow,columnDefinitions.cost).Number(i.costPerUnit);
-	ws.Cell(curRow,columnDefinitions.total).Formula(columnDefinitions.quantity.toExcelAlpha()+curRow+"*"+columnDefinitions.cost.toExcelAlpha()+curRow).Format.Number("$#,#00.00");
+	ws.Cell(curRow,columnDefinitions.quantity).Number(i.quantity).Format.Font.Alignment.Horizontal('right');;
+	ws.Cell(curRow,columnDefinitions.cost).Number(i.costPerUnit).Format.Number("$#,#00.00");
+	ws.Cell(curRow,columnDefinitions.total)
+		.Formula(columnDefinitions.quantity.toExcelAlpha()+curRow+"*"+columnDefinitions.cost.toExcelAlpha()+curRow)
+		.Format.Number("$#,#00.00")
+		.Format.Font.Alignment.Horizontal('right');
 	curRow+=1;
 });
 
