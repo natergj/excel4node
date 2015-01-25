@@ -95,7 +95,17 @@ myStyle5.Font.WrapText(true);
 myStyle5.Fill.Pattern('solid');
 myStyle5.Fill.Color('FF888888');
 
-var ws = wb.WorkSheet('Sample Invoice');
+var wsOpts = {
+	margins:{
+		left: .75,
+		right: .75,
+		top: 1.0,
+		bottom: 1.0,
+		footer: .5,
+		header: .5
+	}
+}
+var ws = wb.WorkSheet('Sample Invoice',wsOpts);
 var ws2 = wb.WorkSheet('Sample Budget');
 var ws3 = wb.WorkSheet('Auto Filter');
 var seriesWS = wb.WorkSheet('Series with frozen Row');
