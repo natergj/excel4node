@@ -30,7 +30,7 @@
     "url": "git://github.com/natergj/excel4node.git"
   },
   "bugs": {
-    "url": "https://github.com/natergj/excel4node/issues"
+    "url": "https://github.com/natergj/excel4node/labels/bug"
   },
   "main": "./lib/index",
   "readmeFilename": "README.md"
