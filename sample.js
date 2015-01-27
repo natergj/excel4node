@@ -14,7 +14,7 @@ var options = {
 	}
 }
 var wb = new xl.WorkBook(options);
-wb.debug=false;
+wb.debug=process.argv[2]=='debug'?true:false;
 
 var myStyle = wb.Style();
 myStyle.Font.Underline();
@@ -112,12 +112,24 @@ var wsOpts = {
 		zoom: 100
 	}
 }
+
+var gWsOpts = {
+	outline : {
+		summaryBelow : false
+	}
+}
+var g2WsOpts = {
+	outline : {
+		summaryBelow : true
+	}
+}
+
 var ws = wb.WorkSheet('Sample Invoice',wsOpts);
 var ws2 = wb.WorkSheet('Sample Budget',wsOpts);
 var ws3 = wb.WorkSheet('Auto Filter',wsOpts);
 var seriesWS = wb.WorkSheet('Series with frozen Row',wsOpts);
-var groupings = wb.WorkSheet('Groupings Summary Top',wsOpts);
-var groupings2 = wb.WorkSheet('Groupings Summary Bottom',wsOpts);
+var groupings = wb.WorkSheet('Groupings Summary Top',gWsOpts);
+var groupings2 = wb.WorkSheet('Groupings Summary Bottom',g2WsOpts);
 
 /*
 	Code to generate sample invoice
@@ -393,8 +405,7 @@ Object.keys(groupingData).forEach(function(g,i){
 			})
 		})
 	})
-})
-groupings.Settings.Outline.SummaryBelow(false);
+});
 
 
 curRow = 1;
@@ -418,8 +429,7 @@ Object.keys(groupingData).forEach(function(g,i){
 	})
 	groupings2.Cell(curRow,1).String(g);
 	curRow+=1;
-})
-groupings2.Settings.Outline.SummaryBelow(true);
+});
 
 
 // Synchronously write file
