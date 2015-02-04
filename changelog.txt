@@ -1,3 +1,14 @@
+0.2.3
+		fixed issue where groupings would cause an XML validation error when summaryBelow was set to true
+		greatly reduced memory usage when added data to worksheets
+		deprecated Workbook.Settings.outlineSummaryBelow() call. This will be removed in version 1 and a console log entry created when used.
+
+0.2.2
+		fixed issue where incorrect string was displayed if cell had changed from a string to a number
+
+0.2.1
+		fixed issue that would cause failure if no cells had been added to a worksheet prior to write function called
+
 0.2.0
 		Near complete refactor. adds efficiency and speed and much more readable code.
 		Added ability to create workbook with options. jszip options are first. more to come. Issue #20

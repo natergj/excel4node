@@ -40,19 +40,22 @@ var ws = wb.WorkSheet('New Worksheet');
 
 var wsOpts = {
 	margins:{
-		left: .75,
-		right: .75,
-		top: 1.0,
-		bottom: 1.0,
-		footer: .5,
-		header: .5
+		left : .75,
+		right : .75,
+		top : 1.0,
+		bottom : 1.0,
+		footer : .5,
+		header : .5
 	},
 	printOptions:{
-		centerHorizontal: true,
-		centerVertical: false
+		centerHorizontal : true,
+		centerVertical : false
 	},
 	view:{
-		zoom: 100
+		zoom : 100
+	},
+	outline:{
+		summaryBelow : true
 	}
 }
 var ws2 = wb.WorkSheet('New Worksheet', wsOpts);
