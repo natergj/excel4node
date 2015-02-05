@@ -1,3 +1,7 @@
+0.2.4
+		fixed issue with cells not merging if one of the cells is after the 26th column.
+		fixed xml validation issue if not style has been specified on the workbook.
+
 0.2.3
 		fixed issue where groupings would cause an XML validation error when summaryBelow was set to true
 		greatly reduced memory usage when added data to worksheets
