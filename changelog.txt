@@ -1,3 +1,6 @@
+0.2.5
+		fixed the 2nd sort function needed for proper cell merging in all cases.
+
 0.2.4
 		fixed issue with cells not merging if one of the cells is after the 26th column.
 		fixed xml validation issue if not style has been specified on the workbook.
