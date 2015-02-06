@@ -1,10 +1,12 @@
 {
   "name": "excel4node",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "keywords": [
     "excel",
     "spreadsheet",
-    "xlsx"
+    "xlsx",
+    "formatted",
+    "report"
   ],
   "description": "Library to create Formatted Excel Files.",
   "author": {

@@ -1,3 +1,6 @@
+0.2.6
+		fixed to merge issues after the 52nd column
+
 0.2.5
 		fixed the 2nd sort function needed for proper cell merging in all cases.
 
