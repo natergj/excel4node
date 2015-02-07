@@ -1,3 +1,10 @@
+0.2.7
+		fixed issue that would prevent cells to be written to columns over 702 (26^2 + 26) column AAA or higher
+		Merged pull request (https://github.com/natergj/excel4node/pull/26) from https://github.com/RafaPolit to fixe continuing issue with merging cells
+
+0.2.6
+		fixed to merge issues after the 52nd column
+
 0.2.5
 		fixed the 2nd sort function needed for proper cell merging in all cases.
 
