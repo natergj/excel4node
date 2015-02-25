@@ -61,6 +61,20 @@ var wsOpts = {
 var ws2 = wb.WorkSheet('New Worksheet', wsOpts);
 ```
 
+Optionally, you can set validations for the WorkSheet
+
+```
+ws.setValidation({
+	type: "list",
+	allowBlank: 1,
+	showInputMessage: 1,
+	showErrorMessage: 1,
+	sqref: "X2:X10",
+	formulas: [
+		'value1,value2'
+	]
+});
+```
 Add a cell to a WorkSheet with some data.  
 Cell can take 4 data types: String, Number, Formula, Date.  
 Cell takes two arguments: row, col

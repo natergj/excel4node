@@ -1,3 +1,6 @@
+0.2.9
+		Merged pull request (https://github.com/natergj/excel4node/pull/29) from https://github.com/atsapenko to add ability to set dropdown validation
+
 0.2.8
 		Merged pull request (https://github.com/natergj/excel4node/pull/27) from https://github.com/pookong to fix issue that would cause a numberformat to not apply to a cell
 
