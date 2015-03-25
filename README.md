@@ -56,7 +56,11 @@ var wsOpts = {
 	},
 	outline:{
 		summaryBelow : true
-	}
+	},
+  fitToPage:{
+    fitToHeight: 100,
+    orientation: 'landscape',
+  },
 }
 var ws2 = wb.WorkSheet('New Worksheet', wsOpts);
 ```
