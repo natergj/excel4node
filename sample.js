@@ -95,6 +95,11 @@ myStyle5.Font.WrapText(true);
 myStyle5.Fill.Pattern('solid');
 myStyle5.Fill.Color('FF888888');
 
+var rotateStyle = wb.Style();
+rotateStyle.Font.Alignment.Rotation('90');
+rotateStyle.Font.Alignment.Vertical('center');
+rotateStyle.Font.Alignment.Horizontal('center');
+
 var wsOpts = {
 	margins:{
 		left: .75,
@@ -130,6 +135,7 @@ var ws3 = wb.WorkSheet('Auto Filter',wsOpts);
 var seriesWS = wb.WorkSheet('Series with frozen Row',wsOpts);
 var groupings = wb.WorkSheet('Groupings Summary Top',gWsOpts);
 var groupings2 = wb.WorkSheet('Groupings Summary Bottom',g2WsOpts);
+var stylings = wb.WorkSheet('Stylings');
 
 /*
 	Code to generate sample invoice
@@ -431,6 +437,10 @@ Object.keys(groupingData).forEach(function(g,i){
 	curRow+=1;
 });
 
+
+// Style sheet
+stylings.Row(1).Height(50);
+stylings.Cell(1,1).String('Accounts').Style(rotateStyle);
 
 // Synchronously write file
 wb.write("Excel.xlsx");
