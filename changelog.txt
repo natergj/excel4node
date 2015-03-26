@@ -1,3 +1,17 @@
+0.2.11
+		Merged pull request (https://github.com/natergj/excel4node/pull/32) from https://github.com/stefanhenze to add ability to set the fit to page on print
+		Added the abilty to rotate text in cell
+		fixed validation issue that would cause an error if a cell were written to as a formula after already being written to as a number or string
+
+0.2.10
+		Merged pull request (https://github.com/natergj/excel4node/pull/29) from https://github.com/atsapenko to fix issue when chaining style for date cell.
+
+0.2.9
+		Merged pull request (https://github.com/natergj/excel4node/pull/29) from https://github.com/atsapenko to add ability to set dropdown validation
+
+0.2.8
+		Merged pull request (https://github.com/natergj/excel4node/pull/27) from https://github.com/pookong to fix issue that would cause a numberformat to not apply to a cell
+
 0.2.7
 		fixed issue that would prevent cells to be written to columns over 702 (26^2 + 26) column AAA or higher
 		Merged pull request (https://github.com/natergj/excel4node/pull/26) from https://github.com/RafaPolit to fixe continuing issue with merging cells

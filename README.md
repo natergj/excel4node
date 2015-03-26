@@ -33,7 +33,7 @@ var wb2 = new xl.WorkBook(wbOpts);
 ```
 
 Add a new WorkSheet to the workbook
-Takes optional params object to specify page margins, zoom and print view centering
+Takes optional params object to specify page margins, zoom and print view centering and whether to fit to page on print.
 
 ```
 var ws = wb.WorkSheet('New Worksheet');
@@ -56,11 +56,29 @@ var wsOpts = {
 	},
 	outline:{
 		summaryBelow : true
-	}
+	},
+	fitToPage:{
+		fitToHeight: 100,
+		orientation: 'landscape',
+  },
 }
 var ws2 = wb.WorkSheet('New Worksheet', wsOpts);
 ```
 
+Optionally, you can set validations for the WorkSheet
+
+```
+ws.setValidation({
+	type: "list",
+	allowBlank: 1,
+	showInputMessage: 1,
+	showErrorMessage: 1,
+	sqref: "X2:X10",
+	formulas: [
+		'value1,value2'
+	]
+});
+```
 Add a cell to a WorkSheet with some data.  
 Cell can take 4 data types: String, Number, Formula, Date.  
 Cell takes two arguments: row, col
@@ -103,6 +121,8 @@ Create a Style and apply it to a cell
   		* Takes one argument of options top, center, bottom
   	* Horizontal
   		* Takes one argument of left, center, right
+  	* Rotation
+  		* Takes one argument as degrees to rotate
 * Number  
   * Format
   	* Takes one argument: Number style string
@@ -115,7 +135,8 @@ Create a Style and apply it to a cell
   * Takes one argument: object defining border
   * each ordinal (top, right, etc) are only required if you want to define a border. If omitted, no border will be added to that side. 
   * style is required if oridinal is defined. if color is omitted, it will default to black. 
-  * ```
+  
+ ```
   {
   		top:{
   			style:'thin',
@@ -151,6 +172,7 @@ myStyle.Font.Color('FF0000');
 myStyle.Font.Size(16);
 myStyle.Font.Alignment.Vertical('top');
 myStyle.Font.Alignment.Horizontal('left');
+myStyle.Font.Alignment.Rotation('90');
 myStyle.Font.WrapText(true);
 
 var myStyle2 = wb.Style();

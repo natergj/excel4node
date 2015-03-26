@@ -115,6 +115,10 @@ var wsOpts = {
 	},
 	view:{
 		zoom: 100
+	},
+	fitToPage:{
+		fitToHeight:100,
+		orientation:'landscape'
 	}
 }
 
@@ -439,8 +443,12 @@ Object.keys(groupingData).forEach(function(g,i){
 
 
 // Style sheet
-stylings.Row(1).Height(50);
-stylings.Cell(1,1).String('Accounts').Style(rotateStyle);
+stylings.Column(1).Width(3);
+stylings.Cell(1,1,5,1,true).String('Group 1').Style(rotateStyle);
+stylings.Cell(6,1,10,1,true).String('Group 2').Style(rotateStyle);
+for(var i = 1; i <= 10; i++){
+	stylings.Cell(i,2).String('Member '+i);
+}
 
 // Synchronously write file
 wb.write("Excel.xlsx");
