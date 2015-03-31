@@ -449,6 +449,9 @@ stylings.Cell(6,1,10,1,true).String('Group 2').Style(rotateStyle);
 for(var i = 1; i <= 10; i++){
 	stylings.Cell(i,2).String('Member '+i);
 }
+stylings.Row(2).Hide();
+stylings.Column(3).Hide();
+stylings.Cell(1,4).String('Row 2 and Column 3 are hiding');
 
 // Synchronously write file
 wb.write("Excel.xlsx");

@@ -250,6 +250,13 @@ See "Departmental Spending Report" tab in sample output workbook
 ws.Row(1).Filter();
 ws.Row(1).Filter(1,8);
 ```
+Hide a specific Row or Column
+
+```
+ws.Row(2).Hide();
+ws.Column(2).Hide();
+```
+
 Set Groupings on Rows and optionally collapse them.  
 See "Groupings Summary Top" and "Groupings Summary Bottom" in sample output.
 

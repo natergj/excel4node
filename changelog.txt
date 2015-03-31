@@ -1,3 +1,6 @@
+0.2.12
+		Added ability to Hide a Row or Column
+		
 0.2.11
 		Merged pull request (https://github.com/natergj/excel4node/pull/32) from https://github.com/stefanhenze to add ability to set the fit to page on print
 		Added the abilty to rotate text in cell
