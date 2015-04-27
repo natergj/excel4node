@@ -314,7 +314,22 @@ var deptSpending = {
 		'supplies':5.00
 	}
 }
-ws3.Row(1).Filter(1,3);
+var filters = [
+	{
+		column:2,
+		rules:[
+			{
+				val:'food'
+			},
+			{
+				val:'coffee'
+			}
+		]
+	}
+];
+
+ws3.Row(1).Filter(1,3,filters);
+
 ws3.Cell(1,1).String('Department');
 ws3.Cell(1,2).String('Item');
 ws3.Cell(1,3).String('Amount');
