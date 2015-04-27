@@ -1,3 +1,6 @@
+0.2.13
+		Fixed issue where default style would inherit style alignement if it was delared prior to any other font declaration
+
 0.2.12
 		Added ability to Hide a Row or Column
 		
