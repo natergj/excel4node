@@ -1,5 +1,6 @@
 0.2.14
 		Added ability to Group columns
+		Merged pull request (https://github.com/natergj/excel4node/pull/34) from https://github.com/kylepixel which greatly optimizes conversion of numeric to and from alpha representations of columns
 
 0.2.13
 		Fixed issue where default style would inherit style alignement if it was delared prior to any other font declaration
