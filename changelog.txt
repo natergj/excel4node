@@ -1,3 +1,6 @@
+0.2.15
+		fixed issue where Column functions were not returning Column objects and could not be chained
+		
 0.2.14
 		Added ability to Group columns
 		Merged pull request (https://github.com/natergj/excel4node/pull/34) from https://github.com/kylepixel which greatly optimizes conversion of numeric to and from alpha representations of columns
