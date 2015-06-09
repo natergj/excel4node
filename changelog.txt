@@ -1,5 +1,8 @@
 0.2.15
 		fixed issue where Column functions were not returning Column objects and could not be chained
+		fixed date issues with Cell Date function when invalid date was sent.
+		fixed issue where merged cells would apply values to all cells in range rather than just top left cell. This would cause issues when summing rows and columns with merged cells.
+		fixed issue where multiple images could not be added to a workbook
 		
 0.2.14
 		Added ability to Group columns
