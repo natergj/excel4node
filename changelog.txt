@@ -1,3 +1,6 @@
+0.2.16
+		merged pull request https://github.com/natergj/excel4node/pull/37 from https://github.com/pomeo to add ability to insert hyperlinks into cells
+
 0.2.15
 		fixed issue where Column functions were not returning Column objects and could not be chained
 		fixed date issues with Cell Date function when invalid date was sent.
