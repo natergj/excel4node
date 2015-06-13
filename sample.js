@@ -101,6 +101,10 @@ function createWorkBook(){
 	rotateStyle.Font.Alignment.Vertical('center');
 	rotateStyle.Font.Alignment.Horizontal('center');
 
+	var hyperLinkStyle = wb.Style();
+	hyperLinkStyle.Font.Color('Blue');
+	hyperLinkStyle.Font.Underline();
+
 	var wsOpts = {
 		margins:{
 			left: .75,
@@ -153,6 +157,7 @@ function createWorkBook(){
 	ws.Cell(3,1,3,6,true);
 	ws.Row(17).Height(60);
 	ws.Cell(17,1,17,6,true).Style(myStyle5).String('Harvard School of Engineering and Applied Sciences\n29 Oxford St\nCambridge MA 02138\nhttp://www.seas.harvard.edu');
+	ws.Cell(18,1,18,6,true).Link('http://www.seas.harvard.edu','The Harvard John A Paulson School of Engineering and Applied Sciences').Style(hyperLinkStyle);
 	ws.Cell(4,1,15,6).Style(myStyle3);
 	ws.Cell(4,1,4,6).Style(myStyle2);
 	ws.Cell(4,1).String('Item');
