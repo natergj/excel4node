@@ -80,7 +80,7 @@ ws.setValidation({
 });
 ```
 Add a cell to a WorkSheet with some data.  
-Cell can take 4 data types: String, Number, Formula, Date.  
+Cell can take 4 data types: String, Number, Formula, Date, Link.  
 Cell takes two arguments: row, col
 
 ```
@@ -90,6 +90,7 @@ ws.Cell(2,2).Number(10);
 ws.Cell(2,3).Formula("A2+B2");
 ws.Cell(2,4).Formula("A2/C2");
 ws.Cell(2,5).Date(new Date());
+ws.Cell(2,6).Link('http://google.com'); or ws.Cell(2,6).Link('http://google.com','Link name');
 ```
 
 Set Dimensions of Rows or Columns
