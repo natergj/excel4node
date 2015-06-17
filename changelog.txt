@@ -1,3 +1,7 @@
+0.2.17
+		Set string function to remove characters not compatible with XMLStringifier.
+		merged pull request https://github.com/natergj/excel4node/pull/38 from https://github.com/nirarazi to add support for Right to Left languages
+
 0.2.16
 		merged pull request https://github.com/natergj/excel4node/pull/37 from https://github.com/pomeo to add ability to insert hyperlinks into cells
 
