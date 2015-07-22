@@ -1,5 +1,7 @@
-0.2.17.1
+0.2.18
 		Fixed issue where page would not scroll vertically if row was frozen
+		Fixed issue where internal Row.cellCount() function would not return the correct number of cells if there were more than 9
+		Fixed issue where invalid workbooks would be generated on write if write was called multiple times on the same workbook.
 		
 0.2.17
 		Set string function to remove characters not compatible with XMLStringifier.
