@@ -1,3 +1,6 @@
+0.2.18.1
+		Fixed issue that would cause Excel to crash when filtered columns were sorted
+
 0.2.18
 		Fixed issue where page would not scroll vertically if row was frozen
 		Fixed issue where internal Row.cellCount() function would not return the correct number of cells if there were more than 9
