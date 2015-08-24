@@ -1,4 +1,4 @@
-0.2.18.1
+0.2.19
 		Fixed issue that would cause Excel to crash when filtered columns were sorted
 
 0.2.18
