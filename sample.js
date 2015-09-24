@@ -126,6 +126,13 @@ function createWorkBook(){
 			orientation:'landscape'
 		}
 	}
+	var pWSOpts = {
+		sheetProtection : {
+			password : 'password',
+			formatRows : true,
+			selectUnlockedCells : true
+		}
+	}
 
 	var gWsOpts = {
 		outline : {
@@ -141,7 +148,7 @@ function createWorkBook(){
 	var ws = wb.WorkSheet('Sample Invoice',wsOpts);
 	var ws2 = wb.WorkSheet('Sample Budget',wsOpts);
 	var ws3 = wb.WorkSheet('Auto Filter',wsOpts);
-	var seriesWS = wb.WorkSheet('Series with frozen Row',wsOpts);
+	var seriesWS = wb.WorkSheet('Series with frozen Row',pWSOpts);
 	var groupings = wb.WorkSheet('Groupings Summary Top',gWsOpts);
 	var groupings2 = wb.WorkSheet('Groupings Summary Bottom',g2WsOpts);
 	var stylings = wb.WorkSheet('Stylings');
@@ -496,6 +503,7 @@ createWorkBook().write("Excel.xlsx", function(err){
 // Write file to http response
 /*
 var dlCount=0;
+
 http.createServer(function(req, res){
 	createWorkBook().write('MyExcel'+dlCount+'.xlsx',res);
 	dlCount++;

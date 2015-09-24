@@ -1,3 +1,6 @@
+0.2.19.1
+		Added the ability to add "Protection" to Workbooks and Worksheets
+		
 0.2.19
 		Fixed issue that would cause Excel to crash when filtered columns were sorted
 
