@@ -21,6 +21,7 @@ Instantiate a new workook
 Takes optional params object to specify workbook options.   
 jszip.compression : change the zip compression method   
 fileSharing : equates to the "Password to modify" password option. This does not encrypt the workbook and users can still open the workbook as ReadOnly
+allowInterrupt : uses an asynchronous forEach loop within code as to not block other operations if reports are being generated on the same thread as other processes that should take higher priority.
 
 ```
 var xl = require('excel4node');
@@ -33,7 +34,8 @@ var wbOpts = {
 	fileSharing : {
 		password : 'Password',
 		userName : 'John Doe'
-	}
+	},
+	allowInterrup : false
 }
 var wb2 = new xl.WorkBook(wbOpts);
 ```

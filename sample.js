@@ -12,7 +12,8 @@ function createWorkBook(){
 	var options = {
 		jszip:{
 			compression:'DEFLATE'
-		}
+		},
+		allowInterrupt : false
 	}
 	var wb = new xl.WorkBook(options);
 	wb.debug=process.argv[2]=='debug'?true:false;
