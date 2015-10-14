@@ -35,7 +35,7 @@ var wbOpts = {
 		password : 'Password',
 		userName : 'John Doe'
 	},
-	allowInterrup : false
+	allowInterrupt : false
 }
 var wb2 = new xl.WorkBook(wbOpts);
 ```
