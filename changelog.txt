@@ -1,4 +1,4 @@
-0.2.19.3
+0.2.20
 		Added the ability to add "Protection" to Workbooks and Worksheets
 		Fixed issue where Row.Filter() would not filter the correct row if workbook opened in LibreOffice or uploaded to GoogleSheets
 		Added the .Border() function to individual cell ranges rather than requiring borders to be defined within a Style
