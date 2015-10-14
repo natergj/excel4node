@@ -1,3 +1,6 @@
+0.2.21
+		Fixed issue where files with spaces in their names were not correctly downloading in Firefox.
+
 0.2.20
 		Added the ability to add "Protection" to Workbooks and Worksheets
 		Fixed issue where Row.Filter() would not filter the correct row if workbook opened in LibreOffice or uploaded to GoogleSheets
