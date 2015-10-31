@@ -92,15 +92,47 @@ var wsOpts = {
 var ws2 = wb.WorkSheet('New Worksheet', wsOpts);
 ```
 
-Optionally, you can set validations for the WorkSheet
+Optionally, you can set validations for the WorkSheet  
+Options for type: list, whole, decimal, date, time, textLength, custom  
+Options for operator: between, notBetween, equal, notEqual, greaterThan, lessThan, greaterThanOrEqual, lessThanOrEqual  
+Options for errorStyle: error, warning, information
+Validation formulas can be numbers, a comma separated string, or a cell reference list.
 
 ```
+
+ws.setValidation({
+	type: "decimal",
+	operator: "between",
+	allowBlank: 1,
+	showInputMessage: 1,
+	promptTitle: "Valid inputs",
+	prompt: "Value should fall within the range of 0 to 100",
+	showErrorMessage: 1,
+	errorStyle: "information",
+	errorTyle: "Invalid Input",
+	error: "Value should not fall outside the range of 0 to 100",
+	sqref: "A2:A10",
+	formulas: [
+		0,
+		100
+	]
+});
+
+ws.setValidation({
+	type: "list",
+	allowBlank: 1,
+	sqref: "B2:B10",
+	formulas: [
+		'=sheet2!$A$1:$A$2'
+	]
+});
+
 ws.setValidation({
 	type: "list",
 	allowBlank: 1,
 	showInputMessage: 1,
 	showErrorMessage: 1,
-	sqref: "X2:X10",
+	sqref: "C2:C10",
 	formulas: [
 		'value1,value2'
 	]
