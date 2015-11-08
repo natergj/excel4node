@@ -481,6 +481,11 @@ function createWorkBook(){
 	stylings.Row(2).Hide();
 	stylings.Column(3).Hide();
 	stylings.Cell(1,4).String('Row 2 and Column 3 are hiding');
+	stylings.Cell(3,4).Bool('false');
+	stylings.Cell(4,4).Bool(false);
+	stylings.Cell(5,4,7,4).Bool('true');
+	stylings.Cell(8,4).Bool(true);
+	stylings.Cell(9,4,10,5,true).Bool(true);
 
 	return wb;
 }
