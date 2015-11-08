@@ -19,9 +19,9 @@ node sample.js
 
 Instantiate a new workook
 Takes optional params object to specify workbook options.   
-jszip.compression : change the zip compression method   
-fileSharing : equates to the "Password to modify" password option. This does not encrypt the workbook and users can still open the workbook as ReadOnly
-allowInterrupt : uses an asynchronous forEach loop within code as to not block other operations if reports are being generated on the same thread as other processes that should take higher priority.
+"jszip.compression" : change the zip compression method   
+"fileSharing" : equates to the "Password to modify" password option. This does not encrypt the workbook and users can still open the workbook as ReadOnly  
+"allowInterrupt" : uses an asynchronous forEach loop within code as to not block other operations if reports are being generated on the same thread as other processes that should take higher priority.
 
 ```
 var xl = require('excel4node');
@@ -92,29 +92,17 @@ var wsOpts = {
 var ws2 = wb.WorkSheet('New Worksheet', wsOpts);
 ```
 
-Optionally, you can set validations for the WorkSheet  
-Options for type: list, whole, decimal, date, time, textLength, custom  
-Options for operator: between, notBetween, equal, notEqual, greaterThan, lessThan, greaterThanOrEqual, lessThanOrEqual  
-Options for errorStyle: error, warning, information
-Validation formulas can be numbers, a comma separated string, or a cell reference list.
+Optionally, you can set validations for the WorkSheet
 
 ```
-
 ws.setValidation({
-	type: "decimal",
-	operator: "between",
+	type: "list",
 	allowBlank: 1,
 	showInputMessage: 1,
-	promptTitle: "Valid inputs",
-	prompt: "Value should fall within the range of 0 to 100",
 	showErrorMessage: 1,
-	errorStyle: "information",
-	errorTyle: "Invalid Input",
-	error: "Value should not fall outside the range of 0 to 100",
-	sqref: "A2:A10",
+	sqref: "X2:X10",
 	formulas: [
-		0,
-		100
+		'value1,value2'
 	]
 });
 
@@ -126,20 +114,9 @@ ws.setValidation({
 		'=sheet2!$A$1:$A$2'
 	]
 });
-
-ws.setValidation({
-	type: "list",
-	allowBlank: 1,
-	showInputMessage: 1,
-	showErrorMessage: 1,
-	sqref: "C2:C10",
-	formulas: [
-		'value1,value2'
-	]
-});
 ```
 Add a cell to a WorkSheet with some data.  
-Cell can take 4 data types: String, Number, Formula, Date, Link.  
+Cell can take 6 data types: String, Number, Formula, Date, Link, Bool.  
 Cell takes two arguments: row, col
 
 ```
@@ -150,6 +127,7 @@ ws.Cell(2,3).Formula("A2+B2");
 ws.Cell(2,4).Formula("A2/C2");
 ws.Cell(2,5).Date(new Date());
 ws.Cell(2,6).Link('http://google.com'); or ws.Cell(2,6).Link('http://google.com','Link name');
+ws.Cell(2,7).Bool(true);
 ```
 
 Set Dimensions of Rows or Columns

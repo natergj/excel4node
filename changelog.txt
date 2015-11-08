@@ -1,3 +1,7 @@
+0.2.22
+		Added the ability to reference Cells in another sheet in validations
+		Merged pull request https://github.com/natergj/excel4node/pull/48 from https://github.com/dteunkenstt to add ability to set Cells with Boolean values
+
 0.2.21
 		Fixed issue where files with spaces in their names were not correctly downloading in Firefox.
 

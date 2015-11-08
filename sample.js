@@ -153,6 +153,7 @@ function createWorkBook(){
 	var groupings = wb.WorkSheet('Groupings Summary Top',gWsOpts);
 	var groupings2 = wb.WorkSheet('Groupings Summary Bottom',g2WsOpts);
 	var stylings = wb.WorkSheet('Stylings');
+	var validations = wb.WorkSheet('Validations');
 
 	/*
 		Code to generate sample invoice
@@ -487,6 +488,36 @@ function createWorkBook(){
 	stylings.Cell(8,4).Bool(true);
 	stylings.Cell(9,4,10,5,true).Bool(true);
 
+	stylings.Cell(3,6).String('yes');
+	stylings.Cell(4,6).String('no');
+
+	stylings.Cell(3,7).String('one');
+	stylings.Cell(4,7).String('two');
+
+	stylings.setValidation({
+		type: "list",
+		allowBlank: 1,
+		sqref: "F3:F10",
+		formulas: [
+			'=Validations!$A$1:$A$3'
+		]
+	});
+
+	stylings.setValidation({
+	    type: "list",
+	    allowBlank: 1,
+	    showInputMessage: 1,
+	    showErrorMessage: 1,
+	    sqref: "G2:G10",
+	    formulas: [
+	        'one,two'
+	    ]
+	});
+
+	//Validations Sheet
+	validations.Cell(1,1).String('yes');
+	validations.Cell(2,1).String('no');
+	validations.Cell(3,1).String('maybe');
 	return wb;
 }
 
