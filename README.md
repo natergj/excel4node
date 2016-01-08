@@ -2,7 +2,7 @@
 
 An OOXML (xlsx) generator that supports formatting options.
 
-This is a fork of [https://github.com/natergj/excel4node](natergj/excel4node) with lots of cleanup (and tests).
+This is a fork of [natergj/excel4node](https://github.com/natergj/excel4node) with lots of cleanup (and tests).
 
 
 ## Installation
@@ -17,14 +17,22 @@ A sample.js script is provided in the code. Running this will output a sample ex
     node sample.js
 
 
-## Usage
-
-Insantiate a new workbook:
+## Usage Example
 
 ```javascript
 var xl = require('excel4node');
+
 var wb = new xl.WorkBook();
+var ws = wb.WorkSheet('My Worksheet');
+
+var myCell = ws.Cell(1, 1);
+myCell.String('Test Value');
+
+wb.write('MyExcel.xlsx');
 ```
+
+
+## Workbook
 
 Workbook takes optional params object:
 
