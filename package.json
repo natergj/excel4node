@@ -1,6 +1,7 @@
 {
   "name": "excel4node",
   "version": "0.2.23",
+  "description": "Library to create Formatted Excel Files.",
   "keywords": [
     "excel",
     "spreadsheet",
@@ -11,7 +12,7 @@
     "workbook",
     "ooxml"
   ],
-  "description": "Library to create Formatted Excel Files.",
+  "main": "./lib/index",
   "author": {
     "name": "Nater",
     "email": "nater@seas.harvard.edu"
@@ -22,13 +23,6 @@
       "url": "http://opensource.org/licenses/mit-license.php"
     }
   ],
-  "dependencies": {
-    "image-size": "0.3.5",
-    "jszip": "2.5.0",
-    "mime": "1.3.4",
-    "underscore": "1.8.3",
-    "xmlbuilder": "3.1.0"
-  },
   "repository": {
     "type": "git",
     "url": "git://github.com/natergj/excel4node.git"
@@ -36,6 +30,18 @@
   "bugs": {
     "url": "https://github.com/natergj/excel4node/labels/bug"
   },
-  "main": "./lib/index",
-  "readmeFilename": "README.md"
+  "readmeFilename": "README.md",
+  "scripts": {
+    "test": "NODE_ENV=test ./node_modules/tape/bin/tape ./tests/**/**/*.test.js"
+  },
+  "dependencies": {
+    "image-size": "0.3.5",
+    "jszip": "2.5.0",
+    "mime": "1.3.4",
+    "underscore": "1.8.3",
+    "xmlbuilder": "3.1.0"
+  },
+  "devDependencies": {
+    "tape": "^4.4.0"
+  }
 }
