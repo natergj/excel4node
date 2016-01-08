@@ -2,8 +2,6 @@
 
 An OOXML (xlsx) generator that supports formatting options.
 
-This is a fork of [natergj/excel4node](https://github.com/natergj/excel4node) with lots of cleanup (and tests).
-
 
 ## Installation
 
@@ -47,7 +45,7 @@ var wb2 = new xl.WorkBook({      // optional params object
         password: 'Password',    // This does not encrypt the workbook,
         userName: 'John Doe'     // and users can still open the workbook as read-only.
     },
-    allowInterrupt: false        // do not asynchrously forEach loops
+    allowInterrupt: false        // do not asynchronously forEach loops
 });
 ```
 
@@ -61,12 +59,12 @@ A Worksheet represents a tab within an excel document.
 ```javascript
 var ws = wb.WorkSheet('My Worksheet', {
     margins: {                         // page margins
-        left: .75,
-        right: .75,
+        left: 0.75,
+        right: 0.75,
         top: 1.0,
         bottom: 1.0,
-        footer: .5,
-        header: .5
+        footer: 0.5,
+        header: 0.5
     },
     printOptions: {                    // page print options
         centerHorizontal: true,
@@ -131,7 +129,6 @@ ws.setValidation({
 });
 ```
 
---------------------------------------------------------------------------------
 
 ## Rows & Columns
 
@@ -182,8 +179,6 @@ ws.Row(1).Group(1,true)
 
 See also "Groupings Summary Top" and "Groupings Summary Bottom" in sample output.
 
-
---------------------------------------------------------------------------------
 
 ## Cells
 
@@ -324,7 +319,6 @@ ws.Cell(3, 1, 4, 5).Style(myStyle);
 ws.Cell(1, 1, 2, 5).Format.Font.Family('Arial');
 ```
 
---------------------------------------------------------------------------------
 
 ## Images
 
