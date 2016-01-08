@@ -1,49 +1,55 @@
 # excel4node
 
-An OOXML (xlsx) generator that supports formatting options
+An OOXML (xlsx) generator that supports formatting options.
 
-### Installation:
+This is a fork of [https://github.com/natergj/excel4node](natergj/excel4node) with lots of cleanup (and tests).
 
-```
-npm install excel4node
-```
 
-### Sample:
+## Installation
+
+    npm install excel4node
+
+
+## Sample
+
 A sample.js script is provided in the code. Running this will output a sample excel workbook named Excel.xlsx
 
-```
-node sample.js
-```
+    node sample.js
 
-### Usage:
 
-Instantiate a new workook
-Takes optional params object to specify workbook options.   
-"jszip.compression" : change the zip compression method   
-"fileSharing" : equates to the "Password to modify" password option. This does not encrypt the workbook and users can still open the workbook as ReadOnly  
-"allowInterrupt" : uses an asynchronous forEach loop within code as to not block other operations if reports are being generated on the same thread as other processes that should take higher priority.
+## Usage
 
-```
+Insantiate a new workbook:
+
+```javascript
 var xl = require('excel4node');
 var wb = new xl.WorkBook();
-
-var wbOpts = {
-	jszip : {
-		compression : 'DEFLATE'
-	},
-	fileSharing : {
-		password : 'Password',
-		userName : 'John Doe'
-	},
-	allowInterrupt : false
-}
-var wb2 = new xl.WorkBook(wbOpts);
 ```
 
-Add a new WorkSheet to the workbook
-Takes optional params object to specify page margins, zoom and print view centering and whether to fit to page on print.   
-The sheetProtection options are the same as the "Protect Sheet" functions in the Review tab of Excel to prevent certain user editing. Setting a value to true means that that particular function is protected and the user will not be able to do that thing. All options are false by default except for 'sheet' which defaults to true if the sheetProtection attribute is set in the worksheet options, but false if it is not.
+Workbook takes optional params object:
 
+```javascript
+var xl = require('excel4node');
+var wb2 = new xl.WorkBook({
+    jszip: {
+        compression: 'DEFLATE'   // change the zip compression method
+    },
+    fileSharing: {               // equates to "password to modify option"
+        password: 'Password',    // This does not encrypt the workbook,
+        userName: 'John Doe'     // and users can still open the workbook as read-only.
+    },
+    allowInterrupt: false        // do not asynchrously forEach loops
+});
+```
+
+`allowInterrupt` uses an asynchronous forEach loop within code as to not block other operations if reports are being generated on the same thread as other processes that should take higher priority.
+
+
+### Add a new WorkSheet to the workbook
+
+Takes optional params object to specify page margins, zoom and print view centering and whether to fit to page on print.
+
+The sheetProtection options are the same as the "Protect Sheet" functions in the Review tab of Excel to prevent certain user editing. Setting a value to true means that that particular function is protected and the user will not be able to do that thing. All options are false by default except for 'sheet' which defaults to true if the sheetProtection attribute is set in the worksheet options, but false if it is not.
 
 ```
 var ws = wb.WorkSheet('New Worksheet');
@@ -332,3 +338,5 @@ wb.write("My Excel File.xlsx",res);
 
 ```
 
+
+## Notes
