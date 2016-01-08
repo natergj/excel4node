@@ -1,3 +1,6 @@
+0.3.0
+		Merged https://github.com/natergj/excel4node/pull/52 from https://github.com/bugeats. Code cleanup refactor, added .eslintrc.js file and tests.
+
 0.2.23
 		Merged https://github.com/natergj/excel4node/pull/50 from https://github.com/dmnorc to fix bug with setting size of font through Cell.Format methods.
 0.2.22
