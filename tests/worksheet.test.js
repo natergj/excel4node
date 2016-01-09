@@ -27,3 +27,25 @@ test('WorkSheet setValidation()', function (t) {
     t.ok(ws);
 });
 
+test('WorkSheet addConditionalFormattingRule()', function (t) {
+    t.plan(1);
+    var ws = makeWorkSheet();
+    ws.addConditionalFormattingRule('A1:A10', {
+        type: 'containsText',
+        priority: 1,
+        operator: 'containsText',
+        text: '??',
+        formula: 'NOT(ISERROR(SEARCH("??", A1)))'
+    });
+    ws.addConditionalFormattingRule('B1:B10', {
+        type: 'containsText',
+        priority: 2,
+        operator: 'containsText',
+        text: '??',
+        formula: 'NOT(ISERROR(SEARCH("??", A1)))'
+    });
+    // var pd = require('pretty-data').pd;
+    // console.log(pd.xml(ws.toXML()));
+    t.ok(ws);
+});
+
