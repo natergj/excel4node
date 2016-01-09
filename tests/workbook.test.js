@@ -1,4 +1,7 @@
 var test = require('tape');
+var jszip = require('jszip');
+
+var XmlTestDoc = require('./lib/xml_test_doc');
 
 // load prototype extensions
 // TODO fix prototype extensions and remove this
@@ -14,7 +17,7 @@ test('WorkBook init', function (t) {
 
 // Initial test to cover lib at a high level
 test('WorkBook coverage', function (t) {
-    t.plan(1);
+    t.plan(2);
 
     var wb = new WorkBook();
 
@@ -23,9 +26,25 @@ test('WorkBook coverage', function (t) {
     var myCell = ws.Cell(1, 1);
     myCell.String('Test Value');
 
+    var outBuffer = wb.writeToBuffer();
+
     t.ok(
-        Buffer.isBuffer(wb.writeToBuffer()),
+        Buffer.isBuffer(outBuffer),
         'WorkBook#writeToBuffer() returns a Buffer'
     );
+
+    var outZip = new jszip;
+    outZip.load(outBuffer);
+
+    var workbookXml = outZip.folder('xl').file('workbook.xml').asText();
+    var doc = new XmlTestDoc(workbookXml);
+
+    t.equal(
+        doc.select('//workbook/sheets/sheet[@name="Test Worksheet"]').length,
+        1,
+        'XML output should have a valid <sheet/> tag'
+    );
+
+    // console.log(doc.prettyPrint());
 });
 
