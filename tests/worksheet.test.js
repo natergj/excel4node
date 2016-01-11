@@ -70,6 +70,6 @@ test('WorkSheet addConditionalFormattingRule()', function (t) {
         'there should be two rules for the sqref B1:B10'
     );
 
-    // console.log(doc.prettyPrint());
+    console.log(doc.prettyPrint());
 });
 
