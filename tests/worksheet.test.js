@@ -88,6 +88,6 @@ test('WorkSheet addConditionalFormattingRule()', function (t) {
     );
 
     // console.log(doc.prettyPrint());
-    // console.log(wbssDoc.prettyPrint());
+    console.log(wbssDoc.prettyPrint());
 });
 

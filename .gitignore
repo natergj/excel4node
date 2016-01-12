@@ -3,4 +3,5 @@ node_modules
 npm-debug.log
 Excel.xlsx
 dev.js
-dev/
+dev.xlsx
+dev
