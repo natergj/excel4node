@@ -48,3 +48,26 @@ test('WorkBook coverage', function (t) {
     // console.log(doc.prettyPrint());
 });
 
+
+test('WorkBook style sheet xml', function (t) {
+    t.plan(5);
+
+    var wb = new WorkBook();
+    var ws = wb.WorkSheet('Test Worksheet');
+
+    var styleSheetXml = wb.createStyleSheetXML();
+    t.ok(styleSheetXml);
+
+    var doc = new XmlTestDoc(styleSheetXml);
+
+    ['fonts', 'fills', 'borders', 'cellXfs'].forEach(function (name) {
+        t.equal(
+            doc.select('//styleSheet/' + name).length,
+            1,
+            'XML output should have a valid <' + name + '/> tag'
+        );
+    });
+
+    // console.log(doc.prettyPrint());
+});
+

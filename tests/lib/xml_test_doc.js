@@ -11,7 +11,9 @@ function XmlTestDoc(xml) {
 
     this.select = function (path) {
         var nodes = select(doc, path);
-        return nodes;
+        return nodes.map(function (n) {
+            return n.toString();
+        });
     };
 
     this.prettyPrint = function () {
