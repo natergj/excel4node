@@ -30,13 +30,20 @@ test('WorkSheet setValidation()', function (t) {
 
 test('WorkSheet addConditionalFormattingRule()', function (t) {
     t.plan(2);
-    var ws = makeWorkSheet();
+    var wb = new xl.WorkBook();
+    var ws = wb.WorkSheet('test');
+
+    var style = wb.Style();
+    style.Font.Bold();
+    style.Fill.Color('FFDDDD');
+    style.Fill.Pattern('solid');
 
     ws.addConditionalFormattingRule('A1:A10', {
         type: 'containsText',
         priority: 1,
         operator: 'containsText',
         text: '??',
+        style: style,
         formula: 'NOT(ISERROR(SEARCH("??", A1)))'
     });
 
@@ -45,6 +52,7 @@ test('WorkSheet addConditionalFormattingRule()', function (t) {
         priority: 2,
         operator: 'containsText',
         text: '??',
+        style: style,
         formula: 'NOT(ISERROR(SEARCH("??", A1)))'
     });
 
@@ -53,6 +61,7 @@ test('WorkSheet addConditionalFormattingRule()', function (t) {
         priority: 3,
         operator: 'containsText',
         text: '!!',
+        style: style,
         formula: 'NOT(ISERROR(SEARCH("!!", B1)))'
     });
 
