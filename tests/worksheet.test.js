@@ -39,29 +39,20 @@ test('WorkSheet addConditionalFormattingRule()', function (t) {
     style.Fill.Pattern('solid');
 
     ws.addConditionalFormattingRule('A1:A10', {
-        type: 'containsText',
+        type: 'expression',
         priority: 1,
-        operator: 'containsText',
-        text: '??',
-        style: style,
         formula: 'NOT(ISERROR(SEARCH("??", A1)))'
     });
 
     ws.addConditionalFormattingRule('B1:B10', {
-        type: 'containsText',
+        type: 'expression',
         priority: 2,
-        operator: 'containsText',
-        text: '??',
-        style: style,
         formula: 'NOT(ISERROR(SEARCH("??", A1)))'
     });
 
     ws.addConditionalFormattingRule('B1:B10', {
-        type: 'containsText',
+        type: 'expression',
         priority: 3,
-        operator: 'containsText',
-        text: '!!',
-        style: style,
         formula: 'NOT(ISERROR(SEARCH("!!", B1)))'
     });
 
@@ -88,6 +79,6 @@ test('WorkSheet addConditionalFormattingRule()', function (t) {
     );
 
     // console.log(doc.prettyPrint());
-    console.log(wbssDoc.prettyPrint());
+    // console.log(wbssDoc.prettyPrint());
 });
 

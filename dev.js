@@ -11,10 +11,11 @@ var myCell = ws.Cell(5, 1).String('Five: ?');
 var myCell = ws.Cell(6, 1).String('Six: !');
 
 ws.addConditionalFormattingRule('A1:A10', {
-    type: 'containsText',
+    // type: 'containsText',
+    type: 'expression',
     priority: 1,
-    operator: 'containsText',
-    text: '!!',
+    // operator: 'containsText',
+    // text: '!!',
     formula: 'NOT(ISERROR(SEARCH("!!", A1)))'
 });
 
