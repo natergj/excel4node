@@ -29,7 +29,7 @@ test('WorkSheet setValidation()', function (t) {
 });
 
 test('WorkSheet addConditionalFormattingRule()', function (t) {
-    t.plan(2);
+    t.plan(3);
     var wb = new xl.WorkBook();
     var ws = wb.WorkSheet('test');
 
@@ -79,6 +79,15 @@ test('WorkSheet addConditionalFormattingRule()', function (t) {
         'there should be two rules for the sqref B1:B10'
     );
 
-    console.log(doc.prettyPrint());
+    var wbssDoc = new XmlTestDoc(wb.createStyleSheetXML());
+
+    t.equal(
+        wbssDoc.select('//styleSheet/dxfs').length,
+        1,
+        'there should be one <dxfs/> element in the workbook stylesheet output'
+    );
+
+    // console.log(doc.prettyPrint());
+    // console.log(wbssDoc.prettyPrint());
 });
 
