@@ -1,3 +1,8 @@
+0.3.1
+		Merged https://github.com/natergj/excel4node/pull/53 from https://github.com/bugeats.
+		More tests added
+		Added support for limited number of conditional formatting rules
+		
 0.3.0
 		Merged https://github.com/natergj/excel4node/pull/52 from https://github.com/bugeats. Code cleanup refactor, added .eslintrc.js file and tests.
 
