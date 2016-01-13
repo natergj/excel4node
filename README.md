@@ -274,7 +274,7 @@ Border Styles:
 
 Takes one argument: object defining border. Each ordinal (top, right, etc) are only required if you want to define a border. If omitted, no border will be added to that side.  Style is required if oridinal is defined. If color is omitted, it will default to black.
 
- ```javascript
+```javascript
 myStyle3.Border({
     top: {
         style: 'thin',
@@ -318,6 +318,35 @@ ws.Cell(3, 1, 4, 5).String('Each Cell in Range Contains this String');
 ws.Cell(3, 1, 4, 5).Style(myStyle);
 ws.Cell(1, 1, 2, 5).Format.Font.Family('Arial');
 ```
+
+
+## Conditional Formatting
+
+Conditional formatting adds custom formats in response to cell reference state. A subset of conditional formatting features is currently supported by excel4node.
+
+Formatting rules apply at the worksheet level.
+
+The following example will highlight all cells between A1 and A10 that contain the string "ok" with bold, green text:
+
+```javascript
+var wb = new xl.WorkBook();
+var ws = wb.WorkSheet('My Worksheet');
+
+var style = wb.Style();
+style.Font.Bold();
+style.Font.Color('00FF00');
+
+ws.addConditionalFormattingRule('A1:A10', {      // apply ws formatting ref 'A1:A10'
+    type: 'expression',                          // the conditional formatting type
+    priority: 1,                                 // rule priority order (required)
+    formula: 'NOT(ISERROR(SEARCH("ok", A1)))',   // formula that returns nonzero or 0
+    style: style                                 // a style object containing styles to apply
+});
+```
+
+**The only conditional formatting type that is currently supported is `expression`.**
+
+When the formula returns zero, conditional formatting is NOT displayed. When the formula returns a nonzero value, conditional formatting is displayed.
 
 
 ## Images
