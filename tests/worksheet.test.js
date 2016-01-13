@@ -29,7 +29,7 @@ test('WorkSheet setValidation()', function (t) {
 });
 
 test('WorkSheet addConditionalFormattingRule()', function (t) {
-    t.plan(3);
+    t.plan(5);
     var wb = new xl.WorkBook();
     var ws = wb.WorkSheet('test');
 
@@ -41,7 +41,8 @@ test('WorkSheet addConditionalFormattingRule()', function (t) {
     ws.addConditionalFormattingRule('A1:A10', {
         type: 'expression',
         priority: 1,
-        formula: 'NOT(ISERROR(SEARCH("??", A1)))'
+        formula: 'NOT(ISERROR(SEARCH("??", A1)))',
+        style: style
     });
 
     ws.addConditionalFormattingRule('B1:B10', {
@@ -59,13 +60,13 @@ test('WorkSheet addConditionalFormattingRule()', function (t) {
     var doc = new XmlTestDoc(ws.toXML());
 
     t.equal(
-        doc.select('//conditionalFormatting/@sqref').length,
+        doc.count('//conditionalFormatting/@sqref'),
         2,
         'there should be two valid <conditionalFormatting/> tags created'
     );
 
     t.equal(
-        doc.select('//conditionalFormatting[@sqref="B1:B10"]/cfRule').length,
+        doc.count('//conditionalFormatting[@sqref="B1:B10"]/cfRule'),
         2,
         'there should be two rules for the sqref B1:B10'
     );
@@ -73,9 +74,21 @@ test('WorkSheet addConditionalFormattingRule()', function (t) {
     var wbssDoc = new XmlTestDoc(wb.createStyleSheetXML());
 
     t.equal(
-        wbssDoc.select('//styleSheet/dxfs').length,
+        wbssDoc.count('//styleSheet/dxfs'),
         1,
         'there should be one <dxfs/> element in the workbook stylesheet output'
+    );
+
+    t.equal(
+        wbssDoc.count('//styleSheet/dxfs/dxf/font/color[@rgb="FF000000"]'),
+        1,
+        'there should be font color embedded in dxf style'
+    );
+
+    t.equal(
+        wbssDoc.count('//styleSheet/dxfs/dxf/fill/patternFill/bgColor[@rgb="FFFFDDDD"]'),
+        1,
+        'there should be font color embedded in dxf style'
     );
 
     // console.log(doc.prettyPrint());

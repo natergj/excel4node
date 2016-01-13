@@ -16,6 +16,11 @@ function XmlTestDoc(xml) {
         });
     };
 
+    this.count = function (path) {
+        var nodes = select(doc, path);
+        return nodes.length;
+    };
+
     this.prettyPrint = function () {
         return (pd.xml(xml));
     };
