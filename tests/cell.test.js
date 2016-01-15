@@ -23,7 +23,7 @@ test('Cell takes a Style object', function (t) {
     t.ok(cell.Style(style));
 });
 
-test('Cell takes a Style object', function (t) {
+test('Cell test Complex String', function (t) {
     t.plan(1);
     var wb = new xl.WorkBook();
     var ws = wb.WorkSheet('test');
