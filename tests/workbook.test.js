@@ -71,3 +71,32 @@ test('WorkBook style sheet xml', function (t) {
     // console.log(doc.prettyPrint());
 });
 
+test('WorkBook default font', function (t) {
+    t.plan(13);
+    var wb = new WorkBook();
+    var defaultFont = wb.styleData.fonts[0];
+    t.equal(defaultFont.bold, false, 'Bold is false');
+    t.equal(defaultFont.italics, false, 'Italics is false');
+    t.equal(defaultFont.underline, false, 'Underline is false');
+    t.equal(defaultFont.color, 'FF000000', 'Color is FF000000');
+    t.equal(defaultFont.name, 'Calibri', 'Font name is Calibri');
+    t.equal(defaultFont.sz, 12, 'Size 12');
+
+    var df = wb.updateDefaultFont({
+        bold: true,
+        italics: true,
+        underline: true,
+        color: '0000FF',
+        font: 'Arial',
+        size: 10
+    });
+
+    t.equal(defaultFont, df, 'Return is default font');
+
+    t.equal(defaultFont.bold, true, 'Bold is true');
+    t.equal(defaultFont.italics, true, 'Italics is true');
+    t.equal(defaultFont.underline, true, 'Underline is true');
+    t.equal(defaultFont.color, '0000FF', 'Color is 0000FF');
+    t.equal(defaultFont.name, 'Arial', 'Font name is Arial');
+    t.equal(defaultFont.sz, 10, 'Size 10');
+});
