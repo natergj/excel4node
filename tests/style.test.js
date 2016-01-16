@@ -39,21 +39,3 @@ test('Style coverage', function (t) {
         }
     }));
 });
-
-test('Style getFont', function (t) {
-    t.plan(9);
-    var style = makeStyle();
-    var font = style.getFont();
-    t.equal(font.bold, false, 'Bold is false');
-    t.equal(font.italics, false, 'Italics is false');
-    t.equal(font.underline, false, 'Underline is false');
-
-    t.ok(style.Font.Bold());
-    t.ok(style.Font.Italics());
-    t.ok(style.Font.Underline());
-    
-    font = style.getFont();
-    t.equal(font.bold, true, 'Bold is true');
-    t.equal(font.italics, true, 'Italics is true');
-    t.equal(font.underline, true, 'Underline is true');
-});
