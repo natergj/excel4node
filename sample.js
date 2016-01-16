@@ -161,7 +161,20 @@ function createWorkBook(){
 
 	ws.Row(1).Height(140);
 	ws.Cell(1,1,2,6,true);
-	ws.Image('sampleFiles/image1.png').Position(1,1,0,0);
+
+	//Absolute position near D3
+	ws.Image('sampleFiles/image1.png', ws.Image.ABSOLUTE).Position(218, 400).Size(255, 50);  //y-pixels, X-pixels
+	
+	//A3
+	ws.Image('sampleFiles/image1.png', ws.Image.ONE_CELL).Position(3, 1, 10, 40).Size(255, 50); //row, column, offsetY, offsetX
+	
+	//A1-F2
+	ws.Image('sampleFiles/image1.png', ws.Image.TWO_CELL).Position(1, 1, 2, 6, 2, 5); //begin-row, begin-column, end-row, end-column, offsetY, offsetX
+	
+	//D5
+	ws.Image('sampleFiles/image1.png', ws.Image.TWO_CELL).Position(5, 4); //row, column (in one cell re-scale in cell)
+
+
 	ws.Row(3).Height(50);
 	ws.Cell(3,1,3,6,true);
 	ws.Row(17).Height(60);
