@@ -95,3 +95,20 @@ test('WorkSheet addConditionalFormattingRule()', function (t) {
     // console.log(wbssDoc.prettyPrint());
 });
 
+test('WorkSheet headerFooter()', function (t) {
+    t.plan(1);
+    var ws = makeWorkSheet();
+    var headerFooter = ws.headerFooter({
+        oddHeader: '&LDavid Gofman&R&D',
+        oddFooter: '&L&A&C&BCompany, Inc. Confidential&B&RPage &P of &N'
+    });
+    t.equal(JSON.stringify(headerFooter), 
+    '{' +
+        '"@differentOddEven":false,' +
+        '"@differentFirst":false,' +
+        '"@scaleWithDoc":true,' +
+        '"@alignWithMargins":true,' +
+        '"oddHeader":"&LDavid Gofman&R&D",' +
+        '"oddFooter":"&L&A&C&BCompany, Inc. Confidential&B&RPage &P of &N"' +
+    '}');
+});
