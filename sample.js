@@ -148,7 +148,9 @@ function createWorkBook(){
 
 	var ws = wb.WorkSheet('Sample Invoice',wsOpts);
 	var ws2 = wb.WorkSheet('Sample Budget',wsOpts);
-	var ws3 = wb.WorkSheet('Auto Filter',wsOpts);
+	var ws3 = wb.WorkSheet('Auto Filter', {
+			orientation:'landscape'
+	});
 	var seriesWS = wb.WorkSheet('Series with frozen Row',pWSOpts);
 	var groupings = wb.WorkSheet('Groupings Summary Top',gWsOpts);
 	var groupings2 = wb.WorkSheet('Groupings Summary Bottom',g2WsOpts);
@@ -370,6 +372,30 @@ function createWorkBook(){
 			curRow+=1;
 		});
 	});
+
+	var startRow = 15,
+		boldStyle = wb.Style();
+	boldStyle.Font.Bold();
+	for (var r = 0; r < 5; r++) {
+		for (var c = 1; c < 100; c++) {
+			if (r === 0) {
+				ws3.Cell(startRow + r, c).Style(boldStyle).String(c.toExcelAlpha());
+			} else {
+				ws3.Cell(startRow + r, c).String(c.toExcelAlpha() + r);
+			}
+		}
+	}
+
+	ws3.printTitles({
+        rows: {
+            begin: startRow,
+            end: startRow
+        },
+        columns: {
+            begin: 1,
+            end: 3
+        }
+    });
 
 	var now = new Date();
 	for(var i = 1; i<=26; i++){
