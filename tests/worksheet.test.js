@@ -140,7 +140,9 @@ test('WorkSheet test printScaling', function (t) {
     opts.scale = wb.Print.CUSTOM_SCALING;
     ws.printScaling(JSON.parse(JSON.stringify(opts)));
     t.equal(JSON.stringify(ws.sheet.pageSetup), '[{"@fitToHeight":300},{"@fitToWidth":200},{"@horizontalDpi":12345},{"@verticalDpi":67890},{"@orientation":"landscape"}]', 'CUSTOM_SCALING') ;
-});test('WorkSheet headerFooter()', function (t) {
+});
+
+test('WorkSheet headerFooter()', function (t) {
     t.plan(1);
     var ws = makeWorkSheet();
     var headerFooter = ws.headerFooter({
