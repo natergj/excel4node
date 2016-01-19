@@ -95,3 +95,49 @@ test('WorkSheet addConditionalFormattingRule()', function (t) {
     // console.log(wbssDoc.prettyPrint());
 });
 
+test('WorkSheet test printScaling', function (t) {
+    t.plan(15);
+    var wb = new xl.WorkBook();
+    var ws = wb.WorkSheet('test', {
+        fitToPage: {
+            orientation: 'landscape'
+        }
+    });
+    var opts = {
+        fitToWidth: 200,
+        fitToHeight: 300,
+        horizontalDpi: 12345,
+        verticalDpi: 67890
+    };
+
+    t.equal(JSON.stringify(ws.printScaling(wb.Print.NO_SCALING)), '{"scale":0}', 'NO_SCALING') ;
+    t.equal(ws.sheet.sheetPr.pageSetUpPr['@fitToPage'], undefined);
+    t.equal(JSON.stringify(ws.printScaling(wb.Print.FIT_ONE_PAGE)), '{"scale":1}', 'FIT_ONE_PAGE') ;
+    t.equal(ws.sheet.sheetPr.pageSetUpPr['@fitToPage'], 1);
+    t.equal(JSON.stringify(ws.printScaling(wb.Print.FIT_ALL_COLUMNS)), '{"scale":2,"fitToHeight":0}', 'FIT_ALL_COLUMNS') ;
+    t.equal(ws.sheet.sheetPr.pageSetUpPr['@fitToPage'], 1);
+    t.equal(JSON.stringify(ws.printScaling(wb.Print.FIT_ALL_ROWS)), '{"scale":3,"fitToWidth":0}', 'FIT_ALL_ROWS') ;
+    t.equal(ws.sheet.sheetPr.pageSetUpPr['@fitToPage'], 1);
+    t.equal(JSON.stringify(ws.printScaling(wb.Print.CUSTOM_SCALING)), '{"scale":4}', 'CUSTOM_SCALING') ;
+    t.equal(ws.sheet.sheetPr.pageSetUpPr['@fitToPage'], 1);
+
+    opts.scale = wb.Print.NO_SCALING;
+    ws.printScaling(JSON.parse(JSON.stringify(opts)));
+    t.equal(JSON.stringify(ws.sheet.pageSetup), '[{"@orientation":"landscape"}]', 'NO_SCALING') ;
+
+    opts.scale = wb.Print.FIT_ONE_PAGE;
+    ws.printScaling(JSON.parse(JSON.stringify(opts)));
+    t.equal(JSON.stringify(ws.sheet.pageSetup), '[{"@horizontalDpi":12345},{"@verticalDpi":67890},{"@orientation":"landscape"}]', 'FIT_ONE_PAGE') ;
+
+    opts.scale = wb.Print.FIT_ALL_COLUMNS;
+    ws.printScaling(JSON.parse(JSON.stringify(opts)));
+    t.equal(JSON.stringify(ws.sheet.pageSetup), '[{"@fitToHeight":0},{"@horizontalDpi":12345},{"@verticalDpi":67890},{"@orientation":"landscape"}]', 'FIT_ALL_COLUMNS') ;
+
+    opts.scale = wb.Print.FIT_ALL_ROWS;
+    ws.printScaling(JSON.parse(JSON.stringify(opts)));
+    t.equal(JSON.stringify(ws.sheet.pageSetup), '[{"@fitToWidth":0},{"@horizontalDpi":12345},{"@verticalDpi":67890},{"@orientation":"landscape"}]', 'FIT_ALL_ROWS') ;
+
+    opts.scale = wb.Print.CUSTOM_SCALING;
+    ws.printScaling(JSON.parse(JSON.stringify(opts)));
+    t.equal(JSON.stringify(ws.sheet.pageSetup), '[{"@fitToHeight":300},{"@fitToWidth":200},{"@horizontalDpi":12345},{"@verticalDpi":67890},{"@orientation":"landscape"}]', 'CUSTOM_SCALING') ;
+});
