@@ -1,3 +1,13 @@
+0.4.0
+		Merged pull requests 67, 59, 60, 64, 66, 67 from https://github.com/dgofman
+		Added ability to create cells with complex multiple formatting within a single cell
+		Added ability to include headers and footers in worksheets
+		Added ability to repeat specific rows or columns on every printed page (https://support.office.com/en-us/article/Repeat-specific-rows-or-columns-on-every-printed-page-0d6dac43-7ee7-4f34-8b08-ffcc8b022409)
+		removed allowInterrupt options. It was causing issues
+		Added ability to set a default font across workbook
+		Fixed issues with images
+		Fixed issue with print orientation and scaling
+
 0.3.1
 		Merged https://github.com/natergj/excel4node/pull/53 from https://github.com/bugeats.
 		More tests added

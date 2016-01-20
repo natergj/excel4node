@@ -44,12 +44,23 @@ var wb2 = new xl.WorkBook({      // optional params object
     fileSharing: {               // equates to "password to modify option"
         password: 'Password',    // This does not encrypt the workbook,
         userName: 'John Doe'     // and users can still open the workbook as read-only.
-    },
-    allowInterrupt: false        // do not asynchronously forEach loops
+    }
 });
 ```
+Set a default font for the workbook
 
-`allowInterrupt` uses an asynchronous forEach loop within code as to not block other operations if reports are being generated on the same thread as other processes that should take higher priority.
+```javascript  
+var xl = require('excel4node');
+var wb = new xl.WorkBook();
+wb.updateDefaultFont({
+	size : 12,
+	bold : false,
+	italics : false,
+	underline : true,
+	color : 'FF000000',
+	font : 'Calibri'
+});
+```
 
 
 ## Worksheet
@@ -97,6 +108,40 @@ var ws = wb.WorkSheet('My Worksheet', {
         sheet: true,
         sort: false
     }
+});
+
+// https://support.office.com/en-US/article/Set-a-specific-print-area-BEEBCEB7-0D43-4E07-8895-5AFE0AEDFB32
+ws.printArea({
+	rows: {
+		begin: 1,
+		end: 2
+	},
+	columns: {
+		begin: 1,
+		end: 3
+	}
+});
+
+// https://support.office.com/en-us/article/Repeat-specific-rows-or-columns-on-every-printed-page-0d6dac43-7ee7-4f34-8b08-ffcc8b022409
+ws.printTitles({
+	rows: {
+	    begin: 1,
+	    end: 2
+	},
+	columns: {
+	    begin: 1,
+	    end: 3
+	}
+});
+
+// Uses https://poi.apache.org/apidocs/org/apache/poi/xssf/usermodel/extensions/XSSFHeaderFooter.html
+ws.headerFooter({
+	firstHeader: '&LFirst Page of Report Header&R&D',
+	firstFooter: '&L&A&C&BCompany, Inc. Confidential&B&RPage &P of &N',
+	evenHeader: '&LReport Header&R&D',
+	evenFooter: '&L&A&C&BCompany, Inc. Confidential&B&RPage &P of &N',
+	oddHeader: '&LReport Header&R&D',
+	oddFooter: '&L&A&C&BCompany, Inc. Confidential&B&RPage &P of &N'
 });
 ```
 
@@ -184,14 +229,42 @@ See also "Groupings Summary Top" and "Groupings Summary Bottom" in sample output
 
 Represents a cell within a worksheet.
 
-Cell can take 6 data types: `String`, `Number`, `Formula`, `Date`, `Link`, and `Bool`.
+Cell can take 6 data types: `String`, `Complex`, `Number`, `Formula`, `Date`, `Link`, and `Bool`.
 
-Cell takes two arguments: row, col.
+Cell takes two required arguments: row, col and 3 optional arguments
 
 Add a cell to a WorkSheet with some data:
 
 ```javascript
+ws.Cell({startRow}, {startCol} [, {endRow}, {endCol}, {isMerged}]);
 ws.Cell(1, 1).String('My String');
+var complexString = [
+	{
+		bold:true,
+		underline: true,
+		italic: true,
+		color: 'FF0000',
+		size: 18,
+		value: 'Hello'
+	}, 
+	' World!', 
+	{
+		color: '000000'
+	},  
+	' All', 
+	' these', 
+	' strings', 
+	' are', 
+	' black', 
+	{
+		color: '0000FF',
+		value: ', but'
+	},  
+	' now', 
+	' are', 
+	' blue' 
+];
+ws.Cell(1, 2).Complex(complexString);
 ws.Cell(2, 1).Number(5);
 ws.Cell(2, 2).Number(10);
 ws.Cell(2, 3).Formula('A2+B2');
@@ -359,6 +432,7 @@ Images can be inserted into a worksheet.
 var imgPath = './my-image.jpg'; // relative path from node script
 var img1 = ws.Image(imgPath);
 img1.Position(1,1);
+```
 
 Set image position directly:
 
@@ -369,6 +443,25 @@ var img2 = ws.Image(imgPath2).Position(
     1000000, // offset from top of row in EMUs
     2000000  // offset from left of col in EMUs
 );
+``` 
+Position images across single or multiple cells
+
+```javascript
+//Absolute position near D3
+//arguments: y-pixels, x-pixels
+ws.Image('sampleFiles/image1.png', ws.Image.ABSOLUTE).Position(218, 400).Size(255, 50); 
+
+//A3
+//arguments: row, column, {offsetY, offsetX} (in pixels optional)
+ws.Image('sampleFiles/image1.png', ws.Image.ONE_CELL).Position(3, 1, 10, 40).Size(255, 50); 
+
+//A1-F2
+//arguments: begin-row, begin-column, end-row, end-column, {offsetY, offsetX} (in pixels - optional)
+ws.Image('sampleFiles/image1.png', ws.Image.TWO_CELL).Position(1, 1, 2, 6, 2, 5); 
+
+//D5
+//arguments: row, column
+ws.Image('sampleFiles/image1.png', ws.Image.TWO_CELL).Position(5, 4); 
 ```
 
 Currently images should be saved at a resolution of 96dpi.
