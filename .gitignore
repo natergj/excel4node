@@ -1,4 +1,5 @@
 node_modules
+distribution
 .DS_Store
 npm-debug.log
 Excel.xlsx
