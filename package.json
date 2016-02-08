@@ -37,6 +37,7 @@
     "document": "jsdoc ./source -r -d docs"
   },
   "dependencies": {
+    "bluebird": "^3.2.2",
     "image-size": "0.4.0",
     "jszip": "2.5.0",
     "lodash": "4.3.0",
