@@ -61,10 +61,8 @@ let getExcelTS = (date) => {
     return ts;
 };
 
-
-
 module.exports = {
-	WorkBook : require('./lib/workbook.js'),
+	WorkBook : require('./lib/workbook/index.js'),
 	getExcelRowCol : getExcelRowCol,
 	getExcelAlpha : getExcelAlpha,
 	getExcelTS : getExcelTS

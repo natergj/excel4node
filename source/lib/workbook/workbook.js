@@ -1,18 +1,23 @@
 let _ 			= require('lodash');
 let JSZip 		= require('jszip');
 let fs 			= require('fs');
-let BbPromise 	= require('bluebird');
+let Promise 	= require('bluebird');
 let xml 		= require('xmlbuilder');
+let WorkSheet 	= require('../worksheet');
+let logger 		= require('../logger.js');
+
+// ------------------------------------------------------------------------------
+// Private WorkBook Methods Start
 
 /**
- * Generate XML for SharedStrings.xml file and add it to zip file
+ * Generate XML for SharedStrings.xml file and add it to zip file. Called from _writeToBuffer()
  * @private
  * @memberof WorkBook
  * @param {Object} promiseObj object containing jszip instance, workbook intance and xmlvars
  * @return {Promise} Resolves with promiseObj
  */
-let addSharedStringsXMLToZip = (promiseObj) => {
-	return new BbPromise( (resolve, reject) => {
+let _addSharedStringsXMLToZip = (promiseObj) => {
+	return new Promise( (resolve, reject) => {
 		try{
 			let stringObj = {
 				'sst' : [{
@@ -83,28 +88,31 @@ let addSharedStringsXMLToZip = (promiseObj) => {
  * Use JSZip to generate file to a node buffer
  * @private
  * @memberof WorkBook
- * @param {WorkBook} Workbook instance
+ * @param {WorkBook} wb WorkBook instance
  * @return {Promise} resolves with Buffer 
  */
-let writeToBuffer = (WorkBook) => {
-	return new BbPromise((resolve, reject) => {
+let _writeToBuffer = (wb) => {
+	return new Promise((resolve, reject) => {
 		try {
 			let promiseObj = {
-				wb : WorkBook, 
+				wb : wb, 
 				xlsx : new JSZip(),
 				xmlOutVars : {}
 			};
+			if(promiseObj.wb.sheets.length === 0){
+				promiseObj.wb.sheets.push(promiseObj.wb.WorkSheet('Sheet 1'));
+			}
 
-			addSharedStringsXMLToZip(promiseObj)
+			_addSharedStringsXMLToZip(promiseObj)
 			.then(() => {
 				let buffer = promiseObj.xlsx.generate({
 			    	type: 'nodebuffer',
-			    	compression: WorkBook.opts.jszip.compression
+			    	compression: wb.opts.jszip.compression
 				});	
 				resolve(buffer);
 			})
 			.catch((e) => {
-				console.error(e);
+				console.error(e.stack);
 			});
 
 		} catch(e) {
@@ -113,26 +121,30 @@ let writeToBuffer = (WorkBook) => {
 	});
 };
 
+// Private WorkBook Methods End
+// ------------------------------------------------------------------------------
 
+
+// Default Options for WorkBook
+let workBookDefaultOpts = {
+	jszip : {
+		compression : 'DEFLATE'
+	}
+};
 
 /**
  * Class repesenting a WorkBook
  * @namespace WorkBook
  */
- class WorkBook {
+class WorkBook {
 
 	/**
 	 * Create a WorkBook.
 	 * @param {Object} opts Workbook settings
 	 */
 	constructor(opts) {
-		let defaultOpts = {
-			jszip : {
-				compression : 'DEFLATE'
-			}
-		};
 
-		this.opts = _.merge({}, defaultOpts, opts);
+		this.opts = _.merge({}, workBookDefaultOpts, opts);
 		this.sheets = [];
 		this.sharedStrings = [];
 		this.styles = [];
@@ -146,43 +158,43 @@ let writeToBuffer = (WorkBook) => {
 	 * If http response object is given, file is written to http response. Useful for web applications.
 	 * If callback is given, callback called with (err, fs.Stats) passed
 	 */
-	write(fileName, httpResponse) {
-		console.log('write file');
-		writeToBuffer(this)
+	write(fileName, handler) {
+		_writeToBuffer(this)
 		.then((buffer) => {
-		    // If `httpResponse` is an object (a node httpResponse object)
-		    if (typeof httpResponse === 'object') {
-		        httpResponse.writeHead(200, {
-		            'Content-Length': buffer.length,
-		            'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-		            'Content-Disposition': 'attachment; filename="' + fileName + '"'
-		        });
-		        httpResponse.end(buffer);
-		    // Else if `httpResponse` is a function, use it as a callback
-		    } else if (typeof httpResponse === 'function') {
-		        fs.writeFile(fileName, buffer, function (err) {
-		            httpResponse(err);
-		        });
-		    // Else httpResponse wasn't specified
-		    } else {
-		        fs.writeFile(fileName, buffer, function (err) {
-		            if (err) { throw err; }
-		        });
+
+		    switch (typeof handler) {
+		    	// handler passed as http response object. 
+		    	case 'object':
+			        handler.writeHead(200, {
+			            'Content-Length': buffer.length,
+			            'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+			            'Content-Disposition': 'attachment; filename="' + fileName + '"'
+			        });
+			        handler.end(buffer);
+		    	break;
+
+		    	// handler passed as callback function
+		    	case 'function':
+			        fs.writeFile(fileName, buffer, function (err) {
+			            handler(err);
+			        });
+		    	break;
+
+		    	// no handler passed, write file to FS.
+		    	default:
+			        fs.writeFile(fileName, buffer, function (err) {
+			            if (err) { throw err; }
+			        });
+		    	break;
 		    }
 		})
 		.catch((e) => {
-			console.error(e);
+			console.error(e.stack);
 		});
 	}
 
-
-
-	/**
-	 * Generate JSON representation of WorkBook. Used in debugging.
-	 * @return {String} WorkBook instance in JSON format
-	 */
-	toString() {
-		console.log(JSON.stringify(this, null, '\t'));
+	WorkSheet(name, opts) {
+		return new WorkSheet(this, name, opts);
 	}
 }
 
