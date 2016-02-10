@@ -1,3 +1,9 @@
+/* REFERENCES
+    http://www.ecma-international.org/news/TC45_current_work/OpenXML%20White%20Paper.pdf
+    http://www.ecma-international.org/publications/standards/Ecma-376.htm
+    http://www.openoffice.org/sc/excelfileformat.pdf 
+    http://officeopenxml.com/anatomyofOOXML-xlsx.php
+*/
 
 /**
  * Translates a column number into the Alpha equivalent used by Excel

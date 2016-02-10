@@ -9,6 +9,33 @@ let logger 		= require('../logger.js');
 // ------------------------------------------------------------------------------
 // Private WorkBook Methods Start
 
+let _addWorkSheetsXML = (promiseObj) => {
+	return new Promise((resolve, reject) => {
+		try {
+			let curSheet = 0;
+
+			let processNextSheet = () => {
+				let thisSheet = promiseObj.wb.sheets[curSheet];
+				if(thisSheet){
+					thisSheet
+					.generateXML()
+					.then((xml) => {
+						// Add worksheet to zip
+						logger.debug(xml);
+						curSheet++;
+						processNextSheet();
+					});
+				} else {
+					resolve(promiseObj);
+				}
+			};
+			processNextSheet();
+		} catch(e) {
+			reject(e);
+		}
+	});
+};
+
 /**
  * Generate XML for SharedStrings.xml file and add it to zip file. Called from _writeToBuffer()
  * @private
@@ -103,7 +130,8 @@ let _writeToBuffer = (wb) => {
 				promiseObj.wb.sheets.push(promiseObj.wb.WorkSheet('Sheet 1'));
 			}
 
-			_addSharedStringsXMLToZip(promiseObj)
+			_addWorkSheetsXML(promiseObj)
+			.then(_addSharedStringsXMLToZip)
 			.then(() => {
 				let buffer = promiseObj.xlsx.generate({
 			    	type: 'nodebuffer',
