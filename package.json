@@ -37,7 +37,6 @@
     "document": "jsdoc ./source -r -d docs"
   },
   "dependencies": {
-    "bluebird": "^3.2.2",
     "colors": "^1.1.2",
     "image-size": "0.4.0",
     "jszip": "2.5.0",
@@ -49,6 +48,7 @@
     "babel-cli": "^6.5.1",
     "babel-polyfill": "^6.5.0",
     "babel-preset-es2015": "^6.5.0",
+    "babel-preset-es2015-node4": "^2.0.3",
     "babel-register": "^6.5.1",
     "jsdoc-babel": "^0.1.0",
     "pretty-data": "^0.40.0",

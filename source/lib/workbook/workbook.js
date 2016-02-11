@@ -1,7 +1,6 @@
 let _ 			= require('lodash');
 let JSZip 		= require('jszip');
 let fs 			= require('fs');
-let Promise 	= require('bluebird');
 let xml 		= require('xmlbuilder');
 let WorkSheet 	= require('../worksheet');
 let logger 		= require('../logger.js');
@@ -223,6 +222,13 @@ class WorkBook {
 
 	WorkSheet(name, opts) {
 		return new WorkSheet(this, name, opts);
+	}
+
+	getStringIndex(val) {
+		if(this.sharedStrings.indexOf(val) < 0){
+			this.sharedStrings.push(val);
+		}
+		return this.sharedStrings.indexOf(val);
 	}
 }
 
