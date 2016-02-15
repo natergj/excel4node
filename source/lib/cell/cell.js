@@ -12,8 +12,37 @@ class Cell {
 	}
 
 	String(index) {
-		this.v = index;
 		this.t = 's';
+		this.v = index;
+		this.f = null;
+	}
+
+	Number(val) {
+		this.t = 'n';
+		this.v = val;
+		this.f = null;
+	}
+
+	Formula(formula) {
+		this.t = null;
+		this.v = null;
+		this.f = formula;
+	}
+
+	Bool(val) {
+		this.t = 'b';
+		this.v = val;
+		this.f = null;
+	}
+
+	Date(dt) {
+		this.t = 'd';
+		this.v = utils.getExcelTS(dt);
+		this.f = null;
+	}
+
+	Style(sId) {
+		this.s = sId;
 	}
 }
 

@@ -117,7 +117,6 @@ let _addSheetData = (promiseObj) => {
 				rEle.att('spans', `${firstCol}:${lastCol}`);
 				thisRow.cellRefs.forEach((c) => {
 					let thisCell = promiseObj.ws.cells[c];
-					logger.debug(thisCell);
 					let cEle = rEle.ele('c').att('r', thisCell.r).att('s', thisCell.s);
 					if(thisCell.t !== null){
 						cEle.att('t', thisCell.t);

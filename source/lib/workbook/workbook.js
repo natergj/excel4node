@@ -146,7 +146,6 @@ let _addWorkSheetsXML = (promiseObj) => {
 
 		let curSheet = 0;
 		
-		logger.debug(promiseObj.wb.sheets.length);
 		let processNextSheet = () => {
 			let thisSheet = promiseObj.wb.sheets[curSheet];
 			if(thisSheet){
@@ -155,7 +154,6 @@ let _addWorkSheetsXML = (promiseObj) => {
 				.then((xml) => {
 					// Add worksheet to zip
 					curSheet++;
-					logger.debug(xml);
 					promiseObj.xlsx.folder('xl').folder('worksheets').file(`sheet${curSheet}.xml`, xml);
 					processNextSheet();
 				});

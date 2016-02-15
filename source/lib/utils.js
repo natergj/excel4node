@@ -72,11 +72,11 @@ let getHashOfPassword = (str) => {
  */
 let getExcelAlpha = (colNum, capitalize) => {
     capitalize = capitalize ? capitalize : true;
-    var remaining = colNum;
-    var aCharCode = capitalize ? 65 : 97;
-    var columnName = '';
+    let remaining = colNum;
+    let aCharCode = capitalize ? 65 : 97;
+    let columnName = '';
     while (remaining > 0) {
-        var mod = (remaining - 1) % 26;
+        let mod = (remaining - 1) % 26;
         columnName = String.fromCharCode(aCharCode + mod) + columnName;
         remaining = (remaining - 1 - mod) / 26;
     } 
@@ -93,14 +93,14 @@ let getExcelAlpha = (colNum, capitalize) => {
  * getExcelRowCol('C2')
  */
 let getExcelRowCol = (str) => {
-    var numeric = str.split(/\D/).filter(function (el) {
+    let numeric = str.split(/\D/).filter(function (el) {
         return el !== '';
     })[0];
-    var alpha = str.split(/\d/).filter(function (el) {
+    let alpha = str.split(/\d/).filter(function (el) {
         return el !== '';
     })[0];
-    var row = parseInt(numeric, 10);
-    var col = alpha.toUpperCase().split('').reduce(function (a, b, index, arr) {
+    let row = parseInt(numeric, 10);
+    let col = alpha.toUpperCase().split('').reduce(function (a, b, index, arr) {
         return a + (b.charCodeAt(0) - 64) * Math.pow(26, arr.length - index - 1);
     }, 0);
     return { row: row, col: col };
@@ -116,9 +116,10 @@ let getExcelRowCol = (str) => {
  * getExcelTS(new Date('08/13/1981'));
  */
 let getExcelTS = (date) => {
-    var epoch = new Date(1899, 11, 31);
-    var dt = date.setDate(date.getDate() + 1);
-    var ts = (dt-epoch) / (1000 * 60 * 60 * 24);
+    let thisDt = new Date(date);
+    let epoch = new Date(1899, 11, 31);
+    let dt = thisDt.setDate(thisDt.getDate() + 1);
+    let ts = (dt-epoch) / (1000 * 60 * 60 * 24);
     return ts;
 };
 
