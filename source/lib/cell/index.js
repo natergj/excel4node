@@ -16,7 +16,7 @@ let cellAccessor = (ws, row1, col1, row2, col2, isMerged) => {
     	for (let c = col1; c <= col2; c++) {
     		let ref = `${utils.getExcelAlpha(c)}${r}`;
     		if(!ws.cells[ref]){
-    			ws.cells[ref] = new Cell();
+    			ws.cells[ref] = new Cell(r, c);
     		}
     		if(!ws.rows[r]){
     			ws.rows[r] = {

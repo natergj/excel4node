@@ -32,7 +32,7 @@
   },
   "readmeFilename": "README.md",
   "scripts": {
-    "test": "NODE_ENV=test ./node_modules/tape/bin/tape ./tests/**/**/*.test.js",
+    "test": "NODE_ENV=test ./node_modules/tape/bin/tape -r babel-register ./tests/**/**/*.test.js",
     "build": "babel source --presets babel-preset-es2015 --out-dir distribution",
     "document": "jsdoc ./source -r -d docs"
   },

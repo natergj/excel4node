@@ -1,9 +1,10 @@
 let _ 				= require('lodash');
-let JSZip 			= require('jszip');
 let fs 				= require('fs');
-let xmlbuilder 		= require('xmlbuilder');
-let WorkSheet 		= require('../worksheet');
+let JSZip 			= require('jszip');
 let logger 			= require('../logger.js');
+let utils 			= require('../utils.js');
+let WorkSheet 		= require('../worksheet');
+let xmlbuilder 		= require('xmlbuilder');
 
 // ------------------------------------------------------------------------------
 // Private WorkBook Methods Start
@@ -145,6 +146,7 @@ let _addWorkSheetsXML = (promiseObj) => {
 
 		let curSheet = 0;
 		
+		logger.debug(promiseObj.wb.sheets.length);
 		let processNextSheet = () => {
 			let thisSheet = promiseObj.wb.sheets[curSheet];
 			if(thisSheet){
@@ -153,6 +155,7 @@ let _addWorkSheetsXML = (promiseObj) => {
 				.then((xml) => {
 					// Add worksheet to zip
 					curSheet++;
+					logger.debug(xml);
 					promiseObj.xlsx.folder('xl').folder('worksheets').file(`sheet${curSheet}.xml`, xml);
 					processNextSheet();
 				});
@@ -313,7 +316,7 @@ let _writeToBuffer = (wb) => {
 		if(promiseObj.wb.sheets.length === 0){
 			promiseObj.wb.WorkSheet();
 		}
-		
+
 		_addRootContentTypesXML(promiseObj)
 		.then(_addRootRelsXML)
 		.then(_addWorkBookXML)
@@ -410,7 +413,7 @@ class WorkBook {
 		// Set Default Font
 		let defaultFont = {
 			'sz': '12',
-			'color': 'FFFFFFFF',
+			'color': utils.cleanColor('Black'),
 			'name': 'Calibri',
 			'family': '2',
 			'scheme': 'minor'

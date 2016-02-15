@@ -122,6 +122,15 @@ let getExcelTS = (date) => {
     return ts;
 };
 
+let sortCellRefs = (a, b) => {
+    let aAtt = getExcelRowCol(a);
+    let bAtt = getExcelRowCol(b);
+    if(aAtt.col === bAtt.col){
+        return aAtt.row - bAtt.row;
+    } else {
+        return aAtt.col - bAtt.col;
+    }
+};
 
 let cleanColor = (val) => {
     // check for RGB, RGBA or Excel Color Names and return RGBA
@@ -200,5 +209,6 @@ module.exports = {
     getExcelAlpha: getExcelAlpha,
     getExcelRowCol: getExcelRowCol,
     getExcelTS: getExcelTS,
-    cleanColor: cleanColor
+    cleanColor: cleanColor,
+    sortCellRefs: sortCellRefs
 };
