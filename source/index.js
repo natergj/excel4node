@@ -9,7 +9,7 @@
     Code references specifications sections from ECMA-376 2nd edition doc
     ECMA-376, Second Edition, Part 1 - Fundamentals And Markup Language Reference.pdf
     found in ECMA-376 2nd edition Part 1 download at http://www.ecma-international.org/publications/standards/Ecma-376.htm
-    Sections are referenced with § 
+    Sections are referenced in code comments with § 
 */
 
 let utils = require('./lib/utils.js');

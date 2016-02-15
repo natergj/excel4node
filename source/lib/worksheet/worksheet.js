@@ -43,79 +43,54 @@ let sheetOpts = {
 let _addSheetPrEleToXML = (promiseObj) => {
 	// §18.3.1.82 sheetPr (Sheet Properties)
 	return new Promise((resolve, reject) => {
-		try{
-			let o = promiseObj.ws.opts.printOptions;
+		let o = promiseObj.ws.opts.printOptions;
 
-			// Check if any option that would require the sheetPr element to be added exists
-			if(o.fitToHeight || o.fitToWidth || o.orientation || o.horizontalDpi || o.verticalDpi){
-				let ele = promiseObj.xml.ele('sheetPr');
+		// Check if any option that would require the sheetPr element to be added exists
+		if(o.fitToHeight || o.fitToWidth || o.orientation || o.horizontalDpi || o.verticalDpi){
+			let ele = promiseObj.xml.ele('sheetPr');
 
-				// §18.3.1.65 pageSetUpPr (Page Setup Properties)
-				if(o.fitToHeight || o.fitToWidth) {
-					ele.ele('pageSetUpPr').att('fitToPage', 1);
-				}
+			// §18.3.1.65 pageSetUpPr (Page Setup Properties)
+			if(o.fitToHeight || o.fitToWidth) {
+				ele.ele('pageSetUpPr').att('fitToPage', 1);
 			}
-			resolve(promiseObj);
 		}
-		catch(e){
-			reject(e);
-		}
+		resolve(promiseObj);
 	});
 };
 
 let _addDimensionEleToXML = (promiseObj) => {
 	// §18.3.1.35 dimension (Worksheet Dimensions)
 	return new Promise((resolve, reject) => {
-		try{
-			let firstCell = 'A1';
-			let lastCell = `${utils.getExcelAlpha(promiseObj.ws.lastUsedCol)}${promiseObj.ws.lastUsedRow}`;
-			let ele = promiseObj.xml.ele('dimension');
-			ele.att('ref', `${firstCell}:${lastCell}`);
+		let firstCell = 'A1';
+		let lastCell = `${utils.getExcelAlpha(promiseObj.ws.lastUsedCol)}${promiseObj.ws.lastUsedRow}`;
+		let ele = promiseObj.xml.ele('dimension');
+		ele.att('ref', `${firstCell}:${lastCell}`);
 
-			resolve(promiseObj);
-		}
-		catch(e){
-			reject(e);
-		}
+		resolve(promiseObj);
 	});
 };
 
 let _addSheetViewsEleToXML = (promiseObj) => {
 	// §18.3.1.88 sheetViews (Sheet Views)
 	return new Promise((resolve, reject) => {
-		try{
 
-			resolve(promiseObj);
-		}
-		catch(e){
-			reject(e);
-		}
+		resolve(promiseObj);
 	});
 };
 
 let _addSheetFormatPrEleToXML = (promiseObj) => {
 	// §18.3.1.81 sheetFormatPr (Sheet Format Properties)
 	return new Promise((resolve, reject) => {
-		try{
 
-			resolve(promiseObj);
-		}
-		catch(e){
-			reject(e);
-		}
+		resolve(promiseObj);
 	});
 };
 
 let _addColsEleToXML = (promiseObj) => {
 	// §18.3.1.17 cols (Column Information)
 	return new Promise((resolve, reject) => {
-		try{
 
-			resolve(promiseObj);
-		}
-		catch(e){
-			reject(e);
-		}
+		resolve(promiseObj);
 	});
 };
 
@@ -123,158 +98,98 @@ let _addSheetDataEleToXML = (promiseObj) => {
 	// §18.3.1.80 sheetData (Sheet Data)
 	return new Promise((resolve, reject) => {
 
-		try{
-			let ele = promiseObj.xml.ele('sheetData');
-			let rows = Object.keys(promiseObj.ws.rows);
-			logger.debug(rows);
-			
-		}
-		catch(e){
-			reject(e);
-		}
+		let ele = promiseObj.xml.ele('sheetData');
+		let rows = Object.keys(promiseObj.ws.rows);
+		
+		resolve(promiseObj);
 	});
 };
 
 let _addSheetProtectionEleToXML = (promiseObj) => {
 	// §18.3.1.85 sheetProtection (Sheet Protection Options)
 	return new Promise((resolve, reject) => {
-		try{
 
-			resolve(promiseObj);
-		}
-		catch(e){
-			reject(e);
-		}
+		resolve(promiseObj);
 	});
 };
 
 let _addAutoFilterEleToXML = (promiseObj) => {
 	// §18.3.1.2 autoFilter (AutoFilter Settings)
 	return new Promise((resolve, reject) => {
-		try{
 
-			resolve(promiseObj);
-		}
-		catch(e){
-			reject(e);
-		}
+		resolve(promiseObj);
 	});
 };
 
 let _addMergeCellsEleToXML = (promiseObj) => {
 	// §18.3.1.55 mergeCells (Merge Cells)
 	return new Promise((resolve, reject) => {
-		try{
 
-			resolve(promiseObj);
-		}
-		catch(e){
-			reject(e);
-		}
+		resolve(promiseObj);
 	});
 };
 
 let _addConditionalFormattingEleToXML = (promiseObj) => {
 	// §18.3.1.18 conditionalFormatting (Conditional Formatting)
 	return new Promise((resolve, reject) => {
-		try{
 
-			resolve(promiseObj);
-		}
-		catch(e){
-			reject(e);
-		}
+		resolve(promiseObj);
 	});
 };
 
 let _addHyperlinksEleToXML = (promiseObj) => {
 	// §18.3.1.48 hyperlinks (Hyperlinks)
 	return new Promise((resolve, reject) => {
-		try{
 
-			resolve(promiseObj);
-		}
-		catch(e){
-			reject(e);
-		}
+		resolve(promiseObj);
 	});
 };
 
 let _addDataValidationsEleToXML = (promiseObj) => {
 	// §18.3.1.33 dataValidations (Data Validations)
 	return new Promise((resolve, reject) => {
-		try{
 
-			resolve(promiseObj);
-		}
-		catch(e){
-			reject(e);
-		}
+		resolve(promiseObj);
 	});
 };
 
 let _addPrintOptionsEleToXML = (promiseObj) => {
 	// §18.3.1.70 printOptions (Print Options)
 	return new Promise((resolve, reject) => {
-		try{
 
-			resolve(promiseObj);
-		}
-		catch(e){
-			reject(e);
-		}
+		resolve(promiseObj);
 	});
 };
 
 let _addPageMarginsEleToXML = (promiseObj) => {
 	// §18.3.1.62 pageMargins (Page Margins)
 	return new Promise((resolve, reject) => {
-		try{
 
-			resolve(promiseObj);
-		}
-		catch(e){
-			reject(e);
-		}
+		resolve(promiseObj);
 	});
 };
 
 let _addPageSetupEleToXML = (promiseObj) => {
 	// §18.3.1.63 pageSetup (Page Setup Settings)
 	return new Promise((resolve, reject) => {
-		try{
 
-			resolve(promiseObj);
-		}
-		catch(e){
-			reject(e);
-		}
+		resolve(promiseObj);
 	});
 };
 
 let _addHeaderFooterEleToXML = (promiseObj) => {
 	// §18.3.1.46 headerFooter (Header Footer Settings)
 	return new Promise((resolve, reject) => {
-		try{
 
-			resolve(promiseObj);
-		}
-		catch(e){
-			reject(e);
-		}
+		resolve(promiseObj);
 	});
 };
 
 let _addDrawingEleToXML = (promiseObj) => {
 	// §18.3.1.36 drawing (Drawing)
 	return new Promise((resolve, reject) => {
-		try{
 
-			resolve(promiseObj);
-		}
-		catch(e){
-			reject(e);
-		}
+		resolve(promiseObj);
 	});
 };
 
@@ -292,7 +207,6 @@ class WorkSheet {
 	 * @param {Object} opts Workbook settings
 	 */
 	constructor( wb, name, opts ) {
-		logger.debug('New WorkSheet created');
 		this.wb = wb;
 		this.opts = _.merge({}, sheetOpts, opts);
 	    this.name = name ? name : `Sheet ${wb.sheets.length + 1}`;
@@ -312,70 +226,66 @@ class WorkSheet {
 
 	generateXML() {
 		return new Promise((resolve, reject) => {
-			try {
-				let wsXML = xml.create(
-					'worksheet',
-					{
-						'version': '1.0', 
-						'encoding': 'UTF-8', 
-						'standalone': true
-					}
-				)
-				.att('mc:Ignorable', 'x14ac')
-				.att('xmlns', 'http://schemas.openxmlformats.org/spreadsheetml/2006/main')
-				.att('xmlns:mc', 'http://schemas.openxmlformats.org/markup-compatibility/2006')
-				.att('xmlns:r', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships')
-				.att('xmlns:x14ac', 'http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac');
 
-				// Excel complains if specific elements on not in the correct order in the XML doc.
-				// Elements must be added to the XML in this order
-				//  - sheetPr
-				//  - dimension
-				//  - sheetViews
-				//  - sheetFormatPr
-				//  - cols
-				//  - sheetData
-				//  - sheetProtection
-				//  - autoFilter
-				//  - mergeCells
-				//  - conditionalFormatting
-				//  - hyperlinks
-				//  - dataValidations
-				//  - printOptions
-				//  - pageMargins
-				//  - pageSetup
-				//  - headerFooter
-				//  - drawing
-				let promiseObj = {xml: wsXML, ws: this};
-				_addSheetPrEleToXML(promiseObj)
-				.then(_addDimensionEleToXML)
-				.then(_addSheetViewsEleToXML)
-				.then(_addSheetFormatPrEleToXML)
-				.then(_addColsEleToXML)
-				.then(_addSheetDataEleToXML)
-				.then(_addSheetProtectionEleToXML)
-				.then(_addAutoFilterEleToXML)
-				.then(_addMergeCellsEleToXML)
-				.then(_addConditionalFormattingEleToXML)
-				.then(_addHyperlinksEleToXML)
-				.then(_addDataValidationsEleToXML)
-				.then(_addPrintOptionsEleToXML)
-				.then(_addPageMarginsEleToXML)
-				.then(_addPageSetupEleToXML)
-				.then(_addHeaderFooterEleToXML)
-				.then(_addDrawingEleToXML)
-				.then((promiseObj) => {
-					resolve(promiseObj.xml.doc().end({ pretty: true, indent: '  ', newline: '\n' }));
-				})
-				.catch((e) => {
-					console.error(e.stack);
-				});
+			let wsXML = xml.create(
+				'worksheet',
+				{
+					'version': '1.0', 
+					'encoding': 'UTF-8', 
+					'standalone': true
+				}
+			)
+			.att('mc:Ignorable', 'x14ac')
+			.att('xmlns', 'http://schemas.openxmlformats.org/spreadsheetml/2006/main')
+			.att('xmlns:mc', 'http://schemas.openxmlformats.org/markup-compatibility/2006')
+			.att('xmlns:r', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships')
+			.att('xmlns:x14ac', 'http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac');
 
-			} 
-			catch(e) {
-				logger.error(e.stack);
-				reject(e);
-			}
+			// Excel complains if specific elements on not in the correct order in the XML doc.
+			// Elements must be added to the XML in this order
+			//  - sheetPr
+			//  - dimension
+			//  - sheetViews
+			//  - sheetFormatPr
+			//  - cols
+			//  - sheetData
+			//  - sheetProtection
+			//  - autoFilter
+			//  - mergeCells
+			//  - conditionalFormatting
+			//  - hyperlinks
+			//  - dataValidations
+			//  - printOptions
+			//  - pageMargins
+			//  - pageSetup
+			//  - headerFooter
+			//  - drawing
+			let promiseObj = {xml: wsXML, ws: this};
+			_addSheetPrEleToXML(promiseObj)
+			.then(_addDimensionEleToXML)
+			.then(_addSheetViewsEleToXML)
+			.then(_addSheetFormatPrEleToXML)
+			.then(_addColsEleToXML)
+			.then(_addSheetDataEleToXML)
+			.then(_addSheetProtectionEleToXML)
+			.then(_addAutoFilterEleToXML)
+			.then(_addMergeCellsEleToXML)
+			.then(_addConditionalFormattingEleToXML)
+			.then(_addHyperlinksEleToXML)
+			.then(_addDataValidationsEleToXML)
+			.then(_addPrintOptionsEleToXML)
+			.then(_addPageMarginsEleToXML)
+			.then(_addPageSetupEleToXML)
+			.then(_addHeaderFooterEleToXML)
+			.then(_addDrawingEleToXML)
+			.then((promiseObj) => {
+				resolve(promiseObj.xml.doc().end({ pretty: true, indent: '  ', newline: '\n' }));
+			})
+			.catch((e) => {
+				console.error(e.stack);
+			});
+
+
 		});
 	}
 

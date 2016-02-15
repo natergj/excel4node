@@ -1,37 +1,167 @@
-let _ 			= require('lodash');
-let JSZip 		= require('jszip');
-let fs 			= require('fs');
-let xml 		= require('xmlbuilder');
-let WorkSheet 	= require('../worksheet');
-let logger 		= require('../logger.js');
+let _ 				= require('lodash');
+let JSZip 			= require('jszip');
+let fs 				= require('fs');
+let xmlbuilder 		= require('xmlbuilder');
+let WorkSheet 		= require('../worksheet');
+let logger 			= require('../logger.js');
 
 // ------------------------------------------------------------------------------
 // Private WorkBook Methods Start
 
-let _addWorkSheetsXML = (promiseObj) => {
-	return new Promise((resolve, reject) => {
-		try {
-			let curSheet = 0;
 
-			let processNextSheet = () => {
-				let thisSheet = promiseObj.wb.sheets[curSheet];
-				if(thisSheet){
-					thisSheet
-					.generateXML()
-					.then((xml) => {
-						// Add worksheet to zip
-						logger.debug(xml);
-						curSheet++;
-						processNextSheet();
-					});
-				} else {
-					resolve(promiseObj);
-				}
-			};
-			processNextSheet();
-		} catch(e) {
-			reject(e);
-		}
+let _addRootContentTypesXML = (promiseObj) => {
+	// Required as stated in §12.2
+	return new Promise((resolve, reject) => {
+		let xml = xmlbuilder.create(
+			'Types',
+			{
+				'version': '1.0', 
+				'encoding': 'UTF-8', 
+				'standalone': true
+			}
+		)
+		.att('xmlns', 'http://schemas.openxmlformats.org/package/2006/content-types');
+
+		xml.ele('Default').att('ContentType', 'application/xml').att('Extension', 'xml');
+		xml.ele('Default').att('ContentType', 'application/vnd.openxmlformats-package.relationships+xml').att('Extension', 'rels');
+		xml.ele('Override').att('ContentType','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml').att('PartName', '/xl/workbook.xml');
+		promiseObj.wb.sheets.forEach((s, i) => {
+			xml.ele('Override')
+			.att('ContentType','application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml')
+			.att('PartName', `/xl/worksheets/sheet${i+1}.xml`);
+		});
+		xml.ele('Override').att('ContentType','application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml').att('PartName', '/xl/styles.xml');
+		xml.ele('Override').att('ContentType','application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml').att('PartName', '/xl/sharedStrings.xml');
+
+		let xmlString = xml.doc().end(promiseObj.xmlOutVars);
+		promiseObj.xlsx.file('[Content_Types].xml', xmlString);
+		resolve(promiseObj);
+	});
+};
+
+let _addRootRelsXML = (promiseObj) => {
+	// Required as stated in §12.2
+	return new Promise((resolve, reject) => {
+		let xml = xmlbuilder.create(
+			'Relationships',
+			{
+				'version': '1.0', 
+				'encoding': 'UTF-8', 
+				'standalone': true
+			}
+		)
+		.att('xmlns', 'http://schemas.openxmlformats.org/package/2006/relationships');
+
+		xml
+		.ele('Relationship')
+		.att('Id', 'rId1')
+		.att('Type', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument')
+		.att('Target', 'xl/workbook.xml');
+
+		let xmlString = xml.doc().end(promiseObj.xmlOutVars);
+		promiseObj.xlsx.folder('_rels').file('.rels', xmlString);
+		resolve(promiseObj);
+
+	});
+};
+
+let _addWorkBookXML = (promiseObj) => {
+	// Required as stated in §12.2
+	return new Promise((resolve, reject) => {
+
+		let xml = xmlbuilder.create(
+			'workbook',
+			{
+				'version': '1.0', 
+				'encoding': 'UTF-8', 
+				'standalone': true
+			}
+		)
+		xml.att('mc:Ignorable', 'x15');
+		xml.att('xmlns', 'http://schemas.openxmlformats.org/spreadsheetml/2006/main');
+		xml.att('xmlns:mc', 'http://schemas.openxmlformats.org/markup-compatibility/2006');
+		xml.att('xmlns:r', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships');
+		xml.att('xmlns:x15', 'http://schemas.microsoft.com/office/spreadsheetml/2010/11/main');
+
+		let sheetsEle = xml.ele('sheets');
+		promiseObj.wb.sheets.forEach((s, i) => {
+			sheetsEle.ele('sheet')
+			.att('name', s.name)
+			.att('sheetId', i+1)
+			.att('r:id', `rId${i+1}`);
+		});
+
+		let xmlString = xml.doc().end(promiseObj.xmlOutVars);
+		promiseObj.xlsx.folder('xl').file('workbook.xml', xmlString);
+		resolve(promiseObj);
+
+	});
+};
+
+let _addWorkBookRelsXML = (promiseObj) => {
+	// Required as stated in §12.2
+	return new Promise((resolve, reject) => {
+
+		let xml = xmlbuilder.create(
+			'Relationships',
+			{
+				'version': '1.0', 
+				'encoding': 'UTF-8', 
+				'standalone': true
+			}
+		)
+		.att('xmlns', 'http://schemas.openxmlformats.org/package/2006/relationships');
+
+		xml
+		.ele('Relationship')
+        .att('Id', `rId${promiseObj.wb.sheets.length+1}`)
+        .att('Target', 'sharedStrings.xml')
+        .att('Type', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings');
+
+		xml
+		.ele('Relationship')
+        .att('Id', `rId${promiseObj.wb.sheets.length+2}`)
+        .att('Target', 'styles.xml')
+        .att('Type', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles');
+
+        promiseObj.wb.sheets.forEach((s, i) => {
+        	xml
+        	.ele('Relationship')
+        	.att('Id', `rId${i+1}`)
+        	.att('Target', `worksheets/sheet${i+1}.xml`)
+        	.att('Type', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet');
+        });
+
+        let xmlString = xml.doc().end(promiseObj.xmlOutVars);
+		promiseObj.xlsx.folder('xl').folder('_rels').file('workbook.xml.rels', xmlString);
+		resolve(promiseObj);
+
+	});
+};
+
+let _addWorkSheetsXML = (promiseObj) => {
+	// Required as stated in §12.2
+	return new Promise((resolve, reject) => {
+
+		let curSheet = 0;
+
+		let processNextSheet = () => {
+			let thisSheet = promiseObj.wb.sheets[curSheet];
+			if(thisSheet){
+				thisSheet
+				.generateXML()
+				.then((xml) => {
+					// Add worksheet to zip
+					curSheet++;
+					promiseObj.xlsx.folder('xl').folder('worksheets').file(`sheet${curSheet}.xml`, xml);
+					processNextSheet();
+				});
+			} else {
+				resolve(promiseObj);
+			}
+		};
+		processNextSheet();
+
 	});
 };
 
@@ -42,71 +172,123 @@ let _addWorkSheetsXML = (promiseObj) => {
  * @param {Object} promiseObj object containing jszip instance, workbook intance and xmlvars
  * @return {Promise} Resolves with promiseObj
  */
-let _addSharedStringsXMLToZip = (promiseObj) => {
+let _addSharedStringsXML = (promiseObj) => {
+	// §12.3.15 Shared String Table Part
 	return new Promise( (resolve, reject) => {
-		try{
-			let stringObj = {
-				'sst' : [{
-                    '@count': 0,
-                    '@uniqueCount': 0,
-                    '@xmlns': 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'
-                }]
-			};
 
-		    promiseObj.wb.sharedStrings.forEach(function (s) {
-		        if (s instanceof Array) {
-		            var si = [],
-		                lastrPr = {}; //Remeber last font name, size and color
-		            s.forEach(function (i) {
-		                if (typeof(i) === 'string') {
-		                    si.push({ 'r': { 'rPr': JSON.parse(JSON.stringify(lastrPr)), 't': { '@xml:space': 'preserve', '#text': i } } });
-		                } else {
-		                    var rPr = {};
-		                    if (i.size !== undefined) {
-		                        lastrPr.sz = rPr.sz = { '@val': i.size };
-		                    } else if (lastrPr.sz) {
-		                        rPr.sz = lastrPr.sz;
-		                    }
-		                    if (i.font !== undefined) {
-		                        lastrPr.rFont = rPr.rFont = { '@val': i.font };
-		                    } else if (lastrPr.rFont) {
-		                        rPr.rFont = lastrPr.rFont;
-		                    }
-		                    if (i.color !== undefined) {
-		                        lastrPr.color = rPr.color = { '@rgb': i.color };
-		                    } else  if (lastrPr.color) {
-		                        rPr.color = lastrPr.color;
-		                    }
-		                    if (i.bold) {
-		                        rPr.b = {};
-		                    }
-		                    if (i.underline) {
-		                        rPr.u = {};
-		                    }
-		                    if (i.italic) {
-		                        rPr.i = {};
-		                    }
-		                    if (i.value !== undefined) {
-		                        si.push({ 'r': { 'rPr': rPr, 't': { '@xml:space': 'preserve', '#text': i.value } } });
-		                    }
-		                }
-		            });
-		            if (si.length) {
-		                stringObj.sst.push({ 'si': si });
-		            }
-		        } else {
-		            stringObj.sst.push({ 'si': { 't': s } });
-		        }
-		    });
+		let xml = xmlbuilder.create(
+			'sst',
+			{
+				'version': '1.0', 
+				'encoding': 'UTF-8', 
+				'standalone': true
+			}
+		)
+		.att('count', promiseObj.wb.sharedStrings.length)
+		.att('uniqueCount', promiseObj.wb.sharedStrings.length)
+		.att('xmlns', 'http://schemas.openxmlformats.org/spreadsheetml/2006/main');
 
-		    stringObj.sst[0]['@uniqueCount'] = promiseObj.wb.sharedStrings.length;
+	    promiseObj.wb.sharedStrings.forEach((s) => {
+	    	xml.ele('si').ele('t').txt(s);
+	    });
 
-			promiseObj.xlsx.folder('xl').file('sharedStrings.xml', xml.create(stringObj).end(promiseObj.xmlOutVars));
+	    let xmlString = xml.doc().end(promiseObj.xmlOutVars);
+		promiseObj.xlsx.folder('xl').file('sharedStrings.xml', xmlString);
 
-			resolve(promiseObj);
-		} catch(e) {
-			reject(e);
+		resolve(promiseObj);
+
+	});
+};
+
+let _addStylesXML = (promiseObj) => {
+	// §12.3.20 Styles Part
+	return new Promise((resolve, reject) => {
+		let xml = xmlbuilder.create(
+			'styleSheet',
+			{
+				'version': '1.0', 
+				'encoding': 'UTF-8', 
+				'standalone': true
+			}
+		)
+		.att('mc:Ignorable', 'x14ac')
+		.att('xmlns', 'http://schemas.openxmlformats.org/spreadsheetml/2006/main')
+		.att('xmlns:mc', 'http://schemas.openxmlformats.org/markup-compatibility/2006')
+		.att('xmlns:x14ac', 'http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac');
+
+		if(promiseObj.wb.styleData.numFmts.length > 0){
+			let nfXML = xml
+			.ele('numFmts')
+			.att('count', promiseObj.wb.styleData.numFmts.length);
+			promiseObj.wb.styleData.numFmts.forEach((nf) => {
+				nfXML
+				.ele('numFmt')
+				.att('formatCode', nf.format)
+				.att('numFmtId', nf.id);
+			});
 		}
+
+		let fontXML = xml
+		.ele('fonts')
+		.att('count', promiseObj.wb.styleData.fonts.length);
+		promiseObj.wb.styleData.fonts.forEach((f) => {
+			let fEle = fontXML.ele('font');
+			fEle.ele('sz').att('val', f.sz);
+			fEle.ele('color').att('rgb', f.color);
+			fEle.ele('name').att('val', f.name);
+			fEle.ele('family').att('val', f.family);
+			fEle.ele('scheme').att('val', f.scheme);
+		});
+
+		let fillXML = xml 
+		.ele('fills')
+		.att('count', promiseObj.wb.styleData.fills.length);
+		promiseObj.wb.styleData.fills.forEach((f) => {
+			let fXML = fillXML.ele('fill');
+			let pFill = fXML.ele('patternFill').att('patternType', f.patternFill.patternType);
+			if(f.patternFill.fgColor){
+				pFill.ele('fgColor').att('rgb', f.patternFill.fgColor);
+			}
+			if(f.patternFill.bgColor){
+				pFill.ele('bgColor').att('rgb', f.patternFill.bgColor);
+			}
+
+		});
+
+		let borderXML = xml 
+		.ele('borders')
+		.att('count', promiseObj.wb.styleData.borders.length);
+		promiseObj.wb.styleData.borders.forEach((b) => {
+			let bXML = borderXML.ele('border');
+
+			['left','right','top','bottom','diagonal'].forEach((o) => {
+				let thisOEle = bXML.ele(o);
+				if(b[o]){
+					if(b[o].style){
+						thisOEle.att('style', b[o].style);
+					}
+					if(b[o].color){
+						thisOEle.ele('color').att('rgb', b[o].color);
+					}
+				}
+			});
+		});
+
+
+		let cellXfsXML = xml 
+		.ele('cellXfs')
+		.att('count', promiseObj.wb.styleData.cellXfs.length);
+		promiseObj.wb.styleData.cellXfs.forEach((c) => {
+			let thisEle = cellXfsXML.ele('xf');
+			Object.keys(c).forEach((a) => {
+				thisEle.att(a, c[a]);
+			});
+		});
+
+	    let xmlString = xml.doc().end(promiseObj.xmlOutVars);
+		promiseObj.xlsx.folder('xl').file('styles.xml', xmlString);
+
+		resolve(promiseObj);
 	});
 };
 
@@ -119,39 +301,53 @@ let _addSharedStringsXMLToZip = (promiseObj) => {
  */
 let _writeToBuffer = (wb) => {
 	return new Promise((resolve, reject) => {
-		try {
-			let promiseObj = {
-				wb : wb, 
-				xlsx : new JSZip(),
-				xmlOutVars : {}
-			};
-			if(promiseObj.wb.sheets.length === 0){
-				promiseObj.wb.sheets.push(promiseObj.wb.WorkSheet('Sheet 1'));
-			}
 
-			_addWorkSheetsXML(promiseObj)
-			.then(_addSharedStringsXMLToZip)
-			.then(() => {
-				let buffer = promiseObj.xlsx.generate({
-			    	type: 'nodebuffer',
-			    	compression: wb.opts.jszip.compression
-				});	
-				resolve(buffer);
-			})
-			.catch((e) => {
-				console.error(e.stack);
-			});
-
-		} catch(e) {
-			reject(e);
+		let promiseObj = {
+			wb : wb, 
+			xlsx : new JSZip(),
+			xmlOutVars : { pretty: true, indent: '  ', newline: '\n' }
+			//xmlOutVars : {}
+		};
+		if(promiseObj.wb.sheets.length === 0){
+			promiseObj.wb.sheets.push(promiseObj.wb.WorkSheet('Sheet 1'));
 		}
+
+		_addRootContentTypesXML(promiseObj)
+		.then(_addRootRelsXML)
+		.then(_addWorkBookXML)
+		.then(_addWorkBookRelsXML)
+		.then(_addWorkSheetsXML)
+		.then(_addSharedStringsXML)
+		.then(_addStylesXML)
+		.then(() => {
+			let buffer = promiseObj.xlsx.generate({
+		    	type: 'nodebuffer',
+		    	compression: wb.opts.jszip.compression
+			});	
+			resolve(buffer);
+		})
+		.catch((e) => {
+			console.error(e.stack);
+		});
+
 	});
 };
 
 // Private WorkBook Methods End
 // ------------------------------------------------------------------------------
 
-
+/* Available options for WorkBook
+{
+	jszip : {
+		compression : 'DEFLATE'
+	},
+	defaultFont : {
+		size : 12,
+		family : 'Calibri',
+		color : 'FFFFFFFF'
+	}
+}
+*/
 // Default Options for WorkBook
 let workBookDefaultOpts = {
 	jszip : {
@@ -175,6 +371,54 @@ class WorkBook {
 		this.sheets = [];
 		this.sharedStrings = [];
 		this.styles = [];
+		this.styleData = {
+			'numFmts': [],
+			'fonts': [],
+			'fills': [
+				{
+					'patternFill': {
+						'patternType' : 'none'
+					}
+				},
+				{
+					'patternFill': {
+						'patternType' : 'none'
+					}
+				}
+			],
+			'borders': [
+				{
+					'left': null,
+					'right': null,
+					'top': null,
+					'bottom': null,
+					'diagonal': null
+				}
+			],
+			'cellXfs': [
+				{
+					'borderId': '0',
+					'fillId': '0',
+					'fontId': '0',
+					'numFmtId': '0'
+				}
+			]
+		}
+
+		// Set Default Font
+		let defaultFont = {
+			'sz': '12',
+			'color': 'FFFFFFFF',
+			'name': 'Calibri',
+			'family': '2',
+			'scheme': 'minor'
+		};
+		if(this.opts.defaultFont){
+			defaultFont.sz = this.opts.defaultFont.size;
+			defaultFont.color = utils.cleanColor(this.opts.defaultFont.color);
+			defaultFont.name = this.opts.defaultFont.family;
+		}
+		this.styleData.fonts.push(defaultFont)
 
 	}
 
@@ -188,7 +432,6 @@ class WorkBook {
 	write(fileName, handler) {
 		_writeToBuffer(this)
 		.then((buffer) => {
-
 		    switch (typeof handler) {
 		    	// handler passed as http response object. 
 		    	case 'object':
@@ -209,6 +452,7 @@ class WorkBook {
 
 		    	// no handler passed, write file to FS.
 		    	default:
+		    		
 			        fs.writeFile(fileName, buffer, function (err) {
 			            if (err) { throw err; }
 			        });
