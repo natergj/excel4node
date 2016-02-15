@@ -144,7 +144,7 @@ let _addWorkSheetsXML = (promiseObj) => {
 	return new Promise((resolve, reject) => {
 
 		let curSheet = 0;
-
+		
 		let processNextSheet = () => {
 			let thisSheet = promiseObj.wb.sheets[curSheet];
 			if(thisSheet){
@@ -308,10 +308,12 @@ let _writeToBuffer = (wb) => {
 			xmlOutVars : { pretty: true, indent: '  ', newline: '\n' }
 			//xmlOutVars : {}
 		};
-		if(promiseObj.wb.sheets.length === 0){
-			promiseObj.wb.sheets.push(promiseObj.wb.WorkSheet('Sheet 1'));
-		}
 
+
+		if(promiseObj.wb.sheets.length === 0){
+			promiseObj.wb.WorkSheet();
+		}
+		
 		_addRootContentTypesXML(promiseObj)
 		.then(_addRootRelsXML)
 		.then(_addWorkBookXML)
