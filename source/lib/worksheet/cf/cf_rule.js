@@ -3,7 +3,7 @@ let _ = require('lodash');
 let CF_RULE_TYPES = require('./cf_rule_types');
 
 class CfRule {
-    constructor (ruleConfig) {
+    constructor(ruleConfig) {
         this.config = ruleConfig;
 
         let foundType = CF_RULE_TYPES[this.config.type];

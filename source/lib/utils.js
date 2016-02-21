@@ -10,7 +10,7 @@ let _bitXOR = (a, b) => {
     b = String(padString + b).substr(-maxLength);
 
     let response = '';
-    for(let i = 0; i < a.length; i++) {
+    for (let i = 0; i < a.length; i++) {
         response += a[i] === b[i] ? 0 : 1;
     }
     return response;
@@ -119,14 +119,14 @@ let getExcelTS = (date) => {
     let thisDt = new Date(date);
     let epoch = new Date(1899, 11, 31);
     let dt = thisDt.setDate(thisDt.getDate() + 1);
-    let ts = (dt-epoch) / (1000 * 60 * 60 * 24);
+    let ts = (dt - epoch) / (1000 * 60 * 60 * 24);
     return ts;
 };
 
 let sortCellRefs = (a, b) => {
     let aAtt = getExcelRowCol(a);
     let bAtt = getExcelRowCol(b);
-    if(aAtt.col === bAtt.col){
+    if (aAtt.col === bAtt.col) {
         return aAtt.row - bAtt.row;
     } else {
         return aAtt.col - bAtt.col;

@@ -12,10 +12,10 @@
     Sections are referenced in code comments with § 
 */
 
-let utils = require('./lib/utils.js');
+const utils = require('./lib/utils.js');
 module.exports = {
-	WorkBook : require('./lib/workbook/index.js'),
-	getExcelRowCol : utils.getExcelRowCol,
-	getExcelAlpha : utils.getExcelAlpha,
-	getExcelTS : utils.getExcelTS
+    WorkBook: require('./lib/workbook/index.js'),
+    getExcelRowCol: utils.getExcelRowCol,
+    getExcelAlpha: utils.getExcelAlpha,
+    getExcelTS: utils.getExcelTS
 };
