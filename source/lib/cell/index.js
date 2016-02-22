@@ -1,4 +1,6 @@
+const _ = require('lodash');
 const Cell = require('./cell.js');
+const rowDefaultParams = require('../row/row_default_params.js');
 const utils = require('../utils.js');
 const logger = require('../logger.js');
 
@@ -121,9 +123,7 @@ let cellAccessor = (ws, row1, col1, row2, col2, isMerged) => {
                 ws.cells[ref] = new Cell(r, c);
             }
             if (!ws.rows[r]) {
-                ws.rows[r] = {
-                    cellRefs: []
-                };
+                ws.rows[r] = _.merge({}, rowDefaultParams);
             }
             if (ws.rows[r].cellRefs.indexOf(ref) < 0) {
                 ws.rows[r].cellRefs.push(ref);

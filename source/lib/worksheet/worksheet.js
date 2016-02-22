@@ -114,7 +114,7 @@ let _addSheetData = (promiseObj) => {
                 if (promiseObj.ws.opts.sheetFormat.defaultRowHeight !== 16) {
                     rEle.att('customHeight', '1');
                 }
-                
+
                 rEle.att('r', r);
                 rEle.att('spans', `${firstCol}:${lastCol}`);
 
@@ -250,8 +250,8 @@ class WorkSheet {
         this.opts.sheetView.tabSelected = this.sheetId === 1 ? 1 : 0;
         this.name = name ? name : `Sheet ${this.sheetId}`;
         this.hasGroupings = false;
-        this.cols = {};
-        this.rows = {}; // Rows keyed by row, contains array of cellRefs
+        this.cols = {}; // Columns keyed by column, contains column properties
+        this.rows = {}; // Rows keyed by row, contains row properties and array of cellRefs
         this.cells = {}; // Cells keyed by Excel ref
         this.lastUsedRow = 1;
         this.lastUsedCol = 1;
