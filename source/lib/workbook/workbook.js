@@ -426,6 +426,20 @@ class WorkBook {
     }
 
     /**
+     * setSelectedTab
+     * @param {Number} tab number of sheet that should be displayed when workbook opens. tabs are indexed starting with 1
+     **/
+    setSelectedTab(id) {
+        this.sheets.forEach((s) => {
+            if (s.sheetId === id) {
+                s.opts.sheetView.tabSelected = 1;
+            } else {
+                s.opts.sheetView.tabSelected = 0;
+            }
+        });
+    }
+
+    /**
      * Generate .xlsx file. 
      * @param {String} fileName Name of Excel workbook with .xslx extension
      * @param {http.response | callback} http response object or callback function (optional). 

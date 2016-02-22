@@ -4,39 +4,7 @@ const CfRulesCollection = require('./cf/cf_rules_collection');
 const logger = require('../logger.js');
 const utils = require('../utils.js');
 const cellAccessor = require('../cell');
-
-// ------------------------------------------------------------------------------
-// Default Options for New WorkSheets
-let sheetOpts = {
-    'margins': {
-        'bottom': 0.75,
-        'footer': 0.3,
-        'header': 0.3,
-        'left': 0.7,
-        'right': 0.7,
-        'top': 0.75
-    },
-    'printOptions': {
-        'centerHorizontal': false,
-        'centerVertical': true,
-        'fitToHeight': null, // (Optional) Max number of pages high
-        'fitToWidth': null, // (Optional) Max number of pages wide
-        'orientation': null, // (Optional) 'potrait' or 'landscape'
-        'horizontalDpi': null, // (Optional) standard is 4294967292
-        'verticalDpi': null  // (Optional) standard is 4294967292
-    
-    },
-    'sheetView': {
-        'workbookViewId': 0,
-        'rightToLeft': 0,
-        'zoomScale': 100,
-        'zoomScaleNormal': 100,
-        'zoomScalePageLayoutView': 100
-    },
-    'outline': {
-        'summaryBelow': false
-    }
-};
+const wsDefaultParams = require('./sheet_default_params.js');
 
 // ------------------------------------------------------------------------------
 // Private WorkSheet Functions
@@ -73,6 +41,29 @@ let _addDimension = (promiseObj) => {
 let _addSheetViews = (promiseObj) => {
     // §18.3.1.88 sheetViews (Sheet Views)
     return new Promise((resolve, reject) => {
+        let o = promiseObj.ws.opts.sheetView;
+        let ele = promiseObj.xml.ele('sheetViews');
+        let tabSelected = promiseObj.ws.opts;
+        let sv = ele.ele('sheetView')
+        .att('tabSelected', o.tabSelected)
+        .att('workbookViewId', o.workbookViewId)
+        .att('rightToLeft', o.rightToLeft)
+        .att('zoomScale', o.zoomScale)
+        .att('zoomScaleNormal', o.zoomScaleNormal)
+        .att('zoomScalePageLayoutView', o.zoomScalePageLayoutView);
+
+        let modifiedPaneParams = [];
+        Object.keys(o.pane).forEach((k) => {
+            if (o.pane[k] !== null) {
+                modifiedPaneParams.push(k);
+            }
+        });
+        if (modifiedPaneParams.lenth > 0) {
+            let pEle = ele.ele('pane');
+            modifiedPaneParams.forEach((k) => {
+                pEle.att(k, o.pane[k]);
+            });
+        }
 
         resolve(promiseObj);
     });
@@ -240,16 +231,18 @@ class WorkSheet {
      * @param {Object} opts Workbook settings
      */
     constructor(wb, name, opts) {
+        
         this.wb = wb;
-        this.opts = _.merge({}, sheetOpts, opts);
-        this.name = name ? name : `Sheet ${wb.sheets.length + 1}`;
+        this.sheetId = this.wb.sheets.length + 1;
+        this.opts = _.merge({}, wsDefaultParams, opts);
+        this.opts.sheetView.tabSelected = this.sheetId === 1 ? 1 : 0;
+        this.name = name ? name : `Sheet ${this.sheetId}`;
         this.hasGroupings = false;
         this.cols = {};
         this.rows = {}; // Rows keyed by row, contains array of cellRefs
         this.cells = {}; // Cells keyed by Excel ref
         this.lastUsedRow = 1;
         this.lastUsedCol = 1;
-        this.paneData = {}; // For use with §18.3.1.88 sheetViews (Sheet Views)
 
         // conditional formatting rules hashed by sqref
         this.cfRulesCollection = new CfRulesCollection();
