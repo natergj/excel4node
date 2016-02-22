@@ -32,6 +32,17 @@ module.exports = {
         'zoomScaleNormal': 100,
         'zoomScalePageLayoutView': 100
     },
+    'sheetFormat': {
+        'baseColWidth': 10,
+        'customHeight': null,
+        'defaultColWidth': null,
+        'defaultRowHeight': 16,
+        'outlineLevelCol': null,
+        'outlineLevelRow': null,
+        'thickBottom': null,
+        'thickTop': null,
+        'zeroHeight': null
+    },
     'outline': {
         'summaryBelow': false
     }

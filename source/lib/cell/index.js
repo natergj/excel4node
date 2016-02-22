@@ -106,6 +106,14 @@ let cellAccessor = (ws, row1, col1, row2, col2, isMerged) => {
     row2 = row2 ? row2 : row1;
     col2 = col2 ? col2 : col1;
 
+    if (row2 > ws.lastUsedRow) {
+        ws.lastUsedRow = row2;
+    }
+
+    if (col2 > ws.lastUsedCol) {
+        ws.lastUsedCol = col2;
+    }
+
     for (let r = row1; r <= row2; r++) {
         for (let c = col1; c <= col2; c++) {
             let ref = `${utils.getExcelAlpha(c)}${r}`;

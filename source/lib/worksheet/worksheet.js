@@ -72,7 +72,13 @@ let _addSheetViews = (promiseObj) => {
 let _addSheetFormatPr = (promiseObj) => {
     // §18.3.1.81 sheetFormatPr (Sheet Format Properties)
     return new Promise((resolve, reject) => {
-
+        let o = promiseObj.ws.opts.sheetFormat;
+        let ele = promiseObj.xml.ele('sheetFormatPr');
+        Object.keys(o).forEach((k) => {
+            if (o[k] !== null) {
+                ele.att(k, o[k]);
+            } 
+        });
         resolve(promiseObj);
     });
 };
@@ -104,8 +110,14 @@ let _addSheetData = (promiseObj) => {
                 let lastCol = utils.getExcelRowCol(lastCell).col;
 
                 let rEle = ele.ele('row');
+                // If defaultRowHeight !== 16, set customHeight attribute to 1 as stated in §18.3.1.81
+                if (promiseObj.ws.opts.sheetFormat.defaultRowHeight !== 16) {
+                    rEle.att('customHeight', '1');
+                }
+                
                 rEle.att('r', r);
                 rEle.att('spans', `${firstCol}:${lastCol}`);
+
                 thisRow.cellRefs.forEach((c) => {
                     let thisCell = promiseObj.ws.cells[c];
                     let cEle = rEle.ele('c').att('r', thisCell.r).att('s', thisCell.s);
