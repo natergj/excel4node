@@ -2,16 +2,95 @@ const utils = require('../utils.js');
 const logger = require('../logger.js');
 const _ = require('lodash');
 
-let _getFont = (wb, font) => {
+let _getFontId = (wb, font) => {
     if (font === undefined) {
         return null;
     }
+
+    let thisFont = {};
+    if (font.bold === true) {
+        thisFont.b = true;
+    }
+
+    if (typeof font.charset === 'number') {
+        thisFont.charset = font.charset;
+    }
+
+    if (typeof font.color === 'string') {
+        thisFont.color = utils.cleanColor(font.color);
+    }
+
+    if (font.condense === true) {
+        thisFont.condense = true;
+    }
+
+    if (font.exend === true) {
+        thisFont.extend = true;
+    }
+
+    if (typeof font.family === 'number') {
+        thisFont.family = font.family;
+    } else {
+        thisFont.family = 2;
+    }
+
+    if (font.italics === true) {
+        thisFont.i = true;
+    }
+
+    if (typeof font.name === 'string') {
+        thisFont.name = font.name;
+    } else {
+        thisFont.name = wb.fonts[0].name;
+    }
+
+    if (font.outline === true) {
+        thisFont.outline = true;
+    }
+
+    if (typeof font.scheme === 'string') {
+        thisFont.scheme = font.scheme;
+    } else {
+        thisFont.scheme = 'minor';
+    }
+
+    if (font.shadow === true) {
+        thisFont.shadow = true;
+    }
+
+    if (font.strike === true) {
+        thisFont.strike = true;
+    }
+
+    if (typeof font.size === 'number') {
+        thisFont.sz = font.size;
+    }
+
+    if (font.underline === true) {
+        thisFont.u = true;
+    }
+
+    if (font.alignVertical === true) {
+        thisFont.vertAlign = true;
+    }
+
+    let fontId;
+    wb.fonts.forEach((f, i) => {
+        if (_.isEqual(f, thisFont)) {
+            fontId = i;
+        }
+    });
+    if (!fontId) {
+        let count = wb.fonts.push(thisFont);
+        let fontId = count - 1;
+    }
+    return fontId;
 };
 
 module.exports = class Style {
     constructor(wb, opts) {
         this.wb = wb;
-        this.font = _getFont(wb, opts.font);
+        this.fontId = _getFontId(wb, opts.font);
     }
 
     get xfId() {
@@ -44,8 +123,9 @@ module.exports = class Style {
 
         let thisXF = {};
 
-        if (this.font !== null) {
+        if (typeof this.fontId === 'number') {
             thisXF.applyFont = 1;
+            thisXF.fontId = this.fontId;
         }
 
         return thisXF;
