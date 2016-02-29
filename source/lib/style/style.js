@@ -18,6 +18,8 @@ let _getFontId = (wb, font) => {
 
     if (typeof font.color === 'string') {
         thisFont.color = utils.cleanColor(font.color);
+    } else {
+        thisFont.color = wb.fonts[0].color;
     }
 
     if (font.condense === true) {
@@ -31,7 +33,7 @@ let _getFontId = (wb, font) => {
     if (typeof font.family === 'number') {
         thisFont.family = font.family;
     } else {
-        thisFont.family = 2;
+        thisFont.family = wb.fonts[0].family;
     }
 
     if (font.italics === true) {
@@ -51,7 +53,7 @@ let _getFontId = (wb, font) => {
     if (typeof font.scheme === 'string') {
         thisFont.scheme = font.scheme;
     } else {
-        thisFont.scheme = 'minor';
+        thisFont.scheme = wb.fonts[0].scheme;
     }
 
     if (font.shadow === true) {
@@ -64,6 +66,8 @@ let _getFontId = (wb, font) => {
 
     if (typeof font.size === 'number') {
         thisFont.sz = font.size;
+    } else {
+        thisFont.sz = wb.fonts[0].sz;
     }
 
     if (font.underline === true) {

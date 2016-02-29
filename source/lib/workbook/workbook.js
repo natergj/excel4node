@@ -411,11 +411,11 @@ class WorkBook {
 
         // Set Default Font
         let defaultFont = {
-            'sz': '12',
             'color': utils.cleanColor('Black'),
-            'name': 'Calibri',
             'family': '2',
-            'scheme': 'minor'
+            'name': 'Calibri',
+            'scheme': 'minor',
+            'sz': '12'
         };
         if (this.opts.defaultFont) {
             defaultFont.sz = this.opts.defaultFont.size;
