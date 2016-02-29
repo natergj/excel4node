@@ -14,7 +14,8 @@ module.exports = {
         'fitToWidth': null, // (Optional) Max number of pages wide
         'orientation': null, // (Optional) 'potrait' or 'landscape'
         'horizontalDpi': null, // (Optional) standard is 4294967292
-        'verticalDpi': null  // (Optional) standard is 4294967292
+        'verticalDpi': null,  // (Optional) standard is 4294967292
+        'printGridLines': null
     
     },
     'sheetView': {
@@ -43,7 +44,34 @@ module.exports = {
         'thickTop': null,
         'zeroHeight': null
     },
+    'sheetProtection': {                 // same as "Protect Sheet" in Review tab of Excel 
+        'autoFilter': null,
+        'deleteColumns': null,
+        'deleteRow': null,
+        'formatCells': null,
+        'formatColumns': null,
+        'formatRows': null,
+        'hashValue': null,
+        'insertColumns': null,
+        'insertHyperlinks': null,
+        'insertRows': null,
+        'objects': null,
+        'password': null,
+        'pivotTables': null,
+        'scenarios': null,
+        'selectLockedCells': null,
+        'selectUnlockedCell': null,
+        'sheet': null,
+        'sort': null
+    },
     'outline': {
         'summaryBelow': false
+    },
+    'autoFilter': {
+        'startRow': null,
+        'endRow': null,
+        'startCol': null,
+        'endCol': null,
+        'filters': []
     }
 };

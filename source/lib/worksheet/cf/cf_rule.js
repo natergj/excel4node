@@ -1,6 +1,5 @@
-let _ = require('lodash');
-
-let CF_RULE_TYPES = require('./cf_rule_types');
+const _ = require('lodash');
+const CF_RULE_TYPES = require('./cf_rule_types');
 
 class CfRule {
     constructor(ruleConfig) {
@@ -27,17 +26,18 @@ class CfRule {
             throw new TypeError('Conditional formatting rule is missing required properties: ' + missingProps.join(', '));
         }
     }
+
+    getBuilderData() {
+        return {
+            'cfRule': {
+                '@type': this.config.type,
+                '@dxfId': this.config.dxfId,
+                '@priority': this.config.priority,
+                'formula': this.config.formula
+            }
+        };
+    }
 }
 
-CfRule.prototype.getBuilderData = function () {
-    return {
-        'cfRule': {
-            '@type': this.config.type,
-            '@dxfId': this.config.dxfId,
-            '@priority': this.config.priority,
-            'formula': this.config.formula
-        }
-    };
-};
 
 module.exports = CfRule;

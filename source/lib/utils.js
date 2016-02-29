@@ -200,6 +200,49 @@ let cleanColor = (val) => {
         return 'FFFFFFFF';
     }
 };
+
+let arrayIntersectSafe = (a, b) => {
+
+    if (a instanceof Array && b instanceof Array) {
+        var ai = 0, bi = 0;
+        var result = new Array();
+
+        while (ai < a.length && bi < b.length) {
+            if (a[ai] < b[bi]) {
+                ai++;
+            } else if (a[ai] > b[bi]) {
+                bi++;
+            } else {
+                result.push(a[ai]);
+                ai++;
+                bi++;
+            }
+        }
+        return result;
+    } else {
+        throw new TypeError('Both variables sent to arrayIntersectSafe must be arrays');
+    }
+};
+
+let getAllCellsInExcelRange = (range) => {
+    var cells = range.split(':');
+    var cell1props = getExcelRowCol(cells[0]);
+    var cell2props = getExcelRowCol(cells[1]);
+    return getAllCellsInNumericRange(cell1props.row, cell1props.col, cell2props.row, cell2props.col);
+};
+
+let getAllCellsInNumericRange = (row1, col1, row2, col2) => {
+    var response = [];
+    row2 = row2 ? row2 : row1;
+    col2 = col2 ? col2 : col1;
+    for (var i = row1; i <= row2; i++) {
+        for (var j = col1; j <= col2; j++) {
+            response.push(j.toExcelAlpha() + i);
+        }
+    }
+    return response.sort(sortCellRefs);
+};
+
 /*
  * Helper Functions
  */
@@ -211,5 +254,8 @@ module.exports = {
     getExcelRowCol: getExcelRowCol,
     getExcelTS: getExcelTS,
     cleanColor: cleanColor,
-    sortCellRefs: sortCellRefs
+    sortCellRefs: sortCellRefs,
+    arrayIntersectSafe: arrayIntersectSafe,
+    getAllCellsInExcelRange: getAllCellsInExcelRange,
+    getAllCellsInNumericRange: getAllCellsInNumericRange
 };

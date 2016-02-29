@@ -4,6 +4,8 @@ const CfRulesCollection = require('./cf/cf_rules_collection');
 const logger = require('../logger.js');
 const utils = require('../utils.js');
 const cellAccessor = require('../cell');
+const rowAccessor = require('../row');
+const colAccessor = require('../column');
 const wsDefaultParams = require('./sheet_default_params.js');
 
 // ------------------------------------------------------------------------------
@@ -11,17 +13,29 @@ const wsDefaultParams = require('./sheet_default_params.js');
 let _addSheetPr = (promiseObj) => {
     // §18.3.1.82 sheetPr (Sheet Properties)
     return new Promise((resolve, reject) => {
-        let o = promiseObj.ws.opts.printOptions;
+        let o = promiseObj.ws.opts;
 
         // Check if any option that would require the sheetPr element to be added exists
-        if (o.fitToHeight || o.fitToWidth || o.orientation || o.horizontalDpi || o.verticalDpi) {
+        if (
+            o.printOptions.fitToHeight || 
+            o.printOptions.fitToWidth || 
+            o.printOptions.orientation || 
+            o.printOptions.horizontalDpi || 
+            o.printOptions.verticalDpi
+        ) {
             let ele = promiseObj.xml.ele('sheetPr');
 
             // §18.3.1.65 pageSetUpPr (Page Setup Properties)
-            if (o.fitToHeight || o.fitToWidth) {
+            if (o.printOptions.fitToHeight || o.printOptions.fitToWidth) {
                 ele.ele('pageSetUpPr').att('fitToPage', 1);
             }
+
+            if (o.autoFilter.ref) {
+                ele.att('enableFormatConditionsCalculation', 1);
+                ele.att('filterMode', 1);
+            }
         }
+
         resolve(promiseObj);
     });
 };
@@ -104,11 +118,6 @@ let _addSheetData = (promiseObj) => {
                 let thisRow = promiseObj.ws.rows[r];
                 thisRow.cellRefs.sort(utils.sortCellRefs);
 
-                let firstCell = thisRow.cellRefs[0];
-                let firstCol = utils.getExcelRowCol(firstCell).col;
-                let lastCell = thisRow.cellRefs[thisRow.cellRefs.length - 1];
-                let lastCol = utils.getExcelRowCol(lastCell).col;
-
                 let rEle = ele.ele('row');
                 // If defaultRowHeight !== 16, set customHeight attribute to 1 as stated in §18.3.1.81
                 if (promiseObj.ws.opts.sheetFormat.defaultRowHeight !== 16) {
@@ -116,7 +125,7 @@ let _addSheetData = (promiseObj) => {
                 }
 
                 rEle.att('r', r);
-                rEle.att('spans', `${firstCol}:${lastCol}`);
+                rEle.att('spans', thisRow.spans);
 
                 thisRow.cellRefs.forEach((c) => {
                     let thisCell = promiseObj.ws.cells[c];
@@ -144,7 +153,31 @@ let _addSheetData = (promiseObj) => {
 let _addSheetProtection = (promiseObj) => {
     // §18.3.1.85 sheetProtection (Sheet Protection Options)
     return new Promise((resolve, reject) => {
+        let o = promiseObj.ws.opts.sheetProtection;
+        let includeSheetProtection = false;
+        Object.keys(o).forEach((k) =>  {
+            if (o[k] !== null) {
+                includeSheetProtection = true;
+            }
+        });
 
+        if (includeSheetProtection) {
+            // Set required fields with defaults if not specified
+            o.sheet = o.sheet !== null ? o.sheet : true;
+            o.objects = o.objects !== null ? o.objects : true;
+            o.scenarios = o.scenarios !== null ? o.scenarios : true;
+
+            let ele = promiseObj.xml.ele('sheetProtection');
+            Object.keys(o).forEach((k) => {
+                if (o[k] !== null) {
+                    if (k === 'password') {
+                        ele.att(k, utils.getHashOfPassword(o[k]));
+                    } else {
+                        ele.att(k, o[k] === true ? '1' : '0');
+                    }
+                }            
+            });
+        }
         resolve(promiseObj);
     });
 };
@@ -152,7 +185,41 @@ let _addSheetProtection = (promiseObj) => {
 let _addAutoFilter = (promiseObj) => {
     // §18.3.1.2 autoFilter (AutoFilter Settings)
     return new Promise((resolve, reject) => {
+        let o = promiseObj.ws.opts.autoFilter;
 
+        if (typeof o.startRow === 'number') {
+            let ele = promiseObj.xml.ele('autoFilter');
+            let filterRow = promiseObj.ws.rows[o.startRow];
+
+            o.startCol = typeof o.startCol === 'number' ? o.startCol : null;
+            o.endCol = typeof o.endCol === 'number' ? o.endCol : null;
+
+            if (typeof o.endRow !== 'number') {
+                let firstEmptyRow = undefined;
+                let curRow = o.startRow;
+                while (firstEmptyRow === undefined) {
+                    if (!promiseObj.ws.rows[curRow]) {
+                        firstEmptyRow = curRow;
+                    } else {
+                        curRow++;
+                    }
+                }
+
+                o.endRow = firstEmptyRow - 1;
+            }
+
+            // Columns to sort not manually set. filter all columns in this row containing data.
+            if (typeof o.startCol !== 'number' || typeof o.endCol !== 'number') {
+                o.startCol = filterRow.firstColumn;
+                o.endCol = filterRow.lastColumn;
+            }
+
+            let startCell = utils.getExcelAlpha(o.startCol) + o.startRow;
+            let endCell = utils.getExcelAlpha(o.endCol) + o.endRow;
+
+            ele.att('ref', `${startCell}:${endCell}`);
+
+        }
         resolve(promiseObj);
     });
 };
@@ -160,6 +227,13 @@ let _addAutoFilter = (promiseObj) => {
 let _addMergeCells = (promiseObj) => {
     // §18.3.1.55 mergeCells (Merge Cells)
     return new Promise((resolve, reject) => {
+
+        if (promiseObj.ws.mergedCells instanceof Array && promiseObj.ws.mergedCells.length > 0) {
+            let ele = promiseObj.xml.ele('mergeCells');
+            promiseObj.ws.mergedCells.forEach((cr) => {
+                ele.ele('mergeCell').att('ref', cr);
+            });
+        }
 
         resolve(promiseObj);
     });
@@ -253,6 +327,7 @@ class WorkSheet {
         this.cols = {}; // Columns keyed by column, contains column properties
         this.rows = {}; // Rows keyed by row, contains row properties and array of cellRefs
         this.cells = {}; // Cells keyed by Excel ref
+        this.mergedCells = [];
         this.lastUsedRow = 1;
         this.lastUsedCol = 1;
 
@@ -331,6 +406,21 @@ class WorkSheet {
         return cellAccessor(this, row1, col1, row2, col2, isMerged);
     }
 
+    Row(row) {
+        return rowAccessor(this, row);
+    }
+
+    Column(col) {
+        return colAccessor(this, col);
+    }
+
+    addConditionalFormattingRule(sqref, options) {
+        let style = options.style || this.wb.Style();
+        options.dxfId = style.id;
+        this.cfRulesCollection.add(sqref, options);
+
+        return this;
+    }
 }
 
 module.exports = WorkSheet;

@@ -4,6 +4,7 @@ const JSZip = require('jszip');
 const logger = require('../logger.js');
 const utils = require('../utils.js');
 const WorkSheet = require('../worksheet');
+const Style = require('../style');
 const xmlbuilder = require('xmlbuilder');
 
 // ------------------------------------------------------------------------------
@@ -486,6 +487,12 @@ class WorkBook {
 
     WorkSheet(name, opts) {
         return new WorkSheet(this, name, opts);
+    }
+
+    Style(opts) {
+        let thisStyle = new Style(this, opts);
+        this.styles.push(thisStyle);
+        return this.styles[thisStyle.styleId];
     }
 
     getStringIndex(val) {

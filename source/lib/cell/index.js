@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const Cell = require('./cell.js');
-const rowDefaultParams = require('../row/row_default_params.js');
+const Row = require('../row/row.js');
+const Column = require('../column/column.js');
 const utils = require('../utils.js');
 const logger = require('../logger.js');
 
@@ -96,6 +97,31 @@ let formulaSetter = (val, theseCells) => {
     return theseCells;
 };
 
+let mergeCells = (ws, excelRefs) => {
+    if (excelRefs instanceof Array && excelRefs.length > 0) {
+        excelRefs.sort(utils.sortCellRefs);
+
+        let cellRange = excelRefs[0] + ':' + excelRefs[excelRefs.length - 1];
+        let rangeCells = excelRefs;
+
+        let okToMerge = true;
+        ws.mergedCells.forEach(function (cr) {
+            // Check to see if currently merged cells contain cells in new merge request
+            let curCells = utils.getAllCellsInExcelRange(cr);
+            let intersection = utils.arrayIntersectSafe(rangeCells, curCells);
+            if (intersection.length > 0) {
+                okToMerge = false;
+                logger.error(`Invalid Range for: ${cellRange}. Some cells in this range are already included in another merged cell range: ${cr}.`);
+            }
+        });
+        if (okToMerge) {
+            ws.mergedCells.push(cellRange);
+        }
+    } else {
+        throw new TypeError('excelRefs variable sent to mergeCells function must be an array with length > 0');
+    }
+};
+
 let cellAccessor = (ws, row1, col1, row2, col2, isMerged) => {
 
     let theseCells = {
@@ -123,14 +149,21 @@ let cellAccessor = (ws, row1, col1, row2, col2, isMerged) => {
                 ws.cells[ref] = new Cell(r, c);
             }
             if (!ws.rows[r]) {
-                ws.rows[r] = _.merge({}, rowDefaultParams);
+                ws.rows[r] = new Row(r);
+            }
+            if (!ws.cols[c]) {
+                ws.cols[c] = new Column(c);
             }
             if (ws.rows[r].cellRefs.indexOf(ref) < 0) {
                 ws.rows[r].cellRefs.push(ref);
             }
+
             theseCells.cells.push(ws.cells[ref]);
             theseCells.excelRefs.push(ref);
         }
+    }
+    if (isMerged) {
+        mergeCells(ws, theseCells.excelRefs);
     }
 
     theseCells.String = (val) => stringSetter(val, theseCells);
