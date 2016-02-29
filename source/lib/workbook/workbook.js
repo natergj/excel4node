@@ -491,8 +491,8 @@ class WorkBook {
 
     Style(opts) {
         let thisStyle = new Style(this, opts);
-        this.styles.push(thisStyle);
-        return this.styles[thisStyle.styleId];
+        let count = this.styles.push(thisStyle);
+        return this.styles[count - 1];
     }
 
     getStringIndex(val) {

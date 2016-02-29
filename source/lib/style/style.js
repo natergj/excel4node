@@ -93,7 +93,6 @@ let _getFontId = (wb, font) => {
 
 module.exports = class Style {
     constructor(wb, opts) {
-        this.wb = wb;
         this.fontId = _getFontId(wb, opts.font);
     }
 
