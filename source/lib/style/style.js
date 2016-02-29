@@ -19,7 +19,7 @@ let _getFontId = (wb, font) => {
     if (typeof font.color === 'string') {
         thisFont.color = utils.cleanColor(font.color);
     } else {
-        thisFont.color = wb.fonts[0].color;
+        thisFont.color = wb.styleData.fonts[0].color;
     }
 
     if (font.condense === true) {
@@ -33,7 +33,7 @@ let _getFontId = (wb, font) => {
     if (typeof font.family === 'number') {
         thisFont.family = font.family;
     } else {
-        thisFont.family = wb.fonts[0].family;
+        thisFont.family = wb.styleData.fonts[0].family;
     }
 
     if (font.italics === true) {
@@ -43,7 +43,7 @@ let _getFontId = (wb, font) => {
     if (typeof font.name === 'string') {
         thisFont.name = font.name;
     } else {
-        thisFont.name = wb.fonts[0].name;
+        thisFont.name = wb.styleData.fonts[0].name;
     }
 
     if (font.outline === true) {
@@ -53,7 +53,7 @@ let _getFontId = (wb, font) => {
     if (typeof font.scheme === 'string') {
         thisFont.scheme = font.scheme;
     } else {
-        thisFont.scheme = wb.fonts[0].scheme;
+        thisFont.scheme = wb.styleData.fonts[0].scheme;
     }
 
     if (font.shadow === true) {
@@ -67,7 +67,7 @@ let _getFontId = (wb, font) => {
     if (typeof font.size === 'number') {
         thisFont.sz = font.size;
     } else {
-        thisFont.sz = wb.fonts[0].sz;
+        thisFont.sz = wb.styleData.fonts[0].sz;
     }
 
     if (font.underline === true) {
@@ -79,13 +79,13 @@ let _getFontId = (wb, font) => {
     }
 
     let fontId;
-    wb.fonts.forEach((f, i) => {
+    wb.styleData.fonts.forEach((f, i) => {
         if (_.isEqual(f, thisFont)) {
             fontId = i;
         }
     });
     if (!fontId) {
-        let count = wb.fonts.push(thisFont);
+        let count = wb.styleData.fonts.push(thisFont);
         let fontId = count - 1;
     }
     return fontId;
