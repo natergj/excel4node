@@ -246,23 +246,23 @@ var complexString = [
 		color: 'FF0000',
 		size: 18,
 		value: 'Hello'
-	}, 
-	' World!', 
+	},
+	' World!',
 	{
 		color: '000000'
 	},  
-	' All', 
-	' these', 
-	' strings', 
-	' are', 
-	' black', 
+	' All',
+	' these',
+	' strings',
+	' are',
+	' black',
 	{
 		color: '0000FF',
 		value: ', but'
 	},  
-	' now', 
-	' are', 
-	' blue' 
+	' now',
+	' are',
+	' blue'
 ];
 ws.Cell(1, 2).Complex(complexString);
 ws.Cell(2, 1).Number(5);
@@ -338,7 +338,7 @@ Available styles:
 - `Font.Alignment.Vertical('top')` options are `top`, `center`, `bottom`
 - `Font.Alignment.Horizontal('left')` options are `left`, `center`, `right`
 - `Font.Alignment.Rotation(15)` degrees to rotate
-- `Number.Format('style')` number style string
+- `Number.Format('style')` number style string (see [here](https://support.office.com/en-us/article/Create-or-delete-a-custom-number-format-78f2a361-936b-4c03-8772-09fab54be7f4))
 - `Fill.Color('DDEEFF')` background color in rgb
 - `Fill.Pattern('solid')` pattern style `solid`, `lightUp`, etc.
 - `Border({...})` border styles (see below)
@@ -443,25 +443,25 @@ var img2 = ws.Image(imgPath2).Position(
     1000000, // offset from top of row in EMUs
     2000000  // offset from left of col in EMUs
 );
-``` 
+```
 Position images across single or multiple cells
 
 ```javascript
 //Absolute position near D3
 //arguments: y-pixels, x-pixels
-ws.Image('sampleFiles/image1.png', ws.Image.ABSOLUTE).Position(218, 400).Size(255, 50); 
+ws.Image('sampleFiles/image1.png', ws.Image.ABSOLUTE).Position(218, 400).Size(255, 50);
 
 //A3
 //arguments: row, column, {offsetY, offsetX} (in pixels optional)
-ws.Image('sampleFiles/image1.png', ws.Image.ONE_CELL).Position(3, 1, 10, 40).Size(255, 50); 
+ws.Image('sampleFiles/image1.png', ws.Image.ONE_CELL).Position(3, 1, 10, 40).Size(255, 50);
 
 //A1-F2
 //arguments: begin-row, begin-column, end-row, end-column, {offsetY, offsetX} (in pixels - optional)
-ws.Image('sampleFiles/image1.png', ws.Image.TWO_CELL).Position(1, 1, 2, 6, 2, 5); 
+ws.Image('sampleFiles/image1.png', ws.Image.TWO_CELL).Position(1, 1, 2, 6, 2, 5);
 
 //D5
 //arguments: row, column
-ws.Image('sampleFiles/image1.png', ws.Image.TWO_CELL).Position(5, 4); 
+ws.Image('sampleFiles/image1.png', ws.Image.TWO_CELL).Position(5, 4);
 ```
 
 Currently images should be saved at a resolution of 96dpi.
