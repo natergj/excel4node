@@ -3,9 +3,9 @@ const Cell = require('./cell.js');
 const Row = require('../row/row.js');
 const Column = require('../column/column.js');
 const utils = require('../utils.js');
-const logger = require('../logger.js');
 
 let stringSetter = (val, theseCells) => {
+    let logger = theseCells.ws.wb.logger;
     let chars, chr;
     chars = /[\u0000-\u0008\u000B-\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE-\uFFFF]/;
     chr = val.match(chars);
@@ -98,6 +98,7 @@ let formulaSetter = (val, theseCells) => {
 };
 
 let mergeCells = (ws, excelRefs) => {
+    let logger = ws.wb.logger;
     if (excelRefs instanceof Array && excelRefs.length > 0) {
         excelRefs.sort(utils.sortCellRefs);
 
@@ -124,6 +125,8 @@ let mergeCells = (ws, excelRefs) => {
 
 let cellAccessor = (ws, row1, col1, row2, col2, isMerged) => {
 
+    ws.wb.logger.debug('Debug Line');
+    
     let theseCells = {
         ws: ws,
         cells: [],

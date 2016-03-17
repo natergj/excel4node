@@ -1,6 +1,6 @@
-var xl = require('./source/dev.js');
+var xl = require('./distribution/');
 
-var wb = new xl.WorkBook();
+var wb = new xl.WorkBook({logLevel:3});
 var ws = wb.WorkSheet('First Sheet', {
     'sheetProtection': {
         'autoFilter': false,

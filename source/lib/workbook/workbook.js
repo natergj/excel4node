@@ -6,6 +6,7 @@ const utils = require('../utils.js');
 const WorkSheet = require('../worksheet');
 const Style = require('../style');
 const xmlbuilder = require('xmlbuilder');
+const SlothLogger = require('sloth-logger');
 
 // ------------------------------------------------------------------------------
 // Private WorkBook Methods Start
@@ -370,6 +371,12 @@ class WorkBook {
      * @param {Object} opts Workbook settings
      */
     constructor(opts) {
+        opts = opts ? opts : {};
+
+        this.logger = new SlothLogger.Logger({
+            logLevel : Number.isNaN(parseInt(opts.logLevel)) ? 0 : parseInt(opts.logLevel)
+        });
+
 
         this.opts = _.merge({}, workBookDefaultOpts, opts);
         this.sheets = [];

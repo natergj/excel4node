@@ -355,24 +355,6 @@ class WorkSheet {
             .att('xmlns:x14ac', 'http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac');
 
             // Excel complains if specific elements on not in the correct order in the XML doc.
-            // Elements must be added to the XML in this order
-            //  - sheetPr
-            //  - dimension
-            //  - sheetViews
-            //  - sheetFormatPr
-            //  - cols
-            //  - sheetData
-            //  - sheetProtection
-            //  - autoFilter
-            //  - mergeCells
-            //  - conditionalFormatting
-            //  - hyperlinks
-            //  - dataValidations
-            //  - printOptions
-            //  - pageMargins
-            //  - pageSetup
-            //  - headerFooter
-            //  - drawing
             let promiseObj = { xml: wsXML, ws: this };
             _addSheetPr(promiseObj)
             .then(_addDimension)
