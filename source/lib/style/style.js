@@ -8,75 +8,23 @@ let _getFontId = (wb, font) => {
     }
 
     let thisFont = {};
-    if (font.bold === true) {
-        thisFont.b = true;
-    }
 
-    if (typeof font.charset === 'number') {
-        thisFont.charset = font.charset;
-    }
+    typeof font.charset === 'number' ? thisFont.charset = font.charset : null;
+    typeof font.color === 'string' ? thisFont.color = utils.cleanColor(font.color) : thisFont.color = wb.styleData.fonts[0].color;
+    typeof font.family === 'number' ? thisFont.family = font.family : thisFont.family = wb.styleData.fonts[0].family;
+    typeof font.name === 'string' ? thisFont.name = font.name : thisFont.name = wb.styleData.fonts[0].name;
+    typeof font.scheme === 'string' ? thisFont.scheme = font.scheme : thisFont.scheme = wb.styleData.fonts[0].scheme;
+    typeof font.size === 'number' ? thisFont.sz = font.size : thisFont.sz = wb.styleData.fonts[0].sz;
 
-    if (typeof font.color === 'string') {
-        thisFont.color = utils.cleanColor(font.color);
-    } else {
-        thisFont.color = wb.styleData.fonts[0].color;
-    }
-
-    if (font.condense === true) {
-        thisFont.condense = true;
-    }
-
-    if (font.exend === true) {
-        thisFont.extend = true;
-    }
-
-    if (typeof font.family === 'number') {
-        thisFont.family = font.family;
-    } else {
-        thisFont.family = wb.styleData.fonts[0].family;
-    }
-
-    if (font.italics === true) {
-        thisFont.i = true;
-    }
-
-    if (typeof font.name === 'string') {
-        thisFont.name = font.name;
-    } else {
-        thisFont.name = wb.styleData.fonts[0].name;
-    }
-
-    if (font.outline === true) {
-        thisFont.outline = true;
-    }
-
-    if (typeof font.scheme === 'string') {
-        thisFont.scheme = font.scheme;
-    } else {
-        thisFont.scheme = wb.styleData.fonts[0].scheme;
-    }
-
-    if (font.shadow === true) {
-        thisFont.shadow = true;
-    }
-
-    if (font.strike === true) {
-        thisFont.strike = true;
-    }
-
-    if (typeof font.size === 'number') {
-        thisFont.sz = font.size;
-    } else {
-        thisFont.sz = wb.styleData.fonts[0].sz;
-    }
-
-    if (font.underline === true) {
-        thisFont.u = true;
-    }
-
-    if (font.alignVertical === true) {
-        thisFont.vertAlign = true;
-    }
+    font.condense === true ? thisFont.condense = true : null;
+    font.extend === true ? thisFont.extend = true : null;
+    font.bold === true ? thisFont.b = true : null;
+    font.italics === true ? thisFont.i = true : null;
+    font.outline === true ? thisFont.outline = true : null;
+    font.shadow === true ? thisFont.shadow = true : null;
+    font.strike === true ? thisFont.strike = true : null;
+    font.underline === true ? thisFont.u = true : null;
+    font.alignVertical === true ? thisFont.vertAlign = true : null;
 
     let fontId;
     wb.styleData.fonts.forEach((f, i) => {
@@ -86,20 +34,125 @@ let _getFontId = (wb, font) => {
     });
     if (!fontId) {
         let count = wb.styleData.fonts.push(thisFont);
-        let fontId = count - 1;
+        fontId = count - 1;
     }
+
     return fontId;
 };
 
+let _getFontId = (wb, fill) => {
+    if (fill === undefined) {
+        return null;
+    }
+
+    let thisFill = {};
+
+    let fillId;
+    wb.styleData.fills.forEach((f, i) => {
+        if (_.isEqual(f, thisFill)) {
+            fillId = i;
+        }
+    });
+    if (!fillId) {
+        let count = wb.styleData.fills.push(thisFill);
+        fillId = count - 1;
+    }
+
+    return fillId;
+}
+
+let _getNumFmtId = (wb, fmt) => {
+    if (fmt === undefined) {
+        return null;
+    }
+
+    if (typeof fmt === 'number') {
+        if (fmt <= 166) {
+            return fmt;
+        } else {
+            return 0;
+        }
+    }
+
+    if (typeof fmt === 'string') {
+
+        let fmtId;
+        wb.styleData.numFmts.forEach((f, i) => {
+            if (_.isEqual(f.formatCode, fmt)) {
+                fmtId = f.numFmtId;
+            }
+        });
+        if(!fmtId){
+            fmtId = wb.styleData.numFmts.length + 166
+            wb.styleData.numFmts.push({
+                formatCode: fmt,
+                numFmtId: fmtId
+            });
+        }
+
+        return fmtId;
+    }
+
+    return null;
+}
+
+
+/*
+    Style Opts
+    {
+        alignment: { // §18.8.1
+            horizontal: ['center', 'centerContinuous', 'distributed', 'fill', 'general', 'justify', 'left', 'right'],
+            indent: integer, // Number of spaces to indent = indent value * 3
+            justifyLastLine: boolean,
+            readingOrder: [0, 1, 2], // 0 = context dependent, 1 = left-to-right, 2 = right-to-left
+            relativeIndent: integer, // number of additional spaces to indent
+            shrinkToFit: boolean,
+            textRotation: integer, // number of degrees to rotate text counter-clockwise
+            vertical: ['bottom', 'center', 'distributed', 'justify', 'top'],
+            wrapText: boolean
+        },
+        font: { // §18.8.22
+            bold: boolean,
+            charset: integer,
+            color: string,
+            condense: boolean,
+            extend: boolean,
+            family: string,
+            italics: boolean,
+            name: string,
+            outline: boolean,
+            scheme: string, // §18.18.33 ST_FontScheme (Font scheme Styles)
+            shadow: boolean,
+            strike: boolean,
+            size: integer,
+            underline: boolean,
+            alignVertical: boolean
+        },
+        fill: { // §18.8.20 fill (Fill)
+            pattern: string,
+            color: string,
+            gradient: object
+        },
+        number: integer or string // §18.8.30 numFmt (Number Format)
+    }
+*/
 module.exports = class Style {
     constructor(wb, opts) {
-        this.fontId = _getFontId(wb, opts.font);
-    }
-
-    get xfId() {
-    }
-
-    get dxfId() {
+        opts = opts ? opts : {};
+        opts.alignment ? this.alignment = opts.alignment : null; // Child Element
+        opts.protection ? this.protection = opts.protection : null; // Child Element
+        this.applyAlignment = null; // attribute boolean
+        this.applyBorder = null; // attribute boolean
+        this.applyFill = null // attribute boolean
+        this.applyFont = null // attribute boolean
+        this.applyNumberFormat = null // attribute boolean
+        this.applyProtection = null // attribute boolean
+        this.borderId = null // attribute 0 based index
+        this.fillId = _getFillId(wb, opts.fill); // attribute 0 based index
+        this.fontId = _getFontId(wb, opts.font); // attribute 0 based index
+        this.numFmtId = _getNumFmtId(wb, opts.number); // attribute 0 based index
+        this.pivotButton = null // attribute boolean
+        this.quotePrefix = null // attribute boolean
     }
 
     get xf() {
