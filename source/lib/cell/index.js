@@ -114,10 +114,7 @@ let styleSetter = (val, theseCells) => {
             c.Style(thisStyle.ids.cellXfs);
         } else {
             let curStyle = theseCells.ws.wb.styles[c.s];
-            console.log(JSON.stringify(curStyle.toObject(), null, '  '));
-            console.log(JSON.stringify(thisStyle.toObject(), null, '  '));
             let newStyleOpts = _.merge(curStyle.toObject(), thisStyle.toObject());
-            console.log(JSON.stringify(newStyleOpts, null, '  '));
             let mergedStyle = theseCells.ws.wb.Style(newStyleOpts);
             c.Style(mergedStyle.ids.cellXfs);
         }

@@ -267,7 +267,6 @@ let _addStylesXML = (promiseObj) => {
         let xmlString = xml.doc().end(promiseObj.xmlOutVars);
         promiseObj.xlsx.folder('xl').file('styles.xml', xmlString);
 
-        console.log(xmlString);
         resolve(promiseObj);
     });
 };
@@ -378,8 +377,6 @@ class WorkBook {
         if (this.opts.defaultFont !== undefined) {
             constants.defaultFont = _.merge(constants.defaultFont, this.opts.defaultFont);  
         } 
-        console.log(this.opts.defaultFont);
-        console.log(constants.defaultFont);
         this.Style({ font: constants.defaultFont });
 
     }

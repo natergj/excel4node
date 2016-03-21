@@ -1,0 +1,170 @@
+let test = require('tape');
+let xl = require('../source/index.js');
+let Style = require('../source/lib/style');
+let xmlbuilder = require('xmlbuilder');
+
+test('Create New Style', (t) => {
+    t.plan(1);
+    let wb = new xl.WorkBook();
+    let style = wb.Style();
+
+    t.ok(style instanceof Style, 'Correctly generated Style object');
+});
+
+test('Set Style Properties', (t) => {
+    t.plan();
+
+    let wb = new xl.WorkBook();
+    let style = wb.Style({
+        alignment: { 
+            horizontal: 'center',
+            indent: 1, // Number of spaces to indent = indent value * 3
+            justifyLastLine: true,
+            readingOrder: 'leftToRight', 
+            relativeIndent: 1, // number of additional spaces to indent
+            shrinkToFit: false,
+            textRotation: 0, // number of degrees to rotate text counter-clockwise
+            vertical: 'bottom',
+            wrapText: true
+        },
+        font: {
+            bold: true,
+            color: 'Black',
+            condense: false,
+            extend: false,
+            family: 'Roman',
+            italics: true,
+            name: 'Courier',
+            outline: true,
+            scheme: 'major', // §18.18.33 ST_FontScheme (Font scheme Styles)
+            shadow: true,
+            strike: true,
+            size: 14,
+            underline: true,
+            vertAlign: 'subscript' // §22.9.2.17 ST_VerticalAlignRun (Vertical Positioning Location)
+        },
+        border: { // §18.8.4 border (Border)
+            left: {
+                style: 'thin',
+                color: '#444444'
+            },
+            right: {
+                style: 'thin',
+                color: '#444444'
+            },
+            top: {
+                style: 'thin',
+                color: '#444444'
+            },
+            bottom: {
+                style: 'thin',
+                color: '#444444'
+            },
+            diagonal: {
+                style: 'thin',
+                color: '#444444'
+            },
+            diagonalDown: true,
+            outline: true
+        },
+        fill: { // §18.8.20 fill (Fill)
+            type: 'pattern',
+            patternType: 'solid',
+            fgColor: 'Yellow'
+        },
+        numberFormat: '0.00##%' // §18.8.30 numFmt (Number Format)
+    });
+
+    t.ok(style instanceof Style, 'Style object successfully created')
+
+    let styleObj = style.toObject();
+    t.ok(styleObj.alignment.horizontal === 'center', 'alignment.horizontal correctly set');
+    t.ok(styleObj.alignment.indent === 1, 'alignment.indent correctly set');
+    t.ok(styleObj.alignment.justifyLastLine === true, 'alignment.justifyLastLine correctly set');
+    t.ok(styleObj.alignment.readingOrder === 'leftToRight', 'alignment.readingOrder correctly set');
+    t.ok(styleObj.alignment.relativeIndent === 1, 'alignment.relativeIndent correctly set');
+    t.ok(styleObj.alignment.shrinkToFit === undefined, 'alignment.shrinkToFit correctly set');
+    t.ok(styleObj.alignment.textRotation === 0, 'alignment.textRotation correctly set');
+    t.ok(styleObj.alignment.vertical === 'bottom', 'alignment.vertical correctly set');
+    t.ok(styleObj.alignment.wrapText === true, 'alignment.wrapText correctly set');
+    t.ok(styleObj.font.bold === true, 'font.bold correctly set');
+    t.ok(styleObj.font.color === 'FF000000', 'font.color correctly set');
+    t.ok(styleObj.font.condense === undefined, 'font.condense correctly set');
+    t.ok(styleObj.font.extend === undefined, 'font.extend correctly set');
+    t.ok(styleObj.font.family === 'Roman', 'font.family correctly set');
+    t.ok(styleObj.font.italics === true, 'font.italics correctly set');
+    t.ok(styleObj.font.name === 'Courier', 'font.name correctly set');
+    t.ok(styleObj.font.outline === true, 'font.outline correctly set');
+    t.ok(styleObj.font.scheme === 'major', 'font.scheme correctly set');
+    t.ok(styleObj.font.shadow === true, 'font.shadow correctly set');
+    t.ok(styleObj.font.strike === true, 'font.strike correctly set');
+    t.ok(styleObj.font.size === 14, 'font.size correctly set');
+    t.ok(styleObj.font.underline === true, 'font.underline correctly set');
+    t.ok(styleObj.font.vertAlign === 'subscript', 'font.vertAlign correctly set');
+    t.ok(styleObj.border.left.style === 'thin', 'border.left.style correctly set');
+    t.ok(styleObj.border.left.color === 'FF444444', 'border.left.color correctly set');
+    t.ok(styleObj.border.right.style === 'thin', 'border.right.style correctly set');
+    t.ok(styleObj.border.right.color === 'FF444444', 'border.right.color correctly set');
+    t.ok(styleObj.border.top.style === 'thin', 'border.top.style correctly set');
+    t.ok(styleObj.border.top.color === 'FF444444', 'border.top.color correctly set');
+    t.ok(styleObj.border.bottom.style === 'thin', 'border.bottom.style correctly set');
+    t.ok(styleObj.border.bottom.color === 'FF444444', 'border.bottom.color correctly set');
+    t.ok(styleObj.border.diagonal.style === 'thin', 'border.diagonal.style correctly set');
+    t.ok(styleObj.border.diagonal.color === 'FF444444', 'border.diagonal.color correctly set');
+    t.ok(styleObj.border.diagonalDown === true, 'border.diagonalDown correctly set');
+    t.ok(styleObj.border.diagonalUp === undefined, 'border.diagonalUp correctly set');
+    t.ok(styleObj.border.outline === true, 'border.outline correctly set');
+    t.ok(styleObj.fill.type === 'pattern', 'fill.type correctly set');
+    t.ok(styleObj.fill.patternType === 'solid', 'fill.patternType correctly set');
+    t.ok(styleObj.fill.fgColor === 'FFFFFF00', 'fill.fgColor correctly set');
+    t.ok(styleObj.fill.bgColor === undefined, 'fill.bgColor correctly set');
+
+    let alignmentXMLele = xmlbuilder.create('test');
+    style.alignment.addToXMLele(alignmentXMLele);
+    let alignmentXMLString = alignmentXMLele.doc().end();
+    t.ok(alignmentXMLString === '<?xml version="1.0"?><test><alignment horizontal="center" indent="1" justifyLastLine="1" readingOrder="leftToRight" relativeIndent="1" textRotation="0" vertical="bottom" wrapText="1"/></test>', 'Alignment XML generated successfully');
+
+    let fontXMLele = xmlbuilder.create('test');
+    style.font.addToXMLele(fontXMLele);
+    let fontXMLString = fontXMLele.doc().end();
+    t.ok(fontXMLString === '<?xml version="1.0"?><test><font><sz val="14"/><color rgb="FF000000"/><name val="Courier"/><family val="1"/><scheme val="major"/><b/><i/><outline/><shadow/><strike/><u/></font></test>', 'font xml created successfully');
+
+    let fillXMLele = xmlbuilder.create('test');
+    style.fill.addToXMLele(fillXMLele);
+    let fillXMLString = fillXMLele.doc().end();
+    t.ok(fillXMLString === '<?xml version="1.0"?><test><patternFill patternType="solid"><fgColor rgb="FFFFFF00"/></patternFill></test>', 'Fill xml created successfully');
+
+    let borderXMLele = xmlbuilder.create('test');
+    style.border.addToXMLele(borderXMLele);
+    let borderXMLString = borderXMLele.doc().end();
+    t.ok(borderXMLString === '<?xml version="1.0"?><test><border outline="1" diagonalDown="1"><left style="thin"><color rgb="FF444444"/></left><right style="thin"><color rgb="FF444444"/></right><top style="thin"><color rgb="FF444444"/></top><bottom style="thin"><color rgb="FF444444"/></bottom><diagonal style="thin"><color rgb="FF444444"/></diagonal></border></test>', 'Border xml created successfully');
+
+    t.end();
+});
+
+test('Update style on Cell', (t) => {
+    t.plan(3);
+
+    let wb = new xl.WorkBook();
+    let ws = wb.WorkSheet('Sheet1');
+    let style = wb.Style({
+        font: {
+            size: 14,
+            name: 'Helvetica'
+        }
+    });
+    ws.Cell(1,1).String('string').Style(style);
+    let styleID = ws.Cell(1,1).cells[0].s;
+    let thisStyle = wb.styles[styleID];
+    t.ok(thisStyle.toObject().font.name === 'Helvetica', 'Cell correctly set to style font.');
+
+    ws.Cell(1,1).Style({
+        font: {
+            name: 'Courier'
+        }
+    });
+    let styleID2 = ws.Cell(1,1).cells[0].s;
+    let thisStyle2 = wb.styles[styleID2];
+    t.ok(thisStyle2.toObject().font.name === 'Courier', 'Cell font name correctly updated to new font name');
+    t.ok(thisStyle2.toObject().font.size === 14, 'Cell font size correctly did not change');
+});

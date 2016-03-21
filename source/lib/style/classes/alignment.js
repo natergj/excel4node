@@ -99,13 +99,13 @@ class Alignment { // §18.8.1 alignment (Alignment)
         let thisEle = ele.ele('alignment');
         this.horizontal !== undefined ? thisEle.att('horizontal', this.horizontal) : null;
         this.indent !== undefined ? thisEle.att('indent', this.indent) : null;
-        this.justifyLastLine !== undefined ? thisEle.att('justifyLastLine', this.justifyLastLine) : null;
+        this.justifyLastLine === true ? thisEle.att('justifyLastLine', 1) : null;
         this.readingOrder !== undefined ? thisEle.att('readingOrder', this.readingOrder) : null;
         this.relativeIndent !== undefined ? thisEle.att('relativeIndent', this.relativeIndent) : null;
-        this.shrinkToFit !== undefined ? thisEle.att('shrinkToFit', this.shrinkToFit) : null;
+        this.shrinkToFit === true ? thisEle.att('shrinkToFit', 1) : null;
         this.textRotation !== undefined ? thisEle.att('textRotation', this.textRotation) : null;
         this.vertical !== undefined ? thisEle.att('vertical', this.vertical) : null;
-        this.wrapText !== undefined ? thisEle.att('wrapText', this.wrapText) : null;
+        this.wrapText === true ? thisEle.att('wrapText', 1) : null;
     }
 }
 

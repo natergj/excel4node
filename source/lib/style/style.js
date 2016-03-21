@@ -75,7 +75,7 @@ let _getNumFmt = (wb, val) => {
     });
 
     if (fmt === undefined) {
-        let fmtId = wb.styleData.numFmts.length + 166;
+        let fmtId = wb.styleData.numFmts.length + 164;
         fmt = {
             formatCode: val,
             numFmtId: fmtId
@@ -144,9 +144,9 @@ let _getNumFmt = (wb, val) => {
             outline: boolean
         },
         fill: { // §18.8.20 fill (Fill)
-            pattern: string,
-            color: string,
-            gradient: object
+            type: 'pattern',
+            patternType: 'solid',
+            color: 'Yellow'
         },
         numberFormat: integer or string // §18.8.30 numFmt (Number Format)
     }
@@ -174,7 +174,7 @@ module.exports = class Style {
         }
 
         if (opts.numberFormat !== undefined) {  
-            if (typeof opts.numberFormat === 'number' && opts.numberFormat <= 165){
+            if (typeof opts.numberFormat === 'number' && opts.numberFormat <= 164){
                 this.numFmtId = opts.numberFormat;
             } else if (typeof opts.numberFormat === 'string') {
                 this.numFmt = _getNumFmt(wb, opts.numberFormat);
@@ -241,7 +241,7 @@ module.exports = class Style {
             obj.border = this.border.toObject();
         }
 
-        if (typeof this.numFmtId === 'number' && this.numFmtId > 166) {
+        if (typeof this.numFmtId === 'number' && this.numFmtId < 164) {
             obj.numberFormat = this.numFmtId;
         } else if (this.numFmt !== undefined && this.numFmt !== null){
             obj.numberFormat = this.numFmt.formatCode;
