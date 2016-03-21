@@ -21,6 +21,7 @@ class Stop { //§18.8.38
 class Fill { //§18.8.20 fill (Fill)
 
     constructor(opts) {
+
         if (['gradient', 'pattern', 'none'].indexOf(opts.type) >= 0){
             this.type = opts.type;
         } else {
@@ -138,11 +139,11 @@ class Fill { //§18.8.20 fill (Fill)
         let pFill = fXML.ele('patternFill').att('patternType', this.type);
 
         if (this.fgColor instanceof CTColor) {
-            pFill.ele('fgColor').att(this.fgColor.type, f.fgColor[this.fgColor.type]);
+            pFill.ele('fgColor').att(this.fgColor.type, this.fgColor[this.fgColor.type]);
         }
-        
+
         if (this.bgColor instanceof CTColor) {
-            pFill.ele('bgColor').att(this.bgColor.type, f.bgColor[this.bgColor.type]);
+            pFill.ele('bgColor').att(this.bgColor.type, this.bgColor[this.bgColor.type]);
         }
     }
 }

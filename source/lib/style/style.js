@@ -217,6 +217,37 @@ module.exports = class Style {
         return thisXF;
     }
 
+    toObject() {
+        let obj = {};
+
+        if (typeof this.fontId === 'number') {
+            obj.applyFont = 1;
+            obj.fontId = this.fontId;
+        }
+
+        if (typeof this.fillId === 'number') {
+            obj.applyFill = 1;
+            obj.fillId = this.fillId;
+        }
+
+        if (typeof this.borderId === 'number') {
+            obj.applyBorder = 1;
+            obj.borderId = this.borderId;
+        }
+
+        if (typeof this.numFmtId === 'number') {
+            obj.applyNumberFormat = 1;
+            obj.numFmtId = this.numFmtId;
+        }
+
+        if (this.alignment instanceof Alignment) {
+            obj.applyAlignment = 1;
+            obj.alignment = this.alignment.toObject();
+        }
+
+        return obj;   
+    }
+
     addXFtoXMLele(ele) {
         let thisEle = ele.ele('xf');
         let thisXF = this.xf;

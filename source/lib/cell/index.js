@@ -104,13 +104,13 @@ let styleSetter = (val, theseCells) => {
     if (val instanceof Style) {
         thisStyle = val;
     } else if (val instanceof Object) {
-        thisStyle = theseCells.wb.Style(val);
+        thisStyle = theseCells.ws.wb.Style(val);
     } else {
         throw new TypeError('Parameter sent to Style function must be an instance of a Style or a style configuration object');
     }
 
     styleXFid = thisStyle.ids.cellXfs;
-    
+
     if (theseCells.merged !== true) {
         theseCells.cells.forEach(function (c, i) {
             c.Style(styleXFid);
