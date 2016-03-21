@@ -108,6 +108,10 @@ class Fill { //§18.8.20 fill (Fill)
                     }
                 }
             break;
+
+            case 'none':
+                this.patternType = 'none';
+            break;
         }
     }
 
@@ -135,8 +139,7 @@ class Fill { //§18.8.20 fill (Fill)
     }
 
     addToXMLele(fXML) {
-
-        let pFill = fXML.ele('patternFill').att('patternType', this.type);
+        let pFill = fXML.ele('patternFill').att('patternType', this.patternType);
 
         if (this.fgColor instanceof CTColor) {
             pFill.ele('fgColor').att(this.fgColor.type, this.fgColor[this.fgColor.type]);

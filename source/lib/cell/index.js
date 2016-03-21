@@ -39,7 +39,7 @@ let stringSetter = (val, theseCells) => {
 
 let numberSetter = (val, theseCells) => {
     if (val === undefined || parseFloat(val) !== val) {
-        console.log('Value sent to Number function of cells %s was not a number, it has type of %s and value of %s',
+        throw new TypeError('Value sent to Number function of cells %s was not a number, it has type of %s and value of %s',
             JSON.stringify(theseCells.excelRefs),
             typeof(val),
             val
@@ -49,7 +49,7 @@ let numberSetter = (val, theseCells) => {
     val = parseFloat(val);
 
     if (!theseCells.merged) {
-        theseCells.cells.forEach(function (c, i) {
+        theseCells.cells.forEach((c, i) => {
             c.Number(val);
         });
     } else {
@@ -61,7 +61,7 @@ let numberSetter = (val, theseCells) => {
 
 let booleanSetter = (val, theseCells) => {
     if (val === undefined || typeof (val.toString().toLowerCase() === 'true' || ((val.toString().toLowerCase() === 'false') ? false : val)) !== 'boolean') {
-        console.log('Value sent to Bool function of cells %s was not a bool, it has type of %s and value of %s',
+        throw new TypeError('Value sent to Bool function of cells %s was not a bool, it has type of %s and value of %s',
             JSON.stringify(theseCells.excelRefs),
             typeof(val),
             val
@@ -71,7 +71,7 @@ let booleanSetter = (val, theseCells) => {
     val = val.toString().toLowerCase() === 'true';
 
     if (!theseCells.merged) {
-        theseCells.cells.forEach(function (c, i) {
+        theseCells.cells.forEach((c, i) => {
             c.Bool(val.toString());
         });
     } else {
@@ -83,11 +83,11 @@ let booleanSetter = (val, theseCells) => {
 
 let formulaSetter = (val, theseCells) => {
     if (typeof(val) !== 'string') {
-        console.log('Value sent to Formula function of cells %s was not a string, it has type of %s', JSON.stringify(theseCells.excelRefs), typeof(val));
+        throw new TypeError('Value sent to Formula function of cells %s was not a string, it has type of %s', JSON.stringify(theseCells.excelRefs), typeof(val));
         val = '';
     }
     if (theseCells.merged !== true) {
-        theseCells.cells.forEach(function (c, i) {
+        theseCells.cells.forEach((c, i) => {
             c.Formula(val);
         });
     } else {
@@ -109,16 +109,21 @@ let styleSetter = (val, theseCells) => {
         throw new TypeError('Parameter sent to Style function must be an instance of a Style or a style configuration object');
     }
 
-    styleXFid = thisStyle.ids.cellXfs;
+    theseCells.cells.forEach((c, i) => {
+        if (c.s === 0) {
+            c.Style(thisStyle.ids.cellXfs);
+        } else {
+            let curStyle = theseCells.ws.wb.styles[c.s];
+            console.log(JSON.stringify(curStyle.toObject(), null, '  '));
+            console.log(JSON.stringify(thisStyle.toObject(), null, '  '));
+            let newStyleOpts = _.merge(curStyle.toObject(), thisStyle.toObject());
+            console.log(JSON.stringify(newStyleOpts, null, '  '));
+            let mergedStyle = theseCells.ws.wb.Style(newStyleOpts);
+            c.Style(mergedStyle.ids.cellXfs);
+        }
+    });
 
-    if (theseCells.merged !== true) {
-        theseCells.cells.forEach(function (c, i) {
-            c.Style(styleXFid);
-        });
-    } else {
-        var c = theseCells.cells[0];
-        c.Style(styleXFid);
-    }   
+    return theseCells;
 };
 
 let mergeCells = (ws, excelRefs) => {
@@ -129,7 +134,7 @@ let mergeCells = (ws, excelRefs) => {
         let rangeCells = excelRefs;
 
         let okToMerge = true;
-        ws.mergedCells.forEach(function (cr) {
+        ws.mergedCells.forEach((cr) => {
             // Check to see if currently merged cells contain cells in new merge request
             let curCells = utils.getAllCellsInExcelRange(cr);
             let intersection = utils.arrayIntersectSafe(rangeCells, curCells);

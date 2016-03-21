@@ -25,11 +25,7 @@ class CTColor { //§18.8.3 && §18.8.19
     }
 
     toObject() {
-        let obj = {};
-        this.rgb !== undefined ? obj.rgb = this.rgb : null;
-        this.theme !== undefined ? obj.theme = this.theme : null;
-        this.type !== undefined ? obj.type = this.type : null;
-        return obj;
+        return this[this.type];
     }
 
     addToXMLele(ele) {

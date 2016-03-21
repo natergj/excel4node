@@ -14,7 +14,7 @@ class Alignment { // §18.8.1 alignment (Alignment)
             }
         }
         
-        if(opts.indent != undefined){
+        if(opts.indent !== undefined){
             if (typeof opts.indent === 'number' && parseInt(opts.indent) === opts.indent && opts.indent > 0) {
                 this.indent = opts.indent;
             } else {
@@ -22,7 +22,7 @@ class Alignment { // §18.8.1 alignment (Alignment)
             }
         }
         
-        if(opts.justifyLastLine != undefined){
+        if(opts.justifyLastLine !== undefined){
             if (opts.justifyLastLine === true) {
                 this.justifyLastLine = opts.justifyLastLine;
             } else if(typeof opts.justifyLastLine !== 'boolean') {
@@ -30,15 +30,15 @@ class Alignment { // §18.8.1 alignment (Alignment)
             }
         }
         
-        if(opts.readingOrder != undefined){
+        if(opts.readingOrder !== undefined){
             if (constants.readingOrders.indexOf(opts.readingOrder) >= 0) {
-                this.readingOrder = constants.readingOrders.indexOf(opts.readingOrder);
-            } else if(opts.readingOrder !== undefined) {
-                throw new TypeError(`alignment readingOrder must be one of ${constants.readingOrders.join(', ')}`);
+                this.readingOrder = opts.readingOrder;
+            } else {
+                throw new TypeError('alignment readingOrder must be one of ' + constants.readingOrders.join(', ') );
             }
         }
         
-        if(opts.relativeIndent != undefined){
+        if(opts.relativeIndent !== undefined){
             if (typeof opts.relativeIndent === 'number' && parseInt(opts.relativeIndent) === opts.relativeIndent && opts.relativeIndent > 0) {
                 this.relativeIndent = opts.relativeIndent;
             } else {
@@ -46,7 +46,7 @@ class Alignment { // §18.8.1 alignment (Alignment)
             }
         }
         
-        if(opts.shrinkToFit != undefined){
+        if(opts.shrinkToFit !== undefined){
             if (opts.shrinkToFit === true) {
                 this.shrinkToFit = opts.shrinkToFit;
             } else if(typeof opts.shrinkToFit !== 'boolean') {
@@ -54,7 +54,7 @@ class Alignment { // §18.8.1 alignment (Alignment)
             }
         }
         
-        if(opts.textRotation != undefined){
+        if(opts.textRotation !== undefined){
             if (typeof opts.textRotation === 'number' && parseInt(opts.textRotation) === opts.textRotation) {
                 this.textRotation = opts.textRotation;
             } else if(opts.textRotation !== undefined) {
@@ -62,7 +62,7 @@ class Alignment { // §18.8.1 alignment (Alignment)
             }
         }
         
-        if(opts.vertical != undefined){
+        if(opts.vertical !== undefined){
             if (constants.alignmentTypes.vertical.indexOf(opts.vertical) >= 0) {
                 this.vertical = opts.vertical;
             } else if(opts.vertical !== undefined) {
@@ -70,7 +70,7 @@ class Alignment { // §18.8.1 alignment (Alignment)
             }
         }
         
-        if(opts.wrapText != undefined){
+        if(opts.wrapText !== undefined){
             if (opts.wrapText === true) {
                 this.wrapText = opts.wrapText;
             } else if(typeof opts.wrapText !== 'boolean') {

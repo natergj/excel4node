@@ -66,39 +66,24 @@ let _getBorderId = (wb, border) => {
     return borderId;
 };
 
-let _getNumFmtId = (wb, fmt) => {
+let _getNumFmt = (wb, val) => {
+    let fmt;
+    wb.styleData.numFmts.forEach((f, i) => {
+        if (_.isEqual(f.formatCode, val)) {
+            fmt = f;
+        }
+    });
+
     if (fmt === undefined) {
-        return null;
+        let fmtId = wb.styleData.numFmts.length + 166;
+        fmt = {
+            formatCode: val,
+            numFmtId: fmtId
+        };
+        wb.styleData.numFmts.push(fmt);
     }
 
-    if (typeof fmt === 'number') {
-        if (fmt <= 166) {
-            return fmt;
-        } else {
-            return 0;
-        }
-    }
-
-    if (typeof fmt === 'string') {
-
-        let fmtId;
-        wb.styleData.numFmts.forEach((f, i) => {
-            if (_.isEqual(f.formatCode, fmt)) {
-                fmtId = f.numFmtId;
-            }
-        });
-        if (fmtId === undefined) {
-            fmtId = wb.styleData.numFmts.length + 166;
-            wb.styleData.numFmts.push({
-                formatCode: fmt,
-                numFmtId: fmtId
-            });
-        }
-
-        return fmtId;
-    }
-
-    return null;
+    return fmt;
 };
 
 
@@ -169,20 +154,41 @@ let _getNumFmtId = (wb, fmt) => {
 module.exports = class Style {
     constructor(wb, opts) {
         opts = opts ? opts : {};
-        opts.alignment ? this.alignment = new Alignment(opts.alignment) : null; // Child Element
-        opts.protection ? this.protection = opts.protection : null; // Child Element
-        this.applyAlignment = null; // attribute boolean
-        this.applyBorder = null; // attribute boolean
-        this.applyFill = null; // attribute boolean
-        this.applyFont = null; // attribute boolean
-        this.applyNumberFormat = null; // attribute boolean
-        this.applyProtection = null; // attribute boolean
-        this.borderId = _getBorderId(wb, opts.border); // attribute 0 based index
-        this.fillId = _getFillId(wb, opts.fill); // attribute 0 based index
-        this.fontId = _getFontId(wb, opts.font); // attribute 0 based index
-        this.numFmtId = _getNumFmtId(wb, opts.numberFormat); // attribute 0 based index
-        this.pivotButton = null; // attribute boolean
-        this.quotePrefix = null; // attribute boolean
+
+        if (opts.alignment !== undefined) {
+            this.alignment = new Alignment(opts.alignment);
+        }
+
+        if (opts.border !== undefined) {  
+            this.borderId = _getBorderId(wb, opts.border); // attribute 0 based index
+            this.border = wb.styleData.borders[this.borderId];  
+        }
+        if (opts.fill !== undefined) {  
+            this.fillId = _getFillId(wb, opts.fill); // attribute 0 based index
+            this.fill = wb.styleData.fills[this.fillId];
+        }
+
+        if (opts.font !== undefined) {  
+            this.fontId = _getFontId(wb, opts.font); // attribute 0 based index
+            this.font = wb.styleData.fonts[this.fontId];
+        }
+
+        if (opts.numberFormat !== undefined) {  
+            if (typeof opts.numberFormat === 'number' && opts.numberFormat <= 165){
+                this.numFmtId = opts.numberFormat;
+            } else if (typeof opts.numberFormat === 'string') {
+                this.numFmt = _getNumFmt(wb, opts.numberFormat);
+            }
+        }
+
+        if (opts.pivotButton !== undefined) {
+            this.pivotButton = null; // attribute boolean
+        }
+
+        if (opts.quotePrefix !== undefined) {
+            this.quotePrefix = null; // attribute boolean
+        }
+
         this.ids = {};
     }
 
@@ -207,6 +213,9 @@ module.exports = class Style {
         if (typeof this.numFmtId === 'number') {
             thisXF.applyNumberFormat = 1;
             thisXF.numFmtId = this.numFmtId;
+        } else if (this.numFmt !== undefined && this.numFmt !== null) {
+            thisXF.applyNumberFormat = 1;
+            thisXF.numFmtId = this.numFmt.numFmtId;
         }
 
         if (this.alignment instanceof Alignment) {
@@ -221,28 +230,33 @@ module.exports = class Style {
         let obj = {};
 
         if (typeof this.fontId === 'number') {
-            obj.applyFont = 1;
-            obj.fontId = this.fontId;
+            obj.font = this.font.toObject();
         }
 
         if (typeof this.fillId === 'number') {
-            obj.applyFill = 1;
-            obj.fillId = this.fillId;
+            obj.fill = this.fill.toObject();
         }
 
         if (typeof this.borderId === 'number') {
-            obj.applyBorder = 1;
-            obj.borderId = this.borderId;
+            obj.border = this.border.toObject();
         }
 
-        if (typeof this.numFmtId === 'number') {
-            obj.applyNumberFormat = 1;
-            obj.numFmtId = this.numFmtId;
+        if (typeof this.numFmtId === 'number' && this.numFmtId > 166) {
+            obj.numberFormat = this.numFmtId;
+        } else if (this.numFmt !== undefined && this.numFmt !== null){
+            obj.numberFormat = this.numFmt.formatCode;
         }
 
         if (this.alignment instanceof Alignment) {
-            obj.applyAlignment = 1;
             obj.alignment = this.alignment.toObject();
+        }
+
+        if (this.pivotButton !== undefined) {
+            obj.pivotButton = this.pivotButton;
+        }
+
+        if (this.quotePrefix !== undefined) {
+            obj.quotePrefix = this.quotePrefix;
         }
 
         return obj;   

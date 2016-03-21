@@ -111,4 +111,10 @@ const readingOrders = [
     'rightToLeft'
 ];
 
-module.exports = {colorSchemes, excelColors, fillPatternTypes, borderStyles, alignmentTypes, readingOrders};
+var defaultFont = {
+    'color': 'FF000000',
+    'name': 'Calibri',
+    'size': '12'
+};
+
+module.exports = {colorSchemes, excelColors, fillPatternTypes, borderStyles, alignmentTypes, readingOrders, defaultFont};

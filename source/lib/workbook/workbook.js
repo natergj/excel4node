@@ -8,6 +8,7 @@ const Border = require('../style/classes/border.js');
 const Fill = require('../style/classes/fill.js');
 const xmlbuilder = require('xmlbuilder');
 const SlothLogger = require('sloth-logger');
+const constants = require('../constants.js');
 
 // ------------------------------------------------------------------------------
 // Private WorkBook Methods Start
@@ -228,8 +229,8 @@ let _addStylesXML = (promiseObj) => {
             promiseObj.wb.styleData.numFmts.forEach((nf) => {
                 nfXML
                 .ele('numFmt')
-                .att('formatCode', nf.format)
-                .att('numFmtId', nf.id);
+                .att('formatCode', nf.formatCode)
+                .att('numFmtId', nf.numFmtId);
             });
         }
 
@@ -266,7 +267,7 @@ let _addStylesXML = (promiseObj) => {
         let xmlString = xml.doc().end(promiseObj.xmlOutVars);
         promiseObj.xlsx.folder('xl').file('styles.xml', xmlString);
 
-        promiseObj.wb.logger.debug(xmlString);
+        console.log(xmlString);
         resolve(promiseObj);
     });
 };
@@ -347,11 +348,12 @@ class WorkBook {
      * @param {Object} opts Workbook settings
      */
     constructor(opts) {
+        opts = opts ? opts : {};
+        
         this.logger = new SlothLogger.Logger({
             logLevel: Number.isNaN(parseInt(opts.logLevel)) ? 0 : parseInt(opts.logLevel)
         });
 
-        opts = opts ? opts : {};
         this.opts = _.merge({}, workBookDefaultOpts, opts);
 
         this.sheets = [];
@@ -360,7 +362,7 @@ class WorkBook {
         this.styleData = {
             'numFmts': [],
             'fonts': [],
-            'fills': [new Fill({type:'none'})],
+            'fills': [new Fill({type:'pattern', patternType:'none'}), new Fill({type:'pattern', patternType:'gray125'})],
             'borders': [new Border()],
             'cellXfs': [
                 {
@@ -374,10 +376,11 @@ class WorkBook {
 
         // Set Default Font and Style
         if (this.opts.defaultFont !== undefined) {
-            this.Style({ font: this.opts.defaultFont });
-        } else {
-            this.Style();
-        }
+            constants.defaultFont = _.merge(constants.defaultFont, this.opts.defaultFont);  
+        } 
+        console.log(this.opts.defaultFont);
+        console.log(constants.defaultFont);
+        this.Style({ font: constants.defaultFont });
 
     }
 
