@@ -2,6 +2,7 @@ const _ = require('lodash');
 const Cell = require('./cell.js');
 const Row = require('../row/row.js');
 const Column = require('../column/column.js');
+const Style = require('../style/style.js');
 const utils = require('../utils.js');
 
 let stringSetter = (val, theseCells) => {
@@ -85,7 +86,7 @@ let formulaSetter = (val, theseCells) => {
         console.log('Value sent to Formula function of cells %s was not a string, it has type of %s', JSON.stringify(theseCells.excelRefs), typeof(val));
         val = '';
     }
-    if (!theseCells.merged) {
+    if (theseCells.merged !== true) {
         theseCells.cells.forEach(function (c, i) {
             c.Formula(val);
         });
@@ -97,8 +98,30 @@ let formulaSetter = (val, theseCells) => {
     return theseCells;
 };
 
+let styleSetter = (val, theseCells) => {
+    let styleXFid;
+    let thisStyle;
+    if (val instanceof Style) {
+        thisStyle = val;
+    } else if (val instanceof Object) {
+        thisStyle = theseCells.wb.Style(val);
+    } else {
+        throw new TypeError('Parameter sent to Style function must be an instance of a Style or a style configuration object');
+    }
+
+    styleXFid = thisStyle.ids.cellXfs;
+    
+    if (theseCells.merged !== true) {
+        theseCells.cells.forEach(function (c, i) {
+            c.Style(styleXFid);
+        });
+    } else {
+        var c = theseCells.cells[0];
+        c.Style(styleXFid);
+    }   
+};
+
 let mergeCells = (ws, excelRefs) => {
-    let logger = ws.wb.logger;
     if (excelRefs instanceof Array && excelRefs.length > 0) {
         excelRefs.sort(utils.sortCellRefs);
 
@@ -112,7 +135,7 @@ let mergeCells = (ws, excelRefs) => {
             let intersection = utils.arrayIntersectSafe(rangeCells, curCells);
             if (intersection.length > 0) {
                 okToMerge = false;
-                logger.error(`Invalid Range for: ${cellRange}. Some cells in this range are already included in another merged cell range: ${cr}.`);
+                ws.wb.logger.error(`Invalid Range for: ${cellRange}. Some cells in this range are already included in another merged cell range: ${cr}.`);
             }
         });
         if (okToMerge) {
@@ -124,8 +147,6 @@ let mergeCells = (ws, excelRefs) => {
 };
 
 let cellAccessor = (ws, row1, col1, row2, col2, isMerged) => {
-
-    ws.wb.logger.debug('Debug Line');
     
     let theseCells = {
         ws: ws,
@@ -173,6 +194,7 @@ let cellAccessor = (ws, row1, col1, row2, col2, isMerged) => {
     theseCells.Number = (val) => numberSetter(val, theseCells);
     theseCells.Bool = (val) => booleanSetter(val, theseCells);
     theseCells.Formula = (val) => formulaSetter(val, theseCells);
+    theseCells.Style = (val) => styleSetter(val, theseCells);
 
     return theseCells;
 };

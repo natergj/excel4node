@@ -1,5 +1,4 @@
 const utils = require('../utils.js');
-const logger = require('../logger.js');
 const _ = require('lodash');
 
 class Row {

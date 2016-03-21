@@ -1,38 +1,22 @@
 const utils = require('../utils.js');
-const logger = require('../logger.js');
 const _ = require('lodash');
 
+const Alignment = require('./classes/alignment.js');
+const Border = require('./classes/border.js');
+const Fill = require('./classes/fill.js');
+const Font = require('./classes/font.js');
+
 let _getFontId = (wb, font) => {
-    if (font === undefined) {
-        return null;
-    }
 
-    let thisFont = {};
-
-    typeof font.charset === 'number' ? thisFont.charset = font.charset : null;
-    typeof font.color === 'string' ? thisFont.color = utils.cleanColor(font.color) : thisFont.color = wb.styleData.fonts[0].color;
-    typeof font.family === 'number' ? thisFont.family = font.family : thisFont.family = wb.styleData.fonts[0].family;
-    typeof font.name === 'string' ? thisFont.name = font.name : thisFont.name = wb.styleData.fonts[0].name;
-    typeof font.scheme === 'string' ? thisFont.scheme = font.scheme : thisFont.scheme = wb.styleData.fonts[0].scheme;
-    typeof font.size === 'number' ? thisFont.sz = font.size : thisFont.sz = wb.styleData.fonts[0].sz;
-
-    font.condense === true ? thisFont.condense = true : null;
-    font.extend === true ? thisFont.extend = true : null;
-    font.bold === true ? thisFont.b = true : null;
-    font.italics === true ? thisFont.i = true : null;
-    font.outline === true ? thisFont.outline = true : null;
-    font.shadow === true ? thisFont.shadow = true : null;
-    font.strike === true ? thisFont.strike = true : null;
-    font.underline === true ? thisFont.u = true : null;
-    font.alignVertical === true ? thisFont.vertAlign = true : null;
+    let thisFont = new Font(font);
 
     let fontId;
     wb.styleData.fonts.forEach((f, i) => {
-        if (_.isEqual(f, thisFont)) {
+        if (_.isEqual(thisFont.toObject(), f.toObject())) {
             fontId = i;
         }
     });
-    if (!fontId) {
+    if (fontId === undefined) {
         let count = wb.styleData.fonts.push(thisFont);
         fontId = count - 1;
     }
@@ -40,26 +24,47 @@ let _getFontId = (wb, font) => {
     return fontId;
 };
 
-let _getFontId = (wb, fill) => {
+let _getFillId = (wb, fill) => {
     if (fill === undefined) {
         return null;
     }
 
-    let thisFill = {};
+    let thisFill = new Fill(fill);
 
     let fillId;
     wb.styleData.fills.forEach((f, i) => {
-        if (_.isEqual(f, thisFill)) {
+        if (_.isEqual(thisFill.toObject(), f.toObject())) {
             fillId = i;
         }
     });
-    if (!fillId) {
+    if (fillId === undefined) {
         let count = wb.styleData.fills.push(thisFill);
         fillId = count - 1;
     }
 
     return fillId;
-}
+};
+
+let _getBorderId = (wb, border) => {
+    if (border === undefined) {
+        return null;
+    }
+
+    let thisBorder = new Border(border);
+    let borderId;
+    wb.styleData.borders.forEach((b, i) => {
+        if (_.isEqual(b.toObject(), thisBorder.toObject())) {
+            borderId = i;
+        }
+    });
+
+    if (borderId === undefined) {
+        let count = wb.styleData.borders.push(thisBorder);
+        borderId = count - 1;
+    }
+
+    return borderId;
+};
 
 let _getNumFmtId = (wb, fmt) => {
     if (fmt === undefined) {
@@ -82,8 +87,8 @@ let _getNumFmtId = (wb, fmt) => {
                 fmtId = f.numFmtId;
             }
         });
-        if(!fmtId){
-            fmtId = wb.styleData.numFmts.length + 166
+        if (fmtId === undefined) {
+            fmtId = wb.styleData.numFmts.length + 166;
             wb.styleData.numFmts.push({
                 formatCode: fmt,
                 numFmtId: fmtId
@@ -94,7 +99,7 @@ let _getNumFmtId = (wb, fmt) => {
     }
 
     return null;
-}
+};
 
 
 /*
@@ -104,7 +109,7 @@ let _getNumFmtId = (wb, fmt) => {
             horizontal: ['center', 'centerContinuous', 'distributed', 'fill', 'general', 'justify', 'left', 'right'],
             indent: integer, // Number of spaces to indent = indent value * 3
             justifyLastLine: boolean,
-            readingOrder: [0, 1, 2], // 0 = context dependent, 1 = left-to-right, 2 = right-to-left
+            readingOrder: ['contextDependent', 'leftToRight', 'rightToLeft'], 
             relativeIndent: integer, // number of additional spaces to indent
             shrinkToFit: boolean,
             textRotation: integer, // number of degrees to rotate text counter-clockwise
@@ -126,57 +131,62 @@ let _getNumFmtId = (wb, fmt) => {
             strike: boolean,
             size: integer,
             underline: boolean,
-            alignVertical: boolean
+            vertAlign: string // §22.9.2.17 ST_VerticalAlignRun (Vertical Positioning Location)
+        },
+        border: { // §18.8.4 border (Border)
+            left: {
+                style: string,
+                color: string
+            },
+            right: {
+                style: string,
+                color: string
+            },
+            top: {
+                style: string,
+                color: string
+            },
+            bottom: {
+                style: string,
+                color: string
+            },
+            diagonal: {
+                style: string,
+                color: string
+            },
+            diagonalDown: boolean,
+            diagonalUp: boolean,
+            outline: boolean
         },
         fill: { // §18.8.20 fill (Fill)
             pattern: string,
             color: string,
             gradient: object
         },
-        number: integer or string // §18.8.30 numFmt (Number Format)
+        numberFormat: integer or string // §18.8.30 numFmt (Number Format)
     }
 */
 module.exports = class Style {
     constructor(wb, opts) {
         opts = opts ? opts : {};
-        opts.alignment ? this.alignment = opts.alignment : null; // Child Element
+        opts.alignment ? this.alignment = new Alignment(opts.alignment) : null; // Child Element
         opts.protection ? this.protection = opts.protection : null; // Child Element
         this.applyAlignment = null; // attribute boolean
         this.applyBorder = null; // attribute boolean
-        this.applyFill = null // attribute boolean
-        this.applyFont = null // attribute boolean
-        this.applyNumberFormat = null // attribute boolean
-        this.applyProtection = null // attribute boolean
-        this.borderId = null // attribute 0 based index
+        this.applyFill = null; // attribute boolean
+        this.applyFont = null; // attribute boolean
+        this.applyNumberFormat = null; // attribute boolean
+        this.applyProtection = null; // attribute boolean
+        this.borderId = _getBorderId(wb, opts.border); // attribute 0 based index
         this.fillId = _getFillId(wb, opts.fill); // attribute 0 based index
         this.fontId = _getFontId(wb, opts.font); // attribute 0 based index
-        this.numFmtId = _getNumFmtId(wb, opts.number); // attribute 0 based index
-        this.pivotButton = null // attribute boolean
-        this.quotePrefix = null // attribute boolean
+        this.numFmtId = _getNumFmtId(wb, opts.numberFormat); // attribute 0 based index
+        this.pivotButton = null; // attribute boolean
+        this.quotePrefix = null; // attribute boolean
+        this.ids = {};
     }
 
     get xf() {
-        /*
-        <xsd:sequence>
-           <xsd:element name="alignment" type="CT_CellAlignment" minOccurs="0" maxOccurs="1"/>
-           <xsd:element name="protection" type="CT_CellProtection" minOccurs="0" maxOccurs="1"/>
-           <xsd:element name="extLst" type="CT_ExtensionList" minOccurs="0" maxOccurs="1"/>
-        </xsd:sequence>
-        <xsd:attribute name="numFmtId" type="ST_NumFmtId" use="optional"/>
-        <xsd:attribute name="fontId" type="ST_FontId" use="optional"/>
-        <xsd:attribute name="fillId" type="ST_FillId" use="optional"/>
-        <xsd:attribute name="borderId" type="ST_BorderId" use="optional"/>
-        <xsd:attribute name="xfId" type="ST_CellStyleXfId" use="optional"/>
-        <xsd:attribute name="quotePrefix" type="xsd:boolean" use="optional" default="false"/>
-        <xsd:attribute name="pivotButton" type="xsd:boolean" use="optional" default="false"/>
-        <xsd:attribute name="applyNumberFormat" type="xsd:boolean" use="optional"/>
-        <xsd:attribute name="applyFont" type="xsd:boolean" use="optional"/>
-        <xsd:attribute name="applyFill" type="xsd:boolean" use="optional"/>
-        <xsd:attribute name="applyBorder" type="xsd:boolean" use="optional"/>
-        <xsd:attribute name="applyAlignment" type="xsd:boolean" use="optional"/>
-        <xsd:attribute name="applyProtection" type="xsd:boolean" use="optional"/>
-        */
-
         let thisXF = {};
 
         if (typeof this.fontId === 'number') {
@@ -184,6 +194,38 @@ module.exports = class Style {
             thisXF.fontId = this.fontId;
         }
 
+        if (typeof this.fillId === 'number') {
+            thisXF.applyFill = 1;
+            thisXF.fillId = this.fillId;
+        }
+
+        if (typeof this.borderId === 'number') {
+            thisXF.applyBorder = 1;
+            thisXF.borderId = this.borderId;
+        }
+
+        if (typeof this.numFmtId === 'number') {
+            thisXF.applyNumberFormat = 1;
+            thisXF.numFmtId = this.numFmtId;
+        }
+
+        if (this.alignment instanceof Alignment) {
+            thisXF.applyAlignment = 1;
+            thisXF.alignment = this.alignment;
+        }
+
         return thisXF;
+    }
+
+    addXFtoXMLele(ele) {
+        let thisEle = ele.ele('xf');
+        let thisXF = this.xf;
+        Object.keys(thisXF).forEach((a) => {
+            if(a === 'alignment') {
+                thisXF[a].addToXMLele(thisEle);
+            } else {
+                thisEle.att(a, thisXF[a]);
+            }
+        });        
     }
 };

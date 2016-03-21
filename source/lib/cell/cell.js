@@ -1,5 +1,4 @@
 const utils = require('../utils.js');
-const logger = require('../logger.js');
 
 // §18.3.1.4 c (Cell)
 class Cell {

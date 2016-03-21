@@ -4,7 +4,6 @@ const Row = require('../row/row.js');
 const Column = require('../column/column.js');
 const WorkSheet = require('../worksheet/worksheet.js');
 const utils = require('../utils.js');
-const logger = require('../logger.js');
 
 let rowAccessor = function (ws, row) {
     let returnObj = {};

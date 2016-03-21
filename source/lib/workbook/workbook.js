@@ -1,10 +1,11 @@
 const _ = require('lodash');
 const fs = require('fs');
 const JSZip = require('jszip');
-const logger = require('../logger.js');
 const utils = require('../utils.js');
 const WorkSheet = require('../worksheet');
 const Style = require('../style');
+const Border = require('../style/classes/border.js');
+const Fill = require('../style/classes/fill.js');
 const xmlbuilder = require('xmlbuilder');
 const SlothLogger = require('sloth-logger');
 
@@ -206,6 +207,7 @@ let _addSharedStringsXML = (promiseObj) => {
 let _addStylesXML = (promiseObj) => {
     // §12.3.20 Styles Part
     return new Promise ((resolve, reject) => {
+
         let xml = xmlbuilder.create(
             'styleSheet',
             {
@@ -235,12 +237,7 @@ let _addStylesXML = (promiseObj) => {
         .ele('fonts')
         .att('count', promiseObj.wb.styleData.fonts.length);
         promiseObj.wb.styleData.fonts.forEach((f) => {
-            let fEle = fontXML.ele('font');
-            fEle.ele('sz').att('val', f.sz);
-            fEle.ele('color').att('rgb', f.color);
-            fEle.ele('name').att('val', f.name);
-            fEle.ele('family').att('val', f.family);
-            fEle.ele('scheme').att('val', f.scheme);
+            f.addToXMLele(fontXML);
         });
 
         let fillXML = xml 
@@ -248,49 +245,28 @@ let _addStylesXML = (promiseObj) => {
         .att('count', promiseObj.wb.styleData.fills.length);
         promiseObj.wb.styleData.fills.forEach((f) => {
             let fXML = fillXML.ele('fill');
-            let pFill = fXML.ele('patternFill').att('patternType', f.patternFill.patternType);
-            if (f.patternFill.fgColor) {
-                pFill.ele('fgColor').att('rgb', f.patternFill.fgColor);
-            }
-            if (f.patternFill.bgColor) {
-                pFill.ele('bgColor').att('rgb', f.patternFill.bgColor);
-            }
-
+            f.addToXMLele(fXML);
         });
 
         let borderXML = xml 
         .ele('borders')
         .att('count', promiseObj.wb.styleData.borders.length);
         promiseObj.wb.styleData.borders.forEach((b) => {
-            let bXML = borderXML.ele('border');
-
-            ['left', 'right', 'top', 'bottom', 'diagonal'].forEach((o) => {
-                let thisOEle = bXML.ele(o);
-                if (b[o]) {
-                    if (b[o].style) {
-                        thisOEle.att('style', b[o].style);
-                    }
-                    if (b[o].color) {
-                        thisOEle.ele('color').att('rgb', b[o].color);
-                    }
-                }
-            });
+            b.addToXMLele(borderXML);
         });
 
 
         let cellXfsXML = xml 
         .ele('cellXfs')
-        .att('count', promiseObj.wb.styleData.cellXfs.length);
-        promiseObj.wb.styleData.cellXfs.forEach((c) => {
-            let thisEle = cellXfsXML.ele('xf');
-            Object.keys(c).forEach((a) => {
-                thisEle.att(a, c[a]);
-            });
+        .att('count', promiseObj.wb.styles.length);
+        promiseObj.wb.styles.forEach((s) => {
+            s.addXFtoXMLele(cellXfsXML);
         });
 
         let xmlString = xml.doc().end(promiseObj.xmlOutVars);
         promiseObj.xlsx.folder('xl').file('styles.xml', xmlString);
 
+        promiseObj.wb.logger.debug(xmlString);
         resolve(promiseObj);
     });
 };
@@ -332,7 +308,7 @@ let _writeToBuffer = (wb) => {
             resolve(buffer);
         })
         .catch((e) => {
-            console.error(e.stack);
+            wb.logger.error(e.stack);
         });
 
     });
@@ -371,65 +347,37 @@ class WorkBook {
      * @param {Object} opts Workbook settings
      */
     constructor(opts) {
-        opts = opts ? opts : {};
-
         this.logger = new SlothLogger.Logger({
-            logLevel : Number.isNaN(parseInt(opts.logLevel)) ? 0 : parseInt(opts.logLevel)
+            logLevel: Number.isNaN(parseInt(opts.logLevel)) ? 0 : parseInt(opts.logLevel)
         });
 
-
+        opts = opts ? opts : {};
         this.opts = _.merge({}, workBookDefaultOpts, opts);
+
         this.sheets = [];
         this.sharedStrings = [];
         this.styles = [];
         this.styleData = {
             'numFmts': [],
             'fonts': [],
-            'fills': [
-                {
-                    'patternFill': {
-                        'patternType': 'none'
-                    }
-                },
-                {
-                    'patternFill': {
-                        'patternType': 'none'
-                    }
-                }
-            ],
-            'borders': [
-                {
-                    'left': null,
-                    'right': null,
-                    'top': null,
-                    'bottom': null,
-                    'diagonal': null
-                }
-            ],
+            'fills': [new Fill({type:'none'})],
+            'borders': [new Border()],
             'cellXfs': [
                 {
-                    'borderId': '0',
-                    'fillId': '0',
-                    'fontId': '0',
-                    'numFmtId': '0'
+                    'borderId': null,
+                    'fillId': null,
+                    'fontId': 0,
+                    'numFmtId': null
                 }
             ]
         };
 
-        // Set Default Font
-        let defaultFont = {
-            'color': utils.cleanColor('Black'),
-            'family': '2',
-            'name': 'Calibri',
-            'scheme': 'minor',
-            'sz': '12'
-        };
-        if (this.opts.defaultFont) {
-            defaultFont.sz = this.opts.defaultFont.size;
-            defaultFont.color = utils.cleanColor(this.opts.defaultFont.color);
-            defaultFont.name = this.opts.defaultFont.family;
+        // Set Default Font and Style
+        if (this.opts.defaultFont !== undefined) {
+            this.Style({ font: this.opts.defaultFont });
+        } else {
+            this.Style();
         }
-        this.styleData.fonts.push(defaultFont);
 
     }
 
@@ -499,6 +447,7 @@ class WorkBook {
     Style(opts) {
         let thisStyle = new Style(this, opts);
         let count = this.styles.push(thisStyle);
+        this.styles[count - 1].ids.cellXfs = count - 1;
         return this.styles[count - 1];
     }
 

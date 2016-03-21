@@ -1,7 +1,6 @@
 const _ = require('lodash');
 const xml = require('xmlbuilder');
 const CfRulesCollection = require('./cf/cf_rules_collection');
-const logger = require('../logger.js');
 const utils = require('../utils.js');
 const cellAccessor = require('../cell');
 const rowAccessor = require('../row');
