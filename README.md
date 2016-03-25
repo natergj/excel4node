@@ -84,7 +84,8 @@ var ws = wb.WorkSheet('My Worksheet', {
 	paperDimensions: {				   // optional, default is LETTER (8.5 in. by 11 in.)
 		paperWidth: '210mm',
 		paperHeight: '297mm'
-		// instead of width and height, paperSize with a value from WorkSheet.PaperSize can be used
+		// paperSize: xl.PaperSize.A4_PAPER
+		// instead of width and height, paperSize with a value from excel4node.PaperSize can be used
 		// if paperWidth and paperHeight are set, they override paperSize
 	},
     view: {                            // page zoom
