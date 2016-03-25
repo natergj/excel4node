@@ -49,7 +49,7 @@ var wb2 = new xl.WorkBook({      // optional params object
 ```
 Set a default font for the workbook
 
-```javascript  
+```javascript
 var xl = require('excel4node');
 var wb = new xl.WorkBook();
 wb.updateDefaultFont({
@@ -81,6 +81,12 @@ var ws = wb.WorkSheet('My Worksheet', {
         centerHorizontal: true,
         centerVertical: false
     },
+	paperDimensions: {				   // optional, default is LETTER (8.5 in. by 11 in.)
+		paperWidth: '210mm',
+		paperHeight: '297mm'
+		// instead of width and height, paperSize with a value from WorkSheet.PaperSize can be used
+		// if paperWidth and paperHeight are set, they override paperSize
+	},
     view: {                            // page zoom
         zoom: 100
     },
@@ -250,7 +256,7 @@ var complexString = [
 	' World!',
 	{
 		color: '000000'
-	},  
+	},
 	' All',
 	' these',
 	' strings',
@@ -259,7 +265,7 @@ var complexString = [
 	{
 		color: '0000FF',
 		value: ', but'
-	},  
+	},
 	' now',
 	' are',
 	' blue'
