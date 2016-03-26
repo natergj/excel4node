@@ -2,7 +2,7 @@ const CfRule = require('./cf_rule');
 
 // -----------------------------------------------------------------------------
 
-class CfRulesCollection {
+class CfRulesCollection { // §18.3.1.18 conditionalFormatting (Conditional Formatting)
     constructor() {
         // rules are indexed by cell refs
         this.rulesBySqref = {};
@@ -20,26 +20,13 @@ class CfRulesCollection {
         return this;
     }
 
-
-
-    getBuilderElements() {
-        let list = [];
-        let self = this;
-        if (!Object.keys(this.rulesBySqref).length) {
-            return list;
-        }
-        Object.keys(this.rulesBySqref).forEach(function (sqref) {
-            let rules = self.rulesBySqref[sqref];
-            list.push({
-                conditionalFormatting: {
-                    '@sqref': sqref,
-                    '#list': rules.map(function (rule, idx) {
-                        return rule.getBuilderData();
-                    })
-                }
+    addToXMLele(ele) {
+        Object.keys(this.rulesBySqref).forEach((sqref) => {
+            let thisEle = ele.ele('conditionalFormatting').att('sqref', sqref);
+            this.rulesBySqref[sqref].forEach((rule) => {
+                rule.addToXMLele(thisEle);
             });
         });
-        return list;
     }
 }
 

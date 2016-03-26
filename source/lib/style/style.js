@@ -5,6 +5,7 @@ const Alignment = require('./classes/alignment.js');
 const Border = require('./classes/border.js');
 const Fill = require('./classes/fill.js');
 const Font = require('./classes/font.js');
+const NumberFormat = require('./classes/numberFormat.js');
 
 let _getFontId = (wb, font) => {
 
@@ -68,7 +69,7 @@ let _getBorderId = (wb, border) => {
 
 let _getNumFmt = (wb, val) => {
     let fmt;
-    wb.styleData.numFmts.forEach((f, i) => {
+    wb.styleData.numFmts.forEach((f) => {
         if (_.isEqual(f.formatCode, val)) {
             fmt = f;
         }
@@ -76,10 +77,8 @@ let _getNumFmt = (wb, val) => {
 
     if (fmt === undefined) {
         let fmtId = wb.styleData.numFmts.length + 164;
-        fmt = {
-            formatCode: val,
-            numFmtId: fmtId
-        };
+        fmt = new NumberFormat(val);
+        fmt.numFmtId = fmtId;
         wb.styleData.numFmts.push(fmt);
     }
 
@@ -151,7 +150,7 @@ let _getNumFmt = (wb, val) => {
         numberFormat: integer or string // §18.8.30 numFmt (Number Format)
     }
 */
-module.exports = class Style {
+class Style {
     constructor(wb, opts) {
         opts = opts ? opts : {};
 
@@ -174,7 +173,7 @@ module.exports = class Style {
         }
 
         if (opts.numberFormat !== undefined) {  
-            if (typeof opts.numberFormat === 'number' && opts.numberFormat <= 164){
+            if (typeof opts.numberFormat === 'number' && opts.numberFormat <= 164) {
                 this.numFmtId = opts.numberFormat;
             } else if (typeof opts.numberFormat === 'string') {
                 this.numFmt = _getNumFmt(wb, opts.numberFormat);
@@ -243,7 +242,7 @@ module.exports = class Style {
 
         if (typeof this.numFmtId === 'number' && this.numFmtId < 164) {
             obj.numberFormat = this.numFmtId;
-        } else if (this.numFmt !== undefined && this.numFmt !== null){
+        } else if (this.numFmt !== undefined && this.numFmt !== null) {
             obj.numberFormat = this.numFmt.formatCode;
         }
 
@@ -266,11 +265,37 @@ module.exports = class Style {
         let thisEle = ele.ele('xf');
         let thisXF = this.xf;
         Object.keys(thisXF).forEach((a) => {
-            if(a === 'alignment') {
+            if (a === 'alignment') {
                 thisXF[a].addToXMLele(thisEle);
             } else {
                 thisEle.att(a, thisXF[a]);
             }
         });        
     }
-};
+
+    addDXFtoXMLele(ele) {
+        let thisEle = ele.ele('dxf');
+
+        if (this.font instanceof Font) {
+            this.font.addToXMLele(thisEle);
+        }
+
+        if (this.numFmt instanceof NumberFormat) {
+            this.numFmt.addToXMLele(thisEle);
+        }
+
+        if (this.fill instanceof Fill) {
+            this.fill.addToXMLele(thisEle);
+        }
+
+        if (this.alignment instanceof Alignment) {
+            this.alignment.addToXMLele(thisEle);
+        }
+
+        if (this.border instanceof Border) {
+            this.border.addToXMLele(thisEle);
+        }
+    }
+}
+
+module.exports = Style;

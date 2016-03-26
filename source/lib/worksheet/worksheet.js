@@ -241,7 +241,7 @@ let _addMergeCells = (promiseObj) => {
 let _addConditionalFormatting = (promiseObj) => {
     // §18.3.1.18 conditionalFormatting (Conditional Formatting)
     return new Promise((resolve, reject) => {
-
+        promiseObj.ws.cfRulesCollection.addToXMLele(promiseObj.xml);
         resolve(promiseObj);
     });
 };
@@ -336,6 +336,14 @@ class WorkSheet {
         this.wb.sheets.push(this);
     }
 
+    addConditionalFormattingRule(sqref, options) {
+        let style = options.style || this.wb.Style();
+        let dxf = this.wb.dxfCollection.add(style);
+        delete options.style;
+        options.dxfId = dxf.id;
+        this.cfRulesCollection.add(sqref, options);
+    }
+
     generateXML() {
         return new Promise((resolve, reject) => {
 
@@ -378,8 +386,6 @@ class WorkSheet {
             .catch((e) => {
                 console.error(e.stack);
             });
-
-
         });
     }
 
@@ -393,14 +399,6 @@ class WorkSheet {
 
     Column(col) {
         return colAccessor(this, col);
-    }
-
-    addConditionalFormattingRule(sqref, options) {
-        let style = options.style || this.wb.Style();
-        options.dxfId = style.id;
-        this.cfRulesCollection.add(sqref, options);
-
-        return this;
     }
 }
 
