@@ -7,6 +7,7 @@ const wsDefaultParams = require('./sheet_default_params.js');
 const HyperlinkCollection = require('./classes/hyperlink.js');
 const DataValidation = require('./classes/dataValidation.js');
 const xmlBuilder = require('./builder.js');
+const optsValidator = require('./optsValidator.js');
 
 
 /**
@@ -23,6 +24,8 @@ class WorkSheet {
         this.wb = wb;
         this.sheetId = this.wb.sheets.length + 1;
         this.opts = _.merge({}, wsDefaultParams, opts);
+        optsValidator(opts);
+
         this.opts.sheetView.tabSelected = this.sheetId === 1 ? 1 : 0;
         this.name = name ? name : `Sheet ${this.sheetId}`;
         this.hasGroupings = false;
@@ -56,12 +59,10 @@ class WorkSheet {
     }
 
     generateRelsXML() {
-        this.wb.logger.debug('generateRelsXML called from instance');
         return xmlBuilder.relsXML(this);
     }
 
     generateXML() {
-        this.wb.logger.debug('generateXML called from instance');
         return xmlBuilder.sheetXML(this);
     }
 

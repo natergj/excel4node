@@ -148,7 +148,6 @@ let addWorkSheetsXML = (promiseObj) => {
                         // Add worksheet to zip
                         promiseObj.xlsx.folder('xl').folder('worksheets').file(`sheet${curSheet}.xml`, xml); 
                         
-                        //promiseObj.wb.logger.debug(xml);
                         resolve();
                     });
                 })
@@ -156,8 +155,6 @@ let addWorkSheetsXML = (promiseObj) => {
                     return thisSheet.generateRelsXML();
                 })
                 .then((xml) => {
-                    promiseObj.wb.logger.debug('generateRelsXML called');
-                    promiseObj.wb.logger.debug(xml);
                     if (xml) {
                         promiseObj.xlsx.folder('xl').folder('worksheets').folder('_rels').file(`sheet${curSheet}.xml.rels`, xml);
                     }
@@ -271,7 +268,6 @@ let addStylesXML = (promiseObj) => {
         }
 
         let xmlString = xml.doc().end(promiseObj.xmlOutVars);
-        promiseObj.wb.logger.debug(xmlString);
         promiseObj.xlsx.folder('xl').file('styles.xml', xmlString);
 
         resolve(promiseObj);

@@ -249,7 +249,6 @@ let _addHyperlinks = (promiseObj) => {
 let _addDataValidations = (promiseObj) => {
     // §18.3.1.33 dataValidations (Data Validations)
     return new Promise((resolve, reject) => {
-        promiseObj.ws.wb.logger.debug(promiseObj.ws.dataValidationCollection);
         if (promiseObj.ws.dataValidationCollection.length > 0) {
             promiseObj.ws.dataValidationCollection.addToXMLele(promiseObj.xml);
         }
@@ -260,6 +259,25 @@ let _addDataValidations = (promiseObj) => {
 let _addPrintOptions = (promiseObj) => {
     // §18.3.1.70 printOptions (Print Options)
     return new Promise((resolve, reject) => {
+
+        let addPrintOptions = false;
+        let o = promiseObj.ws.opts.printOptions;
+        Object.keys(o).forEach((k) => {
+            if (o[k] !== null) {
+                addPrintOptions = true;
+            }
+        });
+
+        if (addPrintOptions) {
+            let poEle = promiseObj.xml.ele('printOptions');
+            o.centerHorizontal === true ? poEle.att('horizontalCentered', 1) : null;
+            o.centerVertical === true ? poEle.att('verticalCentered', 1) : null;
+            o.printHeadings === true ? poEle.att('headings', 1) : null;
+            if (o.printGridLines === true) {
+                poEle.att('gridLines', 1);
+                poEle.att('gridLinesSet', 1);
+            } 
+        }
 
         resolve(promiseObj);
     });
@@ -277,6 +295,17 @@ let _addPageSetup = (promiseObj) => {
     // §18.3.1.63 pageSetup (Page Setup Settings)
     return new Promise((resolve, reject) => {
 
+        let addPageSetup = false;
+        let o = promiseObj.ws.opts.pageSetup;
+        Object.keys(o).forEach((k) => {
+            if (o[k] !== null) {
+                addPageSetup = true;
+            }
+        });
+
+        if (addPageSetup === true) {
+
+        }
         resolve(promiseObj);
     });
 };
@@ -335,7 +364,6 @@ let sheetXML = (ws) => {
         .then(_addDrawing)
         .then((promiseObj) => {
             let xmlString = promiseObj.xml.doc().end({ pretty: true, indent: '  ', newline: '\n' });
-            ws.wb.logger.debug(xmlString);
             resolve(xmlString);
         })
         .catch((e) => {
