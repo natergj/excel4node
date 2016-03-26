@@ -17,5 +17,6 @@ module.exports = {
     WorkBook: require('./lib/workbook/index.js'),
     getExcelRowCol: utils.getExcelRowCol,
     getExcelAlpha: utils.getExcelAlpha,
-    getExcelTS: utils.getExcelTS
+    getExcelTS: utils.getExcelTS,
+    PAPER_SIZE: require('./lib/constants/PAPER_SIZE.js')
 };
