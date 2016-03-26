@@ -4,6 +4,8 @@ const cellAccessor = require('../cell');
 const rowAccessor = require('../row');
 const colAccessor = require('../column');
 const wsDefaultParams = require('./sheet_default_params.js');
+const HyperlinkCollection = require('./classes/hyperlink.js');
+const xmlBuilder = require('./builder.js');
 
 
 /**
@@ -32,6 +34,7 @@ class WorkSheet {
 
         // conditional formatting rules hashed by sqref
         this.cfRulesCollection = new CfRulesCollection();
+        this.hyperlinkCollection = new HyperlinkCollection();
 
         this.wb.sheets.push(this);
     }
@@ -44,8 +47,14 @@ class WorkSheet {
         this.cfRulesCollection.add(sqref, options);
     }
 
+    generateRelsXML() {
+        this.wb.logger.debug('generateRelsXML called from instance');
+        return xmlBuilder.relsXML(this);
+    }
+
     generateXML() {
-        return require('./builder.js')(this);
+        this.wb.logger.debug('generateXML called from instance');
+        return xmlBuilder.sheetXML(this);
     }
 
     Cell(row1, col1, row2, col2, isMerged) {
@@ -59,6 +68,7 @@ class WorkSheet {
     Column(col) {
         return colAccessor(this, col);
     }
+
 }
 
 module.exports = WorkSheet;

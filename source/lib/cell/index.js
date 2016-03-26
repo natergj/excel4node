@@ -123,6 +123,25 @@ let styleSetter = (val, theseCells) => {
     return theseCells;
 };
 
+let hyperlinkSetter = (url, displayStr, tooltip, theseCells) => {
+    theseCells.excelRefs.forEach((ref) => {
+        displayStr = typeof displayStr === 'string' ? displayStr : url;
+        theseCells.ws.hyperlinkCollection.add({
+            location: url,
+            display: displayStr,
+            tooltip: tooltip,
+            ref: ref
+        });
+    });
+    stringSetter(displayStr, theseCells);
+    styleSetter({
+        font: {
+            color: 'Blue',
+            underline: true
+        }
+    }, theseCells);
+};
+
 let mergeCells = (ws, excelRefs) => {
     if (excelRefs instanceof Array && excelRefs.length > 0) {
         excelRefs.sort(utils.sortCellRefs);
@@ -197,6 +216,7 @@ let cellAccessor = (ws, row1, col1, row2, col2, isMerged) => {
     theseCells.Bool = (val) => booleanSetter(val, theseCells);
     theseCells.Formula = (val) => formulaSetter(val, theseCells);
     theseCells.Style = (val) => styleSetter(val, theseCells);
+    theseCells.Link = (url, displayStr, tooltip) => hyperlinkSetter(url, displayStr, tooltip, theseCells);
 
     return theseCells;
 };

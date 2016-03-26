@@ -241,7 +241,7 @@ let _addConditionalFormatting = (promiseObj) => {
 let _addHyperlinks = (promiseObj) => {
     // §18.3.1.48 hyperlinks (Hyperlinks)
     return new Promise((resolve, reject) => {
-
+        promiseObj.ws.hyperlinkCollection.addToXMLele(promiseObj.xml);
         resolve(promiseObj);
     });
 };
@@ -294,7 +294,7 @@ let _addDrawing = (promiseObj) => {
     });
 };
 
-let buildXML = (ws) => {
+let sheetXML = (ws) => {
     return new Promise((resolve, reject) => {
 
         let wsXML = xml.create(
@@ -339,4 +339,40 @@ let buildXML = (ws) => {
     });
 };
 
-module.exports = buildXML;
+let relsXML = (ws) => {
+    return new Promise((resolve, reject) => {
+        let sheetRelRequired = false;
+        if (ws.hyperlinkCollection.length > 0) {
+            sheetRelRequired = true;
+        }
+
+        if (sheetRelRequired === false) {
+            resolve();
+        } 
+
+        let relXML = xml.create(
+            'Relationships',
+            {
+                'version': '1.0', 
+                'encoding': 'UTF-8', 
+                'standalone': true
+            }
+        );
+        relXML.att('xmlns', 'http://schemas.openxmlformats.org/package/2006/relationships');
+
+        if (ws.hyperlinkCollection.length > 0) { ////§15.3 Hyperlinks
+            ws.hyperlinkCollection.links.forEach((l) => {
+                relXML.ele('Relationship')
+                .att('Id', l.rId)
+                .att('Target', l.location)
+                .att('TargetMode', 'External')
+                .att('Type', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink');
+            });
+        }
+
+        resolve(relXML.doc().end({ pretty: true, indent: '  ', newline: '\n' }));
+    });
+};
+
+module.exports = { sheetXML, relsXML };
+

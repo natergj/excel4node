@@ -43,6 +43,7 @@ class Cell {
     Style(sId) {
         this.s = sId;
     }
+
 }
 
 module.exports = Cell;

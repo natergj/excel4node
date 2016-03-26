@@ -140,14 +140,31 @@ let addWorkSheetsXML = (promiseObj) => {
         let processNextSheet = () => {
             let thisSheet = promiseObj.wb.sheets[curSheet];
             if (thisSheet) {
+                curSheet++;
                 thisSheet
                 .generateXML()
                 .then((xml) => {
+                    return new Promise((resolve) =>{
+                        // Add worksheet to zip
+                        promiseObj.xlsx.folder('xl').folder('worksheets').file(`sheet${curSheet}.xml`, xml); 
+                        
+                        //promiseObj.wb.logger.debug(xml);
+                        resolve();
+                    });
+                })
+                .then(() => {
+                    return thisSheet.generateRelsXML();
+                })
+                .then((xml) => {
+                    promiseObj.wb.logger.debug('generateRelsXML called');
                     promiseObj.wb.logger.debug(xml);
-                    // Add worksheet to zip
-                    curSheet++;
-                    promiseObj.xlsx.folder('xl').folder('worksheets').file(`sheet${curSheet}.xml`, xml);
-                    processNextSheet();
+                    if (xml) {
+                        promiseObj.xlsx.folder('xl').folder('worksheets').folder('_rels').file(`sheet${curSheet}.xml.rels`, xml);
+                    }
+                })
+                .then(processNextSheet)
+                .catch((e) => {
+                    promiseObj.wb.logger.error(e.stack);
                 });
             } else {
                 resolve(promiseObj);
