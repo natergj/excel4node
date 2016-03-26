@@ -202,19 +202,36 @@ let getAllCellsInNumericRange = (row1, col1, row2, col2) => {
     return response.sort(sortCellRefs);
 };
 
+let boolToInt = (bool) => {
+    if (parseInt(bool) === 1) {
+        return 1;
+    }
+    if (parseInt(bool) === 0) {
+        return 0;
+    }
+    if (bool === true) {
+        return 1;
+    }
+    if (bool === false) {
+        return 0;
+    }
+    throw new TypeError('Value sent to boolToInt must be true, false, 1 or 0');
+};
+
 /*
  * Helper Functions
  */
 
 module.exports = {
-    generateRId: generateRId,
-    getHashOfPassword: getHashOfPassword,
-    getExcelAlpha: getExcelAlpha,
-    getExcelRowCol: getExcelRowCol,
-    getExcelTS: getExcelTS,
-    cleanColor: cleanColor,
-    sortCellRefs: sortCellRefs,
-    arrayIntersectSafe: arrayIntersectSafe,
-    getAllCellsInExcelRange: getAllCellsInExcelRange,
-    getAllCellsInNumericRange: getAllCellsInNumericRange
+    generateRId,
+    getHashOfPassword,
+    getExcelAlpha,
+    getExcelRowCol,
+    getExcelTS,
+    cleanColor,
+    sortCellRefs,
+    arrayIntersectSafe,
+    getAllCellsInExcelRange,
+    getAllCellsInNumericRange,
+    boolToInt
 };

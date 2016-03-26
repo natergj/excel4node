@@ -5,6 +5,7 @@ const rowAccessor = require('../row');
 const colAccessor = require('../column');
 const wsDefaultParams = require('./sheet_default_params.js');
 const HyperlinkCollection = require('./classes/hyperlink.js');
+const DataValidation = require('./classes/dataValidation.js');
 const xmlBuilder = require('./builder.js');
 
 
@@ -35,6 +36,7 @@ class WorkSheet {
         // conditional formatting rules hashed by sqref
         this.cfRulesCollection = new CfRulesCollection();
         this.hyperlinkCollection = new HyperlinkCollection();
+        this.dataValidationCollection = new DataValidation.DataValidationCollection();
 
         this.wb.sheets.push(this);
     }
@@ -45,6 +47,12 @@ class WorkSheet {
         delete options.style;
         options.dxfId = dxf.id;
         this.cfRulesCollection.add(sqref, options);
+        return this;
+    }
+
+    addDataValidation(opts) {
+        let newValidation = this.dataValidationCollection.add(opts);
+        return newValidation;
     }
 
     generateRelsXML() {

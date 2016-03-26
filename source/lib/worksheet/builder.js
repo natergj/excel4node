@@ -249,7 +249,10 @@ let _addHyperlinks = (promiseObj) => {
 let _addDataValidations = (promiseObj) => {
     // §18.3.1.33 dataValidations (Data Validations)
     return new Promise((resolve, reject) => {
-
+        promiseObj.ws.wb.logger.debug(promiseObj.ws.dataValidationCollection);
+        if (promiseObj.ws.dataValidationCollection.length > 0) {
+            promiseObj.ws.dataValidationCollection.addToXMLele(promiseObj.xml);
+        }
         resolve(promiseObj);
     });
 };
@@ -323,15 +326,17 @@ let sheetXML = (ws) => {
         .then(_addAutoFilter)
         .then(_addMergeCells)
         .then(_addConditionalFormatting)
-        .then(_addHyperlinks)
         .then(_addDataValidations)
+        .then(_addHyperlinks)
         .then(_addPrintOptions)
         .then(_addPageMargins)
         .then(_addPageSetup)
         .then(_addHeaderFooter)
         .then(_addDrawing)
         .then((promiseObj) => {
-            resolve(promiseObj.xml.doc().end({ pretty: true, indent: '  ', newline: '\n' }));
+            let xmlString = promiseObj.xml.doc().end({ pretty: true, indent: '  ', newline: '\n' });
+            ws.wb.logger.debug(xmlString);
+            resolve(xmlString);
         })
         .catch((e) => {
             console.error(e.stack);
