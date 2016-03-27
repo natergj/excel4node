@@ -4,7 +4,7 @@ let xl = require('../source/index');
 test('Create Hyperlink', (t) => {
     let wb = new xl.WorkBook();
     let ws = wb.WorkSheet('test');
-    ws.Cell(1, 1).Link('http://iamnater.com', 'iAmNater', 'iAmNater.com');
+    ws.Cell(1, 1).link('http://iamnater.com', 'iAmNater', 'iAmNater.com');
     t.ok(ws.hyperlinkCollection.links[0].location === 'http://iamnater.com', 'Link location set correctly');
     t.ok(ws.hyperlinkCollection.links[0].display === 'iAmNater', 'Link display set correctly');
     t.ok(ws.hyperlinkCollection.links[0].tooltip === 'iAmNater.com', 'Link tooltip set correctly');

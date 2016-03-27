@@ -10,37 +10,37 @@ class Cell {
         this.v = null; // 'v' child element for values
     }
 
-    String(index) {
+    string(index) {
         this.t = 's';
         this.v = index;
         this.f = null;
     }
 
-    Number(val) {
+    number(val) {
         this.t = 'n';
         this.v = val;
         this.f = null;
     }
 
-    Formula(formula) {
+    formula(formula) {
         this.t = null;
         this.v = null;
         this.f = formula;
     }
 
-    Bool(val) {
+    bool(val) {
         this.t = 'b';
         this.v = val;
         this.f = null;
     }
 
-    Date(dt) {
+    date(dt) {
         this.t = 'd';
         this.v = utils.getExcelTS(dt);
         this.f = null;
     }
 
-    Style(sId) {
+    style(sId) {
         this.s = sId;
     }
 

@@ -6,6 +6,7 @@ const Style = require('../style');
 const Border = require('../style/classes/border.js');
 const Fill = require('../style/classes/fill.js');
 const DXFCollection = require('./dxfCollection.js');
+const MediaCollection = require('./mediaCollection.js');
 const SlothLogger = require('sloth-logger');
 const constants = require('../constants.js');
 const builder = require('./builder.js');
@@ -53,6 +54,7 @@ class WorkBook {
         this.sharedStrings = [];
         this.styles = [];
         this.dxfCollection = new DXFCollection(this);
+        this.mediaCollection = new MediaCollection();
         this.styleData = {
             'numFmts': [],
             'fonts': [],
@@ -98,6 +100,7 @@ class WorkBook {
      * If callback is given, callback called with (err, fs.Stats) passed
      */
     write(fileName, handler) {
+        this.logger.debug('write called');
         builder.writeToBuffer(this)
         .then((buffer) => {
             switch (typeof handler) {

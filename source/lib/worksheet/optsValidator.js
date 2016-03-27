@@ -50,8 +50,8 @@ const optsTypes = {
     },
     'sheetView': {
         'pane': {
-            'activePane': null,
-            'state': null,
+            'activePane': 'PANE',
+            'state': 'PANE_STATE',
             'topLeftCell': null,
             'xSplit': null,
             'ySplit': null
@@ -163,6 +163,20 @@ let validator = function (key, val, type) {
         let printErrors = ['displayed', 'blank', 'dash', 'NA'];
         if (printErrors.indexOf(val) < 0) {
             throw new TypeError('Invalid value for ' + key + '. Value must be one of ' + printErrors.join(', '));
+        }
+        break;
+
+    case 'PANE':
+        let panes = ['bottomLeft', 'bottomRight', 'topLeft', 'topRight'];
+        if (panes.indexOf(val) < 0) {
+            throw new TypeError('Invalid value for ' + key + '. Value must be one of ' + panes.join(', '));
+        }
+        break;
+
+    case 'PANE_STATE':
+        let paneStates = ['split', 'frozen', 'frozenSplit'];
+        if (paneStates.indexOf(val) < 0) {
+            throw new TypeError('Invalid value for ' + key + '. Value must be one of ' + paneStates.join(', '));
         }
         break;
 

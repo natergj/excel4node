@@ -28,11 +28,11 @@ let stringSetter = (val, theseCells) => {
 
     if (!theseCells.merged) {
         theseCells.cells.forEach((c) => {
-            c.String(theseCells.ws.wb.getStringIndex(val));
+            c.string(theseCells.ws.wb.getStringIndex(val));
         });
     } else {
         let c = theseCells.cells[0];
-        c.String(theseCells.ws.wb.getStringIndex(val));
+        c.string(theseCells.ws.wb.getStringIndex(val));
     }
     return theseCells;
 };
@@ -49,11 +49,11 @@ let numberSetter = (val, theseCells) => {
 
     if (!theseCells.merged) {
         theseCells.cells.forEach((c, i) => {
-            c.Number(val);
+            c.number(val);
         });
     } else {
         var c = theseCells.cells[0];
-        c.Number(val);
+        c.number(val);
     }
     return theseCells;    
 };
@@ -70,11 +70,11 @@ let booleanSetter = (val, theseCells) => {
 
     if (!theseCells.merged) {
         theseCells.cells.forEach((c, i) => {
-            c.Bool(val.toString());
+            c.bool(val.toString());
         });
     } else {
         var c = theseCells.cells[0];
-        c.Bool(val.toString());
+        c.bool(val.toString());
     }
     return theseCells;
 };
@@ -85,11 +85,11 @@ let formulaSetter = (val, theseCells) => {
     }
     if (theseCells.merged !== true) {
         theseCells.cells.forEach((c, i) => {
-            c.Formula(val);
+            c.formula(val);
         });
     } else {
         var c = theseCells.cells[0];
-        c.Formula(val);
+        c.formula(val);
     }
 
     return theseCells;
@@ -108,12 +108,12 @@ let styleSetter = (val, theseCells) => {
 
     theseCells.cells.forEach((c, i) => {
         if (c.s === 0) {
-            c.Style(thisStyle.ids.cellXfs);
+            c.style(thisStyle.ids.cellXfs);
         } else {
             let curStyle = theseCells.ws.wb.styles[c.s];
             let newStyleOpts = _.merge(curStyle.toObject(), thisStyle.toObject());
             let mergedStyle = theseCells.ws.wb.Style(newStyleOpts);
-            c.Style(mergedStyle.ids.cellXfs);
+            c.style(mergedStyle.ids.cellXfs);
         }
     });
 
@@ -208,12 +208,12 @@ let cellAccessor = (ws, row1, col1, row2, col2, isMerged) => {
         mergeCells(ws, theseCells.excelRefs);
     }
 
-    theseCells.String = (val) => stringSetter(val, theseCells);
-    theseCells.Number = (val) => numberSetter(val, theseCells);
-    theseCells.Bool = (val) => booleanSetter(val, theseCells);
-    theseCells.Formula = (val) => formulaSetter(val, theseCells);
-    theseCells.Style = (val) => styleSetter(val, theseCells);
-    theseCells.Link = (url, displayStr, tooltip) => hyperlinkSetter(url, displayStr, tooltip, theseCells);
+    theseCells.string = (val) => stringSetter(val, theseCells);
+    theseCells.number = (val) => numberSetter(val, theseCells);
+    theseCells.bool = (val) => booleanSetter(val, theseCells);
+    theseCells.formula = (val) => formulaSetter(val, theseCells);
+    theseCells.style = (val) => styleSetter(val, theseCells);
+    theseCells.link = (url, displayStr, tooltip) => hyperlinkSetter(url, displayStr, tooltip, theseCells);
 
     return theseCells;
 };

@@ -153,17 +153,17 @@ test('Update style on Cell', (t) => {
             name: 'Helvetica'
         }
     });
-    ws.Cell(1,1).String('string').Style(style);
-    let styleID = ws.Cell(1,1).cells[0].s;
+    ws.Cell(1, 1).string('string').style(style);
+    let styleID = ws.Cell(1, 1).cells[0].s;
     let thisStyle = wb.styles[styleID];
     t.ok(thisStyle.toObject().font.name === 'Helvetica', 'Cell correctly set to style font.');
 
-    ws.Cell(1,1).Style({
+    ws.Cell(1, 1).style({
         font: {
             name: 'Courier'
         }
     });
-    let styleID2 = ws.Cell(1,1).cells[0].s;
+    let styleID2 = ws.Cell(1, 1).cells[0].s;
     let thisStyle2 = wb.styles[styleID2];
     t.ok(thisStyle2.toObject().font.name === 'Courier', 'Cell font name correctly updated to new font name');
     t.ok(thisStyle2.toObject().font.size === 14, 'Cell font size correctly did not change');

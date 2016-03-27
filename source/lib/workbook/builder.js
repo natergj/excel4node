@@ -1,5 +1,6 @@
 const xmlbuilder = require('xmlbuilder');
 const JSZip = require('jszip');
+const fs = require('fs');
 
 let addRootContentTypesXML = (promiseObj) => {
     // Required as stated in §12.2
@@ -14,6 +15,17 @@ let addRootContentTypesXML = (promiseObj) => {
         )
         .att('xmlns', 'http://schemas.openxmlformats.org/package/2006/content-types');
 
+        let contentTypesAdded = [];
+        promiseObj.wb.sheets.forEach((s, i) => {
+            if (s.drawingCollection.length > 0) { 
+                s.drawingCollection.drawings.forEach((d) => {
+                    let typeRef = d.contentType + '.' + d.extension;
+                    if (contentTypesAdded.indexOf(typeRef) < 0) {
+                        xml.ele('Default').att('ContentType', d.contentType).att('Extension', d.extension);
+                    }
+                });
+            }
+        });
         xml.ele('Default').att('ContentType', 'application/xml').att('Extension', 'xml');
         xml.ele('Default').att('ContentType', 'application/vnd.openxmlformats-package.relationships+xml').att('Extension', 'rels');
         xml.ele('Override').att('ContentType', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml').att('PartName', '/xl/workbook.xml');
@@ -21,11 +33,18 @@ let addRootContentTypesXML = (promiseObj) => {
             xml.ele('Override')
             .att('ContentType', 'application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml')
             .att('PartName', `/xl/worksheets/sheet${i + 1}.xml`);
+
+            if (s.drawingCollection.length > 0) {              
+                xml.ele('Override')
+                .att('ContentType', 'application/vnd.openxmlformats-officedocument.drawing+xml')
+                .att('PartName', '/xl/drawings/drawing' + s.sheetId + '.xml');  
+            }
         });
         xml.ele('Override').att('ContentType', 'application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml').att('PartName', '/xl/styles.xml');
         xml.ele('Override').att('ContentType', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml').att('PartName', '/xl/sharedStrings.xml');
 
         let xmlString = xml.doc().end(promiseObj.xmlOutVars);
+        promiseObj.wb.logger.debug(xmlString);
         promiseObj.xlsx.file('[Content_Types].xml', xmlString);
         resolve(promiseObj);
     });
@@ -141,8 +160,7 @@ let addWorkSheetsXML = (promiseObj) => {
             let thisSheet = promiseObj.wb.sheets[curSheet];
             if (thisSheet) {
                 curSheet++;
-                thisSheet
-                .generateXML()
+                thisSheet.generateXML()
                 .then((xml) => {
                     return new Promise((resolve) =>{
                         // Add worksheet to zip
@@ -155,9 +173,14 @@ let addWorkSheetsXML = (promiseObj) => {
                     return thisSheet.generateRelsXML();
                 })
                 .then((xml) => {
-                    if (xml) {
-                        promiseObj.xlsx.folder('xl').folder('worksheets').folder('_rels').file(`sheet${curSheet}.xml.rels`, xml);
-                    }
+                    return new Promise((resolve) => {
+                        promiseObj.wb.logger.debug('Sheet rels xml');
+                        promiseObj.wb.logger.debug(xml);
+                        if (xml) {
+                            promiseObj.xlsx.folder('xl').folder('worksheets').folder('_rels').file(`sheet${curSheet}.xml.rels`, xml);
+                        }
+                        resolve();
+                    });
                 })
                 .then(processNextSheet)
                 .catch((e) => {
@@ -274,6 +297,71 @@ let addStylesXML = (promiseObj) => {
     });
 };
 
+let addDrawingsXML = (promiseObj) => {
+    return new Promise((resolve) => {
+        promiseObj.wb.logger.debug('addDrawingsXML called');
+        promiseObj.wb.logger.debug('mediaCollection is empty? ' + promiseObj.wb.mediaCollection.isEmpty);
+        if (!promiseObj.wb.mediaCollection.isEmpty) {
+
+            promiseObj.wb.sheets.forEach((ws) => {
+                promiseObj.wb.logger.debug('is DrawingCollection empty? ' + ws.drawingCollection.isEmpty);
+                if (!ws.drawingCollection.isEmpty) {
+
+                    let drawingRelXML = xmlbuilder.create('Relationships', 
+                        {
+                            'version': '1.0', 
+                            'encoding': 'UTF-8', 
+                            'standalone': true
+                        }
+                    )
+                    .att('xmlns', 'http://schemas.openxmlformats.org/package/2006/relationships');
+
+                    let drawingsXML = xmlbuilder.create(
+                        'xdr:wsDr',
+                        {
+                            'version': '1.0', 
+                            'encoding': 'UTF-8', 
+                            'standalone': true
+                        }
+                    );
+                    drawingsXML
+                    .att('xmlns:a', 'http://schemas.openxmlformats.org/drawingml/2006/main')
+                    .att('xmlns:xdr', 'http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing');
+
+                    ws.drawingCollection.drawings.forEach((d) => {
+
+                        if (d.kind === 'image') {
+                            let target = 'image' + d.id + '.' + d.extension;
+                            promiseObj.xlsx.folder('xl').folder('media').file(target, fs.readFileSync(d.imagePath));
+
+                            drawingRelXML.ele('Relationship')
+                            .att('Id', d.rId)
+                            .att('Target', '../media/' + target)
+                            .att('Type', d.type);
+
+                        }
+
+
+
+                        d.addToXMLele(drawingsXML);
+                        
+                    });
+
+                    let drawingsXMLStr = drawingsXML.doc().end(promiseObj.xmlOutVars);
+                    promiseObj.wb.logger.debug(drawingsXMLStr);
+                    let drawingRelXMLStr = drawingRelXML.doc().end(promiseObj.xmlOutVars);
+                    promiseObj.wb.logger.debug(drawingRelXMLStr);
+                    promiseObj.xlsx.folder('xl').folder('drawings').file('drawing' + ws.sheetId + '.xml', drawingsXMLStr);
+                    promiseObj.xlsx.folder('xl').folder('drawings').folder('_rels').file('drawing' + ws.sheetId + '.xml.rels', drawingRelXMLStr);
+
+                }
+            });
+
+        }
+        resolve(promiseObj);
+    });
+};
+
 /**
  * Use JSZip to generate file to a node buffer
  * @private
@@ -303,11 +391,13 @@ let writeToBuffer = (wb) => {
         .then(addWorkSheetsXML)
         .then(addSharedStringsXML)
         .then(addStylesXML)
+        .then(addDrawingsXML)
         .then(() => {
             let buffer = promiseObj.xlsx.generate({
                 type: 'nodebuffer',
                 compression: wb.opts.jszip.compression
             });    
+            console.log('resolve buffer');
             resolve(buffer);
         })
         .catch((e) => {

@@ -1,5 +1,7 @@
 const xml = require('xmlbuilder');
 const utils = require('../utils.js');
+const Hyperlink = require('./classes/hyperlink');
+const Picture = require('../drawing/picture.js');
 
 let _addSheetPr = (promiseObj) => {
     // §18.3.1.82 sheetPr (Sheet Properties)
@@ -292,7 +294,7 @@ let _addPageMargins = (promiseObj) => {
         .att('left', o.left)
         .att('right', o.right)
         .att('top', o.top)
-        .att('bottom', o.botom)
+        .att('bottom', o.bottom)
         .att('header', o.header)
         .att('footer', o.footer);
 
@@ -371,7 +373,10 @@ let _addHeaderFooter = (promiseObj) => {
 let _addDrawing = (promiseObj) => {
     // §18.3.1.36 drawing (Drawing)
     return new Promise((resolve, reject) => {
-
+        if (!promiseObj.ws.drawingCollection.isEmpty) {
+            let dId = promiseObj.ws.relationships.indexOf('drawing') + 1;
+            promiseObj.xml.ele('drawing').att('r:id', 'rId' + dId);
+        }
         resolve(promiseObj);
     });
 };
@@ -425,7 +430,7 @@ let sheetXML = (ws) => {
 let relsXML = (ws) => {
     return new Promise((resolve, reject) => {
         let sheetRelRequired = false;
-        if (ws.hyperlinkCollection.length > 0) {
+        if (ws.relationships.length > 0) {
             sheetRelRequired = true;
         }
 
@@ -443,17 +448,25 @@ let relsXML = (ws) => {
         );
         relXML.att('xmlns', 'http://schemas.openxmlformats.org/package/2006/relationships');
 
-        if (ws.hyperlinkCollection.length > 0) { ////§15.3 Hyperlinks
-            ws.hyperlinkCollection.links.forEach((l) => {
+        ws.relationships.forEach((r, i) => {
+            let rId = 'rId' + (i + 1);
+            if (r instanceof Hyperlink) {
                 relXML.ele('Relationship')
-                .att('Id', l.rId)
-                .att('Target', l.location)
+                .att('Id', rId)
+                .att('Target', r.location)
                 .att('TargetMode', 'External')
-                .att('Type', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink');
-            });
-        }
+                .att('Type', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink');                
+            } else if (r === 'drawing') {
+                relXML.ele('Relationship')
+                .att('Id', rId)
+                .att('Target', '../drawings/drawing' + ws.sheetId + '.xml')
+                .att('Type', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing');
+            }
+        });
 
-        resolve(relXML.doc().end({ pretty: true, indent: '  ', newline: '\n' }));
+        let xmlString = relXML.doc().end({ pretty: true, indent: '  ', newline: '\n' });
+        ws.wb.logger.debug(xmlString);
+        resolve(xmlString);
     });
 };
 

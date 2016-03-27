@@ -6,6 +6,7 @@ const colAccessor = require('../column');
 const wsDefaultParams = require('./sheet_default_params.js');
 const HyperlinkCollection = require('./classes/hyperlink.js');
 const DataValidation = require('./classes/dataValidation.js');
+const wsDrawing = require('../drawing/index.js');
 const xmlBuilder = require('./builder.js');
 const optsValidator = require('./optsValidator.js');
 
@@ -40,8 +41,20 @@ class WorkSheet {
         this.cfRulesCollection = new CfRulesCollection();
         this.hyperlinkCollection = new HyperlinkCollection();
         this.dataValidationCollection = new DataValidation.DataValidationCollection();
+        this.drawingCollection = new wsDrawing.DrawingCollection();
 
         this.wb.sheets.push(this);
+    }
+
+    get relationships() {
+        let rels = [];
+        this.hyperlinkCollection.links.forEach((l) => {
+            rels.push(l);
+        });
+        if (!this.drawingCollection.isEmpty) {
+            rels.push('drawing');
+        }
+        return rels;
     }
 
     addConditionalFormattingRule(sqref, options) {
@@ -76,6 +89,14 @@ class WorkSheet {
 
     Column(col) {
         return colAccessor(this, col);
+    }
+
+    Image(path) {
+        let mediaID = this.wb.mediaCollection.add(path);
+        let newImage = this.drawingCollection.add('picture', path);
+        newImage.id = mediaID;
+
+        return newImage;
     }
 
 }
