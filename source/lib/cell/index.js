@@ -44,7 +44,6 @@ let numberSetter = (val, theseCells) => {
             typeof(val),
             val
         );
-        val = '';
     }
     val = parseFloat(val);
 
@@ -66,7 +65,6 @@ let booleanSetter = (val, theseCells) => {
             typeof(val),
             val
         );
-        val = '';
     }
     val = val.toString().toLowerCase() === 'true';
 
@@ -84,7 +82,6 @@ let booleanSetter = (val, theseCells) => {
 let formulaSetter = (val, theseCells) => {
     if (typeof(val) !== 'string') {
         throw new TypeError('Value sent to Formula function of cells %s was not a string, it has type of %s', JSON.stringify(theseCells.excelRefs), typeof(val));
-        val = '';
     }
     if (theseCells.merged !== true) {
         theseCells.cells.forEach((c, i) => {

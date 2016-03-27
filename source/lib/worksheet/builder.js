@@ -286,6 +286,15 @@ let _addPrintOptions = (promiseObj) => {
 let _addPageMargins = (promiseObj) => {
     // §18.3.1.62 pageMargins (Page Margins)
     return new Promise((resolve, reject) => {
+        let o = promiseObj.ws.opts.margins;
+
+        promiseObj.xml.ele('pageMargins')
+        .att('left', o.left)
+        .att('right', o.right)
+        .att('top', o.top)
+        .att('bottom', o.botom)
+        .att('header', o.header)
+        .att('footer', o.footer);
 
         resolve(promiseObj);
     });
@@ -304,8 +313,27 @@ let _addPageSetup = (promiseObj) => {
         });
 
         if (addPageSetup === true) {
-
+            let psEle = promiseObj.xml.ele('pageSetup');
+            o.paperSize !== null ? psEle.att('paperSize', o.paperSize) : null;
+            o.paperHeight !== null ? psEle.att('paperHeight', o.paperHeight) : null;
+            o.paperWidth !== null ? psEle.att('paperWidth', o.paperWidth) : null;
+            o.scale !== null ? psEle.att('scale', o.scale) : null;
+            o.firstPageNumber !== null ? psEle.att('firstPageNumber', o.firstPageNumber) : null;
+            o.fitToWidth !== null ? psEle.att('fitToWidth', o.fitToWidth) : null;
+            o.fitToHeight !== null ? psEle.att('fitToHeight', o.fitToHeight) : null;
+            o.pageOrder !== null ? psEle.att('pageOrder', o.pageOrder) : null;
+            o.orientation !== null ? psEle.att('orientation', o.orientation) : null;
+            o.usePrinterDefaults !== null ? psEle.att('usePrinterDefaults', utils.boolToInt(o.usePrinterDefaults)) : null;
+            o.blackAndWhite !== null ? psEle.att('blackAndWhite', utils.boolToInt(o.blackAndWhite)) : null;
+            o.draft !== null ? psEle.att('draft', utils.boolToInt(o.draft)) : null;
+            o.cellComments !== null ? psEle.att('cellComments', o.cellComments) : null;
+            o.useFirstPageNumber !== null ? psEle.att('useFirstPageNumber', utils.boolToInt(o.useFirstPageNumber)) : null;
+            o.errors !== null ? psEle.att('errors', o.errors) : null;
+            o.horizontalDpi !== null ? psEle.att('horizontalDpi', o.horizontalDpi) : null;
+            o.verticalDpi !== null ? psEle.att('verticalDpi', o.verticalDpi) : null;
+            o.copies !== null ? psEle.att('copies', o.copies) : null;
         }
+
         resolve(promiseObj);
     });
 };
@@ -313,6 +341,28 @@ let _addPageSetup = (promiseObj) => {
 let _addHeaderFooter = (promiseObj) => {
     // §18.3.1.46 headerFooter (Header Footer Settings)
     return new Promise((resolve, reject) => {
+
+        let addHeaderFooter = false;
+        let o = promiseObj.ws.opts.headerFooter;
+        Object.keys(o).forEach((k) => {
+            if (o[k] !== null) {
+                addHeaderFooter = true;
+            }
+        });
+
+        if (addHeaderFooter === true) {
+            let hfEle = promiseObj.xml.ele('headerFooter');
+            o.evenFooter !== null ? hfEle.ele('evenFooter').text(o.evenFooter) : null;
+            o.evenHeader !== null ? hfEle.ele('evenHeader').text(o.evenHeader) : null;
+            o.firstFooter !== null ? hfEle.ele('firstFooter').text(o.firstFooter) : null;
+            o.firstHeader !== null ? hfEle.ele('firstHeader').text(o.firstHeader) : null;
+            o.oddFooter !== null ? hfEle.ele('oddFooter').text(o.oddFooter) : null;
+            o.oddHeader !== null ? hfEle.ele('oddHeader').text(o.oddHeader) : null;
+            o.alignWithMargins !== null ? hfEle.att('alignWithMargins', utils.boolToInt(o.alignWithMargins)) : null;
+            o.differentFirst !== null ? hfEle.att('differentFirst', utils.boolToInt(o.differentFirst)) : null;
+            o.differentOddEven !== null ? hfEle.att('differentOddEven', utils.boolToInt(o.differentOddEven)) : null;
+            o.scaleWithDoc !== null ? hfEle.att('scaleWithDoc', utils.boolToInt(o.scaleWithDoc)) : null;
+        }
 
         resolve(promiseObj);
     });

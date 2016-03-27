@@ -1,9 +1,3 @@
 add tests for all configuration options when initializing workbook
 add tests for all configuration options when adding worksheet
 add tests for all style options
-add Cell Style methods
-add ability to set workbook default font/style
-complete print options implimentation
-complete page margins implimentation
-complete pageSetup implimentation
-complete Header/Footer implimentation

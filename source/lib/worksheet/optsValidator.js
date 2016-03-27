@@ -2,35 +2,51 @@ const types = require('../constants/index.js');
 
 const optsTypes = {
     'margins': {
-        'bottom': null,
-        'footer': null,
-        'header': null,
-        'left': null,
-        'right': null,
-        'top': null
+        'bottom': 'Float',
+        'footer': 'Float',
+        'header': 'Float',
+        'left': 'Float',
+        'right': 'Float',
+        'top': 'Float'
     },
     'printOptions': {
-        'centerHorizontal': null,
-        'centerVertical': null,
-        'printGridLines': null,
-        'printHeadings': null
+        'centerHorizontal': 'Boolean',
+        'centerVertical': 'Boolean',
+        'printGridLines': 'Boolean',
+        'printHeadings': 'Boolean'
     
     },
     'pageSetup': {
-        'blackAndWhite': null,
-        'copies': null,
-        'draft': null,
-        'firstPageNumber': null,
-        'fitToHeight': null,
-        'fitToWidth': null,
-        'horizontalDpi': null,
-        'orientation': null,
-        'paperHeight': null,
+        'blackAndWhite': 'Boolean',
+        'cellComments': 'CELL_COMMENTS',
+        'copies': 'Integer',
+        'draft': 'Boolean',
+        'errors': 'PRINT_ERROR',
+        'firstPageNumber': 'Boolean',
+        'fitToHeight': 'Integer',
+        'fitToWidth': 'Integer',
+        'horizontalDpi': 'Integer',
+        'orientation': 'ORIENTATION',
+        'pageOrder': 'PAGE_ORDER',
+        'paperHeight': 'POSITIVE_UNIVERSAL_MEASURE',
         'paperSize': 'PAPER_SIZE',
-        'paperWidth': null,
-        'useFirstPageNumber': null,
-        'usePrinterDefaults': null,
-        'verticalDpi': null
+        'paperWidth': 'POSITIVE_UNIVERSAL_MEASURE',
+        'scale': 'Integer',
+        'useFirstPageNumber': 'Boolean',
+        'usePrinterDefaults': 'Boolean',
+        'verticalDpi': 'Integer'
+    },
+    'headerFooter': {
+        'evenFooter': 'String',
+        'evenHeader': 'String',
+        'firstFooter': 'String',
+        'firstHeader': 'String',
+        'oddFooter': 'String',
+        'oddHeader': 'String',
+        'alignWithMargins': 'Boolean',
+        'differentFirst': 'Boolean',
+        'differentOddEven': 'Boolean',
+        'scaleWithDoc': 'Boolean'
     },
     'sheetView': {
         'pane': {
@@ -112,6 +128,65 @@ let validator = function (key, val, type) {
         let sizes = Object.keys(types.PAPER_SIZE);
         if (sizes.indexOf(val) < 0) {
             throw new TypeError('Invalid value for ' + key + '. Value must be one of ' + sizes.join(', '));
+        }
+        break;
+
+    case 'PAGE_ORDER':
+        let orders = ['downThenOver', 'overThenDown'];
+        if (orders.indexOf(val) < 0) {
+            throw new TypeError('Invalid value for ' + key + '. Value must be one of ' + orders.join(', '));
+        }
+        break;
+
+    case 'ORIENTATION':
+        let orientations = ['default', 'portrait', 'landscape'];
+        if (orientations.indexOf(val) < 0) {
+            throw new TypeError('Invalid value for ' + key + '. Value must be one of ' + orientations.join(', '));
+        }
+        break;
+
+    case 'POSITIVE_UNIVERSAL_MEASURE': 
+        let re = new RegExp('[0-9]+(\.[0-9]+)?(mm|cm|in|pt|pc|pi)');
+        if (re.test(val) !== true) {
+            throw new TypeError('Invalid value for ' + key + '. Value must a positive Float immediately followed by unit of measure from list mm, cm, in, pt, pc, pi. i.e. 10.5cm');
+        }
+        break;
+
+    case 'CELL_COMMENTS':
+        let comments = ['none', 'asDisplayed', 'atEnd'];
+        if (comments.indexOf('val') < 0) {
+            throw new TypeError('Invalid value for ' + key + '. Value must be one of ' + comments.join(', '));
+        }
+        break;
+
+    case 'PRINT_ERROR': 
+        let printErrors = ['displayed', 'blank', 'dash', 'NA'];
+        if (printErrors.indexOf(val) < 0) {
+            throw new TypeError('Invalid value for ' + key + '. Value must be one of ' + printErrors.join(', '));
+        }
+        break;
+
+    case 'Boolean':
+        if ([true, false, 1, 0].indexOf(val) < 0) {
+            throw new TypeError(key + ' expects value of true, false, 1 or 0');
+        }
+        break;
+
+    case 'Float': 
+        if (parseFloat(val) !== val) {
+            throw new TypeError(key + ' expects value as a Float number');
+        }
+        break;
+
+    case 'Integer':
+        if (parseInt(val) !== val) {
+            throw new TypeError(key + ' expects value as an Integer');
+        }
+        break;
+
+    case 'String': 
+        if (typeof val !== 'string') {
+            throw new TypeError(key + ' expects value as a String');
         }
         break;
 

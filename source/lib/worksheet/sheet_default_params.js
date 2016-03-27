@@ -14,18 +14,34 @@ module.exports = {
         'printHeadings': null
     
     },
+    'headerFooter': {
+        'evenFooter': null,
+        'evenHeader': null,
+        'firstFooter': null,
+        'firstHeader': null,
+        'oddFooter': null,
+        'oddHeader': null,
+        'alignWithMargins': null,
+        'differentFirst': null,
+        'differentOddEven': null,
+        'scaleWithDoc': null
+    },
     'pageSetup': {
         'blackAndWhite': null,
+        'cellComments': null,
         'copies': null,
         'draft': null,
+        'errors': null,
         'firstPageNumber': null,
         'fitToHeight': null,
         'fitToWidth': null,
         'horizontalDpi': null,
         'orientation': null,
+        'pageOrder': null,
         'paperHeight': null,
         'paperSize': null,
         'paperWidth': null,
+        'scale': null,
         'useFirstPageNumber': null,
         'usePrinterDefaults': null,
         'verticalDpi': null
