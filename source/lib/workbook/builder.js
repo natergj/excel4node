@@ -374,7 +374,7 @@ let writeToBuffer = (wb) => {
 
         let promiseObj = {
             wb: wb, 
-            xlsx: new JSZip(),
+            xlsx: new JSZip(wb.opts.jszip),
             xmlOutVars: { pretty: true, indent: '  ', newline: '\n' }
             //xmlOutVars : {}
         };
@@ -394,8 +394,7 @@ let writeToBuffer = (wb) => {
         .then(addDrawingsXML)
         .then(() => {
             let buffer = promiseObj.xlsx.generate({
-                type: 'nodebuffer',
-                compression: wb.opts.jszip.compression
+                type: 'nodebuffer'
             });    
             console.log('resolve buffer');
             resolve(buffer);

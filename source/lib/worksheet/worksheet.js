@@ -79,19 +79,19 @@ class WorkSheet {
         return xmlBuilder.sheetXML(this);
     }
 
-    Cell(row1, col1, row2, col2, isMerged) {
+    cell(row1, col1, row2, col2, isMerged) {
         return cellAccessor(this, row1, col1, row2, col2, isMerged);
     }
 
-    Row(row) {
+    row(row) {
         return rowAccessor(this, row);
     }
 
-    Column(col) {
+    column(col) {
         return colAccessor(this, col);
     }
 
-    Image(path) {
+    image(path) {
         let mediaID = this.wb.mediaCollection.add(path);
         let newImage = this.drawingCollection.add('picture', path);
         newImage.id = mediaID;

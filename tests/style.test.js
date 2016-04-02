@@ -6,7 +6,7 @@ let xmlbuilder = require('xmlbuilder');
 test('Create New Style', (t) => {
     t.plan(1);
     let wb = new xl.WorkBook();
-    let style = wb.Style();
+    let style = wb.createStyle();
 
     t.ok(style instanceof Style, 'Correctly generated Style object');
 });
@@ -15,7 +15,7 @@ test('Set Style Properties', (t) => {
     t.plan();
 
     let wb = new xl.WorkBook();
-    let style = wb.Style({
+    let style = wb.createStyle({
         alignment: { 
             horizontal: 'center',
             indent: 1, // Number of spaces to indent = indent value * 3
@@ -75,7 +75,7 @@ test('Set Style Properties', (t) => {
         numberFormat: '0.00##%' // §18.8.30 numFmt (Number Format)
     });
 
-    t.ok(style instanceof Style, 'Style object successfully created')
+    t.ok(style instanceof Style, 'Style object successfully created');
 
     let styleObj = style.toObject();
     t.ok(styleObj.alignment.horizontal === 'center', 'alignment.horizontal correctly set');
@@ -146,24 +146,24 @@ test('Update style on Cell', (t) => {
     t.plan(3);
 
     let wb = new xl.WorkBook();
-    let ws = wb.WorkSheet('Sheet1');
-    let style = wb.Style({
+    let ws = wb.addWorksheet('Sheet1');
+    let style = wb.createStyle({
         font: {
             size: 14,
             name: 'Helvetica'
         }
     });
-    ws.Cell(1, 1).string('string').style(style);
-    let styleID = ws.Cell(1, 1).cells[0].s;
+    ws.cell(1, 1).string('string').style(style);
+    let styleID = ws.cell(1, 1).cells[0].s;
     let thisStyle = wb.styles[styleID];
     t.ok(thisStyle.toObject().font.name === 'Helvetica', 'Cell correctly set to style font.');
 
-    ws.Cell(1, 1).style({
+    ws.cell(1, 1).style({
         font: {
             name: 'Courier'
         }
     });
-    let styleID2 = ws.Cell(1, 1).cells[0].s;
+    let styleID2 = ws.cell(1, 1).cells[0].s;
     let thisStyle2 = wb.styles[styleID2];
     t.ok(thisStyle2.toObject().font.name === 'Courier', 'Cell font name correctly updated to new font name');
     t.ok(thisStyle2.toObject().font.size === 14, 'Cell font size correctly did not change');

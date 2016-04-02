@@ -1,4 +1,4 @@
-let constants = require('./constants.js');
+let types = require('./types/index.js');
 
 let _bitXOR = (a, b) => {
     let maxLength = a.length > b.length ? a.length : b.length;
@@ -66,16 +66,14 @@ let getHashOfPassword = (str) => {
  * Translates a column number into the Alpha equivalent used by Excel
  * @function getExcelAlpha
  * @param {Number} colNum Column number that is to be transalated
- * @param {Boolean} capitalize States whether return string should be capital, defaults to true
  * @returns {String} The Excel alpha representation of the column number
  * @example
  * // returns B
  * getExcelAlpha(2);
  */
-let getExcelAlpha = (colNum, capitalize) => {
-    capitalize = capitalize ? capitalize : true;
+let getExcelAlpha = (colNum) => {
     let remaining = colNum;
-    let aCharCode = capitalize ? 65 : 97;
+    let aCharCode = 65;
     let columnName = '';
     while (remaining > 0) {
         let mod = (remaining - 1) % 26;
@@ -83,6 +81,28 @@ let getExcelAlpha = (colNum, capitalize) => {
         remaining = (remaining - 1 - mod) / 26;
     } 
     return columnName;
+};
+
+/**
+ * Translates a column number into the Alpha equivalent used by Excel
+ * @function getExcelAlpha
+ * @param {Number} rowNum Row number that is to be transalated
+ * @param {Number} colNum Column number that is to be transalated
+ * @returns {String} The Excel alpha representation of the column number
+ * @example
+ * // returns B1
+ * getExcelCellRef(1, 2);
+ */
+let getExcelCellRef = (rowNum, colNum) => {
+    let remaining = colNum;
+    let aCharCode = 65;
+    let columnName = '';
+    while (remaining > 0) {
+        let mod = (remaining - 1) % 26;
+        columnName = String.fromCharCode(aCharCode + mod) + columnName;
+        remaining = (remaining - 1 - mod) / 26;
+    } 
+    return columnName + rowNum;
 };
 
 /**
@@ -138,9 +158,9 @@ let sortCellRefs = (a, b) => {
 let cleanColor = (val) => {
     // check for RGB, RGBA or Excel Color Names and return RGBA
 
-    if (Object.keys(constants.excelColors).indexOf(val.toLowerCase()) >= 0) {
+    if (Object.keys(types.excelColors).indexOf(val.toLowerCase()) >= 0) {
         // val was a named color that matches predefined list. return corresponding color
-        return constants.excelColors[val.toLowerCase()];
+        return types.excelColors[val.toLowerCase()];
     } else if (val.length === 8 && val.substr(0, 2) === 'FF' && /^[a-fA-F0-9()]+$/.test(val)) {
         // val is already a properly formatted color string, return upper case version of itself
         return val.toUpperCase();
@@ -155,8 +175,7 @@ let cleanColor = (val) => {
         return val.substr(7).toUpperCase() + val.substr(1, 6).toUpperCase();
     } else {
         // I don't know what this is, return valid color and console.log error
-        throw new TypeError('valid color options are html style hex codes or these colors by name: %s', Object.keys(constants.excelColors).join(', '));
-        return 'FFFFFFFF';
+        throw new TypeError('valid color options are html style hex codes or these colors by name: %s', Object.keys(types.excelColors).join(', '));
     }
 };
 
@@ -226,6 +245,7 @@ module.exports = {
     generateRId,
     getHashOfPassword,
     getExcelAlpha,
+    getExcelCellRef,
     getExcelRowCol,
     getExcelTS,
     cleanColor,

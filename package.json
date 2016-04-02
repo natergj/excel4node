@@ -1,6 +1,6 @@
 {
   "name": "excel4node",
-  "version": "0.4.0",
+  "version": "1.0.0",
   "description": "Library to create Formatted Excel Files.",
   "keywords": [
     "excel",

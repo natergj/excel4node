@@ -1,5 +1,5 @@
 const utils = require('../../utils.js');
-const constants = require('../../constants.js');
+const types = require('../../types/index.js');
 const _ = require('lodash');
 const xmlbuilder = require('xmlbuilder');
 
@@ -7,18 +7,18 @@ class CTColor { //§18.8.3 && §18.8.19
     constructor(color) {
         this.type;
         this.rgb;
-        this.theme; //§20.1.6.2 clrScheme (Color Scheme) : constants.colorSchemes
+        this.theme; //§20.1.6.2 clrScheme (Color Scheme) : types.colorSchemes
 
         if (typeof color === 'string') {
-            if (constants.colorSchemes.indexOf(color.toLowerCase()) >= 0) {
-                this.theme = constants.colorSchemes.indexOf(color);
+            if (types.colorSchemes.indexOf(color.toLowerCase()) >= 0) {
+                this.theme = types.colorSchemes.indexOf(color);
                 this.type = 'theme';
             } else {
                 try {
                     this.rgb = utils.cleanColor(color);
                     this.type = 'rgb';
                 } catch (e) {
-                    throw new TypeError(`Fill color must be an RGB value, Excel color (${Object.keys(constants.excelColors).join(', ')}) or Excel theme (${constants.colorSchemes.join(', ')})`);
+                    throw new TypeError(`Fill color must be an RGB value, Excel color (${Object.keys(types.excelColors).join(', ')}) or Excel theme (${types.colorSchemes.join(', ')})`);
                 }
             }
         }

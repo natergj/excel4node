@@ -13,10 +13,19 @@
 */
 
 const utils = require('./lib/utils.js');
+const types = require('./lib/types/index.js');
+
 module.exports = {
     WorkBook: require('./lib/workbook/index.js'),
     getExcelRowCol: utils.getExcelRowCol,
     getExcelAlpha: utils.getExcelAlpha,
     getExcelTS: utils.getExcelTS,
-    PAPER_SIZE: require('./lib/constants/PAPER_SIZE.js')
+    getExcelCellRef: utils.getExcelCellRef,
+    PAPER_SIZE: types.paperSize,
+    ST_CellComments: types.cellComments,
+    ST_PrintError: types.printError,
+    ST_PageOrder: types.pageOrder,
+    ST_Orientation: types.orientation,
+    ST_Pane: types.pane,
+    ST_PaneState: types.paneState
 };

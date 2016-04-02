@@ -1,7 +1,7 @@
 const utils = require('../../utils.js');
 const _ = require('lodash');
 const xmlbuilder = require('xmlbuilder');
-const constants = require('../../constants.js');
+const types = require('../../types/index.js');
 
 class Font {
     constructor(opts) {
@@ -13,10 +13,10 @@ class Font {
         typeof opts.size === 'number' ? this.size = opts.size : null;
         
         if (opts.family !== undefined) {
-            if (constants.fontFamilies.indexOf(opts.family.toLowerCase()) >= 0) {
+            if (types.fontFamilies.indexOf(opts.family.toLowerCase()) >= 0) {
                 this.family = opts.family;
             } else {
-                throw new TypeError('Font family must be one of ' + constants.fontFamilies.join(', '));
+                throw new TypeError('Font family must be one of ' + types.fontFamilies.join(', '));
             }
         }
 
@@ -58,11 +58,11 @@ class Font {
 
     addToXMLele(fontXML) {
         let fEle = fontXML.ele('font');
-        fEle.ele('sz').att('val', this.size !== undefined ? this.size : constants.defaultFont.size);
-        fEle.ele('color').att('rgb', this.color !== undefined ? this.color : constants.defaultFont.color);
-        fEle.ele('name').att('val', this.name !== undefined ? this.name : constants.defaultFont.name);
+        fEle.ele('sz').att('val', this.size !== undefined ? this.size : types.defaultFont.size);
+        fEle.ele('color').att('rgb', this.color !== undefined ? this.color : types.defaultFont.color);
+        fEle.ele('name').att('val', this.name !== undefined ? this.name : types.defaultFont.name);
         if (this.family !== undefined) {
-            fEle.ele('family').att('val', constants.fontFamilies.indexOf(this.family.toLowerCase()));
+            fEle.ele('family').att('val', types.fontFamilies.indexOf(this.family.toLowerCase()));
         }
         if (this.scheme !== undefined) {
             fEle.ele('scheme').att('val', this.scheme);

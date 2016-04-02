@@ -1,5 +1,5 @@
 const utils = require('../../utils.js');
-const constants = require('../../constants.js');
+const types = require('../../types/index.js');
 const _ = require('lodash');
 const xmlbuilder = require('xmlbuilder');
 const CTColor = require('./ctColor.js');
@@ -11,8 +11,8 @@ class BorderOrdinal {
             this.color = new CTColor(opts.color);
         }
         if (opts.style !== undefined) {
-            if (constants.borderStyles.indexOf(opts.style) < 0) {
-                throw new TypeError(`Border style must be one of the following: ${constants.borderStyles.join(', ')}`);
+            if (types.borderStyles.indexOf(opts.style) < 0) {
+                throw new TypeError(`Border style must be one of the following: ${types.borderStyles.join(', ')}`);
             } else {
                 this.style = opts.style;
             }
@@ -45,12 +45,12 @@ class Border {
 
         Object.keys(opts).forEach((opt) => {
             if (['outline', 'diagonalDown', 'diagonalUp'].indexOf(opt) >= 0) {
-                if (typeof opts[opt] === 'boolean'){
+                if (typeof opts[opt] === 'boolean') {
                     this[opt] = opts[opt];
                 } else {
-                    throw new TypeError(`Border outline option must be of type Boolean`);
+                    throw new TypeError('Border outline option must be of type Boolean');
                 }
-            } else if (['left','right','top','bottom','diagonal'].indexOf(opt) < 0) {
+            } else if (['left', 'right', 'top', 'bottom', 'diagonal'].indexOf(opt) < 0) {  //TODO: move logic to types folder
                 throw new TypeError(`Invalid key for border declaration ${opt}. Must be one of left, right, top, bottom, diagonal`);
             } else {
                 this[opt] = new BorderOrdinal(opts[opt]);
@@ -91,13 +91,13 @@ class Border {
     addToXMLele(borderXML) {
         let bXML = borderXML.ele('border');
         if (this.outline !== undefined) {
-            bXML.att('outline', '1')
+            bXML.att('outline', '1');
         }
         if (this.diagonalUp !== undefined) {
-            bXML.att('diagonalUp', '1')
+            bXML.att('diagonalUp', '1');
         }
         if (this.diagonalDown !== undefined) {
-            bXML.att('diagonalDown', '1')
+            bXML.att('diagonalDown', '1');
         }
 
         ['left', 'right', 'top', 'bottom', 'diagonal'].forEach((ord) => {

@@ -8,7 +8,7 @@ const Fill = require('../style/classes/fill.js');
 const DXFCollection = require('./dxfCollection.js');
 const MediaCollection = require('./mediaCollection.js');
 const SlothLogger = require('sloth-logger');
-const constants = require('../constants.js');
+const types = require('../types/index.js');
 const builder = require('./builder.js');
 
 
@@ -28,6 +28,12 @@ const builder = require('./builder.js');
 let workBookDefaultOpts = {
     jszip: {
         compression: 'DEFLATE'
+    },
+    defaultFont: {
+        'color': 'FF000000',
+        'name': 'Calibri',
+        'size': 12,
+        'family': 'roman'
     }
 };
 
@@ -71,10 +77,7 @@ class WorkBook {
         };
 
         // Set Default Font and Style
-        if (this.opts.defaultFont !== undefined) {
-            constants.defaultFont = _.merge(constants.defaultFont, this.opts.defaultFont);  
-        } 
-        this.Style({ font: constants.defaultFont });
+        this.createStyle({ font: this.opts.defaultFont });
 
     }
 
@@ -138,11 +141,11 @@ class WorkBook {
         });
     }
 
-    WorkSheet(name, opts) {
+    addWorksheet(name, opts) {
         return new WorkSheet(this, name, opts);
     }
 
-    Style(opts) {
+    createStyle(opts) {
         let thisStyle = new Style(this, opts);
         let count = this.styles.push(thisStyle);
         this.styles[count - 1].ids.cellXfs = count - 1;

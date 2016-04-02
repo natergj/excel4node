@@ -4,7 +4,7 @@ let DataValidation = require('../source/lib/worksheet/classes/dataValidation.js'
 
 test('DataValidation Tests', (t) => {
     let wb = new xl.WorkBook();
-    let ws = wb.WorkSheet('test');
+    let ws = wb.addWorksheet('test');
 
     let val1 = ws.addDataValidation({
         type: 'whole',

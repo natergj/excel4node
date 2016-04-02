@@ -1,4 +1,4 @@
-const types = require('../constants/index.js');
+const types = require('../types/index.js');
 
 const optsTypes = {
     'margins': {
@@ -132,52 +132,31 @@ let validator = function (key, val, type) {
         break;
 
     case 'PAGE_ORDER':
-        let orders = ['downThenOver', 'overThenDown'];
-        if (orders.indexOf(val) < 0) {
-            throw new TypeError('Invalid value for ' + key + '. Value must be one of ' + orders.join(', '));
-        }
+        types.pageOrder.validate(val);
         break;
 
     case 'ORIENTATION':
-        let orientations = ['default', 'portrait', 'landscape'];
-        if (orientations.indexOf(val) < 0) {
-            throw new TypeError('Invalid value for ' + key + '. Value must be one of ' + orientations.join(', '));
-        }
+        types.orientation.validate(val);
         break;
 
     case 'POSITIVE_UNIVERSAL_MEASURE': 
-        let re = new RegExp('[0-9]+(\.[0-9]+)?(mm|cm|in|pt|pc|pi)');
-        if (re.test(val) !== true) {
-            throw new TypeError('Invalid value for ' + key + '. Value must a positive Float immediately followed by unit of measure from list mm, cm, in, pt, pc, pi. i.e. 10.5cm');
-        }
+        types.positiveUniversalMeasure.validate(val);
         break;
 
     case 'CELL_COMMENTS':
-        let comments = ['none', 'asDisplayed', 'atEnd'];
-        if (comments.indexOf('val') < 0) {
-            throw new TypeError('Invalid value for ' + key + '. Value must be one of ' + comments.join(', '));
-        }
+        types.cellComments.validate(val);
         break;
 
     case 'PRINT_ERROR': 
-        let printErrors = ['displayed', 'blank', 'dash', 'NA'];
-        if (printErrors.indexOf(val) < 0) {
-            throw new TypeError('Invalid value for ' + key + '. Value must be one of ' + printErrors.join(', '));
-        }
+        types.printError.validate(val);
         break;
 
     case 'PANE':
-        let panes = ['bottomLeft', 'bottomRight', 'topLeft', 'topRight'];
-        if (panes.indexOf(val) < 0) {
-            throw new TypeError('Invalid value for ' + key + '. Value must be one of ' + panes.join(', '));
-        }
+        types.pane.validate(val);
         break;
 
     case 'PANE_STATE':
-        let paneStates = ['split', 'frozen', 'frozenSplit'];
-        if (paneStates.indexOf(val) < 0) {
-            throw new TypeError('Invalid value for ' + key + '. Value must be one of ' + paneStates.join(', '));
-        }
+        types.paneState.validate(val);
         break;
 
     case 'Boolean':

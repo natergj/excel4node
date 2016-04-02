@@ -101,7 +101,7 @@ let styleSetter = (val, theseCells) => {
     if (val instanceof Style) {
         thisStyle = val;
     } else if (val instanceof Object) {
-        thisStyle = theseCells.ws.wb.Style(val);
+        thisStyle = theseCells.ws.wb.createStyle(val);
     } else {
         throw new TypeError('Parameter sent to Style function must be an instance of a Style or a style configuration object');
     }
@@ -112,7 +112,7 @@ let styleSetter = (val, theseCells) => {
         } else {
             let curStyle = theseCells.ws.wb.styles[c.s];
             let newStyleOpts = _.merge(curStyle.toObject(), thisStyle.toObject());
-            let mergedStyle = theseCells.ws.wb.Style(newStyleOpts);
+            let mergedStyle = theseCells.ws.wb.createStyle(newStyleOpts);
             c.style(mergedStyle.ids.cellXfs);
         }
     });
