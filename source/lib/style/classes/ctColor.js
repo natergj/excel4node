@@ -10,15 +10,15 @@ class CTColor { //§18.8.3 && §18.8.19
         this.theme; //§20.1.6.2 clrScheme (Color Scheme) : types.colorSchemes
 
         if (typeof color === 'string') {
-            if (types.colorSchemes.indexOf(color.toLowerCase()) >= 0) {
-                this.theme = types.colorSchemes.indexOf(color);
+            if (types.colorScheme[color.toLowerCase()] !== undefined) {
+                this.theme = color;
                 this.type = 'theme';
             } else {
                 try {
-                    this.rgb = utils.cleanColor(color);
+                    this.rgb = types.excelColor.getColor(color);
                     this.type = 'rgb';
                 } catch (e) {
-                    throw new TypeError(`Fill color must be an RGB value, Excel color (${Object.keys(types.excelColors).join(', ')}) or Excel theme (${types.colorSchemes.join(', ')})`);
+                    throw new TypeError(`Fill color must be an RGB value, Excel color (${types.excelColor.opts.join(', ')}) or Excel theme (${types.colorScheme.opts.join(', ')})`);
                 }
             }
         }

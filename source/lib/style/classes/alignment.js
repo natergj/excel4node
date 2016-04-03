@@ -7,11 +7,15 @@ class Alignment { // §18.8.1 alignment (Alignment)
     constructor(opts) {
 
         if (opts.horizontal !== undefined) {
-            if (types.alignmentTypes.horizontal.indexOf(opts.horizontal) >= 0) {
-                this.horizontal = opts.horizontal;
-            } else if (opts.horizontal !== undefined) {
-                throw new TypeError(`Horizontal alignment must be one of ${types.alignmentTypes.horizontal.join(', ')}`);
-            }
+            this.horizontal = types.alignment.horizontal.validate(opts.horizontal) === true ? opts.horizontal : null;
+        }
+        
+        if (opts.vertical !== undefined) {
+            this.vertical = types.alignment.vertical.validate(opts.vertical) === true ? opts.vertical : null;
+        }
+        
+        if (opts.readingOrder !== undefined) {
+            this.readingOrder = types.alignment.readingOrder.validate(opts.readingOrder) === true ? opts.readingOrder : null;
         }
         
         if (opts.indent !== undefined) {
@@ -27,14 +31,6 @@ class Alignment { // §18.8.1 alignment (Alignment)
                 this.justifyLastLine = opts.justifyLastLine;
             } else if (typeof opts.justifyLastLine !== 'boolean') {
                 throw new TypeError('justifyLastLine alignment option must be of type boolean');
-            }
-        }
-        
-        if (opts.readingOrder !== undefined) {
-            if (types.readingOrders.indexOf(opts.readingOrder) >= 0) {
-                this.readingOrder = opts.readingOrder;
-            } else {
-                throw new TypeError('alignment readingOrder must be one of ' + types.readingOrders.join(', '));
             }
         }
         
@@ -59,14 +55,6 @@ class Alignment { // §18.8.1 alignment (Alignment)
                 this.textRotation = opts.textRotation;
             } else if (opts.textRotation !== undefined) {
                 throw new TypeError('alignment indent must be an integer.');
-            }
-        }
-        
-        if (opts.vertical !== undefined) {
-            if (types.alignmentTypes.vertical.indexOf(opts.vertical) >= 0) {
-                this.vertical = opts.vertical;
-            } else if (opts.vertical !== undefined) {
-                throw new TypeError(`Vertical alignment must be one of ${types.alignmentTypes.vertical.join(', ')}`);
             }
         }
         

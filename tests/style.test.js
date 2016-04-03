@@ -145,7 +145,7 @@ test('Set Style Properties', (t) => {
 test('Update style on Cell', (t) => {
     t.plan(3);
 
-    let wb = new xl.WorkBook();
+    let wb = new xl.WorkBook({ logLevel: 5 });
     let ws = wb.addWorksheet('Sheet1');
     let style = wb.createStyle({
         font: {
@@ -165,6 +165,6 @@ test('Update style on Cell', (t) => {
     });
     let styleID2 = ws.cell(1, 1).cells[0].s;
     let thisStyle2 = wb.styles[styleID2];
-    t.ok(thisStyle2.toObject().font.name === 'Courier', 'Cell font name correctly updated to new font name');
-    t.ok(thisStyle2.toObject().font.size === 14, 'Cell font size correctly did not change');
+    t.equal(thisStyle2.toObject().font.name, 'Courier', 'Cell font name correctly updated to new font name');
+    t.equal(thisStyle2.toObject().font.size, 14, 'Cell font size correctly did not change');
 });

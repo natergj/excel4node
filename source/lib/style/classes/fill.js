@@ -25,7 +25,7 @@ class Fill { //§18.8.20 fill (Fill)
         if (['gradient', 'pattern', 'none'].indexOf(opts.type) >= 0) {
             this.type = opts.type;
         } else {
-            throw new TypeError('Fill type must be one of gradient or pattern.');
+            throw new TypeError('Fill type must be one of gradient, pattern or none.');
         }
 
         switch (this.type) {
@@ -71,14 +71,6 @@ class Fill { //§18.8.20 fill (Fill)
                 }
             }
 
-            if (opts.type !== undefined) {
-                if (types.gradientFillTypes.indexOf(opts.type) < 0) {
-                    throw new TypeError(`Values for gradient fill type must be one of ${types.gradientFillTypes.join(', ')}`);
-                } else {
-                    this.type = opts.type;
-                }
-            }
-
             if (opts.stops !== undefined) {
                 if (opts.stops instanceof Array) {
                     opts.stops.forEach((s, i) => {
@@ -100,12 +92,8 @@ class Fill { //§18.8.20 fill (Fill)
                 this.fgColor = new CTColor(opts.fgColor);
             }
 
-            if (opts.patternType !== undefined) { //§18.18.55 ST_PatternType (Pattern Type)
-                if (types.fillPatternTypes.indexOf(opts.patternType) >= 0) {
-                    this.patternType = opts.patternType; 
-                } else {
-                    throw new TypeError(`Fill patternType must be one of ${types.fillPatternTypes.join(', ')}`);
-                }
+            if (opts.patternType !== undefined) {
+                types.fillPattern.validate(opts.patternType) === true ? this.patternType = opts.patternType : null; 
             }
             break;
 
@@ -133,7 +121,7 @@ class Fill { //§18.8.20 fill (Fill)
             this.stops.forEach((s) => {
                 obj.stops.push(s.toObject());
             });
-        };
+        }
 
         return obj;
     }

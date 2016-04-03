@@ -21,11 +21,16 @@ module.exports = {
     getExcelAlpha: utils.getExcelAlpha,
     getExcelTS: utils.getExcelTS,
     getExcelCellRef: utils.getExcelCellRef,
-    PAPER_SIZE: types.paperSize,
-    ST_CellComments: types.cellComments,
-    ST_PrintError: types.printError,
-    ST_PageOrder: types.pageOrder,
-    ST_Orientation: types.orientation,
-    ST_Pane: types.pane,
-    ST_PaneState: types.paneState
+    PaperSize: types.paperSize,
+    CellComment: types.cellComments,
+    PrintError: types.printError,
+    PageOrder: types.pageOrder,
+    Orientation: types.orientation,
+    Pane: types.pane,
+    PaneState: types.paneState,
+    HorizontalAlignment: types.alignment.horizontal,
+    VerticalAlignment: types.alignment.vertical,
+    BorderStyle: types.borderStyle,
+    PresetColorVal: types.excelColor,
+    PatternType: types.fillPattern
 };

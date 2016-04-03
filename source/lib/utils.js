@@ -155,30 +155,6 @@ let sortCellRefs = (a, b) => {
     }
 };
 
-let cleanColor = (val) => {
-    // check for RGB, RGBA or Excel Color Names and return RGBA
-
-    if (Object.keys(types.excelColors).indexOf(val.toLowerCase()) >= 0) {
-        // val was a named color that matches predefined list. return corresponding color
-        return types.excelColors[val.toLowerCase()];
-    } else if (val.length === 8 && val.substr(0, 2) === 'FF' && /^[a-fA-F0-9()]+$/.test(val)) {
-        // val is already a properly formatted color string, return upper case version of itself
-        return val.toUpperCase();
-    } else if (val.length === 6 && /^[a-fA-F0-9()]+$/.test(val)) {
-        // val is color code without Alpha, add it and return
-        return 'FF' + val.toUpperCase();
-    } else if (val.length === 7 && val.substr(0, 1) === '#' && /^[a-fA-F0-9()]+$/.test(val.substr(1))) {
-        // val was sent as html style hex code, remove # and add alpha
-        return 'FF' + val.substr(1).toUpperCase();
-    } else if (val.length === 9 && val.substr(0, 1) === '#' && /^[a-fA-F0-9()]+$/.test(val.substr(1))) {
-        // val sent as html style hex code with alpha. revese alpha position and return
-        return val.substr(7).toUpperCase() + val.substr(1, 6).toUpperCase();
-    } else {
-        // I don't know what this is, return valid color and console.log error
-        throw new TypeError('valid color options are html style hex codes or these colors by name: %s', Object.keys(types.excelColors).join(', '));
-    }
-};
-
 let arrayIntersectSafe = (a, b) => {
 
     if (a instanceof Array && b instanceof Array) {
@@ -248,7 +224,6 @@ module.exports = {
     getExcelCellRef,
     getExcelRowCol,
     getExcelTS,
-    cleanColor,
     sortCellRefs,
     arrayIntersectSafe,
     getAllCellsInExcelRange,

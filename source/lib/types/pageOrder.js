@@ -2,14 +2,14 @@
 
 function items() {
     let opts = ['downThenOver', 'overThenDown'];
-    opts.forEach((i) => {
-        this[i] = i;
+    opts.forEach((o, i) => {
+        this[o] = i + 1;
     });
 }
 
 
 items.prototype.validate = function (val) {
-    if (this[val] === undefined) {
+    if (this[val.toLowerCase()] === undefined) {
         let opts = [];
         for (let name in this) {
             if (this.hasOwnProperty(name)) {

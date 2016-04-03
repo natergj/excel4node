@@ -7,18 +7,11 @@ class Font {
     constructor(opts) {
         opts = opts ? opts : {};
 
-        typeof opts.color === 'string' ? this.color = utils.cleanColor(opts.color) : null;
+        typeof opts.color === 'string' ? this.color = types.excelColor.getColor(opts.color) : null;
         typeof opts.name === 'string' ? this.name = opts.name : null;
         typeof opts.scheme === 'string' ? this.scheme = opts.scheme : null;
         typeof opts.size === 'number' ? this.size = opts.size : null;
-        
-        if (opts.family !== undefined) {
-            if (types.fontFamilies.indexOf(opts.family.toLowerCase()) >= 0) {
-                this.family = opts.family;
-            } else {
-                throw new TypeError('Font family must be one of ' + types.fontFamilies.join(', '));
-            }
-        }
+        typeof opts.family === 'string' && types.fontFamily.validate(opts.family) === true ? this.family = opts.family : null;
 
         typeof opts.vertAlign === 'string' ? this.vertAlign = opts.vertAlign : null;
         typeof opts.charset === 'number' ? this.charset = opts.charset : null;
@@ -58,11 +51,11 @@ class Font {
 
     addToXMLele(fontXML) {
         let fEle = fontXML.ele('font');
-        fEle.ele('sz').att('val', this.size !== undefined ? this.size : types.defaultFont.size);
-        fEle.ele('color').att('rgb', this.color !== undefined ? this.color : types.defaultFont.color);
-        fEle.ele('name').att('val', this.name !== undefined ? this.name : types.defaultFont.name);
+        fEle.ele('sz').att('val', this.size !== undefined ? this.size : 12);
+        fEle.ele('color').att('rgb', this.color !== undefined ? this.color : 'FF000000');
+        fEle.ele('name').att('val', this.name !== undefined ? this.name : 'Calibri');
         if (this.family !== undefined) {
-            fEle.ele('family').att('val', types.fontFamilies.indexOf(this.family.toLowerCase()));
+            fEle.ele('family').att('val', types.fontFamily[this.family.toLowerCase()]);
         }
         if (this.scheme !== undefined) {
             fEle.ele('scheme').att('val', this.scheme);
@@ -80,6 +73,8 @@ class Font {
 
         return true;
     }
+
+
 }
 
 module.exports = Font;

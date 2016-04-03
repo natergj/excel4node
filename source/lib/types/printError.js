@@ -1,14 +1,14 @@
 //§18.18.60 ST_PrintError (Print Errors)
 function items() {
     let opts = ['displayed', 'blank', 'dash', 'NA'];
-    opts.forEach((i) => {
-        this[i] = i;
+    opts.forEach((o, i) => {
+        this[o] = i + 1;
     });
 }
 
 
 items.prototype.validate = function (val) {
-    if (this[val] === undefined) {
+    if (this[val.toLowerCase()] === undefined) {
         let opts = [];
         for (let name in this) {
             if (this.hasOwnProperty(name)) {

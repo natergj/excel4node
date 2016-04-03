@@ -11,11 +11,7 @@ class BorderOrdinal {
             this.color = new CTColor(opts.color);
         }
         if (opts.style !== undefined) {
-            if (types.borderStyles.indexOf(opts.style) < 0) {
-                throw new TypeError(`Border style must be one of the following: ${types.borderStyles.join(', ')}`);
-            } else {
-                this.style = opts.style;
-            }
+            this.style = types.borderStyle.validate(opts.style) === true ? opts.style : null;
         }
     }
 
