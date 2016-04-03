@@ -102,7 +102,12 @@ let addWorkBookXML = (promiseObj) => {
             .att('r:id', `rId${i + 1}`);
         });
 
+        if (!promiseObj.wb.definedNameCollection.isEmpty) {
+            promiseObj.wb.definedNameCollection.addToXMLele(xml);
+        }
+
         let xmlString = xml.doc().end(promiseObj.xmlOutVars);
+        promiseObj.wb.logger.debug(xmlString);
         promiseObj.xlsx.folder('xl').file('workbook.xml', xmlString);
         resolve(promiseObj);
 
@@ -372,9 +377,10 @@ let addDrawingsXML = (promiseObj) => {
 let writeToBuffer = (wb) => {
     return new Promise ((resolve, reject) => {
 
+        wb.logger.debug(wb.opts.jszip);
         let promiseObj = {
             wb: wb, 
-            xlsx: new JSZip(wb.opts.jszip),
+            xlsx: new JSZip(),
             xmlOutVars: { pretty: true, indent: '  ', newline: '\n' }
             //xmlOutVars : {}
         };
@@ -385,17 +391,16 @@ let writeToBuffer = (wb) => {
         }
 
         addRootContentTypesXML(promiseObj)
+        .then(addWorkSheetsXML)
         .then(addRootRelsXML)
         .then(addWorkBookXML)
         .then(addWorkBookRelsXML)
-        .then(addWorkSheetsXML)
         .then(addSharedStringsXML)
         .then(addStylesXML)
         .then(addDrawingsXML)
         .then(() => {
-            let buffer = promiseObj.xlsx.generate({
-                type: 'nodebuffer'
-            });    
+            wb.opts.jszip.type = 'nodebuffer';
+            let buffer = promiseObj.xlsx.generate(wb.opts.jszip);    
             console.log('resolve buffer');
             resolve(buffer);
         })

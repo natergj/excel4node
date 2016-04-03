@@ -33,8 +33,8 @@
   "readmeFilename": "README.md",
   "scripts": {
     "test": "NODE_ENV=test ./node_modules/tape/bin/tape -r babel-register ./tests/**/**/*.test.js",
-    "build": "babel source --presets babel-preset-es2015 --out-dir distribution",
-    "watch": "babel source -w --presets babel-preset-es2015 --out-dir distribution",
+    "build": "babel source --presets babel-preset-es2015 -s --out-dir distribution",
+    "watch": "babel source -w --presets babel-preset-es2015 -s --out-dir distribution",
     "document": "jsdoc ./source -r -d docs"
   },
   "dependencies": {
@@ -54,6 +54,7 @@
     "babel-register": "^6.5.1",
     "jsdoc-babel": "^0.1.0",
     "pretty-data": "^0.40.0",
+    "source-map-support": "^0.4.0",
     "tape": "^4.4.0",
     "xmldom": "^0.1.19",
     "xpath.js": "^1.0.6"

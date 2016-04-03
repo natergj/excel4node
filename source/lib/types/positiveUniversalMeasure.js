@@ -4,7 +4,6 @@ function measure() {
     
 }
 
-
 measure.prototype.validate = function (val) {
     let re = new RegExp('[0-9]+(\.[0-9]+)?(mm|cm|in|pt|pc|pi)');
     if (re.test(val) !== true) {

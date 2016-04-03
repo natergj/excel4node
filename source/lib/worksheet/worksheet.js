@@ -24,7 +24,8 @@ class WorkSheet {
         
         this.wb = wb;
         this.sheetId = this.wb.sheets.length + 1;
-        this.opts = _.merge({}, wsDefaultParams, opts);
+        this.localSheetId = this.wb.sheets.length;
+        this.opts = _.merge({}, _.cloneDeep(wsDefaultParams), opts);
         optsValidator(opts);
 
         this.opts.sheetView.tabSelected = this.sheetId === 1 ? 1 : 0;
@@ -43,7 +44,6 @@ class WorkSheet {
         this.dataValidationCollection = new DataValidation.DataValidationCollection();
         this.drawingCollection = new wsDrawing.DrawingCollection();
 
-        this.wb.sheets.push(this);
     }
 
     get relationships() {
@@ -55,6 +55,14 @@ class WorkSheet {
             rels.push('drawing');
         }
         return rels;
+    }
+
+    get columnCount() {
+        return Math.max.apply(Math, Object.keys(this.cols));
+    }
+
+    get rowCount() {
+        return Math.max.apply(Math, Object.keys(this.rows));
     }
 
     addConditionalFormattingRule(sqref, options) {

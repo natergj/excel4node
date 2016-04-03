@@ -2,7 +2,8 @@ const utils = require('../utils.js');
 const _ = require('lodash');
 
 class Row {
-    constructor(row) {
+    constructor(row, ws) {
+        this.ws = ws;
         this.cellRefs = [];
         this.collapsed = null;
         this.customFormat = null;
@@ -13,7 +14,30 @@ class Row {
         this.r = row;
         this.s = null;
         this.thickBot = null;
-        this.thicktop = null;
+        this.thickTop = null;
+    }
+
+    set height(h) {
+        if (typeof h === 'number') {
+            this.ht = h;
+            this.customHeight = true;
+        } else {
+            throw new TypeError('Row height must be a number');
+        }
+        return this.ht;
+    }
+    get height() {
+        return this.ht;
+    }
+
+    setHeight(h) {
+        if (typeof h === 'number') {
+            this.ht = h;
+            this.customHeight = true;
+        } else {
+            throw new TypeError('Row height must be a number');
+        }
+        return this;
     }
 
     get spans() {
@@ -54,6 +78,66 @@ class Row {
         } else {
             return 'A';
         }  
+    }
+
+    filter(opts) {
+
+        let theseOpts = opts instanceof Object ? opts : {};
+        let theseFilters = opts.filters instanceof Array ? opts.filters : [];
+
+        let o = this.ws.opts.autoFilter;
+        o.startRow = this.r;
+        if (typeof theseOpts.lastRow === 'number') {
+            o.endRow = theseOpts.lastRow;
+        }
+
+        if (typeof theseOpts.firstColumn === 'number' && typeof theseOpts.lastColumn === 'number') {
+            o.startCol = theseOpts.firstColumn;
+            o.endCol = theseOpts.lastColumn;
+        }
+
+        // Programmer Note: DefinedName class is added to workbook during workbook write process for filters
+
+        this.ws.opts.autoFilter.filters = theseFilters;
+    }
+
+    hide() {
+        this.hidden = true;
+        return this;
+    }
+
+    group(level, collapsed) {
+        if (parseInt(level) === level) {
+            this.outlineLevel = level;
+        } else {
+            throw new TypeError('Row group level must be a positive integer');
+        }
+
+        if (collapsed === undefined) {
+            return this;
+        }
+
+        if (typeof collapsed === 'boolean') {
+            this.collapsed = collapsed;
+            this.hidden = collapsed;
+        } else {
+            throw new TypeError('Row group collapse flag must be a boolean');
+        }
+
+        return this;
+    }
+
+
+    freeze(jumpTo) {
+        let o = this.ws.opts.sheetView.pane;
+        jumpTo = typeof jumpTo === 'number' && jumpTo > this.r ? jumpTo : this.r + 1;
+        o.state = 'frozen';
+        o.ySplit = this.r;
+        o.activePane = 'bottomRight';
+        o.xSplit === null ? 
+            o.topLeftCell = utils.getExcelCellRef(jumpTo, 1) : 
+            o.topLeftCell = utils.getExcelCellRef(jumpTo, utils.getExcelRowCol(o.topLeftCell).col);
+        return this;
     }
 }
 

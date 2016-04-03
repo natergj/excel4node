@@ -46,6 +46,7 @@ class DataValidation { // §18.3.1.32 dataValidation (Data Validation)
                 throw new TypeError('DataValidation error must be a string');
             }
             this.error = opts.error;
+            this.showErrorMessage = opts.showErrorMessage = true;
         }
 
         if (opts.errorTitle !== undefined) {
@@ -53,6 +54,7 @@ class DataValidation { // §18.3.1.32 dataValidation (Data Validation)
                 throw new TypeError('DataValidation errorTitle must be a string');
             }
             this.errorTitle = opts.errorTitle;
+            this.showErrorMessage = opts.showErrorMessage = true;
         }
 
         if (opts.imeMode !== undefined) {
@@ -76,6 +78,7 @@ class DataValidation { // §18.3.1.32 dataValidation (Data Validation)
                 throw new TypeError('DataValidation prompt must be a string');
             }
             this.prompt = opts.prompt;
+            this.showInputMessage = opts.showInputMessage = true;
         }
 
         if (opts.promptTitle !== undefined) {
@@ -83,6 +86,7 @@ class DataValidation { // §18.3.1.32 dataValidation (Data Validation)
                 throw new TypeError('DataValidation promptTitle must be a string');
             }
             this.promptTitle = opts.promptTitle;
+            this.showInputMessage = opts.showInputMessage = true;
         }
 
         if (opts.showDropDown !== undefined) {

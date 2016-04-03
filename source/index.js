@@ -32,5 +32,6 @@ module.exports = {
     VerticalAlignment: types.alignment.vertical,
     BorderStyle: types.borderStyle,
     PresetColorVal: types.excelColor,
-    PatternType: types.fillPattern
+    PatternType: types.fillPattern,
+    PositiveUniversalMeasure: types.positiveUniversalMeasure
 };

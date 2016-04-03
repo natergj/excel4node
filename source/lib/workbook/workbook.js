@@ -7,6 +7,7 @@ const Border = require('../style/classes/border.js');
 const Fill = require('../style/classes/fill.js');
 const DXFCollection = require('./dxfCollection.js');
 const MediaCollection = require('./mediaCollection.js');
+const DefinedNameCollection = require('../classes/definedNameCollection.js');
 const SlothLogger = require('sloth-logger');
 const types = require('../types/index.js');
 const builder = require('./builder.js');
@@ -61,6 +62,7 @@ class WorkBook {
         this.styles = [];
         this.dxfCollection = new DXFCollection(this);
         this.mediaCollection = new MediaCollection();
+        this.definedNameCollection = new DefinedNameCollection();
         this.styleData = {
             'numFmts': [],
             'fonts': [],
@@ -104,6 +106,7 @@ class WorkBook {
      */
     write(fileName, handler) {
         this.logger.debug('write called');
+
         builder.writeToBuffer(this)
         .then((buffer) => {
             switch (typeof handler) {
@@ -142,7 +145,8 @@ class WorkBook {
     }
 
     addWorksheet(name, opts) {
-        return new WorkSheet(this, name, opts);
+        let newLength = this.sheets.push(new WorkSheet(this, name, opts));
+        return this.sheets[newLength - 1];
     }
 
     createStyle(opts) {

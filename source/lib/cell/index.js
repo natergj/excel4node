@@ -191,10 +191,10 @@ let cellAccessor = (ws, row1, col1, row2, col2, isMerged) => {
                 ws.cells[ref] = new Cell(r, c);
             }
             if (!ws.rows[r]) {
-                ws.rows[r] = new Row(r);
+                ws.rows[r] = new Row(r, ws);
             }
             if (!ws.cols[c]) {
-                ws.cols[c] = new Column(c);
+                ws.cols[c] = new Column(c, ws);
             }
             if (ws.rows[r].cellRefs.indexOf(ref) < 0) {
                 ws.rows[r].cellRefs.push(ref);

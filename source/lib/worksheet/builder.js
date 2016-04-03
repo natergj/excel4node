@@ -65,11 +65,13 @@ let _addSheetViews = (promiseObj) => {
                 modifiedPaneParams.push(k);
             }
         });
-        if (modifiedPaneParams.lenth > 0) {
-            let pEle = ele.ele('pane');
-            modifiedPaneParams.forEach((k) => {
-                pEle.att(k, o.pane[k]);
-            });
+        if (modifiedPaneParams.length > 0) {
+            let pEle = sv.ele('pane');
+            o.pane.xSplit !== null ? pEle.att('xSplit', o.pane.xSplit) : null;
+            o.pane.ySplit !== null ? pEle.att('ySplit', o.pane.ySplit) : null;
+            o.pane.topLeftCell !== null ? pEle.att('topLeftCell', o.pane.topLeftCell) : null;
+            o.pane.activePane !== null ? pEle.att('activePane', o.pane.activePane) : null;
+            o.pane.state !== null ? pEle.att('state', o.pane.state) : null;
         }
 
         resolve(promiseObj);
@@ -86,6 +88,11 @@ let _addSheetFormatPr = (promiseObj) => {
                 ele.att(k, o[k]);
             } 
         });
+
+        if (typeof o.defaultRowHeight === 'number') {
+            ele.att('customHeight', '1');
+        }
+
         resolve(promiseObj);
     });
 };
@@ -93,6 +100,24 @@ let _addSheetFormatPr = (promiseObj) => {
 let _addCols = (promiseObj) => {
     // §18.3.1.17 cols (Column Information)
     return new Promise((resolve, reject) => {
+
+        if (promiseObj.ws.columnCount > 0) {
+            let colsEle = promiseObj.xml.ele('cols');
+
+            for (let colId in promiseObj.ws.cols) {
+                let col = promiseObj.ws.cols[colId];
+                let colEle = colsEle.ele('col');
+                
+                col.min !== null ? colEle.att('min', col.min) : null;
+                col.max !== null ? colEle.att('max', col.max) : null;
+                col.width !== null ? colEle.att('width', col.width) : null;
+                col.style !== null ? colEle.att('style', col.style) : null;
+                col.hidden !== null ? colEle.att('hidden', utils.boolToInt(col.hidden)) : null;
+                col.customWidth !== null ? colEle.att('customWidth', utils.boolToInt(col.customWidth)) : null;
+                col.outlineLevel !== null ? colEle.att('outlineLevel', col.outlineLevel) : null;
+                col.collapsed !== null ? colEle.att('collapsed', utils.boolToInt(col.collapsed)) : null;
+            }
+        }
 
         resolve(promiseObj);
     });
@@ -119,6 +144,15 @@ let _addSheetData = (promiseObj) => {
 
                 rEle.att('r', r);
                 rEle.att('spans', thisRow.spans);
+                thisRow.s !== null ? rEle.att('s', thisRow.s) : null;
+                thisRow.customFormat !== null ? rEle.att('customFormat', thisRow.customFormat) : null;
+                thisRow.ht !== null ? rEle.att('ht', thisRow.ht) : null;
+                thisRow.hidden !== null ? rEle.att('hidden', thisRow.hidden) : null;
+                thisRow.customHeight !== null ? rEle.att('customHeight', thisRow.customHeight) : null;
+                thisRow.outlineLevel !== null ? rEle.att('outlineLevel', thisRow.outlineLevel) : null;
+                thisRow.collapsed !== null ? rEle.att('collapsed', thisRow.collapsed) : null;
+                thisRow.thickTop !== null ? rEle.att('thickTop', thisRow.thickTop) : null;
+                thisRow.thickBot !== null ? rEle.att('thickBot', thisRow.thickBot) : null;
 
                 thisRow.cellRefs.forEach((c) => {
                     let thisCell = promiseObj.ws.cells[c];
@@ -164,9 +198,9 @@ let _addSheetProtection = (promiseObj) => {
             Object.keys(o).forEach((k) => {
                 if (o[k] !== null) {
                     if (k === 'password') {
-                        ele.att(k, utils.getHashOfPassword(o[k]));
+                        ele.att('hashValue', utils.getHashOfPassword(o[k]));
                     } else {
-                        ele.att(k, o[k] === true ? '1' : '0');
+                        ele.att(k, utils.boolToInt(o[k]));
                     }
                 }            
             });
@@ -211,6 +245,17 @@ let _addAutoFilter = (promiseObj) => {
             let endCell = utils.getExcelAlpha(o.endCol) + o.endRow;
 
             ele.att('ref', `${startCell}:${endCell}`);
+            promiseObj.ws.wb.definedNameCollection.addDefinedName({
+                hidden: 1,
+                localSheetId: promiseObj.ws.localSheetId,
+                name: '_xlnm._FilterDatabase',
+                refFormula: '\'' + promiseObj.ws.name + '\'!' +
+                    '$' + utils.getExcelAlpha(o.startCol) + 
+                    '$' + o.startRow +
+                    ':' +
+                    '$' + utils.getExcelAlpha(o.endCol) + 
+                    '$' + o.endRow
+            });
 
         }
         resolve(promiseObj);
@@ -419,6 +464,7 @@ let sheetXML = (ws) => {
         .then(_addDrawing)
         .then((promiseObj) => {
             let xmlString = promiseObj.xml.doc().end({ pretty: true, indent: '  ', newline: '\n' });
+            ws.wb.logger.debug(xmlString);
             resolve(xmlString);
         })
         .catch((e) => {
