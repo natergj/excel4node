@@ -1,3 +1,6 @@
+0.5.1
+		Merged pull request 76 from https://github.com/bhuvanaurora to fix issue that would arise if you tried to add an emoji to an excel document
+
 0.5.0
 		Merged pull request 74 from https://github.com/pindinz to add support for specifying specific paper size
 		
