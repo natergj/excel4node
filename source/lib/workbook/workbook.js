@@ -35,7 +35,8 @@ let workBookDefaultOpts = {
         'name': 'Calibri',
         'size': 12,
         'family': 'roman'
-    }
+    },
+    dateFormat: 'm/d/yy'
 };
 
 /**

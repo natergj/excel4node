@@ -35,7 +35,7 @@ class Cell {
     }
 
     date(dt) {
-        this.t = 'd';
+        this.t = null;
         this.v = utils.getExcelTS(dt);
         this.f = null;
     }

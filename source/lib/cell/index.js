@@ -95,6 +95,24 @@ let formulaSetter = (val, theseCells) => {
     return theseCells;
 };
 
+let dateSetter = (val, theseCells) => {
+    let thisDate = new Date(val);
+    if (isNaN(thisDate.getTime())) {
+        throw new TypeError('Invalid date sent to date function of cells. %s could not be converted to a date.', val);
+    }
+    if (theseCells.merged !== true) {
+        theseCells.cells.forEach((c, i) => {
+            c.date(thisDate);
+        });
+    } else {
+        var c = theseCells.cells[0];
+        c.date(thisDate);
+    }
+    styleSetter({
+        numberFormat: '[$-409]' + theseCells.ws.wb.opts.dateFormat
+    }, theseCells);
+};
+
 let styleSetter = (val, theseCells) => {
     let styleXFid;
     let thisStyle;
@@ -212,6 +230,7 @@ let cellAccessor = (ws, row1, col1, row2, col2, isMerged) => {
     theseCells.number = (val) => numberSetter(val, theseCells);
     theseCells.bool = (val) => booleanSetter(val, theseCells);
     theseCells.formula = (val) => formulaSetter(val, theseCells);
+    theseCells.date = (val) => dateSetter(val, theseCells);
     theseCells.style = (val) => styleSetter(val, theseCells);
     theseCells.link = (url, displayStr, tooltip) => hyperlinkSetter(url, displayStr, tooltip, theseCells);
 
