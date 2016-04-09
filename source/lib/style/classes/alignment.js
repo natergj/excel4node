@@ -27,9 +27,9 @@ class Alignment { // §18.8.1 alignment (Alignment)
         }
         
         if (opts.justifyLastLine !== undefined) {
-            if (opts.justifyLastLine === true) {
+            if (typeof opts.justifyLastLine === 'boolean') {
                 this.justifyLastLine = opts.justifyLastLine;
-            } else if (typeof opts.justifyLastLine !== 'boolean') {
+            } else {
                 throw new TypeError('justifyLastLine alignment option must be of type boolean');
             }
         }
@@ -43,9 +43,9 @@ class Alignment { // §18.8.1 alignment (Alignment)
         }
         
         if (opts.shrinkToFit !== undefined) {
-            if (opts.shrinkToFit === true) {
+            if (typeof opts.shrinkToFit === 'boolean') {
                 this.shrinkToFit = opts.shrinkToFit;
-            } else if (typeof opts.shrinkToFit !== 'boolean') {
+            } else {
                 throw new TypeError('justifyLastLine alignment option must be of type boolean');
             }
         }
@@ -59,9 +59,9 @@ class Alignment { // §18.8.1 alignment (Alignment)
         }
         
         if (opts.wrapText !== undefined) {
-            if (opts.wrapText === true) {
+            if (typeof opts.wrapText === 'boolean') {
                 this.wrapText = opts.wrapText;
-            } else if (typeof opts.wrapText !== 'boolean') {
+            } else {
                 throw new TypeError('justifyLastLine alignment option must be of type boolean');
             }
         }

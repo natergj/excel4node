@@ -77,22 +77,22 @@ class Border {
         if (this.diagonal !== undefined) {
             obj.diagonal = this.diagonal.toObject();
         }
-        this.outline !== undefined ? obj.outline = this.outline : null;
-        this.diagonalDown !== undefined ? obj.diagonalDown = this.diagonalDown : null;
-        this.diagonalUp !== undefined ? obj.diagonalUp = this.diagonalUp : null;
+        typeof this.outline === 'boolean' ? obj.outline = this.outline : null;
+        typeof this.diagonalDown === 'boolean' ? obj.diagonalDown = this.diagonalDown : null;
+        typeof this.diagonalUp === 'boolean' ? obj.diagonalUp = this.diagonalUp : null;
 
         return obj;
     }
 
     addToXMLele(borderXML) {
         let bXML = borderXML.ele('border');
-        if (this.outline !== undefined) {
+        if (this.outline === true) {
             bXML.att('outline', '1');
         }
-        if (this.diagonalUp !== undefined) {
+        if (this.diagonalUp === true) {
             bXML.att('diagonalUp', '1');
         }
-        if (this.diagonalDown !== undefined) {
+        if (this.diagonalDown === true) {
             bXML.att('diagonalDown', '1');
         }
 

@@ -83,14 +83,14 @@ test('Set Style Properties', (t) => {
     t.ok(styleObj.alignment.justifyLastLine === true, 'alignment.justifyLastLine correctly set');
     t.ok(styleObj.alignment.readingOrder === 'leftToRight', 'alignment.readingOrder correctly set');
     t.ok(styleObj.alignment.relativeIndent === 1, 'alignment.relativeIndent correctly set');
-    t.ok(styleObj.alignment.shrinkToFit === undefined, 'alignment.shrinkToFit correctly set');
+    t.ok(styleObj.alignment.shrinkToFit === false, 'alignment.shrinkToFit correctly set');
     t.ok(styleObj.alignment.textRotation === 0, 'alignment.textRotation correctly set');
     t.ok(styleObj.alignment.vertical === 'bottom', 'alignment.vertical correctly set');
     t.ok(styleObj.alignment.wrapText === true, 'alignment.wrapText correctly set');
     t.ok(styleObj.font.bold === true, 'font.bold correctly set');
     t.ok(styleObj.font.color === 'FF000000', 'font.color correctly set');
-    t.ok(styleObj.font.condense === undefined, 'font.condense correctly set');
-    t.ok(styleObj.font.extend === undefined, 'font.extend correctly set');
+    t.ok(styleObj.font.condense === false, 'font.condense correctly set');
+    t.ok(styleObj.font.extend === false, 'font.extend correctly set');
     t.ok(styleObj.font.family === 'Roman', 'font.family correctly set');
     t.ok(styleObj.font.italics === true, 'font.italics correctly set');
     t.ok(styleObj.font.name === 'Courier', 'font.name correctly set');
@@ -112,12 +112,12 @@ test('Set Style Properties', (t) => {
     t.ok(styleObj.border.diagonal.style === 'thin', 'border.diagonal.style correctly set');
     t.ok(styleObj.border.diagonal.color === 'FF444444', 'border.diagonal.color correctly set');
     t.ok(styleObj.border.diagonalDown === true, 'border.diagonalDown correctly set');
-    t.ok(styleObj.border.diagonalUp === undefined, 'border.diagonalUp correctly set');
+    t.ok(styleObj.border.diagonalUp === undefined, 'border.diagonalUp correctly not set');
     t.ok(styleObj.border.outline === true, 'border.outline correctly set');
     t.ok(styleObj.fill.type === 'pattern', 'fill.type correctly set');
     t.ok(styleObj.fill.patternType === 'solid', 'fill.patternType correctly set');
     t.ok(styleObj.fill.fgColor === 'FFFFFF00', 'fill.fgColor correctly set');
-    t.ok(styleObj.fill.bgColor === undefined, 'fill.bgColor correctly set');
+    t.ok(styleObj.fill.bgColor === undefined, 'fill.bgColor correctly not set');
 
     let alignmentXMLele = xmlbuilder.create('test');
     style.alignment.addToXMLele(alignmentXMLele);
@@ -143,28 +143,33 @@ test('Set Style Properties', (t) => {
 });
 
 test('Update style on Cell', (t) => {
-    t.plan(3);
 
     let wb = new xl.WorkBook({ logLevel: 5 });
     let ws = wb.addWorksheet('Sheet1');
     let style = wb.createStyle({
         font: {
             size: 14,
-            name: 'Helvetica'
+            name: 'Helvetica',
+            underline: true
         }
     });
     ws.cell(1, 1).string('string').style(style);
     let styleID = ws.cell(1, 1).cells[0].s;
     let thisStyle = wb.styles[styleID];
-    t.ok(thisStyle.toObject().font.name === 'Helvetica', 'Cell correctly set to style font.');
+    t.equals(thisStyle.toObject().font.name, 'Helvetica', 'Cell correctly set to style font.');
+    t.equals(thisStyle.toObject().font.underline, true, 'Cell correctly set to style font underline.');
 
     ws.cell(1, 1).style({
         font: {
-            name: 'Courier'
+            name: 'Courier',
+            underline: false
         }
     });
     let styleID2 = ws.cell(1, 1).cells[0].s;
     let thisStyle2 = wb.styles[styleID2];
     t.equal(thisStyle2.toObject().font.name, 'Courier', 'Cell font name correctly updated to new font name');
     t.equal(thisStyle2.toObject().font.size, 14, 'Cell font size correctly did not change');
+    t.equal(thisStyle2.toObject().font.underline, false, 'Cell font underline correctly unset');
+
+    t.end();
 });

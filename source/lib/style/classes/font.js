@@ -6,6 +6,8 @@ const types = require('../../types/index.js');
 class Font {
     constructor(opts) {
         opts = opts ? opts : {};
+        console.log(opts);
+        console.log(typeof(opts.underline) === 'boolean');
 
         typeof opts.color === 'string' ? this.color = types.excelColor.getColor(opts.color) : null;
         typeof opts.name === 'string' ? this.name = opts.name : null;
@@ -16,14 +18,14 @@ class Font {
         typeof opts.vertAlign === 'string' ? this.vertAlign = opts.vertAlign : null;
         typeof opts.charset === 'number' ? this.charset = opts.charset : null;
 
-        opts.condense === true ? this.condense = true : null;
-        opts.extend === true ? this.extend = true : null;
-        opts.bold === true ? this.bold = true : null;
-        opts.italics === true ? this.italics = true : null;
-        opts.outline === true ? this.outline = true : null;
-        opts.shadow === true ? this.shadow = true : null;
-        opts.strike === true ? this.strike = true : null;
-        opts.underline === true ? this.underline = true : null;
+        typeof opts.condense === 'boolean' ? this.condense = opts.condense : null;
+        typeof opts.extend === 'boolean' ? this.extend = opts.extend : null;
+        typeof opts.bold === 'boolean' ? this.bold = opts.bold : null;
+        typeof opts.italics === 'boolean' ? this.italics = opts.italics : null;
+        typeof opts.outline === 'boolean' ? this.outline = opts.outline : null;
+        typeof opts.shadow === 'boolean' ? this.shadow = opts.shadow : null;
+        typeof opts.strike === 'boolean' ? this.strike = opts.strike : null;
+        typeof opts.underline === 'boolean' ? this.underline = opts.underline : null;
     }
 
     toObject() {
@@ -37,14 +39,14 @@ class Font {
         typeof this.size === 'number' ? obj.size = this.size : null;
         typeof this.vertAlign === 'string' ? obj.vertAlign = this.vertAlign : null;
 
-        this.condense === true ? obj.condense = true : null;
-        this.extend === true ? obj.extend = true : null;
-        this.bold === true ? obj.bold = true : null;
-        this.italics === true ? obj.italics = true : null;
-        this.outline === true ? obj.outline = true : null;
-        this.shadow === true ? obj.shadow = true : null;
-        this.strike === true ? obj.strike = true : null;
-        this.underline === true ? obj.underline = true : null;
+        typeof this.condense === 'boolean' ? obj.condense = this.condense : null;
+        typeof this.extend === 'boolean' ? obj.extend = this.extend : null;
+        typeof this.bold === 'boolean' ? obj.bold = this.bold : null;
+        typeof this.italics === 'boolean' ? obj.italics = this.italics : null;
+        typeof this.outline === 'boolean' ? obj.outline = this.outline : null;
+        typeof this.shadow === 'boolean' ? obj.shadow = this.shadow : null;
+        typeof this.strike === 'boolean' ? obj.strike = this.strike : null;
+        typeof this.underline === 'boolean' ? obj.underline = this.underline : null;
 
         return obj;
     }
