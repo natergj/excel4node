@@ -8,7 +8,7 @@ let colAccessor = (ws, col) => {
     if (!(ws.cols[col] instanceof Column)) {
         ws.cols[col] = new Column(col, ws);
     }
-    return  ws.cols[col];
+    return ws.cols[col];
 };
 
 module.exports = colAccessor;
