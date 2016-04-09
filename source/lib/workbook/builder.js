@@ -366,7 +366,6 @@ let addDrawingsXML = (promiseObj) => {
     return new Promise((resolve) => {
         if (!promiseObj.wb.mediaCollection.isEmpty) {
 
-            let drawingRelID = 1;
             promiseObj.wb.sheets.forEach((ws) => {
                 if (!ws.drawingCollection.isEmpty) {
 
@@ -412,9 +411,8 @@ let addDrawingsXML = (promiseObj) => {
 
                     let drawingsXMLStr = drawingsXML.doc().end(promiseObj.xmlOutVars);
                     let drawingRelXMLStr = drawingRelXML.doc().end(promiseObj.xmlOutVars);
-                    promiseObj.xlsx.folder('xl').folder('drawings').file('drawing' + drawingRelID + '.xml', drawingsXMLStr);
-                    promiseObj.xlsx.folder('xl').folder('drawings').folder('_rels').file('drawing' + drawingRelID + '.xml.rels', drawingRelXMLStr);
-                    drawingRelID++;
+                    promiseObj.xlsx.folder('xl').folder('drawings').file('drawing' + ws.sheetId + '.xml', drawingsXMLStr);
+                    promiseObj.xlsx.folder('xl').folder('drawings').folder('_rels').file('drawing' + ws.sheetId + '.xml.rels', drawingRelXMLStr);
                 }
             });
 
