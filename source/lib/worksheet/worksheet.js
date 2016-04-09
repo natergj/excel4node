@@ -87,8 +87,8 @@ class WorkSheet {
         return xmlBuilder.sheetXML(this);
     }
 
-    cell(row1, col1, row2, col2, isMerged) {
-        return cellAccessor(this, row1, col1, row2, col2, isMerged);
+    get cell() {
+        return cellAccessor.bind(this);
     }
 
     row(row) {
