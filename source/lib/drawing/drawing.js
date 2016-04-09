@@ -38,7 +38,7 @@ class Drawing {
     }
     set anchorFrom(obj) {
         if (obj !== undefined && obj instanceof Object) {
-            this._anchorFrom = new CTMarker(obj.col, obj.colOff, obj.row, obj.rowOff);
+            this._anchorFrom = new CTMarker(obj.col - 1, obj.colOff, obj.row - 1, obj.rowOff);
         }
     }
 
@@ -47,7 +47,7 @@ class Drawing {
     }
     set anchorTo(obj) {
         if (obj !== undefined && obj instanceof Object) {
-            this._anchorTo = new CTMarker(obj.col, obj.colOff, obj.row, obj.rowOff);
+            this._anchorTo = new CTMarker(obj.col - 1, obj.colOff, obj.row - 1, obj.rowOff);
         }
     }
 

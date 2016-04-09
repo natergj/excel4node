@@ -99,9 +99,11 @@ class WorkSheet {
         return colAccessor(this, col);
     }
 
-    image(path) {
-        let mediaID = this.wb.mediaCollection.add(path);
-        let newImage = this.drawingCollection.add('picture', path);
+    addImage(opts) {
+        opts = opts ? opts : {};
+        opts.type = 'picture';
+        let mediaID = this.wb.mediaCollection.add(opts.path);
+        let newImage = this.drawingCollection.add(opts);
         newImage.id = mediaID;
 
         return newImage;

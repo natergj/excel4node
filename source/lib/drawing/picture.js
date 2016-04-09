@@ -7,13 +7,13 @@ const EMU = require('../classes/emu.js');
 const xmlbuilder = require('xmlbuilder');
 
 class Picture extends Drawing {
-    constructor(pathStr) {
+    constructor(opts) {
         super();
         this.kind = 'image';
-        this.contentType = mime.lookup(pathStr);
+        this.contentType = mime.lookup(opts.path);
         this.type = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/image';
-        this.imagePath = pathStr;
-        this._name = path.basename(pathStr);
+        this.imagePath = opts.path;
+        this._name = path.basename(opts.path);
         this._descr = null;
         this._title = null;
         this._id;
@@ -28,6 +28,11 @@ class Picture extends Drawing {
         this.noAdjustHandles;
         this.noChangeArrowheads;
         this.noChangeShapeType;
+        if (['oneCellAnchor', 'twoCellAnchor'].indexOf(opts.position.type) >= 0) {
+            this.anchor(opts.position.type, opts.position.from, opts.position.to);
+        } else if (opts.position.type === 'absoluteAnchor') {
+            this.position(opts.position.x, opts.position.y);
+        }
     }
 
     get name() {
@@ -115,10 +120,10 @@ class Picture extends Drawing {
         let picEle = anchorEle.ele('xdr:pic');
         let nvPicPrEle = picEle.ele('xdr:nvPicPr');
         let cNvPrEle = nvPicPrEle.ele('xdr:cNvPr');
-        cNvPrEle.att('id', this.id);
+        cNvPrEle.att('descr', this.description);
+        cNvPrEle.att('id', this.id + 1);
         cNvPrEle.att('name', this.name);
         cNvPrEle.att('title', this.title);
-        cNvPrEle.att('descr', this.description);
         let cNvPicPrEle = nvPicPrEle.ele('xdr:cNvPicPr');
 
         this.noGrp === true ? cNvPicPrEle.ele('a:picLocks').att('noGrp', 1) : null;
