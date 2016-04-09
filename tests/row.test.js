@@ -19,7 +19,6 @@ test('Row Tests', (t) => {
 
     rowWS.column(4).freeze();
     t.equals(rowWS.opts.sheetView.pane.topLeftCell, 'E4', 'topLeftCell updated when column was also frozen');
-    rowWb.logger.debug(rowWS.opts.sheetView.pane);
 
     t.end();
 });

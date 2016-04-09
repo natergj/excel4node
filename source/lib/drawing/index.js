@@ -10,17 +10,15 @@ class DrawingCollection {
         return this.drawings.length;
     }
 
-    add(type, opt) {
-        switch (type) {
+    add(opts) {
+        switch (opts.type) {
         case 'picture':
-            let newPic = new Picture(opt);
+            let newPic = new Picture(opts);
             this.drawings.push(newPic);
             return newPic;
-            break;
 
         default:
             throw new TypeError('this option is not yet supported');
-            break;
         }
     }
 

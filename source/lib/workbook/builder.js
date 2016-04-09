@@ -45,7 +45,6 @@ let addRootContentTypesXML = (promiseObj) => {
         xml.ele('Override').att('ContentType', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml').att('PartName', '/xl/sharedStrings.xml');
 
         let xmlString = xml.doc().end(promiseObj.xmlOutVars);
-        promiseObj.wb.logger.debug(xmlString);
         promiseObj.xlsx.file('[Content_Types].xml', xmlString);
         resolve(promiseObj);
     });
@@ -108,7 +107,6 @@ let addWorkBookXML = (promiseObj) => {
         }
 
         let xmlString = xml.doc().end(promiseObj.xmlOutVars);
-        promiseObj.wb.logger.debug(xmlString);
         promiseObj.xlsx.folder('xl').file('workbook.xml', xmlString);
         resolve(promiseObj);
 
@@ -180,8 +178,6 @@ let addWorkSheetsXML = (promiseObj) => {
                 })
                 .then((xml) => {
                     return new Promise((resolve) => {
-                        promiseObj.wb.logger.debug('Sheet rels xml');
-                        promiseObj.wb.logger.debug(xml);
                         if (xml) {
                             promiseObj.xlsx.folder('xl').folder('worksheets').folder('_rels').file(`sheet${curSheet}.xml.rels`, xml);
                         }
@@ -292,7 +288,6 @@ let addSharedStringsXML = (promiseObj) => {
         });
 
         let xmlString = xml.doc().end(promiseObj.xmlOutVars);
-        promiseObj.wb.logger.debug(xmlString);
         promiseObj.xlsx.folder('xl').file('sharedStrings.xml', xmlString);
 
         resolve(promiseObj);
@@ -369,12 +364,10 @@ let addStylesXML = (promiseObj) => {
 
 let addDrawingsXML = (promiseObj) => {
     return new Promise((resolve) => {
-        promiseObj.wb.logger.debug('addDrawingsXML called');
-        promiseObj.wb.logger.debug('mediaCollection is empty? ' + promiseObj.wb.mediaCollection.isEmpty);
         if (!promiseObj.wb.mediaCollection.isEmpty) {
 
+            let drawingRelID = 1;
             promiseObj.wb.sheets.forEach((ws) => {
-                promiseObj.wb.logger.debug('is DrawingCollection empty? ' + ws.drawingCollection.isEmpty);
                 if (!ws.drawingCollection.isEmpty) {
 
                     let drawingRelXML = xmlbuilder.create('Relationships', 
@@ -418,12 +411,10 @@ let addDrawingsXML = (promiseObj) => {
                     });
 
                     let drawingsXMLStr = drawingsXML.doc().end(promiseObj.xmlOutVars);
-                    promiseObj.wb.logger.debug(drawingsXMLStr);
                     let drawingRelXMLStr = drawingRelXML.doc().end(promiseObj.xmlOutVars);
-                    promiseObj.wb.logger.debug(drawingRelXMLStr);
-                    promiseObj.xlsx.folder('xl').folder('drawings').file('drawing' + ws.sheetId + '.xml', drawingsXMLStr);
-                    promiseObj.xlsx.folder('xl').folder('drawings').folder('_rels').file('drawing' + ws.sheetId + '.xml.rels', drawingRelXMLStr);
-
+                    promiseObj.xlsx.folder('xl').folder('drawings').file('drawing' + drawingRelID + '.xml', drawingsXMLStr);
+                    promiseObj.xlsx.folder('xl').folder('drawings').folder('_rels').file('drawing' + drawingRelID + '.xml.rels', drawingRelXMLStr);
+                    drawingRelID++;
                 }
             });
 
@@ -442,7 +433,6 @@ let addDrawingsXML = (promiseObj) => {
 let writeToBuffer = (wb) => {
     return new Promise ((resolve, reject) => {
 
-        wb.logger.debug(wb.opts.jszip);
         let promiseObj = {
             wb: wb, 
             xlsx: new JSZip(),

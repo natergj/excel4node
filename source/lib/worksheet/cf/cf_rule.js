@@ -50,12 +50,3 @@ class CfRule { // §18.3.1.10 cfRule (Conditional Formatting Rule)
 
 
 module.exports = CfRule;
-
-/*
-'A1:A10', {      // apply ws formatting ref 'A1:A10'
-    type: 'expression',                          // the conditional formatting type
-    priority: 1,                                 // rule priority order (required)
-    formula: 'NOT(ISERROR(SEARCH("ok", A1)))',   // formula that returns nonzero or 0
-    style: style                                 // a style object containing styles to apply
-}
-*/

@@ -73,8 +73,6 @@ class Column {
         o.ySplit === null ? 
             o.topLeftCell = utils.getExcelCellRef(1, jumpTo) : 
             o.topLeftCell = utils.getExcelCellRef(utils.getExcelRowCol(o.topLeftCell).row, jumpTo);
-
-        this.ws.wb.logger.debug(o);
         return this;
     }
 }

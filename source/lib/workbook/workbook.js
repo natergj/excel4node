@@ -106,7 +106,6 @@ class WorkBook {
      * If callback is given, callback called with (err, fs.Stats) passed
      */
     write(fileName, handler) {
-        this.logger.debug('write called');
 
         builder.writeToBuffer(this)
         .then((buffer) => {

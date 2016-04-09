@@ -456,7 +456,6 @@ let sheetXML = (ws) => {
         .then(_addDrawing)
         .then((promiseObj) => {
             let xmlString = promiseObj.xml.doc().end({ pretty: true, indent: '  ', newline: '\n' });
-            ws.wb.logger.debug(xmlString);
             resolve(xmlString);
         })
         .catch((e) => {
@@ -486,10 +485,8 @@ let relsXML = (ws) => {
         );
         relXML.att('xmlns', 'http://schemas.openxmlformats.org/package/2006/relationships');
 
-        ws.wb.logger.debug(ws.relationships);
         ws.relationships.forEach((r, i) => {
             let rId = 'rId' + (i + 1);
-            ws.wb.logger.debug(r instanceof hyperlinks.Hyperlink);
             if (r instanceof hyperlinks.Hyperlink) {
                 relXML.ele('Relationship')
                 .att('Id', rId)
@@ -505,7 +502,6 @@ let relsXML = (ws) => {
         });
 
         let xmlString = relXML.doc().end({ pretty: true, indent: '  ', newline: '\n' });
-        ws.wb.logger.debug(xmlString);
         resolve(xmlString);
     });
 };
