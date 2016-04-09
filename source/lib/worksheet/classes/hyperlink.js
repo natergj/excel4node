@@ -70,4 +70,4 @@ class HyperlinkCollection { //§18.3.1.48 hyperlinks (Hyperlinks)
     }
 }
 
-module.exports = HyperlinkCollection;
+module.exports = { HyperlinkCollection, Hyperlink };

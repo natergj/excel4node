@@ -1,6 +1,6 @@
 const xml = require('xmlbuilder');
 const utils = require('../utils.js');
-const Hyperlink = require('./classes/hyperlink');
+const hyperlinks = require('./classes/hyperlink');
 const Picture = require('../drawing/picture.js');
 
 let _addSheetPr = (promiseObj) => {
@@ -156,6 +156,10 @@ let _addSheetData = (promiseObj) => {
 
                 thisRow.cellRefs.forEach((c) => {
                     let thisCell = promiseObj.ws.cells[c];
+                    if (thisCell.v === null) {
+                        return;
+                    }
+                    
                     let cEle = rEle.ele('c').att('r', thisCell.r).att('s', thisCell.s);
                     if (thisCell.t !== null) {
                         cEle.att('t', thisCell.t);
@@ -267,7 +271,7 @@ let _addMergeCells = (promiseObj) => {
     return new Promise((resolve, reject) => {
 
         if (promiseObj.ws.mergedCells instanceof Array && promiseObj.ws.mergedCells.length > 0) {
-            let ele = promiseObj.xml.ele('mergeCells');
+            let ele = promiseObj.xml.ele('mergeCells').att('count', promiseObj.ws.mergedCells.length);
             promiseObj.ws.mergedCells.forEach((cr) => {
                 ele.ele('mergeCell').att('ref', cr);
             });
@@ -496,9 +500,11 @@ let relsXML = (ws) => {
         );
         relXML.att('xmlns', 'http://schemas.openxmlformats.org/package/2006/relationships');
 
+        ws.wb.logger.debug(ws.relationships);
         ws.relationships.forEach((r, i) => {
             let rId = 'rId' + (i + 1);
-            if (r instanceof Hyperlink) {
+            ws.wb.logger.debug(r instanceof hyperlinks.Hyperlink);
+            if (r instanceof hyperlinks.Hyperlink) {
                 relXML.ele('Relationship')
                 .att('Id', rId)
                 .att('Target', r.location)
