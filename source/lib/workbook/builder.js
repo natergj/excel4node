@@ -269,7 +269,7 @@ let addSharedStringsXML = (promiseObj) => {
                     } else {
                         let thisRun = thisSI.ele('r');
                         let thisRunProps = thisRun.ele('rPr');
-                        typeof run.props.rFont === 'string' ? thisRunProps.ele('rFont') : null;
+                        typeof run.props.name === 'string' ? thisRunProps.ele('rFont').att('val', run.props.name) : null;
                         run.props.bold === true ? thisRunProps.ele('b') : null;
                         run.props.italics === true ? thisRunProps.ele('i') : null;
                         run.props.strike === true ? thisRunProps.ele('strike') : null;
@@ -283,7 +283,7 @@ let addSharedStringsXML = (promiseObj) => {
                         }
                         typeof run.props.size === 'number' ? thisRunProps.ele('sz').att('val', run.props.size) : null;
                         run.props.underline === true ? thisRunProps.ele('u') : null;
-                        run.props.alignVertical === true ? thisRunProps.ele('vertAlign') : null;
+                        typeof run.props.vertAlign === 'string' ? thisRunProps.ele('vertAlign').att('val', run.props.vertAlign) : null;
                         thisRun.ele('t', run.text).att('xml:space', 'preserve');
                     }
                 });
@@ -292,6 +292,7 @@ let addSharedStringsXML = (promiseObj) => {
         });
 
         let xmlString = xml.doc().end(promiseObj.xmlOutVars);
+        promiseObj.wb.logger.debug(xmlString);
         promiseObj.xlsx.folder('xl').file('sharedStrings.xml', xmlString);
 
         resolve(promiseObj);
