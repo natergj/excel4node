@@ -155,21 +155,7 @@ let _addSheetData = (promiseObj) => {
                 thisRow.thickBot !== null ? rEle.att('thickBot', thisRow.thickBot) : null;
 
                 thisRow.cellRefs.forEach((c) => {
-                    let thisCell = promiseObj.ws.cells[c];
-                    if (thisCell.v === null) {
-                        return;
-                    }
-                    
-                    let cEle = rEle.ele('c').att('r', thisCell.r).att('s', thisCell.s);
-                    if (thisCell.t !== null) {
-                        cEle.att('t', thisCell.t);
-                    }
-                    if (thisCell.f !== null) {
-                        cEle.ele('f').txt(thisCell.f);
-                    }
-                    if (thisCell.v !== null) {
-                        cEle.ele('v').txt(thisCell.v);
-                    }
+                    promiseObj.ws.cells[c].addToXMLele(rEle);
                 });
                 processNextRow();
             } else {

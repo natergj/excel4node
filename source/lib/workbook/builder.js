@@ -1,6 +1,7 @@
 const xmlbuilder = require('xmlbuilder');
 const JSZip = require('jszip');
 const fs = require('fs');
+const CTColor = require('../style/classes/ctColor.js');
 
 let addRootContentTypesXML = (promiseObj) => {
     // Required as stated in §12.2
@@ -224,7 +225,70 @@ let addSharedStringsXML = (promiseObj) => {
         .att('xmlns', 'http://schemas.openxmlformats.org/spreadsheetml/2006/main');
 
         promiseObj.wb.sharedStrings.forEach((s) => {
-            xml.ele('si').ele('t').txt(s);
+            if (typeof s === 'string') {
+                xml.ele('si').ele('t').txt(s);
+            } else if (s instanceof Array) {
+
+                let thisSI = xml.ele('si');
+                let theseRuns = []; // §18.4.4 r (Rich Text Run)
+                let currProps = {};
+                let curRun;
+                let i = 0;
+                while (i < s.length) {
+                    if (typeof s[i] === 'string') {
+                        if (curRun === undefined) {
+                            theseRuns.push({
+                                props: {},
+                                text: ''
+                            });
+                            curRun = theseRuns[theseRuns.length - 1];
+                        } 
+                        curRun.text = curRun.text + s[i];
+                    } else if (typeof s[i] === 'object') {
+                        theseRuns.push({
+                            props: {},
+                            text: ''
+                        });
+                        curRun = theseRuns[theseRuns.length - 1];
+                        Object.keys(s[i]).forEach((k) => {
+                            currProps[k] = s[i][k];
+                        });
+                        Object.keys(currProps).forEach((k) => {
+                            curRun.props[k] = currProps[k];
+                        });
+                        if (s[i].value !== undefined) {
+                            curRun.text = s[i].value;
+                        }
+                    }
+                    i++;
+                }
+
+                theseRuns.forEach((run) => {
+                    if (Object.keys(run).length < 1) {
+                        thisSI.ele('t', run.text).att('xml:space', 'preserve');
+                    } else {
+                        let thisRun = thisSI.ele('r');
+                        let thisRunProps = thisRun.ele('rPr');
+                        typeof run.props.rFont === 'string' ? thisRunProps.ele('rFont') : null;
+                        run.props.bold === true ? thisRunProps.ele('b') : null;
+                        run.props.italics === true ? thisRunProps.ele('i') : null;
+                        run.props.strike === true ? thisRunProps.ele('strike') : null;
+                        run.props.outline === true ? thisRunProps.ele('outline') : null;
+                        run.props.shadow === true ? thisRunProps.ele('shadow') : null;
+                        run.props.condense === true ? thisRunProps.ele('condense') : null;
+                        run.props.extend === true ? thisRunProps.ele('extend') : null;
+                        if (typeof run.props.color === 'string') {
+                            let thisColor = new CTColor(run.props.color);
+                            thisColor.addToXMLele(thisRunProps);
+                        }
+                        typeof run.props.size === 'number' ? thisRunProps.ele('sz').att('val', run.props.size) : null;
+                        run.props.underline === true ? thisRunProps.ele('u') : null;
+                        run.props.alignVertical === true ? thisRunProps.ele('vertAlign') : null;
+                        thisRun.ele('t', run.text).att('xml:space', 'preserve');
+                    }
+                });
+
+            }
         });
 
         let xmlString = xml.doc().end(promiseObj.xmlOutVars);

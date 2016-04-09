@@ -44,6 +44,23 @@ class Cell {
         this.s = sId;
     }
 
+    addToXMLele(ele) {
+        if (this.v === null && this.is === null) {
+            return;
+        }
+
+        let cEle = ele.ele('c').att('r', this.r).att('s', this.s);
+        if (this.t !== null) {
+            cEle.att('t', this.t);
+        }
+        if (this.f !== null) {
+            cEle.ele('f').txt(this.f);
+        }
+        if (this.v !== null) {
+            cEle.ele('v').txt(this.v);
+        }
+
+    }
 }
 
 module.exports = Cell;

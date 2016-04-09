@@ -37,6 +37,17 @@ let stringSetter = (val, theseCells) => {
     return theseCells;
 };
 
+let complexStringSetter = (val, theseCells) => {
+    if (!theseCells.merged) {
+        theseCells.cells.forEach((c) => {
+            c.string(theseCells.ws.wb.getStringIndex(val));
+        });
+    } else {
+        let c = theseCells.cells[0];
+        c.string(theseCells.ws.wb.getStringIndex(val));
+    }
+};
+
 let numberSetter = (val, theseCells) => {
     if (val === undefined || parseFloat(val) !== val) {
         throw new TypeError('Value sent to Number function of cells %s was not a number, it has type of %s and value of %s',
@@ -223,7 +234,13 @@ let cellAccessor = (ws, row1, col1, row2, col2, isMerged) => {
         mergeCells(ws, theseCells.excelRefs);
     }
 
-    theseCells.string = (val) => stringSetter(val, theseCells);
+    theseCells.string = (val) => {
+        if (val instanceof Array) {
+            complexStringSetter(val, theseCells);
+        } else {
+            stringSetter(val, theseCells);
+        }
+    };
     theseCells.number = (val) => numberSetter(val, theseCells);
     theseCells.bool = (val) => booleanSetter(val, theseCells);
     theseCells.formula = (val) => formulaSetter(val, theseCells);
