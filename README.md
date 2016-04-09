@@ -249,7 +249,7 @@ headerFooter strings accept [Dynamic Formatting Strings](https://poi.apache.org/
 
 
 #### Methods
-WorkSheet data validations   
+##### WorkSheet data validations   
 accepts a validation options object with these available options. All options are optional with exception of sqref.
 
 ```javascript
@@ -302,6 +302,31 @@ ws.addDataValidation({
     formulas: [0, 100]
 });
 ```
+
+##### Worksheet Conditional Formatting
+Conditional formatting adds custom formats in response to cell reference state. A subset of conditional formatting features is currently supported by excel4node.   
+Formatting rules apply at the worksheet level.   
+The following example will highlight all cells between A1 and A10 that contain the string "ok" with bold, green text:   
+
+```javascript
+var wb = new xl.WorkBook();
+var ws = wb.addWorksheet('Sheet 1');
+var myStyle = wb.createStyle({
+	font: {
+		bold: true,
+		color: '00FF00'
+	}
+});
+ 
+ws.addConditionalFormattingRule('A1:A10', {      // apply ws formatting ref 'A1:A10' 
+    type: 'expression',                          // the conditional formatting type 
+    priority: 1,                                 // rule priority order (required) 
+    formula: 'NOT(ISERROR(SEARCH("ok", A1)))',   // formula that returns nonzero or 0 
+    style: myStyle                               // a style object containing styles to apply 
+});
+```
+**The only conditional formatting type that is currently supported is expression.**   
+When the formula returns zero, conditional formatting is NOT displayed. When the formula returns a nonzero value, conditional formatting is displayed.
 
 
 ## Rows and Columns
@@ -356,3 +381,169 @@ ws.column(5).group(1, true);
 
 
 ## Cells
+The cell method accesses a single cell or range of cells to manipulate   
+cell method takes two required parameters and 3 optional parameters   
+.string() accepts a String or Array. Sending array allows for multiple font formattings within the same cell.   
+.number(number) accepts a number   
+.formula(formula) accepts an Excel formula   
+.date(date) accepts either a date or a date string   
+.link(url, [displayStr, tooltip]) accepts a URL and optionally a displayStr and hover tooltip   
+.bool(value) accepts a boolean (true or false)   
+.style(object) accepts the same object as when creating a new style.  When applied to a cell that already has style formatting, the original formatting will be kept and updated with the changes sent to the style function.   
+
+```javascript
+// ws.cell(startRow, startColumn, [[endRow, endColumn], isMerged]); 
+
+ws.cell(1, 1).string('My simple string');
+ws.cell(1, 2).number(5);
+ws.cell(1, 3).formula('B1 * 10');
+ws.cell(1, 4).date(new Date());
+ws.cell(1, 5).link('http://iamnater.com');
+ws.cell(1, 6).bool(true);
+
+ws.cell(2, 1, 2, 6, true).string('One big merged cell');
+ws.cell(3, 1, 3, 6).number(1); // All 6 cells set to number 1
+
+var complexString = [
+    'Workbook default font String\n',
+    {
+        bold: true,
+        underline: true,
+        italic: true,
+        color: 'FF0000',
+        size: 18,
+        name: 'Courier',
+        value: 'Hello'
+    },
+    ' World!',
+    {
+        color: '000000',
+        underline: false,
+        name: 'Arial',
+        vertAlign: 'subscript'
+    },
+    ' All',
+    ' these',
+    ' strings',
+    ' are',
+    ' black subsript,',
+    {
+        color: '0000FF',
+        value: '\nbut',
+        vertAlign: 'baseline'
+    },
+    ' now are blue'
+];
+ws.cell(4, 1).string(complexString);
+ws.cell(5, 1).string('another simple string).style({ font: {name: 'Helvetica'} });
+
+```
+
+## Styles
+Style objects can be applied to Cells   
+Any combination of style values can be set   
+Creating a preset style is much more efficient than applying styles to individual cells   
+
+```javascript
+/*
+Style Options Object:
+{
+    alignment: { // §18.8.1
+        horizontal: ['center', 'centerContinuous', 'distributed', 'fill', 'general', 'justify', 'left', 'right'],
+        indent: integer, // Number of spaces to indent = indent value * 3
+        justifyLastLine: boolean,
+        readingOrder: ['contextDependent', 'leftToRight', 'rightToLeft'], 
+        relativeIndent: integer, // number of additional spaces to indent
+        shrinkToFit: boolean,
+        textRotation: integer, // number of degrees to rotate text counter-clockwise
+        vertical: ['bottom', 'center', 'distributed', 'justify', 'top'],
+        wrapText: boolean
+    },
+    font: { // §18.8.22
+        bold: boolean,
+        charset: integer,
+        color: string,
+        condense: boolean,
+        extend: boolean,
+        family: string,
+        italics: boolean,
+        name: string,
+        outline: boolean,
+        scheme: string, // §18.18.33 ST_FontScheme (Font scheme Styles)
+        shadow: boolean,
+        strike: boolean,
+        size: integer,
+        underline: boolean,
+        vertAlign: string // §22.9.2.17 ST_VerticalAlignRun (Vertical Positioning Location)
+    },
+    border: { // §18.8.4 border (Border)
+        left: {
+            style: string, //§18.18.3 ST_BorderStyle (Border Line Styles) ['none', 'thin', 'medium', 'dashed', 'dotted', 'thick', 'double', 'hair', 'mediumDashed', 'dashDot', 'mediumDashDot', 'dashDotDot', 'mediumDashDotDot', 'slantDashDot']
+            color: string // HTML style hex value
+        },
+        right: {
+            style: string,
+            color: string
+        },
+        top: {
+            style: string,
+            color: string
+        },
+        bottom: {
+            style: string,
+            color: string
+        },
+        diagonal: {
+            style: string,
+            color: string
+        },
+        diagonalDown: boolean,
+        diagonalUp: boolean,
+        outline: boolean
+    },
+    fill: { // §18.8.20 fill (Fill)
+        type: string, // Currently only 'pattern' is implimented. Non-implimented option is 'gradient'
+        patternType: string, //§18.18.55 ST_PatternType (Pattern Type)
+        color: string // HTML style hex value
+    },
+    numberFormat: integer or string // §18.8.30 numFmt (Number Format)
+});
+*/
+
+var wb = new xl.WorkBook();
+var ws = wb.addWorksheet('Sheet 1');
+var myStyle = wb.createStyle({
+	font: {
+		bold: true,
+		underline: true
+	}, 
+	alignment: {
+		wrapText: true,
+		horizontal: 'center'
+	}
+});
+
+ws.cell(1, 1).string('my \n multiline\n string').style(myStyle);
+ws.cell(2, 1).string('row 2 string');
+ws.cell(3, 1).string('row 3 string');
+ws.cell(2, 1, 3, 1).style(myStyle);
+ws.cell(3, 1).style({ font: { underline: false } });
+```
+
+## Images
+
+```javascript
+ws2.addImage({
+    path: './screenshot.png',
+    position: {
+        type: 'oneCellAnchor',
+        from: {
+            col: 1,
+            colOff: '0.5in',
+            row: 1,
+            rowOff: 0 
+        }
+    }
+});
+
+```
