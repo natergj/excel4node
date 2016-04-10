@@ -531,7 +531,8 @@ Style Options Object:
     fill: { // §18.8.20 fill (Fill)
         type: string, // Currently only 'pattern' is implimented. Non-implimented option is 'gradient'
         patternType: string, //§18.18.55 ST_PatternType (Pattern Type)
-        color: string // HTML style hex value
+        bgColor: string // HTML style hex value. optional. defaults to black
+        fgColor: string // HTML style hex value. required.
     },
     numberFormat: integer or string // §18.8.30 numFmt (Number Format)
 });
