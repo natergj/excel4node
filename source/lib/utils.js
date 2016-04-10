@@ -191,7 +191,7 @@ let getAllCellsInNumericRange = (row1, col1, row2, col2) => {
     col2 = col2 ? col2 : col1;
     for (var i = row1; i <= row2; i++) {
         for (var j = col1; j <= col2; j++) {
-            response.push(j.toExcelAlpha() + i);
+            response.push(getExcelAlpha(j) + i);
         }
     }
     return response.sort(sortCellRefs);
