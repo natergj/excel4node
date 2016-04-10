@@ -6,8 +6,6 @@ const types = require('../../types/index.js');
 class Font {
     constructor(opts) {
         opts = opts ? opts : {};
-        console.log(opts);
-        console.log(typeof(opts.underline) === 'boolean');
 
         typeof opts.color === 'string' ? this.color = types.excelColor.getColor(opts.color) : null;
         typeof opts.name === 'string' ? this.name = opts.name : null;

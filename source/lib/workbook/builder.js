@@ -458,7 +458,6 @@ let writeToBuffer = (wb) => {
         .then(() => {
             wb.opts.jszip.type = 'nodebuffer';
             let buffer = promiseObj.xlsx.generate(wb.opts.jszip);    
-            console.log('resolve buffer');
             resolve(buffer);
         })
         .catch((e) => {

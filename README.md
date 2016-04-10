@@ -531,10 +531,40 @@ ws.cell(3, 1).style({ font: { underline: false } });
 ```
 
 ## Images
+Adds and image to the worksheet.   
+currently on 'picture' type is supported   
+positioning has 3 types, 'absoluteAnchor', 'oneCellAnchor', 'twoCellAnchor'   
+absoluteAnchor takes two position elements in either EMUs or measurements in cm, mm, or in   
+x:0, y:0 is top left corner of worksheet  
+oneCellAnchor and twoCellAnchor types will take positional objects: 
+
+```json
+{  
+	col: integer, \\ left side of image will be placed on left edge of this column   
+	colOff: integer or string, \\ offset from left edge of column as EMU or measurment in cm, mm or in   
+	row: integer, \\top of image will be place on the top edge of this row   
+	rowOff: integer or string \\ offset from top edge or row as EMU or measurement in cm, mm or in   
+}
+```
+position type of oneCellAnchor will take a single "from" position   
+position type of twoCellAnchor will take a "from" and "to" position   
+specifying a twoCellAnchor will automatically adjust the image to fit within the bounds of the two anchors.   
 
 ```javascript
-ws2.addImage({
-    path: './screenshot.png',
+
+ws.addImage({
+    path: './screenshot2.jpeg',
+    type: 'picture',
+    position: {
+        type: 'absoluteAnchor',
+        x: '1in',
+        y: '2in'
+    }
+});
+
+ws.addImage({
+    path: './screenshot1.jpg',
+    type: 'picture',
     position: {
         type: 'oneCellAnchor',
         from: {
@@ -542,6 +572,26 @@ ws2.addImage({
             colOff: '0.5in',
             row: 1,
             rowOff: 0 
+        }
+    }
+});
+ 
+ws.addImage({
+    path: './screenshot1.png',
+    type: 'picture',
+    position: {
+        type: 'twoCellAnchor',
+        from: {
+            col: 1,
+            colOff: 0,
+            row: 10,
+            rowOff: 0
+        },
+        to: {
+            col: 4,
+            colOff: 0,
+            row: 13,
+            rowOff: 0
         }
     }
 });
