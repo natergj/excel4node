@@ -1,5 +1,6 @@
 const xml = require('xmlbuilder');
 const utils = require('../utils.js');
+const types = require('../types/index.js');
 const hyperlinks = require('./classes/hyperlink');
 const Picture = require('../drawing/picture.js');
 
@@ -10,11 +11,12 @@ let _addSheetPr = (promiseObj) => {
 
         // Check if any option that would require the sheetPr element to be added exists
         if (
-            o.printOptions.fitToHeight || 
-            o.printOptions.fitToWidth || 
-            o.printOptions.orientation || 
-            o.printOptions.horizontalDpi || 
-            o.printOptions.verticalDpi
+            o.printOptions.fitToHeight !== null || 
+            o.printOptions.fitToWidth !== null || 
+            o.outline.summaryBelow !== null ||
+            o.autoFilter.ref !== null ||
+            o.outline.summaryRight
+
         ) {
             let ele = promiseObj.xml.ele('sheetPr');
 
@@ -26,6 +28,13 @@ let _addSheetPr = (promiseObj) => {
             if (o.autoFilter.ref) {
                 ele.att('enableFormatConditionsCalculation', 1);
                 ele.att('filterMode', 1);
+            }
+
+            if (o.outline.summaryBelow !== null || o.outline.summaryRight !== null) {
+                let outlineEle = ele.ele('outlinePr');
+                outlineEle.att('applyStyles', 1);
+                o.outline.summaryBelow === true ? outlineEle.att('summaryBelow', 1) : null;
+                o.outline.summaryRight === true ? outlineEle.att('summaryRight', 1) : null;
             }
         }
 
@@ -83,11 +92,13 @@ let _addSheetFormatPr = (promiseObj) => {
     return new Promise((resolve, reject) => {
         let o = promiseObj.ws.opts.sheetFormat;
         let ele = promiseObj.xml.ele('sheetFormatPr');
-        Object.keys(o).forEach((k) => {
-            if (o[k] !== null) {
-                ele.att(k, o[k]);
-            } 
-        });
+
+        o.baseColWidth !== null ? ele.att('baseColWidth', o.baseColWidth) : null;
+        o.defaultColWidth !== null ? ele.att('defaultColWidth', o.defaultColWidth) : null;
+        o.defaultRowHeight !== null ? ele.att('defaultRowHeight', o.defaultRowHeight) : null;
+        o.thickBottom !== null ? ele.att('thickBottom', utils.boolToInt(o.thickBottom)) : null;
+        o.thickTop !== null ? ele.att('thickTop', utils.boolToInt(o.thickTop)) : null;
+
 
         if (typeof o.defaultRowHeight === 'number') {
             ele.att('customHeight', '1');
@@ -188,7 +199,7 @@ let _addSheetProtection = (promiseObj) => {
             Object.keys(o).forEach((k) => {
                 if (o[k] !== null) {
                     if (k === 'password') {
-                        ele.att('hashValue', utils.getHashOfPassword(o[k]));
+                        ele.att('password', utils.getHashOfPassword(o[k]));
                     } else {
                         ele.att(k, utils.boolToInt(o[k]));
                     }
@@ -351,7 +362,7 @@ let _addPageSetup = (promiseObj) => {
 
         if (addPageSetup === true) {
             let psEle = promiseObj.xml.ele('pageSetup');
-            o.paperSize !== null ? psEle.att('paperSize', o.paperSize) : null;
+            o.paperSize !== null ? psEle.att('paperSize', types.paperSize[o.paperSize]) : null;
             o.paperHeight !== null ? psEle.att('paperHeight', o.paperHeight) : null;
             o.paperWidth !== null ? psEle.att('paperWidth', o.paperWidth) : null;
             o.scale !== null ? psEle.att('scale', o.scale) : null;
@@ -389,12 +400,12 @@ let _addHeaderFooter = (promiseObj) => {
 
         if (addHeaderFooter === true) {
             let hfEle = promiseObj.xml.ele('headerFooter');
-            o.evenFooter !== null ? hfEle.ele('evenFooter').text(o.evenFooter) : null;
-            o.evenHeader !== null ? hfEle.ele('evenHeader').text(o.evenHeader) : null;
-            o.firstFooter !== null ? hfEle.ele('firstFooter').text(o.firstFooter) : null;
-            o.firstHeader !== null ? hfEle.ele('firstHeader').text(o.firstHeader) : null;
-            o.oddFooter !== null ? hfEle.ele('oddFooter').text(o.oddFooter) : null;
             o.oddHeader !== null ? hfEle.ele('oddHeader').text(o.oddHeader) : null;
+            o.oddFooter !== null ? hfEle.ele('oddFooter').text(o.oddFooter) : null;
+            o.evenHeader !== null ? hfEle.ele('evenHeader').text(o.evenHeader) : null;
+            o.evenFooter !== null ? hfEle.ele('evenFooter').text(o.evenFooter) : null;
+            o.firstHeader !== null ? hfEle.ele('firstHeader').text(o.firstHeader) : null;
+            o.firstFooter !== null ? hfEle.ele('firstFooter').text(o.firstFooter) : null;
             o.alignWithMargins !== null ? hfEle.att('alignWithMargins', utils.boolToInt(o.alignWithMargins)) : null;
             o.differentFirst !== null ? hfEle.att('differentFirst', utils.boolToInt(o.differentFirst)) : null;
             o.differentOddEven !== null ? hfEle.att('differentOddEven', utils.boolToInt(o.differentOddEven)) : null;

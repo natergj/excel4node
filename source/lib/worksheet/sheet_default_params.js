@@ -75,7 +75,7 @@ module.exports = {
     'sheetProtection': {                 // same as "Protect Sheet" in Review tab of Excel 
         'autoFilter': null,
         'deleteColumns': null,
-        'deleteRow': null,
+        'deleteRows': null,
         'formatCells': null,
         'formatColumns': null,
         'formatRows': null,
@@ -88,18 +88,20 @@ module.exports = {
         'pivotTables': null,
         'scenarios': null,
         'selectLockedCells': null,
-        'selectUnlockedCell': null,
+        'selectUnlockedCells': null,
         'sheet': null,
         'sort': null
     },
     'outline': {
-        'summaryBelow': false
+        'summaryBelow': null,
+        'summaryRight': null
     },
     'autoFilter': {
         'startRow': null,
         'endRow': null,
         'startCol': null,
         'endCol': null,
+        'ref': null,
         'filters': []
     }
 };
