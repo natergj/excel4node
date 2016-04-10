@@ -42,7 +42,7 @@ class DataValidation { // §18.3.1.32 dataValidation (Data Validation)
         }
 
         if (opts.error !== undefined) {
-            if (typeof opts.errorStyle !== 'string') {
+            if (typeof opts.error !== 'string') {
                 throw new TypeError('DataValidation error must be a string');
             }
             this.error = opts.error;
