@@ -59,7 +59,7 @@ xl.getExcelRowCol(cellRef)
 Accepts cell reference (i.e. 'A1') and returns object with corresponding row and column
 
 ```javascript 
-xl.getExcelRowCol('B5);
+xl.getExcelRowCol('B5');
 // returns { row: 5, col: 2} 
 ```
 
@@ -435,7 +435,7 @@ var complexString = [
     ' now are blue'
 ];
 ws.cell(4, 1).string(complexString);
-ws.cell(5, 1).string('another simple string).style({ font: {name: 'Helvetica'} });
+ws.cell(5, 1).string('another simple string).style({font: {name: 'Helvetica'}});
 
 ```
 
@@ -538,12 +538,12 @@ absoluteAnchor takes two position elements in either EMUs or measurements in cm,
 x:0, y:0 is top left corner of worksheet  
 oneCellAnchor and twoCellAnchor types will take positional objects: 
 
-```json
+```javascript
 {  
-	col: integer, \\ left side of image will be placed on left edge of this column   
-	colOff: integer or string, \\ offset from left edge of column as EMU or measurment in cm, mm or in   
-	row: integer, \\top of image will be place on the top edge of this row   
-	rowOff: integer or string \\ offset from top edge or row as EMU or measurement in cm, mm or in   
+	col: integer, // left side of image will be placed on left edge of this column   
+	colOff: integer or string, // offset from left edge of column as EMU or measurment in cm, mm or in   
+	row: integer, //top of image will be place on the top edge of this row   
+	rowOff: integer or string // offset from top edge or row as EMU or measurement in cm, mm or in   
 }
 ```
 position type of oneCellAnchor will take a single "from" position   
