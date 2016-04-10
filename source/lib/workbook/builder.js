@@ -438,8 +438,8 @@ let writeToBuffer = (wb) => {
         let promiseObj = {
             wb: wb, 
             xlsx: new JSZip(),
-            xmlOutVars: { pretty: true, indent: '  ', newline: '\n' }
-            //xmlOutVars : {}
+            //xmlOutVars: { pretty: true, indent: '  ', newline: '\n' }
+            xmlOutVars: {}
         };
 
 
