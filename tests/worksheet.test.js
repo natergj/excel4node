@@ -119,7 +119,6 @@ test('Set WorkSheet options', (t) => {
 
     ws.generateXML().then((XML) => {
         let doc = new DOMParser().parseFromString(XML);
-        console.log(XML);
         let margins = doc.getElementsByTagName('pageMargins')[0];
         t.equals(margins.getAttribute('bottom'), '1.25', 'Bottom margin properly set');
         t.equals(margins.getAttribute('footer'), '1.5', 'Footer margin properly set');
@@ -216,4 +215,142 @@ test('Set WorkSheet options', (t) => {
         t.end();
     });
 
+});
+
+test('Verify Invalid Worksheet options fail type validation', (t) => {
+    let wb = new xl.WorkBook();
+
+    try {
+        let ws = wb.addWorksheet('sheet', {
+            pageSetup: {
+                cellComments: 'invalid option'
+            }
+        });
+        t.notOk(typeof ws === 'object', 'Worksheet creation should fail when setting invalid pageSetup.cellComments property');
+    } catch (e) {
+        t.ok(
+            e instanceof TypeError,
+            'setting invalid pageSetup.cellComments property should throw an error'
+        );
+    }
+
+
+    try {
+        let ws = wb.addWorksheet('sheet', {
+            pageSetup: {
+                errors: 'invalid option'
+            }
+        });
+        t.notOk(typeof ws === 'object', 'Worksheet creation should fail when setting invalid pageSetup.pageSetup property');
+    } catch (e) {
+        t.ok(
+            e instanceof TypeError,
+            'setting invalid pageSetup.errors property should throw an error'
+        );
+    }
+
+    try {
+        let ws = wb.addWorksheet('sheet', {
+            pageSetup: {
+                orientation: 'invalid option'
+            }
+        });
+        t.notOk(typeof ws === 'object', 'Worksheet creation should fail when setting invalid pageSetup.orientation property');
+    } catch (e) {
+        t.ok(
+            e instanceof TypeError,
+            'setting invalid pageSetup.orientation property should throw an error'
+        );
+    }
+
+    try {
+        let ws = wb.addWorksheet('sheet', {
+            pageSetup: {
+                pageOrder: 'invalid option'
+            }
+        });
+        t.notOk(typeof ws === 'object', 'Worksheet creation should fail when setting invalid pageSetup.pageOrder property');
+    } catch (e) {
+        t.ok(
+            e instanceof TypeError,
+            'setting invalid pageSetup.pageOrder property should throw an error'
+        );
+    }
+
+    try {
+        let ws = wb.addWorksheet('sheet', {
+            pageSetup: {
+                paperHeight: 'invalid option'
+            }
+        });
+        t.notOk(typeof ws === 'object', 'Worksheet creation should fail when setting invalid pageSetup.paperHeight property');
+    } catch (e) {
+        t.ok(
+            e instanceof TypeError,
+            'setting invalid pageSetup.paperHeight property should throw an error'
+        );
+    }
+
+    try {
+        let ws = wb.addWorksheet('sheet', {
+            pageSetup: {
+                paperSize: 'invalid option'
+            }
+        });
+        t.notOk(typeof ws === 'object', 'Worksheet creation should fail when setting invalid pageSetup.paperSize property');
+    } catch (e) {
+        t.ok(
+            e instanceof TypeError,
+            'setting invalid pageSetup.paperSize property should throw an error'
+        );
+    }
+
+    try {
+        let ws = wb.addWorksheet('sheet', {
+            pageSetup: {
+                paperWidth: 'invalid option'
+            }
+        });
+        t.notOk(typeof ws === 'object', 'Worksheet creation should fail when setting invalid pageSetup.paperWidth property');
+    } catch (e) {
+        t.ok(
+            e instanceof TypeError,
+            'setting invalid pageSetup.paperWidth property should throw an error'
+        );
+    }
+
+    try {
+        let ws = wb.addWorksheet('sheet', {
+            sheetView: {
+                pane: {
+                    activePane: 'invalid option'
+                }
+            }
+        });
+        t.notOk(typeof ws === 'object', 'Worksheet creation should fail when setting invalid sheetView.pane.activePane property');
+    } catch (e) {
+        t.ok(
+            e instanceof TypeError,
+            'setting invalid sheetView.pane.activePane property should throw an error'
+        );
+    }
+
+    try {
+        let ws = wb.addWorksheet('sheet', {
+            sheetView: {
+                pane: {
+                    state: 'invalid option'
+                }
+            }
+        });
+        t.notOk(typeof ws === 'object', 'Worksheet creation should fail when setting invalid sheetView.pane.state property');
+    } catch (e) {
+        t.ok(
+            e instanceof TypeError,
+            'setting invalid sheetView.pane.state property should throw an error'
+        );
+    }
+
+
+    t.end();
 });
