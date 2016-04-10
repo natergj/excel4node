@@ -1,124 +1,167 @@
-//require('babel-register');
-//var xl = require('./source');
-
 require('source-map-support').install();
 var xl = require('./distribution');
-
-
 var wb = new xl.WorkBook({
     defaultFont: {
-        name: 'Arial'
-    },
-    logLevel: 5,
-    dateFormat: 'mm-dd-yyyy hh:MM'
+        name: 'Verdana',
+        size: 12
+    }
 });
-var ws = wb.addWorksheet('Sheet 1');
-/*
-ws.cell(1, 1).string('My simple string').style({ alignment: { wrapText: true } });
-ws.cell(1, 2).number(5);
-ws.cell(1, 3).formula('B1 * 10');
-ws.cell(1, 4).date(new Date());
-ws.column(4).setWidth(15);
-ws.cell(1, 5).link('http://iamnater.com');
-ws.column(5).width = 15;
-ws.cell(1, 6).link('http://iamnater.com', 'Website Link', 'Link to my website');
-ws.column(6).width = 15;
-ws.cell(1, 7).bool(true);
 
-ws.cell(2, 1, 2, 6, true).string('One big merged cell');
-ws.cell(3, 1, 3, 6).number(1); // All 6 cells set to number 1
+/*****************************************
+ * START Create a sample invoice
+ *****************************************/
 
-
-var complexString = [
-    'Workbook default font String\n',
-    {
-        bold: true,
-        underline: true,
-        italic: true,
-        color: 'FF0000',
-        size: 18,
-        name: 'Courier',
-        value: 'Hello'
-    },
-    ' World!',
-    {
-        color: '000000',
-        underline: false,
-        name: 'Arial',
-        vertAlign: 'subscript'
-    },
-    ' All',
-    ' these',
-    ' strings',
-    ' are',
-    ' black subsript,',
-    {
-        color: '0000FF',
-        value: '\nbut',
-        vertAlign: 'baseline'
-    },
-    ' now are blue'
-];
-
-ws.cell(4, 1).style({ alignment: { wrapText: true } }).string(complexString);
-ws.row(4).setHeight(100);
-ws.column(1).setWidth(75);
-*/
-
-var myStyle = wb.createStyle({
-    font: {
-        bold: true,
-        underline: true
-    }, 
+// Create some styles to be used throughout
+var multiLineStyle = wb.createStyle({
     alignment: {
         wrapText: true,
-        horizontal: 'center'
+        vertical: 'top'
     }
 });
-
-ws.cell(5, 1).string('my \n multiline\n string').style(myStyle);
-ws.cell(6, 1).string('row 6 string');
-ws.cell(7, 1).string('row 7 string');
-ws.cell(6, 1, 7, 1).style(myStyle);
-ws.cell(7, 1).style({ font: { underline: false } });
-
-var ws2 = wb.addWorksheet('Sheet 2');
-var myStyle2 = wb.createStyle({
+var largeText = wb.createStyle({ 
+    font: { 
+        name: 'Cambria', 
+        size: 20 
+    } 
+});
+var medText = wb.createStyle({
     font: {
-        bold: true,
-        color: '00FF00'
+        name: 'Cambria',
+        size: 14,
+        color: '#D4762C'
+    },
+    alignment: {
+        vertical: 'center'
     }
 });
- 
-ws2.addConditionalFormattingRule('A1:A10', {      // apply ws formatting ref 'A1:A10' 
-    type: 'expression',                          // the conditional formatting type 
-    priority: 1,                                 // rule priority order (required) 
-    formula: 'NOT(ISERROR(SEARCH("ok", A1)))',   // formula that returns nonzero or 0 
-    style: myStyle2                               // a style object containing styles to apply 
+
+var currencyStyle = wb.createStyle({
+    numberFormat: '$##0.00; [Red]($##0.00); $0.00'
 });
 
+var invoiceWS = wb.addWorksheet('Invoice', {
+    pageSetup: {
+        fitToWidth: 1
+    }
+});
 
-ws2.addImage({
-    path: './screenshot.png',
+// Set some row and column properties
+invoiceWS.row(1).setHeight(25);
+invoiceWS.row(2).setHeight(45);
+invoiceWS.column(1).setWidth(3);
+invoiceWS.column(2).setWidth(10);
+invoiceWS.column(3).setWidth(35);
+invoiceWS.column(5).setWidth(25);
+invoiceWS.cell(2, 2).string('INVOICE').style(largeText);
+invoiceWS.cell(2, 3).string('809871').style(largeText).style({ font: { color: '#D4762C' } });
+
+// Add a company logo
+invoiceWS.addImage({
+    path: './sampleFiles/logo.png',
+    type: 'picture',
     position: {
-        type: 'oneCellAnchor',
+        type: 'twoCellAnchor',
         from: {
-            col: 1,
-            colOff: '0.5in',
-            row: 1,
-            rowOff: 0 
+            col: 4,
+            colOff: 0,
+            row: 2,
+            rowOff: 0
+        },
+        to: {
+            col: 6,
+            colOff: 0,
+            row: 3,
+            rowOff: 0
         }
     }
 });
 
+// Add some borders to specific cells
+invoiceWS.cell(2, 2, 2, 5).style({ border: { bottom: { style: 'thick', color: '#000000' } } });
 
-ws2.addImage({
-    path: './screenshot2.png',
-    position: {
-        type: 'absoluteAnchor',
-        x: '1in',
-        y: '2in'
+// Add some data and adjust styles for specific cells
+invoiceWS.cell(3, 2, 3, 3, true).string('January 1, 2016').style({ border: { bottom: { style: 'thin', color: '#D4762C' } } });
+invoiceWS.cell(4, 2, 4, 3, true).string('PAYMENT DUE BY: March 1, 2016').style({ font: { bold: true } });
+
+// style methods can be chained. multiple styles will be merged with last style taking precedence if there is a conflict
+invoiceWS.cell(3, 5, 4, 5, true).formula('E31').style(currencyStyle).style({ font: { size: 20, color: '#D4762C' }, alignment: { vertical: 'center' } });
+invoiceWS.cell(4, 2, 4, 5).style({ border: { bottom: { style: 'thin', color: '#000000' } } });
+
+invoiceWS.row(6).setHeight(75);
+invoiceWS.cell(6, 2, 6, 5).style(multiLineStyle);
+
+// set some strings to have multiple font formats within a single cell
+invoiceWS.cell(6, 2, 6, 3, true).string([
+    {
+        bold: true
+    },
+    'Client Name\n',
+    {
+        bold: false
+    },
+    'Company Name Inc.\n1234 First Street\nSomewhere, OR 12345'
+]);
+
+invoiceWS.cell(6, 4, 6, 5, true).string([
+    {
+        bold: true
+    },
+    'iAmNater.com\n',
+    {
+        bold: false
+    },
+    '123 Nowhere Lane\nSomewhere, OR 12345'
+]).style({ alignment: { horizontal: 'right' } });
+
+invoiceWS.cell(8, 2, 8, 5).style({ border: { bottom: { style: 'thick', color: '#000000' } } });
+
+invoiceWS.cell(10, 2).string('QUANTITY');
+invoiceWS.cell(10, 3).string('DETAILS');
+invoiceWS.cell(10, 4).string('UNIT PRICE').style({ alignment: { horizontal: 'right' } });
+invoiceWS.cell(10, 5).string('LINE TOTAL').style({ alignment: { horizontal: 'right' } });
+
+var items = require('./sampleFiles/invoiceData.json').items;
+var i = 0;
+var rowOffset = 11;
+var oddBackgroundColor = '#F8F5EE';
+while (i <= 10) {
+    var item = items[i];
+    var curRow = rowOffset + i;
+    if (item !== undefined) {
+        invoiceWS.cell(curRow, 2).number(item.units).style({ alignment: { horizontal: 'left' } });
+        invoiceWS.cell(curRow, 3).string(item.description);
+        invoiceWS.cell(curRow, 4).number(item.unitCost).style(currencyStyle);
+        invoiceWS.cell(curRow, 5).formula(xl.getExcelCellRef(rowOffset + i, 2) + '*' + xl.getExcelCellRef(rowOffset + 1, 4)).style(currencyStyle);
     }
-});
+    if (i % 2 === 0) {
+        invoiceWS.cell(curRow, 2, curRow, 5).style({
+            fill: {
+                type: 'pattern',
+                patternType: 'solid',
+                fgColor: oddBackgroundColor
+            }
+        });
+    }
+    i++;
+}
+invoiceWS.cell(21, 2, 21, 5).style({ border: { bottom: { style: 'thin', color: '#DCD1B3' } } });
 
-wb.write('Excel.xlsx');
+invoiceWS.cell(22, 4).string('Discount');
+invoiceWS.cell(22, 5).number(0.00).style(currencyStyle);
+
+invoiceWS.cell(23, 4).string('Net Total');
+invoiceWS.cell(23, 5).formula('SUM(E11:E21)').style(currencyStyle);
+
+invoiceWS.cell(23, 2, 23, 5).style({ border: { bottom: { style: 'thin', color: '#000000' } } });
+
+invoiceWS.row(24).setHeight(20);
+invoiceWS.cell(24, 4, 25, 4, true).string('USD TOTAL').style(medText);
+invoiceWS.cell(24, 5, 25, 5, true).formula('SUM(E22:E23)').style(medText).style(currencyStyle);
+/*****************************************
+ * END Create a sample invoice
+ *****************************************/
+
+wb.write('Excel.xlsx', function (err, stats) {
+    console.log(err);
+    console.log(stats);
+});

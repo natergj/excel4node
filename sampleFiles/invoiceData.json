@@ -1,0 +1,16 @@
+{
+    "items" : [
+        {
+            "description": "material",
+            "unitCost": 500,
+            "units": 2
+        },
+        {
+            "description": "labor",
+            "unitCost": 150,
+            "units": 4
+        }
+    ],
+    "company": "iAmNater.com",
+    "logoFile": "logo.png"
+}
