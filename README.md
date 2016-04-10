@@ -283,9 +283,9 @@ accepts a validation options object with these available options. All options ar
 {
 	sqref: String, // Required. Specifies range of cells to apply validate. i.e. "A1:A100"
 	allowBlank: Boolean, // Allows cells to be empty
-	errorStyle: String, // One of 'stop', 'warning', 'information'
+	errorStyle: String, // One of 'stop', 'warning', 'information'. You must specify an error string for this to take effect
 	error: String, // Message to show on error
-	erroTitle: String, // Title of message shown on error
+	errorTitle: String, // Title of message shown on error
 	showErrorMessage: Boolean, // Defaults to true if error or errorTitle is set
 	imeMode: String, // Restricts input to a specific set of characters. One of 'noControl', 'off', 'on', 'disabled', 'hiragana', 'fullKatakana', 'halfKatakana', 'fullAlpha', 'halfAlpha', 'fullHangul', 'halfHangul'
 	operator: String, // Must be one of 'between', 'notBetween', 'equal', 'notEqual', 'lessThan', 'lessThanOrEqual', 'greaterThan', 'greaterThanOrEqual'
@@ -305,7 +305,7 @@ ws.addDataValidation({
     allowBlank: true,
     prompt: 'Choose from dropdown',
     error: 'Invalid choice was chosen',
-    showDropDown: true;
+    showDropDown: true,
     sqref: 'X2:X10',
     formulas: [
         'value1,value2'
