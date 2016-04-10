@@ -4,6 +4,7 @@ const Row = require('../row/row.js');
 const Column = require('../column/column.js');
 const Style = require('../style/style.js');
 const utils = require('../utils.js');
+const util = require('util');
 
 function stringSetter(val) {
     let logger = this.ws.wb.logger;
@@ -51,11 +52,11 @@ function complexStringSetter(val) {
 
 function numberSetter(val) {
     if (val === undefined || parseFloat(val) !== val) {
-        throw new TypeError('Value sent to Number function of cells %s was not a number, it has type of %s and value of %s',
+        throw new TypeError(util.format('Value sent to Number function of cells %s was not a number, it has type of %s and value of %s',
             JSON.stringify(this.excelRefs),
             typeof(val),
             val
-        );
+        ));
     }
     val = parseFloat(val);
 
@@ -72,11 +73,11 @@ function numberSetter(val) {
 
 function booleanSetter(val) {
     if (val === undefined || typeof (val.toString().toLowerCase() === 'true' || ((val.toString().toLowerCase() === 'false') ? false : val)) !== 'boolean') {
-        throw new TypeError('Value sent to Bool function of cells %s was not a bool, it has type of %s and value of %s',
+        throw new TypeError(util.format('Value sent to Bool function of cells %s was not a bool, it has type of %s and value of %s',
             JSON.stringify(this.excelRefs),
             typeof(val),
             val
-        );
+        ));
     }
     val = val.toString().toLowerCase() === 'true';
 
@@ -93,7 +94,7 @@ function booleanSetter(val) {
 
 function formulaSetter(val) {
     if (typeof(val) !== 'string') {
-        throw new TypeError('Value sent to Formula function of cells %s was not a string, it has type of %s', JSON.stringify(this.excelRefs), typeof(val));
+        throw new TypeError(util.format('Value sent to Formula function of cells %s was not a string, it has type of %s', JSON.stringify(this.excelRefs), typeof(val)));
     }
     if (this.merged !== true) {
         this.cells.forEach((c, i) => {
@@ -110,7 +111,7 @@ function formulaSetter(val) {
 function dateSetter(val) {
     let thisDate = new Date(val);
     if (isNaN(thisDate.getTime())) {
-        throw new TypeError('Invalid date sent to date function of cells. %s could not be converted to a date.', val);
+        throw new TypeError(util.format('Invalid date sent to date function of cells. %s could not be converted to a date.', val));
     }
     if (this.merged !== true) {
         this.cells.forEach((c, i) => {
@@ -133,7 +134,7 @@ function styleSetter(val) {
     } else if (val instanceof Object) {
         thisStyle = this.ws.wb.createStyle(val);
     } else {
-        throw new TypeError('Parameter sent to Style function must be an instance of a Style or a style configuration object');
+        throw new TypeError(util.format('Parameter sent to Style function must be an instance of a Style or a style configuration object'));
     }
 
     this.cells.forEach((c, i) => {
@@ -191,7 +192,7 @@ function mergeCells(cellBlock) {
             cellBlock.ws.mergedCells.push(cellRange);
         }
     } else {
-        throw new TypeError('excelRefs variable sent to mergeCells function must be an array with length > 0');
+        throw new TypeError(util.format('excelRefs variable sent to mergeCells function must be an array with length > 0'));
     }
 }
 
