@@ -2,6 +2,9 @@
   "name": "excel4node",
   "version": "1.0.0",
   "description": "Library to create Formatted Excel Files.",
+  "engines" : {
+    "node": ">4.0.0"
+  },
   "keywords": [
     "excel",
     "spreadsheet",
@@ -53,7 +56,7 @@
     "babel-preset-es2015-node4": "^2.0.3",
     "babel-register": "^6.5.1",
     "jsdoc-babel": "^0.1.0",
-    "pretty-data": "^0.40.0",
+    "pretty-data": "^0.40.0",`
     "source-map-support": "^0.4.0",
     "tape": "^4.4.0",
     "tape-promise": "^1.1.0",

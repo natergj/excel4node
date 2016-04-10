@@ -126,6 +126,34 @@ Creates a new Style instance
 Accepts Style configuration object (see Style section)
 Returns a new Style instance   
 
+wb.write();   
+The write() method can accept a single filename, a filename with callback function or an HTTP response object.
+
+```javascript
+var xl = require('excel4node');
+var wb = new xl.WorkBook();
+wb.write('ExcelFile.xlsx'); // Writes the file ExcelFile.xlsx to the process.cwd();
+```
+```javascript
+wb.write('ExcelFile.xlsx', function (err, stats) {
+	if (err) {
+		console.error(err);
+	} 
+	console.log(stats); // Prints out an instance of a node.js fs.Stats object
+});
+```
+```javascript
+// sends excel
+var express = require('express');
+var app = express();
+app.get('/', function (req, res) {
+    wb.write('ExcelFile.xlsx', res);
+});
+app.listen(3000, function () {
+  console.log('Example app listening on port 3000!');
+});
+```
+
 
 ## WorkSheet
 An instance of the WorkSheet class contains all information specific to that worksheet

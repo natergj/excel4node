@@ -11,6 +11,7 @@ const DefinedNameCollection = require('../classes/definedNameCollection.js');
 const SlothLogger = require('sloth-logger');
 const types = require('../types/index.js');
 const builder = require('./builder.js');
+const http = require('http');
 
 
 /* Available options for WorkBook
@@ -113,18 +114,26 @@ class WorkBook {
                 // handler passed as http response object. 
 
             case 'object':
-                handler.writeHead(200, {
-                    'Content-Length': buffer.length,
-                    'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                    'Content-Disposition': 'attachment; filename="' + fileName + '"'
-                });
-                handler.end(buffer);
+                if (handler instanceof http.ServerResponse) {
+                    handler.writeHead(200, {
+                        'Content-Length': buffer.length,
+                        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                        'Content-Disposition': 'attachment; filename="' + fileName + '"'
+                    });
+                    handler.end(buffer);
+                } else {
+                    throw new TypeError('Unknown object sent to write function.');
+                }
                 break;
 
             // handler passed as callback function
             case 'function':
                 fs.writeFile(fileName, buffer, function (err) {
-                    handler(err);
+                    if (err) {
+                        handler(err);
+                    } else {
+                        fs.stat(fileName, handler);
+                    }
                 });
                 break;
 
