@@ -166,7 +166,7 @@ Full WorkSheet options. All options are optional.
         'printHeadings': Boolean
     
     },
-    'headerFooter': { // Set Header and Footer strings and options. 
+    'headerFooter': { // Set Header and Footer strings and options. See note below
         'evenFooter': String,
         'evenHeader': String,
         'firstFooter': String,
@@ -180,18 +180,18 @@ Full WorkSheet options. All options are optional.
     },
     'pageSetup': {
         'blackAndWhite': Boolean,
-        'cellComments': xl.CellComment,
+        'cellComments': xl.CellComment, // one of 'none', 'asDisplayed', 'atEnd'
         'copies': Integer,
         'draft': Boolean,
-        'errors': xl.PrintError,
+        'errors': xl.PrintError, // One of 'displayed', 'blank', 'dash', 'NA'
         'firstPageNumber': Integer,
         'fitToHeight': Integer, // Number of vertical pages to fit to
         'fitToWidth': Integer, // Number of horizontal pages to fit to
         'horizontalDpi': Integer,
-        'orientation': xl.Orientation,
-        'pageOrder': xl.PageOrder,
-        'paperHeight': xl.PositiveUniversalMeasure,
-        'paperSize': xl.PaperSize,
+        'orientation': xl.Orientation, // One of 'default', 'portrait', 'landscape'
+        'pageOrder': xl.PageOrder, // One of 'downThenOver', 'overThenDown'
+        'paperHeight': xl.PositiveUniversalMeasure, // Value must a positive Float immediately followed by unit of measure from list mm, cm, in, pt, pc, pi. i.e. '10.5cm'
+        'paperSize': xl.PaperSize, // see lib/types/paperSize.js for all types and descriptions of types. setting paperSize overrides paperHeight and paperWidth settings
         'paperWidth': xl.PositiveUniversalMeasure,
         'scale': Integer,
         'useFirstPageNumber': Boolean,
@@ -199,10 +199,10 @@ Full WorkSheet options. All options are optional.
         'verticalDpi': Integer
     },
     'sheetView': {
-        'pane': {
-            'activePane': xl.Pane,
-            'state': xl.PaneState,
-            'topLeftCell': Cell Reference,
+        'pane': { // Note. Calling .freeze() on a row or column will adjust these values 
+            'activePane': xl.Pane, // one of 'bottomLeft', 'bottomRight', 'topLeft', 'topRight'
+            'state': xl.PaneState, // one of 'split', 'frozen', 'frozenSplit'
+            'topLeftCell': Cell Reference, // i.e. 'A1'
             'xSplit': Float, // Horizontal position of the split, in 1/20th of a point; 0 (zero) if none. If the pane is frozen, this value indicates the number of columns visible in the top pane.
             'ySplit': Float // Vertical position of the split, in 1/20th of a point; 0 (zero) if none. If the pane is frozen, this value indicates the number of rows visible in the left pane.
         },
@@ -221,7 +221,7 @@ Full WorkSheet options. All options are optional.
     'sheetProtection': { // same as "Protect Sheet" in Review tab of Excel 
         'autoFilter': Boolean, // True means that that user will be unable to modify this setting
         'deleteColumns': Boolean,
-        'deleteRow': Boolean,
+        'deleteRows': Boolean,
         'formatCells': Boolean,
         'formatColumns': Boolean,
         'formatRows': Boolean,
@@ -233,7 +233,7 @@ Full WorkSheet options. All options are optional.
         'pivotTables': Boolean,
         'scenarios': Boolean,
         'selectLockedCells': Boolean,
-        'selectUnlockedCell': Boolean,
+        'selectUnlockedCells': Boolean,
         'sheet': Boolean,
         'sort': Boolean
     },
@@ -244,8 +244,7 @@ Full WorkSheet options. All options are optional.
 }
 ```
 
-Notes:   
-headerFooter strings accept [Dynamic Formatting Strings](https://poi.apache.org/apidocs/org/apache/poi/xssf/usermodel/extensions/XSSFHeaderFooter.html). i.e. '&L&A&C&BCompany, Inc. Confidential&B&RPage &P of &N'   
+__Note:__ headerFooter strings accept [Dynamic Formatting Strings](https://poi.apache.org/apidocs/org/apache/poi/xssf/usermodel/extensions/XSSFHeaderFooter.html). i.e. '&L&A&C&BCompany, Inc. Confidential&B&RPage &P of &N'   
 
 
 #### Methods
@@ -435,7 +434,7 @@ var complexString = [
     ' now are blue'
 ];
 ws.cell(4, 1).string(complexString);
-ws.cell(5, 1).string('another simple string).style({font: {name: 'Helvetica'}});
+ws.cell(5, 1).string('another simple string).style({ font: {name: 'Helvetica'} });
 
 ```
 
@@ -538,12 +537,12 @@ absoluteAnchor takes two position elements in either EMUs or measurements in cm,
 x:0, y:0 is top left corner of worksheet  
 oneCellAnchor and twoCellAnchor types will take positional objects: 
 
-```javascript
+```json
 {  
-	col: integer, // left side of image will be placed on left edge of this column   
-	colOff: integer or string, // offset from left edge of column as EMU or measurment in cm, mm or in   
-	row: integer, //top of image will be place on the top edge of this row   
-	rowOff: integer or string // offset from top edge or row as EMU or measurement in cm, mm or in   
+	col: integer, \\ left side of image will be placed on left edge of this column   
+	colOff: integer or string, \\ offset from left edge of column as EMU or measurment in cm, mm or in   
+	row: integer, \\top of image will be place on the top edge of this row   
+	rowOff: integer or string \\ offset from top edge or row as EMU or measurement in cm, mm or in   
 }
 ```
 position type of oneCellAnchor will take a single "from" position   
