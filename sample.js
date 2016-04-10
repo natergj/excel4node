@@ -161,6 +161,251 @@ invoiceWS.cell(24, 5, 25, 5, true).formula('SUM(E22:E23)').style(medText).style(
  * END Create a sample invoice
  *****************************************/
 
+
+/*****************************************
+ * START Create a filterable list
+ *****************************************/
+
+var filterSheet = wb.addWorksheet('Filters');
+
+for (var i = 1; i <= 10; i++) {
+    filterSheet.cell(1, i).string('Header' + i);
+}
+filterSheet.row(1).filter(1, 10);
+
+for (var r = 2; r <= 30; r++) {
+    for (var c = 1; c <= 10; c++) {
+        filterSheet.cell(r, c).number(parseInt(Math.random() * 100));
+    }
+}
+ /*****************************************
+ * END Create a filterable list
+ *****************************************/
+
+/*****************************************
+ * START Create collapsable lists
+ *****************************************/
+
+
+var collapseSheet = wb.addWorksheet('Collapsables', {
+    pageSetup: {
+        fitToWidth: 1
+    },
+    outline: {
+        summaryBelow: true
+    }
+});
+
+var rowOffset = 0;
+for (var r = 1; r <= 10; r++) {
+    for (var c = 1; c <= 10; c++) {
+        collapseSheet.cell(r + rowOffset, c).number(parseInt(Math.random() * 100));
+    }
+    collapseSheet.row(r + rowOffset).group(1, true);
+}
+for (var i = 1; i <= 10; i++) {
+    collapseSheet.cell(11, i).formula('SUM(' + xl.getExcelCellRef(rowOffset + 1, i) + ':' + xl.getExcelCellRef(rowOffset + 10, i) + ')');
+}
+collapseSheet.cell(11, 1, 11, 10).style({
+    fill: {
+        type: 'pattern',
+        patternType: 'solid',
+        fgColor: '#C2D6EC'
+    }
+});
+
+var rowOffset = 11;
+for (var r = 1; r <= 10; r++) {
+    for (var c = 1; c <= 10; c++) {
+        collapseSheet.cell(r + rowOffset, c).number(parseInt(Math.random() * 100));
+    }
+    collapseSheet.row(r + rowOffset).group(1, true);
+}
+for (var i = 1; i <= 10; i++) {
+    collapseSheet.cell(22, i).formula('SUM(' + xl.getExcelCellRef(rowOffset + 1, i) + ':' + xl.getExcelCellRef(rowOffset + 10, i) + ')');
+}
+collapseSheet.cell(22, 1, 22, 10).style({
+    fill: {
+        type: 'pattern',
+        patternType: 'solid',
+        fgColor: '#4273B0'
+    }
+});
+
+
+
+var rowOffset = 22;
+for (var r = 1; r <= 10; r++) {
+    for (var c = 1; c <= 10; c++) {
+        collapseSheet.cell(r + rowOffset, c).number(parseInt(Math.random() * 100));
+    }
+    collapseSheet.row(r + rowOffset).group(1, true);
+}
+for (var i = 1; i <= 10; i++) {
+    collapseSheet.cell(33, i).formula('SUM(' + xl.getExcelCellRef(rowOffset + 1, i) + ':' + xl.getExcelCellRef(rowOffset + 10, i) + ')');
+}
+collapseSheet.cell(33, 1, 33, 10).style({
+    fill: {
+        type: 'pattern',
+        patternType: 'solid',
+        fgColor: '#C2D6EC'
+    }
+});
+
+var rowOffset = 33;
+for (var r = 1; r <= 10; r++) {
+    for (var c = 1; c <= 10; c++) {
+        collapseSheet.cell(r + rowOffset, c).number(parseInt(Math.random() * 100));
+    }
+    collapseSheet.row(r + rowOffset).group(1, true);
+}
+for (var i = 1; i <= 10; i++) {
+    collapseSheet.cell(44, i).formula('SUM(' + xl.getExcelCellRef(rowOffset + 1, i) + ':' + xl.getExcelCellRef(rowOffset + 10, i) + ')');
+}
+collapseSheet.cell(44, 1, 44, 10).style({
+    fill: {
+        type: 'pattern',
+        patternType: 'solid',
+        fgColor: '#4273B0'
+    }
+});
+
+
+
+var rowOffset = 44;
+for (var r = 1; r <= 10; r++) {
+    for (var c = 1; c <= 10; c++) {
+        collapseSheet.cell(r + rowOffset, c).number(parseInt(Math.random() * 100));
+    }
+    collapseSheet.row(r + rowOffset).group(1, true);
+}
+for (var i = 1; i <= 10; i++) {
+    collapseSheet.cell(55, i).formula('SUM(' + xl.getExcelCellRef(rowOffset + 1, i) + ':' + xl.getExcelCellRef(rowOffset + 10, i) + ')');
+}
+collapseSheet.cell(55, 1, 55, 10).style({
+    fill: {
+        type: 'pattern',
+        patternType: 'solid',
+        fgColor: '#C2D6EC'
+    }
+});
+
+var rowOffset = 55;
+for (var r = 1; r <= 10; r++) {
+    for (var c = 1; c <= 10; c++) {
+        collapseSheet.cell(r + rowOffset, c).number(parseInt(Math.random() * 100));
+    }
+    collapseSheet.row(r + rowOffset).group(1, true);
+}
+for (var i = 1; i <= 10; i++) {
+    collapseSheet.cell(66, i).formula('SUM(' + xl.getExcelCellRef(rowOffset + 1, i) + ':' + xl.getExcelCellRef(rowOffset + 10, i) + ')');
+}
+collapseSheet.cell(66, 1, 66, 10).style({
+    fill: {
+        type: 'pattern',
+        patternType: 'solid',
+        fgColor: '#4273B0'
+    }
+});
+/*****************************************
+ * START Create collapsable lists
+ *****************************************/
+
+/*****************************************
+ * START Create Frozen lists
+ *****************************************/
+
+var frozenSheet = wb.addWorksheet('Frozen');
+
+for (var i = 2; i <= 21; i++) {
+    frozenSheet.cell(1, i).string('Column' + i);
+}
+frozenSheet.row(1).freeze();
+
+for (var r = 2; r <= 30; r++) {
+    frozenSheet.cell(r, 1).string('Row' + r);
+    for (var c = 2; c <= 22; c++) {
+        frozenSheet.cell(r, c).number(parseInt(Math.random() * 100));
+    }
+}
+frozenSheet.column(1).freeze();
+
+ /*****************************************
+ * END Create Frozen lists
+ *****************************************/
+
+/*****************************************
+ * START Create Split sheet
+ *****************************************/
+
+var splitSheet = wb.addWorksheet('SplitSheet', {
+    'sheetView': {
+        'pane': {
+            'activePane': 'bottomRight',
+            'state': 'split',
+            'xSplit': 2000,
+            'ySplit': 3000 
+        }
+    }
+});
+
+for (var r = 1; r <= 30; r++) {
+    for (var c = 1; c <= 20; c++) {
+        splitSheet.cell(r, c).number(parseInt(Math.random() * 100));
+    }
+}
+
+ /*****************************************
+ * END Create Split
+ *****************************************/
+
+/*****************************************
+ * START Create Selectable Options list
+ *****************************************/
+var optionsSheet = wb.addWorksheet('Selectable Options');
+
+optionsSheet.cell(1, 1).string('Booleans');
+optionsSheet.cell(1, 2).string('Option List');
+optionsSheet.cell(1, 3).string('Numbers 1-10');
+
+optionsSheet.addDataValidation({
+    type: 'list',
+    allowBlank: true,
+    prompt: 'Choose from dropdown',
+    error: 'Invalid choice was chosen',
+    sqref: 'A2:A10',
+    formulas: [
+        'true,false'
+    ]
+});
+
+optionsSheet.addDataValidation({
+    type: 'list',
+    allowBlank: true,
+    prompt: 'Choose from dropdown',
+    promptTitle: 'Choose from dropdown',
+    error: 'Invalid choice was chosen',
+    showInputMessage: true,
+    showDropDown: false,
+    sqref: 'B2:B10',
+    formulas: [
+        'option 1,option 2,option 3'
+    ]
+});
+
+optionsSheet.addDataValidation({
+    errorStyle: 'stop',
+    error: 'Number must be between 1 and 10',
+    type: 'whole',
+    operator: 'between',
+    allowBlank: 1,
+    sqref: 'C2:C10',
+    formulas: [1, 10]
+});
+/*****************************************
+ * END Create Selectable Options list
+ *****************************************/
+
 wb.write('Excel.xlsx', function (err, stats) {
     console.log(err);
     console.log(stats);
