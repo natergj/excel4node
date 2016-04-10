@@ -21,7 +21,7 @@ let _addSheetPr = (promiseObj) => {
             let ele = promiseObj.xml.ele('sheetPr');
 
             // §18.3.1.65 pageSetUpPr (Page Setup Properties)
-            if (o.printOptions.fitToHeight || o.printOptions.fitToWidth) {
+            if (o.printOptions.fitToHeight !== null || o.printOptions.fitToWidth !== null) {
                 ele.ele('pageSetUpPr').att('fitToPage', 1);
             }
 
