@@ -20,11 +20,6 @@ let _addSheetPr = (promiseObj) => {
         ) {
             let ele = promiseObj.xml.ele('sheetPr');
 
-            // §18.3.1.65 pageSetUpPr (Page Setup Properties)
-            if (o.printOptions.fitToHeight !== null || o.printOptions.fitToWidth !== null) {
-                ele.ele('pageSetUpPr').att('fitToPage', 1);
-            }
-
             if (o.autoFilter.ref) {
                 ele.att('enableFormatConditionsCalculation', 1);
                 ele.att('filterMode', 1);
@@ -35,6 +30,11 @@ let _addSheetPr = (promiseObj) => {
                 outlineEle.att('applyStyles', 1);
                 o.outline.summaryBelow === true ? outlineEle.att('summaryBelow', 1) : null;
                 o.outline.summaryRight === true ? outlineEle.att('summaryRight', 1) : null;
+            }
+
+            // §18.3.1.65 pageSetUpPr (Page Setup Properties)
+            if (o.pageSetup.fitToHeight !== null || o.pageSetup.fitToWidth !== null) {
+                ele.ele('pageSetUpPr').att('fitToPage', 1);
             }
         }
 
@@ -466,7 +466,7 @@ let sheetXML = (ws) => {
         .then(_addHeaderFooter)
         .then(_addDrawing)
         .then((promiseObj) => {
-            let xmlString = promiseObj.xml.doc().end({ pretty: true, indent: '  ', newline: '\n' });
+            let xmlString = promiseObj.xml.doc().end();
             resolve(xmlString);
         })
         .catch((e) => {
@@ -512,7 +512,7 @@ let relsXML = (ws) => {
             }
         });
 
-        let xmlString = relXML.doc().end({ pretty: true, indent: '  ', newline: '\n' });
+        let xmlString = relXML.doc().end();
         resolve(xmlString);
     });
 };
