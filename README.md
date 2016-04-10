@@ -143,7 +143,7 @@ wb.write('ExcelFile.xlsx', function (err, stats) {
 });
 ```
 ```javascript
-// sends excel
+// sends Excel file to web client requesting the / route
 var express = require('express');
 var app = express();
 app.get('/', function (req, res) {
