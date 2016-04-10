@@ -1,5 +1,5 @@
 let test = require('tape');
-let xl = require('../source/index');
+let xl = require('../distribution/index');
 
 test('Cell coverage', (t) => {
     t.plan(1);

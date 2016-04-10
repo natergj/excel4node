@@ -1,6 +1,6 @@
 let test = require('tape');
-let xl = require('../source/index');
-let DataValidation = require('../source/lib/worksheet/classes/dataValidation.js');
+let xl = require('../distribution/index');
+let DataValidation = require('../distribution/lib/worksheet/classes/dataValidation.js');
 
 test('DataValidation Tests', (t) => {
     let wb = new xl.WorkBook();

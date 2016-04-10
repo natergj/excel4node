@@ -1,7 +1,7 @@
 var lodash = require('lodash');
 var test = require('tape');
 
-var CfRule = require('../source/lib/worksheet/cf/cf_rule');
+var CfRule = require('../distribution/lib/worksheet/cf/cf_rule');
 
 test('CfRule init', function (t) {
     t.plan(4);
