@@ -125,7 +125,7 @@ let validator = function (key, val, type) {
     switch (type) {
 
     case 'PAPER_SIZE': 
-        let sizes = Object.keys(types.PAPER_SIZE);
+        let sizes = Object.keys(types.paperSize);
         if (sizes.indexOf(val) < 0) {
             throw new TypeError('Invalid value for ' + key + '. Value must be one of ' + sizes.join(', '));
         }
@@ -144,7 +144,7 @@ let validator = function (key, val, type) {
         break;
 
     case 'CELL_COMMENTS':
-        types.cellComments.validate(val);
+        types.cellComment.validate(val);
         break;
 
     case 'PRINT_ERROR': 

@@ -22,7 +22,7 @@ function items() {
 
 
 items.prototype.validate = function (val) {
-    if (this[val.toLowerCase()] === undefined) {
+    if (this[val] === undefined) {
         let opts = [];
         for (let name in this) {
             if (this.hasOwnProperty(name)) {

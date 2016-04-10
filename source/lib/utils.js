@@ -198,16 +198,16 @@ let getAllCellsInNumericRange = (row1, col1, row2, col2) => {
 };
 
 let boolToInt = (bool) => {
-    if (parseInt(bool) === 1) {
-        return 1;
-    }
-    if (parseInt(bool) === 0) {
-        return 0;
-    }
     if (bool === true) {
         return 1;
     }
     if (bool === false) {
+        return 0;
+    }
+    if (parseInt(bool) === 1) {
+        return 1;
+    }
+    if (parseInt(bool) === 0) {
         return 0;
     }
     throw new TypeError('Value sent to boolToInt must be true, false, 1 or 0');
