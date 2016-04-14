@@ -196,6 +196,9 @@ function mergeCells(cellBlock) {
     }
 }
 
+/**
+ * @class cellBlock
+ */
 function cellBlock() {
     this.ws;
     this.cells = [];
@@ -203,6 +206,19 @@ function cellBlock() {
     this.merged = false;
 }
 
+/**
+ * Module repesenting a Cell Accessor
+ * @alias Worksheet.cell
+ * @namespace
+ * @func Worksheet.cell
+ * @desc Access a range of cells in order to manipulate values
+ * @param {Number} row1 Row of top left cell
+ * @param {Number} col1 Column of top left cell
+ * @param {Number} row2 Row of bottom right cell (optional)
+ * @param {Number} col2 Column of bottom right cell (optional)
+ * @param {Boolean} isMerged Merged the cell range into a single cell
+ * @returns {cellBlock}
+ */
 function cellAccessor(row1, col1, row2, col2, isMerged) {
     let theseCells = new cellBlock();
     theseCells.ws = this;
@@ -243,6 +259,12 @@ function cellAccessor(row1, col1, row2, col2, isMerged) {
     return theseCells;
 }
 
+/**
+ * @alias cellBlock.string
+ * @func cellBlock.string
+ * @param {String} val Value of String
+ * @returns {cellBlock} Block of cells with attached methods
+ */
 cellBlock.prototype.string = function (val) {
     if (val instanceof Array) {
         return complexStringSetter.bind(this)(val);
@@ -250,11 +272,55 @@ cellBlock.prototype.string = function (val) {
         return stringSetter.bind(this)(val);
     }
 };
+
+/**
+ * @alias cellBlock.style
+ * @func cellBlock.style
+ * @param {Object} style One of a Style instance or an object with Style parameters
+ * @returns {cellBlock} Block of cells with attached methods
+ */
 cellBlock.prototype.style = styleSetter;
+
+/**
+ * @alias cellBlock.number
+ * @func cellBlock.number
+ * @param {Number} val Value of Number
+ * @returns {cellBlock} Block of cells with attached methods
+ */
 cellBlock.prototype.number = numberSetter;
+
+/**
+ * @alias cellBlock.bool
+ * @func cellBlock.bool
+ * @param {Boolean} val Value of Boolean
+ * @returns {cellBlock} Block of cells with attached methods
+ */
 cellBlock.prototype.bool = booleanSetter;
+
+/**
+ * @alias cellBlock.formula
+ * @func cellBlock.formula
+ * @param {String} val Excel style formula as string
+ * @returns {cellBlock} Block of cells with attached methods
+ */
 cellBlock.prototype.formula = formulaSetter;
+
+/**
+ * @alias cellBlock.date
+ * @func cellBlock.date
+ * @param {Date} val Value of Date
+ * @returns {cellBlock} Block of cells with attached methods
+ */
 cellBlock.prototype.date = dateSetter;
+
+/**
+ * @alias cellBlock.link
+ * @func cellBlock.link
+ * @param {String} url Value of Hyperlink URL
+ * @param {String} displayStr Value of String representation of URL
+ * @param {String} tooltip Value of text to display as hover
+ * @returns {cellBlock} Block of cells with attached methods
+ */
 cellBlock.prototype.link = hyperlinkSetter;
 
 module.exports = cellAccessor;

@@ -2,6 +2,12 @@ const utils = require('../utils.js');
 
 // §18.3.1.4 c (Cell)
 class Cell {
+    /**
+     * Create an Excel Cell
+     * @private
+     * @param {Number} row Row of cell. 
+     * @param {Number} col Column of cell
+     */
     constructor(row, col) {
         this.r = `${utils.getExcelAlpha(col)}${row}`; // 'r' attribute
         this.s = 0; // 's' attribute refering to style index
