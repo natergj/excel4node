@@ -4,7 +4,7 @@ let Column = require('../distribution/lib/column/column.js');
 
 test('Column Tests', (t) => {
 
-    let wb = new xl.WorkBook();
+    let wb = new xl.Workbook();
     let ws = wb.addWorksheet();
 
     t.ok(ws.column(2) instanceof Column, 'Successfully accessed a column object');

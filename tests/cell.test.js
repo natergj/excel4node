@@ -3,7 +3,7 @@ let xl = require('../distribution/index');
 
 test('Cell coverage', (t) => {
     t.plan(1);
-    let wb = new xl.WorkBook();
+    let wb = new xl.Workbook();
     let ws = wb.addWorksheet('test');
     let cellAccessor = ws.cell(1, 1);
     t.ok(cellAccessor, 'Correctly generated cellAccessor object');
@@ -11,7 +11,7 @@ test('Cell coverage', (t) => {
 
 test('Cell returns correct number of cell references', (t) => {
     t.plan(1);
-    let wb = new xl.WorkBook();
+    let wb = new xl.Workbook();
     let ws = wb.addWorksheet('test');
     let cellAccessor = ws.cell(1, 1, 5, 2);
     t.ok(cellAccessor.excelRefs.length === 10, 'cellAccessor returns correct number of cellRefs');
@@ -19,7 +19,7 @@ test('Cell returns correct number of cell references', (t) => {
 
 test('Add String to cell', (t) => {
     t.plan(3);
-    let wb = new xl.WorkBook();
+    let wb = new xl.Workbook();
     let ws = wb.addWorksheet('test');
     let cell = ws.cell(1, 1).string('my test string');
     let thisCell = ws.cells[cell.excelRefs[0]];
@@ -30,7 +30,7 @@ test('Add String to cell', (t) => {
 
 test('Add Number to cell', (t) => {
     t.plan(3);
-    let wb = new xl.WorkBook();
+    let wb = new xl.Workbook();
     let ws = wb.addWorksheet('test');
     let cell = ws.cell(1, 1).number(10);
     let thisCell = ws.cells[cell.excelRefs[0]];
@@ -41,7 +41,7 @@ test('Add Number to cell', (t) => {
 
 test('Add Boolean to cell', (t) => {
     t.plan(3);
-    let wb = new xl.WorkBook();
+    let wb = new xl.Workbook();
     let ws = wb.addWorksheet('test');
     let cell = ws.cell(1, 1).bool(true);
     let thisCell = ws.cells[cell.excelRefs[0]];
@@ -52,7 +52,7 @@ test('Add Boolean to cell', (t) => {
 
 test('Add Formula to cell', (t) => {
     t.plan(4);
-    let wb = new xl.WorkBook();
+    let wb = new xl.Workbook();
     let ws = wb.addWorksheet('test');
     let cell = ws.cell(1, 1).formula('SUM(A1:A10)');
     let thisCell = ws.cells[cell.excelRefs[0]];

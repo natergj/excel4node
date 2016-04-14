@@ -3,7 +3,7 @@ let xl = require('../distribution/index');
 let DataValidation = require('../distribution/lib/worksheet/classes/dataValidation.js');
 
 test('DataValidation Tests', (t) => {
-    let wb = new xl.WorkBook();
+    let wb = new xl.Workbook();
     let ws = wb.addWorksheet('test');
 
     let val1 = ws.addDataValidation({

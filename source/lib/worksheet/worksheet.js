@@ -12,12 +12,12 @@ const optsValidator = require('./optsValidator.js');
 
 
 /**
- * Class repesenting a WorkBook
- * @namespace WorkBook
+ * Class repesenting a Worksheet
+ * @namespace Worksheet
  */
-class WorkSheet {
+class Worksheet {
     /**
-     * Create a WorkSheet.
+     * Create a Worksheet.
      * @param {Object} opts Workbook settings
      */
     constructor(wb, name, opts) {
@@ -110,4 +110,4 @@ class WorkSheet {
 
 }
 
-module.exports = WorkSheet;
+module.exports = Worksheet;

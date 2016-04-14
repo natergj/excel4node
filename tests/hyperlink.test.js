@@ -2,7 +2,7 @@ let test = require('tape');
 let xl = require('../distribution/index');
 
 test('Create Hyperlink', (t) => {
-    let wb = new xl.WorkBook();
+    let wb = new xl.Workbook();
     let ws = wb.addWorksheet('test');
     ws.cell(1, 1).link('http://iamnater.com', 'iAmNater', 'iAmNater.com');
     t.ok(ws.hyperlinkCollection.links[0].location === 'http://iamnater.com', 'Link location set correctly');

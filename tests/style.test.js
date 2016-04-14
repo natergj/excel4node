@@ -5,7 +5,7 @@ let xmlbuilder = require('xmlbuilder');
 
 test('Create New Style', (t) => {
     t.plan(1);
-    let wb = new xl.WorkBook();
+    let wb = new xl.Workbook();
     let style = wb.createStyle();
 
     t.ok(style instanceof Style, 'Correctly generated Style object');
@@ -14,7 +14,7 @@ test('Create New Style', (t) => {
 test('Set Style Properties', (t) => {
     t.plan();
 
-    let wb = new xl.WorkBook();
+    let wb = new xl.Workbook();
     let style = wb.createStyle({
         alignment: { 
             horizontal: 'center',
@@ -144,7 +144,7 @@ test('Set Style Properties', (t) => {
 
 test('Update style on Cell', (t) => {
 
-    let wb = new xl.WorkBook({ logLevel: 5 });
+    let wb = new xl.Workbook({ logLevel: 5 });
     let ws = wb.addWorksheet('Sheet1');
     let style = wb.createStyle({
         font: {

@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const fs = require('fs');
 const utils = require('../utils.js');
-const WorkSheet = require('../worksheet');
+const Worksheet = require('../worksheet');
 const Style = require('../style');
 const Border = require('../style/classes/border.js');
 const Fill = require('../style/classes/fill.js');
@@ -14,7 +14,7 @@ const builder = require('./builder.js');
 const http = require('http');
 
 
-/* Available options for WorkBook
+/* Available options for Workbook
 {
     jszip : {
         compression : 'DEFLATE'
@@ -26,8 +26,8 @@ const http = require('http');
     }
 }
 */
-// Default Options for WorkBook
-let workBookDefaultOpts = {
+// Default Options for Workbook
+let workbookDefaultOpts = {
     jszip: {
         compression: 'DEFLATE'
     },
@@ -41,13 +41,13 @@ let workBookDefaultOpts = {
 };
 
 /**
- * Class repesenting a WorkBook
- * @namespace WorkBook
+ * Class repesenting a Workbook
+ * @namespace Workbook
  */
-class WorkBook {
+class Workbook {
 
     /**
-     * Create a WorkBook.
+     * Create a Workbook.
      * @param {Object} opts Workbook settings
      */
     constructor(opts) {
@@ -57,7 +57,7 @@ class WorkBook {
             logLevel: Number.isNaN(parseInt(opts.logLevel)) ? 0 : parseInt(opts.logLevel)
         });
 
-        this.opts = _.merge({}, workBookDefaultOpts, opts);
+        this.opts = _.merge({}, workbookDefaultOpts, opts);
 
         this.sheets = [];
         this.sharedStrings = [];
@@ -154,7 +154,7 @@ class WorkBook {
     }
 
     addWorksheet(name, opts) {
-        let newLength = this.sheets.push(new WorkSheet(this, name, opts));
+        let newLength = this.sheets.push(new Worksheet(this, name, opts));
         return this.sheets[newLength - 1];
     }
 
@@ -173,4 +173,4 @@ class WorkBook {
     }
 }
 
-module.exports = WorkBook;
+module.exports = Workbook;

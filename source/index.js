@@ -16,7 +16,7 @@ const utils = require('./lib/utils.js');
 const types = require('./lib/types/index.js');
 
 module.exports = {
-    WorkBook: require('./lib/workbook/index.js'),
+    Workbook: require('./lib/workbook/index.js'),
     getExcelRowCol: utils.getExcelRowCol,
     getExcelAlpha: utils.getExcelAlpha,
     getExcelTS: utils.getExcelTS,

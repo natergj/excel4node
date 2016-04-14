@@ -4,8 +4,8 @@ let Font = require('../distribution/lib/style/classes/font.js');
 
 test('Change default workbook options', (t) => {
 
-    let wb = new xl.WorkBook();
-    let wb2 = new xl.WorkBook({
+    let wb = new xl.Workbook();
+    let wb2 = new xl.Workbook({
         jszip: {
             compression: 'DEFLATE'
         },

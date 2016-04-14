@@ -5,7 +5,7 @@ const xl = require('../source/index');
 const DOMParser = require('xmldom').DOMParser;
 
 test('Generate multiple sheets', (t) => {
-    let wb = new xl.WorkBook();
+    let wb = new xl.Workbook();
     let ws = wb.addWorksheet('test');
     let ws2 = wb.addWorksheet('test2');
     let ws3 = wb.addWorksheet('test3');
@@ -22,7 +22,7 @@ test('Generate multiple sheets', (t) => {
 });
 
 test('Set WorkSheet options', (t) => {
-    let wb = new xl.WorkBook();
+    let wb = new xl.Workbook();
     let ws = wb.addWorksheet('test 1', {
         'margins': { // Accepts a Double in Inches
             'bottom': 1.25,
@@ -218,7 +218,7 @@ test('Set WorkSheet options', (t) => {
 });
 
 test('Verify Invalid Worksheet options fail type validation', (t) => {
-    let wb = new xl.WorkBook();
+    let wb = new xl.Workbook();
 
     try {
         let ws = wb.addWorksheet('sheet', {

@@ -4,7 +4,7 @@ let Row = require('../distribution/lib/row/row.js');
 
 test('Row Tests', (t) => {
 
-    let rowWb = new xl.WorkBook({ logLevel: 5 });
+    let rowWb = new xl.Workbook({ logLevel: 5 });
     let rowWS = rowWb.addWorksheet();
 
     t.ok(rowWS.row(2) instanceof Row, 'Successfully accessed a row object');
