@@ -32,6 +32,8 @@ class Picture extends Drawing {
             this.anchor(opts.position.type, opts.position.from, opts.position.to);
         } else if (opts.position.type === 'absoluteAnchor') {
             this.position(opts.position.x, opts.position.y);
+        } else {
+            throw new TypeError('Invalid option for anchor type. anchorType must be one of oneCellAnchor, twoCellAnchor, or absoluteAnchor');
         }
     }
 
