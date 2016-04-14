@@ -1,6 +1,6 @@
 require('source-map-support').install();
 var xl = require('./distribution');
-var wb = new xl.WorkBook({
+var wb = new xl.Workbook({
     defaultFont: {
         name: 'Verdana',
         size: 12
@@ -42,6 +42,10 @@ var currencyStyle = wb.createStyle({
 var invoiceWS = wb.addWorksheet('Invoice', {
     pageSetup: {
         fitToWidth: 1
+    },
+    headerFooter: {
+        oddHeader: 'iAmNater invoice',
+        oddFooter: 'Invoice Page &P'
     }
 });
 
@@ -386,7 +390,6 @@ optionsSheet.addDataValidation({
     promptTitle: 'Choose from dropdown',
     error: 'Invalid choice was chosen',
     showInputMessage: true,
-    showDropDown: false,
     sqref: 'B2:B10',
     formulas: [
         'option 1,option 2,option 3'
@@ -404,6 +407,35 @@ optionsSheet.addDataValidation({
 });
 /*****************************************
  * END Create Selectable Options list
+ *****************************************/
+
+/*****************************************
+ * START final sheet
+ *****************************************/
+
+var funSheet = wb.addWorksheet('fun', {
+    pageSetup: {
+        orientation: 'landscape'
+    },
+    sheetView: {
+        zoomScale: 120
+    }
+});
+
+funSheet.cell(1, 1).string('Release 1.0.0! Finally done.');
+funSheet.addImage({
+    path: './sampleFiles/thumbsUp.jpg',
+    type: 'picture',
+    position: {
+        type: 'absoluteAnchor',
+        x: 0,
+        y: '10mm'
+    }
+});
+
+
+/*****************************************
+ * END final sheet
  *****************************************/
 
 wb.write('Excel.xlsx', function (err, stats) {
