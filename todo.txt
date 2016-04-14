@@ -1,1 +1,2 @@
-finish writing sample.js file
+finish adding jsdoc comments
+run some stress testing
