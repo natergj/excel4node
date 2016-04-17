@@ -2,6 +2,29 @@ const utils = require('../utils.js');
 const _ = require('lodash');
 
 class Row {
+    /**
+     * Element representing an Excel Row
+     * @param {Number} row Row of cell
+     * @param {Worksheet} Worksheet that contains row
+     * @property {Worksheet} ws Worksheet that contains the specified Row
+     * @property {Array.String} cellRefs Array of excel cell references
+     * @property {Boolean} collapsed States whether row is collapsed when grouped
+     * @property {Boolean} customFormat States whether the row has a custom format
+     * @property {Boolean} customHeight States whether the row's height is different than default
+     * @property {Boolean} hidden States whether the row is hidden
+     * @property {Number} ht Height of the row (internal property)
+     * @property {Number} outlineLevel Grouping level of row
+     * @property {Number} r Row index
+     * @property {Number} s Style index
+     * @property {Boolean} thickBot States whether row has a thick bottom border
+     * @property {Boolean} thickTop States whether row has a thick top border
+     * @property {Number} height Height of row
+     * @property {String} spans String representation of excel cell range i.e. A1:A10
+     * @property {Number} firstColumn Index of the first column of the row containg data
+     * @property {String} firstColumnAlpha Alpha representation of the first column of the row containing data
+     * @property {Number} lastColumn Index of the last column of the row cotaining data
+     * @property {String} lastColumnAlpha Alpha representation of the last column of the row containing data
+     */
     constructor(row, ws) {
         this.ws = ws;
         this.cellRefs = [];
@@ -30,6 +53,13 @@ class Row {
         return this.ht;
     }
 
+    /**
+     * @alias Row.setHeight
+     * @desc Sets the height of a row
+     * @func Row.setHeight
+     * @param {Number} val New Height of row
+     * @returns {Row} Excel Row with attached methods
+     */
     setHeight(h) {
         if (typeof h === 'number') {
             this.ht = h;
@@ -80,6 +110,17 @@ class Row {
         }  
     }
 
+    /**
+     * @alias Row.filter
+     * @desc Add autofilter dropdowns to the items of the row
+     * @func Row.filter
+     * @param {Object} opts Object containing options for the fitler. 
+     * @param {Number} opts.lastRow Last row in which the filter show effect filtered results (optional)
+     * @param {Number} opts.startCol First column that a filter dropdown should be added (optional)
+     * @param {Number} opts.lastCol Last column that a filter dropdown should be added (optional)
+     * @param {Array.DefinedName} opts.filters Array of filter paramaters
+     * @returns {Row} Excel Row with attached methods
+     */
     filter(opts) {
 
         let theseOpts = opts instanceof Object ? opts : {};
@@ -101,11 +142,25 @@ class Row {
         this.ws.opts.autoFilter.filters = theseFilters;
     }
 
+    /**
+     * @alias Row.hide
+     * @desc Hides the row
+     * @func Row.hide
+     * @returns {Row} Excel Row with attached methods
+     */
     hide() {
         this.hidden = true;
         return this;
     }
 
+    /**
+     * @alias Row.group
+     * @desc Hides the row
+     * @func Row.group
+     * @param {Number} level Group level of row
+     * @param {Boolean} collapsed States whether group should be collapsed or expanded by default
+     * @returns {Row} Excel Row with attached methods
+     */
     group(level, collapsed) {
         if (parseInt(level) === level) {
             this.outlineLevel = level;
@@ -127,7 +182,13 @@ class Row {
         return this;
     }
 
-
+    /**
+     * @alias Row.freeze
+     * @desc Creates Worksheet panes and freezes the top pane
+     * @func Row.freeze
+     * @param {Number} jumpTo Row that the bottom pane should be scrolled to by default
+     * @returns {Row} Excel Row with attached methods
+     */
     freeze(jumpTo) {
         let o = this.ws.opts.sheetView.pane;
         jumpTo = typeof jumpTo === 'number' && jumpTo > this.r ? jumpTo : this.r + 1;

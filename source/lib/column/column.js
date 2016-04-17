@@ -4,7 +4,7 @@ const _ = require('lodash');
 
 class Column {
     /**
-     * Create an Excel Column
+     * Element representing an Excel Column
      * @param {Number} col Column of cell
      * @param {Worksheet} Worksheet that contains column
      * @property {Worksheet} ws Worksheet that contains the specified Column

@@ -28,6 +28,30 @@ class BorderOrdinal {
 }
 
 class Border {
+    /** 
+     * @class Border
+     * @desc Border object for Style
+     * @param {Object} opts Options for Border object
+     * @param {Object} opts.left Options for left side of Border
+     * @param {String} opts.left.color HEX represenation of color
+     * @param {String} opts.left.style Border style
+     * @param {Object} opts.right Options for right side of Border
+     * @param {String} opts.right.color HEX represenation of color
+     * @param {String} opts.right.style Border style
+     * @param {Object} opts.top Options for top side of Border
+     * @param {String} opts.top.color HEX represenation of color
+     * @param {String} opts.top.style Border style
+     * @param {Object} opts.bottom Options for bottom side of Border
+     * @param {String} opts.bottom.color HEX represenation of color
+     * @param {String} opts.bottom.style Border style
+     * @param {Object} opts.diagonal Options for diagonal side of Border
+     * @param {String} opts.diagonal.color HEX represenation of color
+     * @param {String} opts.diagonal.style Border style
+     * @param {Boolean} opts.outline States whether borders should be applied only to the outside borders of a cell range
+     * @param {Boolean} opts.diagonalDown States whether diagonal border should go from top left to bottom right
+     * @param {Boolean} opts.diagonalUp States whether diagonal border should go from bottom left to top right
+     * @returns {Border}
+     */
     constructor(opts) {
         opts = opts ? opts : {};
         this.left;
@@ -54,6 +78,11 @@ class Border {
         });
     }
 
+    /** 
+     * @func Border.toObject
+     * @desc Converts the Border instance to a javascript object
+     * @returns {Object}
+     */
     toObject() {
         let obj = {};
         obj.left;
@@ -84,6 +113,12 @@ class Border {
         return obj;
     }
 
+    /**
+     * @alias Border.addToXMLele
+     * @desc When generating Workbook output, attaches style to the styles xml file
+     * @func Border.addToXMLele
+     * @param {xmlbuilder.Element} ele Element object of the xmlbuilder module
+     */
     addToXMLele(borderXML) {
         let bXML = borderXML.ele('border');
         if (this.outline === true) {

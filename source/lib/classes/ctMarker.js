@@ -1,6 +1,18 @@
 let EMU = require('./emu.js');
 
 class CTMarker {
+    /**
+     * Element representing an Excel position marker
+     * @param {Number} colId Column Number
+     * @param {String} colOffset Offset stating how far right to shift the start edge
+     * @param {Number} rowId Row Number
+     * @param {String} rowOffset Offset stating how far down to shift the start edge
+     * @property {Number} col Column number
+     * @property {EMU} colOff EMUs of right shift
+     * @property {Number} row Row number
+     * @property {EMU} rowOff EMUs of top shift
+     * @returns {CTMarker} Excel CTMarker 
+     */
     constructor(colId, colOffset, rowId, rowOffset) {
         this._col = colId;
         this._colOff = new EMU(colOffset);

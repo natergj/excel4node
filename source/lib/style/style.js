@@ -152,6 +152,28 @@ let _getNumFmt = (wb, val) => {
 */
 class Style {
     constructor(wb, opts) {
+        /**
+         * Excel Style object
+         * @class Style
+         * @desc Style object for formatting Excel Cells
+         * @param {Workbook} wb Excel Workbook object
+         * @param {Object} opts Options for style
+         * @param {Object} opts.alignment Options for creating an Alignment instance
+         * @param {Object} opts.font Options for creating a Font instance
+         * @param {Object} opts.border Options for creating a Border instance
+         * @param {Object} opts.fill Options for creating a Fill instance
+         * @param {String} opts.numberFormat
+         * @property {Alignment} alignment Alignment instance associated with Style
+         * @property {Border} border Border instance associated with Style
+         * @property {Number} borderId ID of Border instance in the Workbook
+         * @property {Fill} fill Fill instance associated with Style
+         * @property {Number} fillId ID of Fill instance in the Workbook
+         * @property {Font} font Font instance associated with Style
+         * @property {Number} fontId ID of Font instance in the Workbook
+         * @property {String} numberFormat String represenation of the way a number should be formatted
+         * @property {Number} xf XF id of the Style in the Workbook
+         * @returns {Style} 
+         */
         opts = opts ? opts : {};
 
         if (opts.alignment !== undefined) {
@@ -225,6 +247,12 @@ class Style {
         return thisXF;
     }
 
+
+    /** 
+     * @func Style.toObject
+     * @desc Converts the Style instance to a javascript object
+     * @returns {Object}
+     */
     toObject() {
         let obj = {};
 
@@ -261,6 +289,12 @@ class Style {
         return obj;   
     }
 
+    /**
+     * @alias Style.addToXMLele
+     * @desc When generating Workbook output, attaches style to the styles xml file
+     * @func Style.addToXMLele
+     * @param {xmlbuilder.Element} ele Element object of the xmlbuilder module
+     */
     addXFtoXMLele(ele) {
         let thisEle = ele.ele('xf');
         let thisXF = this.xf;
@@ -273,6 +307,12 @@ class Style {
         });        
     }
 
+    /**
+     * @alias Style.addDXFtoXMLele
+     * @desc When generating Workbook output, attaches style to the styles xml file as a dxf for use with conditional formatting rules
+     * @func Style.addDXFtoXMLele
+     * @param {xmlbuilder.Element} ele Element object of the xmlbuilder module
+     */
     addDXFtoXMLele(ele) {
         let thisEle = ele.ele('dxf');
 

@@ -40,15 +40,21 @@ let workbookDefaultOpts = {
     dateFormat: 'm/d/yy'
 };
 
-/**
- * Class repesenting a Workbook
- * @namespace Workbook
- */
+
 class Workbook {
 
     /**
-     * Create a Workbook.
+     * @class Workbook
      * @param {Object} opts Workbook settings
+     * @param {Object} opts.jszip
+     * @param {String} opts.jszip.compression JSZip compression type. defaults to 'DEFLATE'
+     * @param {Object} opts.defaultFont
+     * @param {String} opts.defaultFont.color HEX value of default font color. defaults to #000000
+     * @param {String} opts.defaultFont.name Font name. defaults to Calibri
+     * @param {Number} opts.defaultFont.size Font size. defaults to 12
+     * @param {String} opts.defaultFont.family Font family. defaults to roman
+     * @param {String} opts.dataFormat Specifies the format for dates in the Workbook. defaults to 'm/d/yy'
+     * @returns {Workbook}
      */
     constructor(opts) {
         opts = opts ? opts : {};
@@ -153,11 +159,22 @@ class Workbook {
         });
     }
 
+    /**
+     * Add a worksheet to the Workbook 
+     * @param {String} name Name of the Worksheet
+     * @param {Object} opts Options for Worksheet. See Worksheet class definition
+     * @returns {Worksheet}
+     */
     addWorksheet(name, opts) {
         let newLength = this.sheets.push(new Worksheet(this, name, opts));
         return this.sheets[newLength - 1];
     }
 
+    /** 
+     * Add a Style to the Workbook
+     * @param {Object} opts Options for the style. See Style class definition
+     * @returns {Style}
+     */
     createStyle(opts) {
         let thisStyle = new Style(this, opts);
         let count = this.styles.push(thisStyle);
@@ -165,6 +182,11 @@ class Workbook {
         return this.styles[count - 1];
     }
 
+    /**
+     * Gets the index of a string from the shared string array if exists and adds the string if it does not and returns the new index
+     * @param {String} val Text of string
+     * @returns {Number} index of the string in the shared strings array
+     */
     getStringIndex(val) {
         if (this.sharedStrings.indexOf(val) < 0) {
             this.sharedStrings.push(val);

@@ -7,6 +7,29 @@ const EMU = require('../classes/emu.js');
 const xmlbuilder = require('xmlbuilder');
 
 class Picture extends Drawing {
+
+    /**
+     * Element representing an Excel Picture subclass of Drawing
+     * @property {String} kind Kind of picture (currently only image is supported)
+     * @property {String} contentType Mime type of image
+     * @property {String} type ooxml schema
+     * @property {String} imagePath Filesystem path to image
+     * @property {String} name Name of image
+     * @property {String} description Description of image
+     * @property {String} title Title of image
+     * @property {String} id ID of image
+     * @property {String} noGrp pickLocks property
+     * @property {String} noSelect pickLocks property
+     * @property {String} noRot pickLocks property
+     * @property {String} noChangeAspect pickLocks property
+     * @property {String} noMove pickLocks property
+     * @property {String} noResize pickLocks property
+     * @property {String} noEditPoints pickLocks property
+     * @property {String} noAdjustHandles pickLocks property
+     * @property {String} noChangeArrowheads pickLocks property
+     * @property {String} noChangeShapeType pickLocks property
+     * @returns {Picture} Excel Picture  pickLocks property
+     */
     constructor(opts) {
         super();
         this.kind = 'image';
@@ -85,6 +108,12 @@ class Picture extends Drawing {
         return emu.value;
     }
 
+    /**
+     * @alias Picture.addToXMLele
+     * @desc When generating Workbook output, attaches pictures to the drawings xml file
+     * @func Picture.addToXMLele
+     * @param {xmlbuilder.Element} ele Element object of the xmlbuilder module
+     */
     addToXMLele(ele) {
 
         let anchorEle = ele.ele('xdr:' + this.anchorType);

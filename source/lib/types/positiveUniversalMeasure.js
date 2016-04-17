@@ -1,7 +1,6 @@
 //§22.9.2.12 ST_PositiveUniversalMeasure (Positive Universal Measurement)
 
 function measure() {
-    
 }
 
 measure.prototype.validate = function (val) {

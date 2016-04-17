@@ -4,6 +4,20 @@ const _ = require('lodash');
 const xmlbuilder = require('xmlbuilder');
 
 class Alignment { // §18.8.1 alignment (Alignment)
+    /**
+     * @class Alignment
+     * @param {Object} opts Properties of Alignment object
+     * @param {String} opts.horizontal Horizontal Alignment property of text. 
+     * @param {String} opts.vertical Vertical Alignment property of text. 
+     * @param {String} opts.readingOrder Reading order for language of text.
+     * @param {Number} opts.indent How much text should be indented. Setting indent to 1 will indent text 3 spaces
+     * @param {Boolean} opts.justifyLastLine Specifies whether to justify last line of text
+     * @param {Number} opts.relativeIndent Used in conditional formatting to state how much more text should be indented if rule passes
+     * @param {Boolean} opts.shrinkToFit Indicates if text should be shrunk to fit into cell
+     * @param {Number} opts.textRotation Number of degrees to rotate text counterclockwise
+     * @param {Boolean} opts.wrapText States whether text with newline characters should wrap
+     * @returns {Alignment}
+     */
     constructor(opts) {
 
         if (opts.horizontal !== undefined) {
@@ -67,6 +81,11 @@ class Alignment { // §18.8.1 alignment (Alignment)
         }
     }
 
+    /** 
+     * @func Alignment.toObject
+     * @desc Converts the Alignment instance to a javascript object
+     * @returns {Object}
+     */
     toObject() {
         let obj = {};
 
@@ -83,6 +102,12 @@ class Alignment { // §18.8.1 alignment (Alignment)
         return obj;
     }    
 
+    /**
+     * @alias Alignment.addToXMLele
+     * @desc When generating Workbook output, attaches style to the styles xml file
+     * @func Alignment.addToXMLele
+     * @param {xmlbuilder.Element} ele Element object of the xmlbuilder module
+     */
     addToXMLele(ele) {
         let thisEle = ele.ele('alignment');
         this.horizontal !== undefined ? thisEle.att('horizontal', this.horizontal) : null;

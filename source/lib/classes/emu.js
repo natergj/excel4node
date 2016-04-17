@@ -1,4 +1,12 @@
 class EMU {
+    
+    /** 
+     * The EMU was created in order to be able to evenly divide in both English and Metric units
+     * @class EMU
+     * @param {String} Number of EMUs or string representation of length in mm, cm or in. i.e. '10.5mm'
+     * @property {Number} value Number of EMUs
+     * @returns {EMU} Number of EMUs 
+     */
     constructor(val) {
         this._value;
         this.value = val;
@@ -38,14 +46,32 @@ class EMU {
         }        
     }
 
+    /**
+     * @alias EMU.toInt
+     * @desc Returns the number of EMUs as integer
+     * @func EMU.toInt
+     * @returns {Number} Number of EMUs
+     */
     toInt() {
         return this._value;
     }
 
+    /**
+     * @alias EMU.toInch
+     * @desc Returns the number of Inches for the EMUs
+     * @func EMU.toInch
+     * @returns {Number} Number of Inches for the EMUs
+     */
     toInch() {
         return this._value / 914400;
     }
 
+    /**
+     * @alias EMU.toCM
+     * @desc Returns the number of Centimeters for the EMUs
+     * @func EMU.toCM
+     * @returns {Number} Number of Centimeters for the EMUs
+     */
     toCM() {
         return this._value / 360000;
     }

@@ -4,6 +4,27 @@ const xmlbuilder = require('xmlbuilder');
 const types = require('../../types/index.js');
 
 class Font {
+    /**
+     * @class Font
+     * @desc Instance of Font with properties
+     * @param {Object} opts Options for Font
+     * @param {String} opts.color HEX color of font
+     * @param {String} opts.name Name of Font. i.e. Calibri
+     * @param {String} opts.scheme Font Scheme. defaults to major
+     * @param {Number} opts.size Pt size of Font
+     * @param {String} opts.family Font Family. defaults to roman
+     * @param {String} opts.vertAlign Specifies font as subscript or superscript
+     * @param {Number} opts.charset Character set of font as defined in §18.4.1 charset (Character Set) or standard
+     * @param {Boolean} opts.condense Macintosh compatibility settings to squeeze text together when rendering
+     * @param {Boolean} opts.extend Stretches out the text when rendering
+     * @param {Boolean} opts.bold States whether font should be bold
+     * @param {Boolean} opts.italics States whether font should be in italics
+     * @param {Boolean} opts.outline States whether font should be outlined
+     * @param {Boolean} opts.shadow States whether font should have a shadow
+     * @param {Boolean} opts.strike States whether font should have a strikethrough
+     * @param {Boolean} opts.underline States whether font should be underlined
+     * @retuns {Font}
+     */
     constructor(opts) {
         opts = opts ? opts : {};
 
@@ -26,6 +47,11 @@ class Font {
         typeof opts.underline === 'boolean' ? this.underline = opts.underline : null;
     }
 
+    /** 
+     * @func Font.toObject
+     * @desc Converts the Font instance to a javascript object
+     * @returns {Object}
+     */
     toObject() {
         let obj = {};
 
@@ -49,6 +75,12 @@ class Font {
         return obj;
     }
 
+    /**
+     * @alias Font.addToXMLele
+     * @desc When generating Workbook output, attaches style to the styles xml file
+     * @func Font.addToXMLele
+     * @param {xmlbuilder.Element} ele Element object of the xmlbuilder module
+     */
     addToXMLele(fontXML) {
         let fEle = fontXML.ele('font');
         fEle.ele('sz').att('val', this.size !== undefined ? this.size : 12);

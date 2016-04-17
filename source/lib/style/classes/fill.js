@@ -5,11 +5,24 @@ const xmlbuilder = require('xmlbuilder');
 const CTColor = require('./ctColor.js');
 
 class Stop { //§18.8.38
+    /** 
+     * @class Stop
+     * @desc Stops for Gradient fills
+     * @param {Object} opts Options for Stop
+     * @param {String} opts.color Color of Stop
+     * @param {Number} opts.position Order of Stop with first stop being 0
+     * @returns {Stop}
+     */
     constructor(opts, position) {
         this.color = new CTColor(opts.color);
         this.position = position;
     }
 
+    /** 
+     * @func Stop.toObject
+     * @desc Converts the Stop instance to a javascript object
+     * @returns {Object}
+     */
     toObject() {
         let obj = {};
         this.color !== undefined ? obj.color = this.color.toObject() : null;
@@ -20,6 +33,19 @@ class Stop { //§18.8.38
 
 class Fill { //§18.8.20 fill (Fill)
 
+    /** 
+     * @class Fill
+     * @desc Excel Fill 
+     * @param {Object} opts
+     * @param {String} opts.type Type of Excel fill (gradient or pattern)
+     * @param {Number} opts.bottom If Gradient fill, the position of the bottom edge of the inner rectange as a percentage in decimal form. (must be between 0 and 1)
+     * @param {Number} opts.top If Gradient fill, the position of the top edge of the inner rectange as a percentage in decimal form. (must be between 0 and 1)
+     * @param {Number} opts.left If Gradient fill, the position of the left edge of the inner rectange as a percentage in decimal form. (must be between 0 and 1)
+     * @param {Number} opts.right If Gradient fill, the position of the right edge of the inner rectange as a percentage in decimal form. (must be between 0 and 1)
+     * @param {Number} opts.degree Angle of the Gradient
+     * @param {Array.Stop} opts.stops Array of position stops for gradient
+     * @returns {Fill}
+     */
     constructor(opts) {
 
         if (['gradient', 'pattern', 'none'].indexOf(opts.type) >= 0) {
@@ -103,6 +129,11 @@ class Fill { //§18.8.20 fill (Fill)
         }
     }
 
+    /** 
+     * @func Fill.toObject
+     * @desc Converts the Fill instance to a javascript object
+     * @returns {Object}
+     */
     toObject() {
         let obj = {};
 
@@ -126,6 +157,12 @@ class Fill { //§18.8.20 fill (Fill)
         return obj;
     }
 
+    /**
+     * @alias Fill.addToXMLele
+     * @desc When generating Workbook output, attaches style to the styles xml file
+     * @func Fill.addToXMLele
+     * @param {xmlbuilder.Element} ele Element object of the xmlbuilder module
+     */
     addToXMLele(fXML) {
         let pFill = fXML.ele('patternFill').att('patternType', this.patternType);
 
