@@ -19,15 +19,15 @@ found in ECMA-376 2nd edition Part 1 download at [http://www.ecma-international.
 // Require library
 var xl = require('excel4node');
 
-// Create a new instance of a WorkBook class
-var wb = new xl.WorkBook();
+// Create a new instance of a Workbook class
+var wb = new xl.Workbook();
 
 // Add Workseets to the workbook
 var ws = wb.addWorksheet('Sheet 1');
 var ws2 = wb.addWorksheet('Sheet 2');
 
 // Create a reusable style
-var style = wb.Style({
+var style = wb.createStyle({
 	font: {
 		color: '#FF0800',
 		size: 12
@@ -131,7 +131,7 @@ The write() method can accept a single filename, a filename with callback functi
 
 ```javascript
 var xl = require('excel4node');
-var wb = new xl.WorkBook();
+var wb = new xl.Workbook();
 wb.write('ExcelFile.xlsx'); // Writes the file ExcelFile.xlsx to the process.cwd();
 ```
 ```javascript
@@ -163,7 +163,7 @@ WorkSheet contructor is called via WorkBook class and accepts a name and configu
 
 ```javascript
 var xl = require('excel4node');
-var wb = new xl.WorkBook();
+var wb = new xl.Workbook();
 
 var options = {
 	margins: {
@@ -336,7 +336,7 @@ Formatting rules apply at the worksheet level.
 The following example will highlight all cells between A1 and A10 that contain the string "ok" with bold, green text:   
 
 ```javascript
-var wb = new xl.WorkBook();
+var wb = new xl.Workbook();
 var ws = wb.addWorksheet('Sheet 1');
 var myStyle = wb.createStyle({
 	font: {
@@ -462,7 +462,7 @@ var complexString = [
     ' now are blue'
 ];
 ws.cell(4, 1).string(complexString);
-ws.cell(5, 1).string('another simple string).style({ font: {name: 'Helvetica'} });
+ws.cell(5, 1).string('another simple string').style({ font: {name: 'Helvetica'} });
 
 ```
 
@@ -538,7 +538,7 @@ Style Options Object:
 });
 */
 
-var wb = new xl.WorkBook();
+var wb = new xl.Workbook();
 var ws = wb.addWorksheet('Sheet 1');
 var myStyle = wb.createStyle({
 	font: {
