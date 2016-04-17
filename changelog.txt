@@ -1,3 +1,7 @@
+1.0.1
+        Removed a missed remnant of old code that wasn't removed during the merge
+        Excluded development tests folder from npm published code
+        
 1.0.0 
         Complete rewrite of library in ES2015
         This is a breaking change for API.  Library is much more javascripty
