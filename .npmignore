@@ -1,2 +1,6 @@
 source
 docs
+references
+npm-debug.log
+output
+tests
