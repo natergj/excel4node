@@ -1,2 +1,0 @@
-finish adding jsdoc comments
-run some stress testing
