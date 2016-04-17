@@ -2,7 +2,7 @@
   "name": "excel4node",
   "version": "1.0.0",
   "description": "Library to create Formatted Excel Files.",
-  "engines" : {
+  "engines": {
     "node": ">4.0.0"
   },
   "keywords": [
@@ -36,18 +36,18 @@
   "readmeFilename": "README.md",
   "scripts": {
     "test": "NODE_ENV=test ./node_modules/tape/bin/tape -r babel-register ./tests/*.test.js",
-    "build": "babel source --presets babel-preset-es2015 -s --out-dir distribution",
-    "watch": "babel source -w --presets babel-preset-es2015 -s --out-dir distribution",
+    "build": "./node_modules/babel-cli/bin/babel.js source --presets babel-preset-es2015 -s --out-dir distribution",
+    "watch": "./node_modules/babel-cli/bin/babel.js source -w --presets babel-preset-es2015 -s --out-dir distribution",
     "document": "jsdoc ./source -r -d docs"
   },
   "dependencies": {
     "colors": "^1.1.2",
-    "image-size": "0.4.0",
-    "jszip": "2.5.0",
-    "lodash": "4.3.0",
+    "image-size": "0.5.0",
+    "jszip": "3.0.0",
+    "lodash": "4.11.1",
     "mime": "^1.3.4",
     "sloth-logger": "^1.0.2",
-    "xmlbuilder": "4.2.1"
+    "xmlbuilder": "8.2.2"
   },
   "devDependencies": {
     "babel-cli": "^6.5.1",
