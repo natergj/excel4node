@@ -176,10 +176,22 @@ class Workbook {
      * @returns {Style}
      */
     createStyle(opts) {
-        let thisStyle = new Style(this, opts);
-        let count = this.styles.push(thisStyle);
-        this.styles[count - 1].ids.cellXfs = count - 1;
-        return this.styles[count - 1];
+        let thisStyle;
+        let checkCount = 0;
+        while (thisStyle === undefined && checkCount < this.styles.length) {
+            if (_.isEqual(this.styles[checkCount].toObject(), opts)) {
+                thisStyle = this.styles[checkCount];
+            }
+            checkCount++;
+        }
+        if (thisStyle === undefined) {
+            thisStyle = new Style(this, opts);
+            let count = this.styles.push(thisStyle);
+            this.styles[count - 1].ids.cellXfs = count - 1;
+            return this.styles[count - 1];
+        } else {
+            return thisStyle;
+        }
     }
 
     /**
