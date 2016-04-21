@@ -164,7 +164,11 @@ function styleSetter(val) {
         }
 
         if (c.s === 0) {
-            thisCellStyle = this.ws.wb.createStyle(thisCellStyle);
+            if (thisStyle.border && thisStyle.border.outline) {
+                thisCellStyle = this.ws.wb.createStyle(thisCellStyle);
+            } else {
+                thisCellStyle = thisStyle;
+            }
             c.style(thisCellStyle.ids.cellXfs);
         } else {
             let curStyle = this.ws.wb.styles[c.s];
