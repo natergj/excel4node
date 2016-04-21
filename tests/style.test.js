@@ -173,3 +173,66 @@ test('Update style on Cell', (t) => {
 
     t.end();
 });
+
+test('Validate borders on cellBlocks', (t) => {
+    let wb = new xl.Workbook();
+    let ws = wb.addWorksheet('Sheet1');
+    let style = wb.createStyle({
+        border: {
+            left: {
+                style: 'thin',
+                color: '#444444'
+            },
+            right: {
+                style: 'thin',
+                color: '#444444'
+            },
+            top: {
+                style: 'thin',
+                color: '#444444'
+            },
+            bottom: {
+                style: 'thin',
+                color: '#444444'
+            }
+        }
+    });
+    let style2 = wb.createStyle({
+        border: {
+            left: {
+                style: 'thin',
+                color: '#444444'
+            },
+            right: {
+                style: 'thin',
+                color: '#444444'
+            },
+            top: {
+                style: 'thin',
+                color: '#444444'
+            },
+            bottom: {
+                style: 'thin',
+                color: '#444444'
+            },
+            outline: true
+        }
+    });
+
+    ws.cell(2, 2, 5, 3).style(style);
+    ws.cell(2, 5, 5, 6).style(style2);
+
+    t.ok(wb.styles[ws.cell(2,2).cells[0].s].border.left !== undefined, 'Left side of top left cell should have a border if outline is set to false');
+    t.ok(wb.styles[ws.cell(2,2).cells[0].s].border.right !== undefined, 'Right side of top left cell should have a border if outline is set to false');
+    t.ok(wb.styles[ws.cell(2,2).cells[0].s].border.top !== undefined, 'Top side of top left cell should have a border if outline is set to false');
+    t.ok(wb.styles[ws.cell(2,2).cells[0].s].border.bottom !== undefined, 'Bottom side of top left cell should have a border if outline is set to false');
+
+    t.ok(wb.styles[ws.cell(2,5).cells[0].s].border.left !== undefined, 'Left side of top left cell should have a border if outline is set to true');
+    t.ok(wb.styles[ws.cell(2,5).cells[0].s].border.top !== undefined, 'Top side of top left cell should have a border if outline is set to true');
+    t.ok(wb.styles[ws.cell(2,5).cells[0].s].border.right === undefined, 'Right side of top left cell should NOT have a border if outline is set to true');
+    t.ok(wb.styles[ws.cell(2,5).cells[0].s].border.bottom === undefined, 'Bottom side of top left cell should NOT have a border if outline is set to true');
+
+    t.end(); 
+});
+
+
