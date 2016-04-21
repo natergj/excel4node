@@ -1,3 +1,7 @@
+1.0.3
+        Fixed issue where border.outline property was not applying border only to cells on out the outside of the cell block
+        Fixed issue where an excessive number of style xfs may have been added to styles.xml file
+        
 1.0.2
         Fixed some inaccuracies in the README.md file
 1.0.1
