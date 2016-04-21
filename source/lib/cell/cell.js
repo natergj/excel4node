@@ -14,6 +14,8 @@ class Cell {
         this.t = null; // 't' attribute stating Cell data type - §18.18.11 ST_CellType (Cell Type)
         this.f = null; // 'f' child element used for formulas
         this.v = null; // 'v' child element for values
+        this.row = row; // used internally throughout code. Does not go into XML
+        this.col = col; // used internally throughout code. Does not go into XML
     }
 
     string(index) {

@@ -127,7 +127,6 @@ function dateSetter(val) {
 }
 
 function styleSetter(val) {
-    let styleXFid;
     let thisStyle;
     if (val instanceof Style) {
         thisStyle = val;
@@ -137,17 +136,43 @@ function styleSetter(val) {
         throw new TypeError(util.format('Parameter sent to Style function must be an instance of a Style or a style configuration object'));
     }
 
-    this.cells.forEach((c, i) => {
+    let borderEdges = {};
+    if (thisStyle.border && thisStyle.border.outline) {
+        borderEdges.left = this.firstCol;
+        borderEdges.right = this.lastCol;
+        borderEdges.top = this.firstRow;
+        borderEdges.bottom = this.lastRow;
+    }
+
+    this.cells.forEach((c) => {
+        let thisCellStyle = thisStyle.toObject();
+        if (thisStyle.border && thisStyle.border.outline) {
+            let thisCellsBorder = {};
+            if (c.row === borderEdges.top && thisCellStyle.border.top) {
+                thisCellsBorder.top = thisCellStyle.border.top;
+            }
+            if (c.row === borderEdges.bottom && thisCellStyle.border.bottom) {
+                thisCellsBorder.bottom = thisCellStyle.border.bottom;
+            }
+            if (c.col === borderEdges.left && thisCellStyle.border.left) {
+                thisCellsBorder.left = thisCellStyle.border.left;
+            }
+            if (c.col === borderEdges.right && thisCellStyle.border.right) {
+                thisCellsBorder.right = thisCellStyle.border.right;
+            }
+            thisCellStyle.border = thisCellsBorder;
+        }
+
         if (c.s === 0) {
-            c.style(thisStyle.ids.cellXfs);
+            thisCellStyle = this.ws.wb.createStyle(thisCellStyle);
+            c.style(thisCellStyle.ids.cellXfs);
         } else {
             let curStyle = this.ws.wb.styles[c.s];
-            let newStyleOpts = _.merge(curStyle.toObject(), thisStyle.toObject());
+            let newStyleOpts = _.merge(curStyle.toObject(), thisCellStyle);
             let mergedStyle = this.ws.wb.createStyle(newStyleOpts);
             c.style(mergedStyle.ids.cellXfs);
         }
     });
-
     return this;
 }
 
@@ -199,11 +224,73 @@ function mergeCells(cellBlock) {
 /**
  * @class cellBlock
  */
-function cellBlock() {
-    this.ws;
-    this.cells = [];
-    this.excelRefs = [];
-    this.merged = false;
+class cellBlock {
+
+    constructor() {
+        this.ws;
+        this.cells = [];
+        this.excelRefs = [];
+        this.merged = false;
+    }
+
+    get matrix() {
+        let matrix = [];
+        let tmpObj = {};
+        this.cells.forEach((c) => {
+            if (!tmpObj[c.row]) {
+                tmpObj[c.row] = [];
+            }
+            tmpObj[c.row].push(c);
+        });
+        let rows = Object.keys(tmpObj);
+        rows.forEach((r) => {
+            tmpObj[r].sort((a, b) => {
+                return a.col - b.col;
+            });
+            matrix.push(tmpObj[r]);
+        });
+        return matrix;
+    }
+
+    get firstRow() {
+        let firstRow;
+        this.cells.forEach((c) => {
+            if (c.row < firstRow || firstRow === undefined) {
+                firstRow = c.row;
+            }
+        });
+        return firstRow;
+    }
+
+    get lastRow() {
+        let lastRow;
+        this.cells.forEach((c) => {
+            if (c.row > lastRow || lastRow === undefined) {
+                lastRow = c.row;
+            }
+        });
+        return lastRow;
+    }
+
+    get firstCol() {
+        let firstCol;
+        this.cells.forEach((c) => {
+            if (c.col < firstCol || firstCol === undefined) {
+                firstCol = c.col;
+            }
+        });
+        return firstCol;
+    }
+
+    get lastCol() {
+        let lastCol;
+        this.cells.forEach((c) => {
+            if (c.col > lastCol || lastCol === undefined) {
+                lastCol = c.col;
+            }
+        });
+        return lastCol;
+    }
 }
 
 /**
