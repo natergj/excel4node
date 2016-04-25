@@ -107,7 +107,8 @@ var wb = new xl.WorkBook({
         size: 12,
         name: 'Calibri',
         color: 'FFFFFFFF'
-    }
+    },
+    dateFormat: 'm/d/yy hh:mm:ss'
 });
 ```
 
@@ -556,6 +557,8 @@ ws.cell(2, 1).string('row 2 string');
 ws.cell(3, 1).string('row 3 string');
 ws.cell(2, 1, 3, 1).style(myStyle);
 ws.cell(3, 1).style({ font: { underline: false } });
+ws.cell(4, 1).date(new Date()).style({ numberFormat: 'yyyy-mm-dd' });
+// Since dates are stored as numbers in Excel, use the numberFormat option of the styles to set the date format as well.
 ```
 
 ## Images
