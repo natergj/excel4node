@@ -20,11 +20,11 @@ function generateWorkbook() {
             vertical: 'top'
         }
     });
-    var largeText = wb.createStyle({ 
-        font: { 
-            name: 'Cambria', 
-            size: 20 
-        } 
+    var largeText = wb.createStyle({
+        font: {
+            name: 'Cambria',
+            size: 20
+        }
     });
     var medText = wb.createStyle({
         font: {
@@ -350,7 +350,7 @@ function generateWorkbook() {
                 'activePane': 'bottomRight',
                 'state': 'split',
                 'xSplit': 2000,
-                'ySplit': 3000 
+                'ySplit': 3000
             }
         }
     });
@@ -453,6 +453,6 @@ wb.write('Excel.xlsx', function (err, stats) {
 var http = require('http');
 http.createServer(function (req, res) {
     wb.write('MyExcel.xlsx', res);
-}).listen(3000, function() {
+}).listen(3000, function () {
     console.log('Go to http://localhost:3000 to download a copy of this Workbook');
 });

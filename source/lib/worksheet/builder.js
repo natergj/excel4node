@@ -140,10 +140,15 @@ let _addSheetData = (promiseObj) => {
 
         let ele = promiseObj.xml.ele('sheetData');
         let rows = Object.keys(promiseObj.ws.rows);
-        
-        let processNextRow = () => {
-            let r = rows.shift();
-            if (r) {
+
+        let processNextRows = (rowCount) => {
+
+            let theseRows = rows.splice(0, rowCount);
+            if (theseRows.length === 0) {
+                return resolve(promiseObj);
+            }
+
+            theseRows.forEach((r) => {
                 let thisRow = promiseObj.ws.rows[r];
                 thisRow.cellRefs.sort(utils.sortCellRefs);
 
@@ -153,7 +158,7 @@ let _addSheetData = (promiseObj) => {
                     rEle.att('customHeight', '1');
                 }
 
-                rEle.att('r', r);
+                rEle.att('r', thisRow.r);
                 rEle.att('spans', thisRow.spans);
                 thisRow.s !== null ? rEle.att('s', thisRow.s) : null;
                 thisRow.customFormat !== null ? rEle.att('customFormat', thisRow.customFormat) : null;
@@ -168,12 +173,12 @@ let _addSheetData = (promiseObj) => {
                 thisRow.cellRefs.forEach((c) => {
                     promiseObj.ws.cells[c].addToXMLele(rEle);
                 });
-                processNextRow();
-            } else {
-                resolve(promiseObj);
-            }
+            });
+
+            processNextRows(rowCount);
         };
-        processNextRow();
+
+        processNextRows(500);
 
     });
 };

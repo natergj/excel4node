@@ -21,8 +21,7 @@ test('Test library functions', (t) => {
     t.ok(xl.getExcelCellRef(14, 27) === 'AA14', 'Returned correct excel cell reference');
     t.ok(xl.getExcelCellRef(999, 729) === 'ABA999', 'Returned correct excel cell reference');
 
-
-    t.ok(xl.getExcelTS(new Date('2015-01-01T00:00:00.0000Z')).toFixed(2) === '42004.79', 'Correctly translated date to excel timestamp');
+    t.ok(xl.getExcelTS(new Date('2015-01-01T00:00:00.0000Z')).toFixed(0) === '42005', 'Correctly translated date to excel timestamp');
 
     t.end();
 });
