@@ -1,3 +1,6 @@
+1.0.5  
+        Fixed issue #84 which would result in Office 2013 on Windows crashing when attempting to print a workbook.
+        
 1.0.4
         Fixed issue #82 which would result in call stack size being exceeded when workbook was being written
 1.0.3

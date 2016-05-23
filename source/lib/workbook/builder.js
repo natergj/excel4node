@@ -98,6 +98,13 @@ let addWorkBookXML = (promiseObj) => {
         xml.att('xmlns:r', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships');
         xml.att('xmlns:x15', 'http://schemas.microsoft.com/office/spreadsheetml/2010/11/main');
 
+        let booksViewEle = xml.ele('bookViews');
+        booksViewEle.ele('workbookView')
+        .att('xWindow', '240')
+        .att('yWindow', '15')
+        .att('windowWidth', '8505')
+        .att('windowHeight', '6240');
+
         let sheetsEle = xml.ele('sheets');
         promiseObj.wb.sheets.forEach((s, i) => {
             sheetsEle.ele('sheet')
