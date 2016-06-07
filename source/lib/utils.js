@@ -138,10 +138,21 @@ let getExcelRowCol = (str) => {
  * getExcelTS(new Date('08/13/1981'));
  */
 let getExcelTS = (date) => {
+
     let thisDt = new Date(date);
+    thisDt.setDate(thisDt.getDate() + 1);
+    // Take timezone into account when calculating date
+    thisDt.setMinutes(thisDt.getMinutes() - thisDt.getTimezoneOffset());
+
     let epoch = new Date(1899, 11, 31);
-    let dt = thisDt.setDate(thisDt.getDate() + 1);
-    let ts = (dt - epoch) / (1000 * 60 * 60 * 24);
+    // Take timezone into account when calculating epoch
+    epoch.setMinutes(epoch.getMinutes() - epoch.getTimezoneOffset());
+
+    // Get milliseconds between date sent to function and epoch 
+    let diff2 = thisDt.getTime() - epoch.getTime();
+
+    let ts = diff2 / (1000 * 60 * 60 * 24);
+    console.log(ts);
     return ts;
 };
 
