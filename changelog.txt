@@ -1,3 +1,6 @@
+1.0.6
+        Fixed issue #87 which would result in non-logical behaviour of showDropDown="true" for dataValidations
+        Fixed issue #88 which would result in fonts set as default for workbook not having all of their attributes respected for cells that had a style assigned to them that only included a subset of the font attributes.
 1.0.5  
         Fixed issue #84 which would result in Office 2013 on Windows crashing when attempting to print a workbook.
         
