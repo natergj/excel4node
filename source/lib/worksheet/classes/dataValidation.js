@@ -144,7 +144,7 @@ class DataValidation { // §18.3.1.32 dataValidation (Data Validation)
         this.imeMode !== undefined ? valEle.att('imeMode', this.imeMode) : null;
         this.operator !== undefined ? valEle.att('operator', this.operator) : null;
         this.allowBlank !== undefined ? valEle.att('allowBlank', myUtils.boolToInt(this.allowBlank)) : null;
-        this.showDropDown !== undefined ? valEle.att('showDropDown', myUtils.boolToInt(this.showDropDown)) : null;
+        this.showDropDown === false ? valEle.att('showDropDown', 1) : null; // For some reason, the Excel app sets this property to true if the "In-cell dropdown" option is selected in the data validation screen.
         this.showInputMessage !== undefined ? valEle.att('showInputMessage', myUtils.boolToInt(this.showInputMessage)) : null;
         this.showErrorMessage !== undefined ? valEle.att('showErrorMessage', myUtils.boolToInt(this.showErrorMessage)) : null;
         this.errorTitle !== undefined ? valEle.att('errorTitle', this.errorTitle) : null;

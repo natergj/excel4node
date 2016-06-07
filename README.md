@@ -293,7 +293,7 @@ accepts a validation options object with these available options. All options ar
 	prompt: String, // Message text of input prompt
 	promptTitle: String, // Title of input prompt
 	showInputMessage: Boolean, // Defaults to true if prompt or promptTitle is set
-	showDropDown: Boolean, // A boolean value indicating whether to display a dropdown combo box for a list type data validation.
+	showDropDown: Boolean, // A boolean value indicating whether to display a dropdown combo box for a list type data validation. Defaults to true for type:list
 	type: String, // One of 'none', 'whole', 'decimal', 'list', 'date', 'time', 'textLength', 'custom'
 	formulas: Array // Minimum count 1, maximum count 2. 
 }
