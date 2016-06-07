@@ -235,4 +235,31 @@ test('Validate borders on cellBlocks', (t) => {
     t.end(); 
 });
 
+test('Use Workbook default fonts', (t) => {
+    let wb = new xl.Workbook({
+        dateFormat: 'm/d/yy hh:mm:ss',
+        defaultFont: {
+            size: 9,
+            name: 'Arial',
+            color: 'FF000000'
+        }
+    });
+
+    let style = wb.createStyle({
+        font: {
+            size: 10
+        }
+    });
+
+    var ws = wb.addWorksheet('Fonts');
+
+    ws.cell(1, 1).string('Arial 9');
+    ws.cell(2, 1).string('Arial 10').style(style);
+    t.equals(wb.styles[ws.cell(1, 1).cells[0].s].font.name, 'Arial', 'Font of cell with no custom style uses font name set as workbook default');
+    t.equals(wb.styles[ws.cell(1, 1).cells[0].s].font.size, 9, 'Font of cell with no custom style uses font size set as workbook default');
+    t.equals(wb.styles[ws.cell(2, 1).cells[0].s].font.name, 'Arial', 'Font of cell with custom style specifying only font size uses font name set as workbook default');
+    t.equals(wb.styles[ws.cell(2, 1).cells[0].s].font.size, 10, 'Font of cell with custom style specifying only font size uses style font size rather than value set as workbook default');
+
+    t.end();
+});
 

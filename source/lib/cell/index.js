@@ -129,9 +129,9 @@ function dateSetter(val) {
 function styleSetter(val) {
     let thisStyle;
     if (val instanceof Style) {
-        thisStyle = val;
+        thisStyle = val.toObject();
     } else if (val instanceof Object) {
-        thisStyle = this.ws.wb.createStyle(val);
+        thisStyle = val;
     } else {
         throw new TypeError(util.format('Parameter sent to Style function must be an instance of a Style or a style configuration object'));
     }
@@ -145,34 +145,29 @@ function styleSetter(val) {
     }
 
     this.cells.forEach((c) => {
-        let thisCellStyle = thisStyle.toObject();
         if (thisStyle.border && thisStyle.border.outline) {
             let thisCellsBorder = {};
-            if (c.row === borderEdges.top && thisCellStyle.border.top) {
-                thisCellsBorder.top = thisCellStyle.border.top;
+            if (c.row === borderEdges.top && thisStyle.border.top) {
+                thisCellsBorder.top = thisStyle.border.top;
             }
-            if (c.row === borderEdges.bottom && thisCellStyle.border.bottom) {
-                thisCellsBorder.bottom = thisCellStyle.border.bottom;
+            if (c.row === borderEdges.bottom && thisStyle.border.bottom) {
+                thisCellsBorder.bottom = thisStyle.border.bottom;
             }
-            if (c.col === borderEdges.left && thisCellStyle.border.left) {
-                thisCellsBorder.left = thisCellStyle.border.left;
+            if (c.col === borderEdges.left && thisStyle.border.left) {
+                thisCellsBorder.left = thisStyle.border.left;
             }
-            if (c.col === borderEdges.right && thisCellStyle.border.right) {
-                thisCellsBorder.right = thisCellStyle.border.right;
+            if (c.col === borderEdges.right && thisStyle.border.right) {
+                thisCellsBorder.right = thisStyle.border.right;
             }
-            thisCellStyle.border = thisCellsBorder;
+            thisStyle.border = thisCellsBorder;
         }
 
         if (c.s === 0) {
-            if (thisStyle.border && thisStyle.border.outline) {
-                thisCellStyle = this.ws.wb.createStyle(thisCellStyle);
-            } else {
-                thisCellStyle = thisStyle;
-            }
+            let thisCellStyle = this.ws.wb.createStyle(thisStyle);
             c.style(thisCellStyle.ids.cellXfs);
         } else {
             let curStyle = this.ws.wb.styles[c.s];
-            let newStyleOpts = _.merge(curStyle.toObject(), thisCellStyle);
+            let newStyleOpts = _.merge({}, curStyle.toObject(), thisStyle);
             let mergedStyle = this.ws.wb.createStyle(newStyleOpts);
             c.style(mergedStyle.ids.cellXfs);
         }

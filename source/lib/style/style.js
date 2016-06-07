@@ -9,6 +9,7 @@ const NumberFormat = require('./classes/numberFormat.js');
 
 let _getFontId = (wb, font) => {
 
+    font = _.merge({}, wb.opts.defaultFont, font);
     let thisFont = new Font(font);
 
     let fontId;
