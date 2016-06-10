@@ -50,7 +50,7 @@ class DataValidation { // §18.3.1.32 dataValidation (Data Validation)
         }
 
         if (opts.errorTitle !== undefined) {
-            if (typeof opts.errorStyle !== 'string') {
+            if (typeof opts.errorTitle !== 'string') {
                 throw new TypeError('DataValidation errorTitle must be a string');
             }
             this.errorTitle = opts.errorTitle;
