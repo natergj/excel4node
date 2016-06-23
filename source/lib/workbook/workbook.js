@@ -155,7 +155,7 @@ class Workbook {
             }
         })
         .catch((e) => {
-            console.error(e.stack);
+            throw new Error(e);
         });
     }
 

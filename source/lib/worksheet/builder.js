@@ -95,12 +95,12 @@ let _addSheetFormatPr = (promiseObj) => {
 
         o.baseColWidth !== null ? ele.att('baseColWidth', o.baseColWidth) : null;
         o.defaultColWidth !== null ? ele.att('defaultColWidth', o.defaultColWidth) : null;
-        o.defaultRowHeight !== null ? ele.att('defaultRowHeight', o.defaultRowHeight) : null;
+        o.defaultRowHeight !== null ? ele.att('defaultRowHeight', o.defaultRowHeight) : ele.att('defaultRowHeight', 16);
         o.thickBottom !== null ? ele.att('thickBottom', utils.boolToInt(o.thickBottom)) : null;
         o.thickTop !== null ? ele.att('thickTop', utils.boolToInt(o.thickTop)) : null;
 
 
-        if (o.defaultRowHeight !== 16) {
+        if (typeof o.defaultRowHeight === 'number') {
             ele.att('customHeight', '1');
         }
 
@@ -160,7 +160,7 @@ let _addSheetData = (promiseObj) => {
                 thisRow.customFormat !== null ? rEle.att('customFormat', thisRow.customFormat) : null;
                 thisRow.ht !== null ? rEle.att('ht', thisRow.ht) : null;
                 thisRow.hidden !== null ? rEle.att('hidden', thisRow.hidden) : null;
-                thisRow.customHeight === true || promiseObj.ws.opts.sheetFormat.defaultRowHeight !== 16 ? rEle.att('customHeight', 1) : null;
+                thisRow.customHeight === true || typeof promiseObj.ws.opts.sheetFormat.defaultRowHeight === 'number' ? rEle.att('customHeight', 1) : null;
                 thisRow.outlineLevel !== null ? rEle.att('outlineLevel', thisRow.outlineLevel) : null;
                 thisRow.collapsed !== null ? rEle.att('collapsed', thisRow.collapsed) : null;
                 thisRow.thickTop !== null ? rEle.att('thickTop', thisRow.thickTop) : null;
@@ -471,7 +471,7 @@ let sheetXML = (ws) => {
             resolve(xmlString);
         })
         .catch((e) => {
-            console.error(e.stack);
+            throw new Error(e);
         });
     });
 };

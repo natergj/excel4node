@@ -65,7 +65,7 @@ module.exports = {
         'baseColWidth': 10,
         'customHeight': null,
         'defaultColWidth': null,
-        'defaultRowHeight': 16,
+        'defaultRowHeight': null,
         'outlineLevelCol': null,
         'outlineLevelRow': null,
         'thickBottom': null,
