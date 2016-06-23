@@ -100,7 +100,7 @@ let _addSheetFormatPr = (promiseObj) => {
         o.thickTop !== null ? ele.att('thickTop', utils.boolToInt(o.thickTop)) : null;
 
 
-        if (typeof o.defaultRowHeight === 'number') {
+        if (o.defaultRowHeight !== 16) {
             ele.att('customHeight', '1');
         }
 
@@ -153,10 +153,6 @@ let _addSheetData = (promiseObj) => {
                 thisRow.cellRefs.sort(utils.sortCellRefs);
 
                 let rEle = ele.ele('row');
-                // If defaultRowHeight !== 16, set customHeight attribute to 1 as stated in §18.3.1.81
-                if (promiseObj.ws.opts.sheetFormat.defaultRowHeight !== 16) {
-                    rEle.att('customHeight', '1');
-                }
 
                 rEle.att('r', thisRow.r);
                 rEle.att('spans', thisRow.spans);
@@ -164,7 +160,7 @@ let _addSheetData = (promiseObj) => {
                 thisRow.customFormat !== null ? rEle.att('customFormat', thisRow.customFormat) : null;
                 thisRow.ht !== null ? rEle.att('ht', thisRow.ht) : null;
                 thisRow.hidden !== null ? rEle.att('hidden', thisRow.hidden) : null;
-                thisRow.customHeight !== null ? rEle.att('customHeight', thisRow.customHeight) : null;
+                thisRow.customHeight === true || promiseObj.ws.opts.sheetFormat.defaultRowHeight !== 16 ? rEle.att('customHeight', 1) : null;
                 thisRow.outlineLevel !== null ? rEle.att('outlineLevel', thisRow.outlineLevel) : null;
                 thisRow.collapsed !== null ? rEle.att('collapsed', thisRow.collapsed) : null;
                 thisRow.thickTop !== null ? rEle.att('thickTop', thisRow.thickTop) : null;
