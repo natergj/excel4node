@@ -3,4 +3,5 @@ docs
 references
 npm-debug.log
 output
+tmp
 *.xlsx

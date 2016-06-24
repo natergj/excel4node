@@ -1,3 +1,6 @@
+1.1.0
+        Fixed issue where defaultRowHeight set in Workbook opts was not being properly handled.
+        
 1.0.9
         Fixed issue #90 which would result in a type error being thrown if a dataValidation errorTitle was set and errorStyle was not
 
