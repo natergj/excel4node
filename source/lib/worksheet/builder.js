@@ -475,7 +475,7 @@ let sheetXML = (ws) => {
             resolve(xmlString);
         })
         .catch((e) => {
-            console.error(e.stack);
+            //console.error(e.stack);
         });
     });
 };
@@ -516,7 +516,6 @@ let relsXML = (ws) => {
                 .att('Type', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing');
             }
         });
-
         let xmlString = relXML.doc().end();
         resolve(xmlString);
     });

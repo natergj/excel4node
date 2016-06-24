@@ -464,7 +464,7 @@ let writeToBuffer = (wb) => {
         .then(addDrawingsXML)
         .then(() => {
             wb.opts.jszip.type = 'nodebuffer';
-            let buffer = promiseObj.xlsx.generate(wb.opts.jszip);    
+            let buffer = promiseObj.xlsx.generate(wb.opts.jszip);   
             resolve(buffer);
         })
         .catch((e) => {

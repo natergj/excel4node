@@ -152,7 +152,6 @@ let getExcelTS = (date) => {
     let diff2 = thisDt.getTime() - epoch.getTime();
 
     let ts = diff2 / (1000 * 60 * 60 * 24);
-    console.log(ts);
     return ts;
 };
 
