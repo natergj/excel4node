@@ -354,3 +354,53 @@ test('Verify Invalid Worksheet options fail type validation', (t) => {
 
     t.end();
 });
+
+test('Check worksheet defaultRowHeight behavior', (t) => {
+    // The defaultRowHeight property effects more than its own tag in the XML. 
+    // need to check output of sheetFormatPr.customHeight, sheetFormatPr.defaultRowHeight and each row's customHeight attribute
+    // With no sheetFormat.customHeight set, the row height should scale to fit the text and ignore the sheetFormatPr.defaultRowHeight value
+
+    let wb = new xl.Workbook({
+        defaultFont: {
+            size: 9,
+            name: 'Arial'
+        }
+    });
+
+    let ws1 = wb.addWorksheet('Sheet1', {
+        sheetFormat: {
+            defaultRowHeight: 12
+        }
+    });
+    ws1.cell(1, 1).string('String');
+
+    let ws2 = wb.addWorksheet('Sheet2');
+    ws2.cell(1, 1).string('String');
+
+    ws1.generateXML()
+    .then((XML) => {
+        let doc = new DOMParser().parseFromString(XML);
+        let sheetFormatPr = doc.getElementsByTagName('sheetFormatPr')[0];
+        t.equals(sheetFormatPr.getAttribute('defaultRowHeight'), '12', 'Required attribute sheetFormatPr.defalutRowHeight successfully updated with custom row height');
+        t.equals(sheetFormatPr.getAttribute('customHeight'), '1', 'Optional sheetFormatPr.customHeight successfully set to be true');
+
+        let firstRow = doc.getElementsByTagName('row')[0];
+        t.equals(firstRow.getAttribute('customHeight'), '1', 'customHeight attribute on row successfully set to 1 since sheet default row height specified');
+    })
+    .then(() => {
+        return ws2.generateXML();
+    })
+    .then((XML) => {
+        let doc = new DOMParser().parseFromString(XML);
+        let sheetFormatPr = doc.getElementsByTagName('sheetFormatPr')[0];
+        t.equals(sheetFormatPr.getAttribute('defaultRowHeight'), '16', 'Required attribute sheetFormatPr.defalutRowHeight successfully set with default value');
+        t.equals(sheetFormatPr.getAttribute('customHeight'), '', 'Optional sheetFormatPr.customHeight not set when sheetFormat.defaultRowHeight not specified');
+
+        let firstRow = doc.getElementsByTagName('row')[0];
+        t.equals(firstRow.getAttribute('customHeight'), '', 'customHeight attribute on row successfully not set since sheet default row height not specified');
+    })
+    .then(() => {
+        t.end();
+    });
+
+});

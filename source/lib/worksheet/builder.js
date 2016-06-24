@@ -471,7 +471,7 @@ let sheetXML = (ws) => {
             resolve(xmlString);
         })
         .catch((e) => {
-            throw new Error(e);
+            throw new Error(e.stack);
         });
     });
 };
