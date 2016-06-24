@@ -512,7 +512,6 @@ let relsXML = (ws) => {
                 .att('Type', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing');
             }
         });
-
         let xmlString = relXML.doc().end();
         resolve(xmlString);
     });

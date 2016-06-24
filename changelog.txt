@@ -1,5 +1,8 @@
-1.0.8
+1.0.9
         Fixed issue #90 which would result in a type error being thrown if a dataValidation errorTitle was set and errorStyle was not
+
+1.0.8
+        Removed debug line that had been missed prior to publish
 
 1.0.7
         Fixed issue #89 which would result in dates showing a 1 hour offset if date was in daylight savings time
