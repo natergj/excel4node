@@ -154,6 +154,7 @@ class DataValidation { // §18.3.1.32 dataValidation (Data Validation)
         this.sqref !== undefined ? valEle.att('sqref', this.sqref) : null;
         this.formula1 !== undefined ? valEle.ele('formula1').text(cleanFormula(this.formula1)) : null;
         this.formula2 !== undefined ? valEle.ele('formula2').text(cleanFormula(this.formula2)) : null;
+        valEle.up();
     }
 }
 
@@ -178,6 +179,7 @@ class DataValidationCollection { // §18.3.1.33 dataValidations (Data Validation
         this.items.forEach((val) => {
             val.addToXMLele(valsEle);
         });
+        valsEle.up();
     }
 }
 

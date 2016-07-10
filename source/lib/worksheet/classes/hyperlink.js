@@ -40,7 +40,8 @@ class Hyperlink { //§18.3.1.47 hyperlink (Hyperlink)
         } 
         if (this.tooltip !== undefined) {
             thisEle.att('tooltip', this.tooltip);
-        }     
+        } 
+        thisEle.up();    
     }
 }
 
@@ -66,6 +67,7 @@ class HyperlinkCollection { //§18.3.1.48 hyperlinks (Hyperlinks)
             this.links.forEach((l) => {
                 l.addToXMLEle(linksEle);
             });
+            linksEle.up();
         }
     }
 }

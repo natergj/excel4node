@@ -1,3 +1,6 @@
+1.1.1
+        Improved effeciency when writing Workbooks to help address Issue #83. Tested with 50 columns and 30,000 rows.
+
 1.1.0
         Fixed issue where defaultRowHeight set in Workbook opts was not being properly handled.
         

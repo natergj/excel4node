@@ -30,12 +30,14 @@ let _addSheetPr = (promiseObj) => {
                 outlineEle.att('applyStyles', 1);
                 o.outline.summaryBelow === true ? outlineEle.att('summaryBelow', 1) : null;
                 o.outline.summaryRight === true ? outlineEle.att('summaryRight', 1) : null;
+                outlineEle.up();
             }
 
             // §18.3.1.65 pageSetUpPr (Page Setup Properties)
             if (o.pageSetup.fitToHeight !== null || o.pageSetup.fitToWidth !== null) {
-                ele.ele('pageSetUpPr').att('fitToPage', 1);
+                ele.ele('pageSetUpPr').att('fitToPage', 1).up();
             }
+            ele.up();
         }
 
         resolve(promiseObj);
@@ -49,6 +51,7 @@ let _addDimension = (promiseObj) => {
         let lastCell = `${utils.getExcelAlpha(promiseObj.ws.lastUsedCol)}${promiseObj.ws.lastUsedRow}`;
         let ele = promiseObj.xml.ele('dimension');
         ele.att('ref', `${firstCell}:${lastCell}`);
+        ele.up();
 
         resolve(promiseObj);
     });
@@ -81,8 +84,10 @@ let _addSheetViews = (promiseObj) => {
             o.pane.topLeftCell !== null ? pEle.att('topLeftCell', o.pane.topLeftCell) : null;
             o.pane.activePane !== null ? pEle.att('activePane', o.pane.activePane) : null;
             o.pane.state !== null ? pEle.att('state', o.pane.state) : null;
+            pEle.up();
         }
-
+        sv.up();
+        ele.up();
         resolve(promiseObj);
     });
 };
@@ -103,7 +108,7 @@ let _addSheetFormatPr = (promiseObj) => {
         if (typeof o.defaultRowHeight === 'number') {
             ele.att('customHeight', '1');
         }
-
+        ele.up();
         resolve(promiseObj);
     });
 };
@@ -127,7 +132,9 @@ let _addCols = (promiseObj) => {
                 col.customWidth !== null ? colEle.att('customWidth', utils.boolToInt(col.customWidth)) : null;
                 col.outlineLevel !== null ? colEle.att('outlineLevel', col.outlineLevel) : null;
                 col.collapsed !== null ? colEle.att('collapsed', utils.boolToInt(col.collapsed)) : null;
+                colEle.up();
             }
+            colsEle.up();
         }
 
         resolve(promiseObj);
@@ -141,15 +148,9 @@ let _addSheetData = (promiseObj) => {
         let ele = promiseObj.xml.ele('sheetData');
         let rows = Object.keys(promiseObj.ws.rows);
 
-        let processNextRows = (rowCount) => {
-
-            let theseRows = rows.splice(0, rowCount);
-            if (theseRows.length === 0) {
-                return resolve(promiseObj);
-            }
-
-            theseRows.forEach((r) => {
-                let thisRow = promiseObj.ws.rows[r];
+        let processRows = (theseRows) => {
+            for (var r = 0; r < theseRows.length; r++) {
+                let thisRow = promiseObj.ws.rows[theseRows[r]];
                 thisRow.cellRefs.sort(utils.sortCellRefs);
 
                 let rEle = ele.ele('row');
@@ -166,15 +167,26 @@ let _addSheetData = (promiseObj) => {
                 thisRow.thickTop !== null ? rEle.att('thickTop', thisRow.thickTop) : null;
                 thisRow.thickBot !== null ? rEle.att('thickBot', thisRow.thickBot) : null;
 
-                thisRow.cellRefs.forEach((c) => {
-                    promiseObj.ws.cells[c].addToXMLele(rEle);
-                });
-            });
+                for (var i = 0; i < thisRow.cellRefs.length; i++) {
+                    promiseObj.ws.cells[thisRow.cellRefs[i]].addToXMLele(rEle);
+                }
+                
+                rEle.up();
+            }
 
-            processNextRows(rowCount);
+            processNextRows();
         };
 
-        processNextRows(500);
+        let processNextRows = () => {
+            let theseRows = rows.splice(0, 500);
+            if (theseRows.length === 0) {
+                ele.up();
+                return resolve(promiseObj);
+            }
+            processRows(theseRows);
+        };
+
+        processNextRows();
 
     });
 };
@@ -206,6 +218,7 @@ let _addSheetProtection = (promiseObj) => {
                     }
                 }            
             });
+            ele.up();
         }
         resolve(promiseObj);
     });
@@ -258,7 +271,7 @@ let _addAutoFilter = (promiseObj) => {
                     '$' + utils.getExcelAlpha(o.endCol) + 
                     '$' + o.endRow
             });
-
+            ele.up();
         }
         resolve(promiseObj);
     });
@@ -271,8 +284,9 @@ let _addMergeCells = (promiseObj) => {
         if (promiseObj.ws.mergedCells instanceof Array && promiseObj.ws.mergedCells.length > 0) {
             let ele = promiseObj.xml.ele('mergeCells').att('count', promiseObj.ws.mergedCells.length);
             promiseObj.ws.mergedCells.forEach((cr) => {
-                ele.ele('mergeCell').att('ref', cr);
+                ele.ele('mergeCell').att('ref', cr).up();
             });
+            ele.up();
         }
 
         resolve(promiseObj);
@@ -325,7 +339,8 @@ let _addPrintOptions = (promiseObj) => {
             if (o.printGridLines === true) {
                 poEle.att('gridLines', 1);
                 poEle.att('gridLinesSet', 1);
-            } 
+            }
+            poEle.up();
         }
 
         resolve(promiseObj);
@@ -343,7 +358,8 @@ let _addPageMargins = (promiseObj) => {
         .att('top', o.top)
         .att('bottom', o.bottom)
         .att('header', o.header)
-        .att('footer', o.footer);
+        .att('footer', o.footer)
+        .up();
 
         resolve(promiseObj);
     });
@@ -381,6 +397,7 @@ let _addPageSetup = (promiseObj) => {
             o.horizontalDpi !== null ? psEle.att('horizontalDpi', o.horizontalDpi) : null;
             o.verticalDpi !== null ? psEle.att('verticalDpi', o.verticalDpi) : null;
             o.copies !== null ? psEle.att('copies', o.copies) : null;
+            psEle.up();
         }
 
         resolve(promiseObj);
@@ -401,16 +418,19 @@ let _addHeaderFooter = (promiseObj) => {
 
         if (addHeaderFooter === true) {
             let hfEle = promiseObj.xml.ele('headerFooter');
-            o.oddHeader !== null ? hfEle.ele('oddHeader').text(o.oddHeader) : null;
-            o.oddFooter !== null ? hfEle.ele('oddFooter').text(o.oddFooter) : null;
-            o.evenHeader !== null ? hfEle.ele('evenHeader').text(o.evenHeader) : null;
-            o.evenFooter !== null ? hfEle.ele('evenFooter').text(o.evenFooter) : null;
-            o.firstHeader !== null ? hfEle.ele('firstHeader').text(o.firstHeader) : null;
-            o.firstFooter !== null ? hfEle.ele('firstFooter').text(o.firstFooter) : null;
+
             o.alignWithMargins !== null ? hfEle.att('alignWithMargins', utils.boolToInt(o.alignWithMargins)) : null;
             o.differentFirst !== null ? hfEle.att('differentFirst', utils.boolToInt(o.differentFirst)) : null;
             o.differentOddEven !== null ? hfEle.att('differentOddEven', utils.boolToInt(o.differentOddEven)) : null;
             o.scaleWithDoc !== null ? hfEle.att('scaleWithDoc', utils.boolToInt(o.scaleWithDoc)) : null;
+
+            o.oddHeader !== null ? hfEle.ele('oddHeader').text(o.oddHeader).up() : null;
+            o.oddFooter !== null ? hfEle.ele('oddFooter').text(o.oddFooter).up() : null;
+            o.evenHeader !== null ? hfEle.ele('evenHeader').text(o.evenHeader).up() : null;
+            o.evenFooter !== null ? hfEle.ele('evenFooter').text(o.evenFooter).up() : null;
+            o.firstHeader !== null ? hfEle.ele('firstHeader').text(o.firstHeader).up() : null;
+            o.firstFooter !== null ? hfEle.ele('firstFooter').text(o.firstFooter).up() : null;
+            hfEle.up();
         }
 
         resolve(promiseObj);
@@ -422,7 +442,7 @@ let _addDrawing = (promiseObj) => {
     return new Promise((resolve, reject) => {
         if (!promiseObj.ws.drawingCollection.isEmpty) {
             let dId = promiseObj.ws.relationships.indexOf('drawing') + 1;
-            promiseObj.xml.ele('drawing').att('r:id', 'rId' + dId);
+            promiseObj.xml.ele('drawing').att('r:id', 'rId' + dId).up();
         }
         resolve(promiseObj);
     });
@@ -431,16 +451,12 @@ let _addDrawing = (promiseObj) => {
 let sheetXML = (ws) => {
     return new Promise((resolve, reject) => {
 
-        let wsXML = xml.create(
-            'worksheet',
-            {
-                'version': '1.0', 
-                'encoding': 'UTF-8', 
-                'standalone': true
-            },
-            { pubID: null, sysID: null },
-            { allowSurrogateChars: true }
-        )
+        let xmlProlog = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+        let xmlString = '';
+        let wsXML = xml.begin((chunk) => {
+            xmlString += chunk;
+        })
+        .ele('worksheet')
         .att('mc:Ignorable', 'x14ac')
         .att('xmlns', 'http://schemas.openxmlformats.org/spreadsheetml/2006/main')
         .att('xmlns:mc', 'http://schemas.openxmlformats.org/markup-compatibility/2006')
@@ -449,6 +465,7 @@ let sheetXML = (ws) => {
 
         // Excel complains if specific elements on not in the correct order in the XML doc.
         let promiseObj = { xml: wsXML, ws: ws };
+
         _addSheetPr(promiseObj)
         .then(_addDimension)
         .then(_addSheetViews)
@@ -467,8 +484,13 @@ let sheetXML = (ws) => {
         .then(_addHeaderFooter)
         .then(_addDrawing)
         .then((promiseObj) => {
-            let xmlString = promiseObj.xml.doc().end();
-            resolve(xmlString);
+            return new Promise((resolve, reject) => {
+                wsXML.end();
+                resolve(xmlString);
+            });
+        })
+        .then((xml) => {
+            resolve(xml);
         })
         .catch((e) => {
             throw new Error(e.stack);

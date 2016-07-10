@@ -62,12 +62,12 @@ class Cell {
             cEle.att('t', this.t);
         }
         if (this.f !== null) {
-            cEle.ele('f').txt(this.f);
+            cEle.ele('f').txt(this.f).up();
         }
         if (this.v !== null) {
-            cEle.ele('v').txt(this.v);
+            cEle.ele('v').txt(this.v).up();
         }
-
+        cEle.up();
     }
 }
 
