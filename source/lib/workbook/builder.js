@@ -441,14 +441,11 @@ let addDrawingsXML = (promiseObj) => {
  */
 let writeToBuffer = (wb) => {
     return new Promise ((resolve, reject) => {
-
         let promiseObj = {
             wb: wb, 
             xlsx: new JSZip(),
-            //xmlOutVars: { pretty: true, indent: '  ', newline: '\n' }
             xmlOutVars: {}
         };
-
 
         if (promiseObj.wb.sheets.length === 0) {
             promiseObj.wb.WorkSheet();
@@ -464,11 +461,17 @@ let writeToBuffer = (wb) => {
         .then(addDrawingsXML)
         .then(() => {
             wb.opts.jszip.type = 'nodebuffer';
-            let buffer = promiseObj.xlsx.generate(wb.opts.jszip);   
-            resolve(buffer);
+            promiseObj.xlsx.generateAsync(wb.opts.jszip)
+            .then((buf) => {
+                resolve(buf);
+            })
+            .catch((e) => {
+                reject(e);
+            });
         })
         .catch((e) => {
             wb.logger.error(e.stack);
+            reject(e);
         });
 
     });

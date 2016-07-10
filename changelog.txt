@@ -1,3 +1,7 @@
+1.1.2
+        dependency cleanup
+        updated to version 3.x.x of jszip
+
 1.1.1
         Improved effeciency when writing Workbooks to help address Issue #83. Tested with 50 columns and 30,000 rows.
 
