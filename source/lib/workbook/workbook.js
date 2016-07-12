@@ -110,7 +110,7 @@ class Workbook {
      * Writes Excel data to a node Buffer.
      */
     writeToBuffer() {
-      return builder.writeToBuffer(this)
+        return builder.writeToBuffer(this);
     }
 
     /**
