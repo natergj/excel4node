@@ -1,3 +1,8 @@
+1.2.0
+        merged https://github.com/natergj/excel4node/pull/91 from miguelmota to expose writeToBuffer method allowing excel zip buffer to be piped to other streams
+        added documentation to README
+        fixed some errors in README
+
 1.1.2
         dependency cleanup
         updated to version 3.x.x of jszip
