@@ -58,7 +58,7 @@ class Workbook {
      */
     constructor(opts) {
         opts = opts ? opts : {};
-        
+
         this.logger = new SlothLogger.Logger({
             logLevel: Number.isNaN(parseInt(opts.logLevel)) ? 0 : parseInt(opts.logLevel)
         });
@@ -106,9 +106,17 @@ class Workbook {
     }
 
     /**
-     * Generate .xlsx file. 
+     * writeToBuffer
+     * Writes Excel data to a node Buffer.
+     */
+    writeToBuffer() {
+      return builder.writeToBuffer(this)
+    }
+
+    /**
+     * Generate .xlsx file.
      * @param {String} fileName Name of Excel workbook with .xslx extension
-     * @param {http.response | callback} http response object or callback function (optional). 
+     * @param {http.response | callback} http response object or callback function (optional).
      * If http response object is given, file is written to http response. Useful for web applications.
      * If callback is given, callback called with (err, fs.Stats) passed
      */
@@ -117,7 +125,7 @@ class Workbook {
         builder.writeToBuffer(this)
         .then((buffer) => {
             switch (typeof handler) {
-                // handler passed as http response object. 
+                // handler passed as http response object.
 
             case 'object':
                 if (handler instanceof http.ServerResponse) {
@@ -145,10 +153,10 @@ class Workbook {
 
             // no handler passed, write file to FS.
             default:
-                
+
                 fs.writeFile(fileName, buffer, function (err) {
-                    if (err) { 
-                        throw err; 
+                    if (err) {
+                        throw err;
                     }
                 });
                 break;
@@ -160,7 +168,7 @@ class Workbook {
     }
 
     /**
-     * Add a worksheet to the Workbook 
+     * Add a worksheet to the Workbook
      * @param {String} name Name of the Worksheet
      * @param {Object} opts Options for Worksheet. See Worksheet class definition
      * @returns {Worksheet}
@@ -170,7 +178,7 @@ class Workbook {
         return this.sheets[newLength - 1];
     }
 
-    /** 
+    /**
      * Add a Style to the Workbook
      * @param {Object} opts Options for the style. See Style class definition
      * @returns {Style}
