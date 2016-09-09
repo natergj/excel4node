@@ -263,3 +263,163 @@ test('Use Workbook default fonts', (t) => {
     t.end();
 });
 
+test('Reuse existing styles', (t) => {
+    // TODO: Needs tests for remaining style props and should test all iterations
+
+    const fontA = {
+        size: 14,
+        name: 'Helvetica',
+        underline: true
+    };
+
+    const fontB = {
+        size: 20,
+        name: 'Arial',
+        underline: true
+    };
+
+    const borderA = {
+        left: {
+            style: 'thin',
+            color: '#444444'
+        },
+        right: {
+            style: 'thin',
+            color: '#444444'
+        },
+        top: {
+            style: 'thin',
+            color: '#444444'
+        },
+        bottom: {
+            style: 'thin',
+            color: '#444444'
+        }
+    };
+
+    const borderB = {
+        left: {
+            style: 'thin',
+            color: '#111111'
+        },
+        right: {
+            style: 'thin',
+            color: '#222222'
+        },
+        top: {
+            style: 'thin',
+            color: '#333333'
+        },
+        bottom: {
+            style: 'thin',
+            color: '#444444'
+        }
+    };
+
+    const fillA = {
+        type: 'pattern',
+        patternType: 'solid',
+        fgColor: 'Yellow'
+    };
+
+    const fillB = {
+        type: 'pattern',
+        patternType: 'lightDown',
+        fgColor: 'Red'
+    };
+
+    function testCombination(isEqual, styleOptsA, styleOptsB, message) {
+        let wb = new xl.Workbook();
+        let prevStyleCount = wb.styles.length;
+        let styleA = wb.createStyle(JSON.parse(JSON.stringify(styleOptsA)));
+        let styleB = wb.createStyle(JSON.parse(JSON.stringify(styleOptsB)));
+        if (isEqual) {
+            t.equal(styleA, styleB, message + ' return same Style instance');
+            t.equal(wb.styles.length, prevStyleCount + 1, message + ' only added one style to workbook');
+        }
+        else {
+            t.notEqual(styleA, styleB, message + ' return different Style instance');
+            t.equal(wb.styles.length, prevStyleCount + 2, message + ' added two styles to workbook');
+        }
+    }
+
+    testCombination(true, {
+        font: fontA
+    }, {
+        font: fontA
+    }, 'Same font');
+
+    testCombination(false, {
+        font: fontA
+    }, {
+        font: fontB
+    }, 'Different fonts');
+
+    testCombination(true, {
+        border: borderA
+    }, {
+        border: borderA
+    }, 'Same border');
+
+    testCombination(false, {
+        border: borderA
+    }, {
+        border: borderB
+    }, 'Different borders');
+
+    testCombination(true, {
+        fill: fillA
+    }, {
+        fill: fillA
+    }, 'Same fill');
+
+    testCombination(false, {
+        fill: fillA
+    }, {
+        fill: fillB
+    }, 'Different fills');
+
+    testCombination(true, {
+        font: fontA,
+        border: borderA
+    }, {
+        font: fontA,
+        border: borderA
+    }, 'Same font and border');
+
+    testCombination(false, {
+        font: fontA,
+        border: borderA
+    }, {
+        font: fontA,
+        border: borderB
+    }, 'Same font different borders');
+
+    testCombination(false, {
+        font: fontA,
+        border: borderA
+    }, {
+        font: fontB,
+        border: borderA
+    }, 'Different font same borders');
+
+    testCombination(false, {
+        font: fontA,
+        fill: fillA
+    }, {
+        font: fontA,
+        fill: fillB
+    }, 'Same font different fills');
+
+    testCombination(true, {
+        font: fontA,
+        border: borderA,
+        fill: fillA
+    }, {
+        font: fontA,
+        border: borderA,
+        fill: fillA
+    }, 'Same font, border and fill');
+
+    t.end();
+});
