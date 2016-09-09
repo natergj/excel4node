@@ -9,21 +9,19 @@ const NumberFormat = require('./classes/numberFormat.js');
 
 let _getFontId = (wb, font) => {
 
+    // Create the Font and lookup key
     font = _.merge({}, wb.opts.defaultFont, font);
-    let thisFont = new Font(font);
+    const thisFont = new Font(font);
+    const lookupKey = JSON.stringify(thisFont.toObject());
 
-    let fontId;
-    wb.styleData.fonts.forEach((f, i) => {
-        if (_.isEqual(thisFont.toObject(), f.toObject())) {
-            fontId = i;
-        }
-    });
-    if (fontId === undefined) {
-        let count = wb.styleData.fonts.push(thisFont);
-        fontId = count - 1;
+    // Find an existing entry, creating a new one if it does not exist
+    let id = wb.styleDataLookup.fonts[lookupKey];
+    if (id === undefined) {
+        id = wb.styleData.fonts.push(thisFont) - 1;
+        wb.styleDataLookup.fonts[lookupKey] = id;
     }
 
-    return fontId;
+    return id;
 };
 
 let _getFillId = (wb, fill) => {
@@ -31,20 +29,18 @@ let _getFillId = (wb, fill) => {
         return null;
     }
 
-    let thisFill = new Fill(fill);
+    // Create the Fill and lookup key
+    const thisFill = new Fill(fill);
+    const lookupKey = JSON.stringify(thisFill.toObject());
 
-    let fillId;
-    wb.styleData.fills.forEach((f, i) => {
-        if (_.isEqual(thisFill.toObject(), f.toObject())) {
-            fillId = i;
-        }
-    });
-    if (fillId === undefined) {
-        let count = wb.styleData.fills.push(thisFill);
-        fillId = count - 1;
+    // Find an existing entry, creating a new one if it does not exist
+    let id = wb.styleDataLookup.fills[lookupKey];
+    if (id === undefined) {
+        id = wb.styleData.fills.push(thisFill) - 1;
+        wb.styleDataLookup.fills[lookupKey] = id;
     }
 
-    return fillId;
+    return id;
 };
 
 let _getBorderId = (wb, border) => {
@@ -52,20 +48,18 @@ let _getBorderId = (wb, border) => {
         return null;
     }
 
-    let thisBorder = new Border(border);
-    let borderId;
-    wb.styleData.borders.forEach((b, i) => {
-        if (_.isEqual(b.toObject(), thisBorder.toObject())) {
-            borderId = i;
-        }
-    });
+    // Create the Border and lookup key
+    const thisBorder = new Border(border);
+    const lookupKey = JSON.stringify(thisBorder.toObject());
 
-    if (borderId === undefined) {
-        let count = wb.styleData.borders.push(thisBorder);
-        borderId = count - 1;
+    // Find an existing entry, creating a new one if it does not exist
+    let id = wb.styleDataLookup.borders[lookupKey];
+    if (id === undefined) {
+        id = wb.styleData.borders.push(thisBorder) - 1;
+        wb.styleDataLookup.borders[lookupKey] = id;
     }
 
-    return borderId;
+    return id;
 };
 
 let _getNumFmt = (wb, val) => {
