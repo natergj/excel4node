@@ -68,6 +68,7 @@ class Workbook {
         this.sheets = [];
         this.sharedStrings = [];
         this.styles = [];
+        this.stylesLookup = {};
         this.dxfCollection = new DXFCollection(this);
         this.mediaCollection = new MediaCollection();
         this.definedNameCollection = new DefinedNameCollection();
@@ -84,6 +85,21 @@ class Workbook {
                     'numFmtId': null
                 }
             ]
+        };
+
+        // Lookups for style components to quickly find existing entries
+        // - Lookup keys are stringified JSON of a style's toObject result
+        // - Lookup values are the indexes for the actual entry in the styleData arrays
+        this.styleDataLookup = {
+            'fonts': {},
+            'fills': this.styleData.fills.reduce((ret, fill, index) => {
+                ret[JSON.stringify(fill.toObject())] = index;
+                return ret;
+            }, {}),
+            'borders': this.styleData.borders.reduce((ret, border, index) => {
+                ret[JSON.stringify(border.toObject())] = index;
+                return ret;
+            }, {}),
         };
 
         // Set Default Font and Style
@@ -184,22 +200,18 @@ class Workbook {
      * @returns {Style}
      */
     createStyle(opts) {
-        let thisStyle;
-        let checkCount = 0;
-        while (thisStyle === undefined && checkCount < this.styles.length) {
-            if (_.isEqual(this.styles[checkCount].toObject(), opts)) {
-                thisStyle = this.styles[checkCount];
-            }
-            checkCount++;
+        const thisStyle = new Style(this, opts);
+        const lookupKey = JSON.stringify(thisStyle.toObject());
+
+        // Use existing style if one exists
+        if (this.stylesLookup[lookupKey]) {
+            return this.stylesLookup[lookupKey];
         }
-        if (thisStyle === undefined) {
-            thisStyle = new Style(this, opts);
-            let count = this.styles.push(thisStyle);
-            this.styles[count - 1].ids.cellXfs = count - 1;
-            return this.styles[count - 1];
-        } else {
-            return thisStyle;
-        }
+
+        this.stylesLookup[lookupKey] = thisStyle;
+        const index = this.styles.push(thisStyle) - 1;
+        this.styles[index].ids.cellXfs = index;
+        return this.styles[index];
     }
 
     /**
