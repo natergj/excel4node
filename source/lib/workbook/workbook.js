@@ -99,7 +99,7 @@ class Workbook {
             'borders': this.styleData.borders.reduce((ret, border, index) => {
                 ret[JSON.stringify(border.toObject())] = index;
                 return ret;
-            }, {}),
+            }, {})
         };
 
         // Set Default Font and Style

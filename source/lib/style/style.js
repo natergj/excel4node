@@ -16,7 +16,7 @@ let _getFontId = (wb, font) => {
 
     // Find an existing entry, creating a new one if it does not exist
     let id = wb.styleDataLookup.fonts[lookupKey];
-    if (id == null) {
+    if (id === undefined) {
         id = wb.styleData.fonts.push(thisFont) - 1;
         wb.styleDataLookup.fonts[lookupKey] = id;
     }
@@ -35,7 +35,7 @@ let _getFillId = (wb, fill) => {
 
     // Find an existing entry, creating a new one if it does not exist
     let id = wb.styleDataLookup.fills[lookupKey];
-    if (id == null) {
+    if (id === undefined) {
         id = wb.styleData.fills.push(thisFill) - 1;
         wb.styleDataLookup.fills[lookupKey] = id;
     }
@@ -54,7 +54,7 @@ let _getBorderId = (wb, border) => {
 
     // Find an existing entry, creating a new one if it does not exist
     let id = wb.styleDataLookup.borders[lookupKey];
-    if (id == null) {
+    if (id === undefined) {
         id = wb.styleData.borders.push(thisBorder) - 1;
         wb.styleDataLookup.borders[lookupKey] = id;
     }
