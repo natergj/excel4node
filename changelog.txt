@@ -1,3 +1,6 @@
+1.2.1
+        Fix Workbook#createStyle creating duplicates and slow performance [#100]
+
 1.2.0
         merged https://github.com/natergj/excel4node/pull/91 from miguelmota to expose writeToBuffer method allowing excel zip buffer to be piped to other streams
         added documentation to README
