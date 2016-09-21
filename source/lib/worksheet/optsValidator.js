@@ -61,7 +61,8 @@ const optsTypes = {
         'rightToLeft': null,
         'zoomScale': null,
         'zoomScaleNormal': null,
-        'zoomScalePageLayoutView': null
+        'zoomScalePageLayoutView': null,
+        'showGridLines': null
     },
     'sheetFormat': {
         'baseColWidth': null,

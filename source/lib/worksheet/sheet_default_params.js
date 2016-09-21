@@ -59,7 +59,8 @@ module.exports = {
         'rightToLeft': 0,
         'zoomScale': 100,
         'zoomScaleNormal': 100,
-        'zoomScalePageLayoutView': 100
+        'zoomScalePageLayoutView': 100,
+        'showGridLines': 1
     },
     'sheetFormat': {
         'baseColWidth': 10,

@@ -69,7 +69,8 @@ let _addSheetViews = (promiseObj) => {
         .att('rightToLeft', o.rightToLeft)
         .att('zoomScale', o.zoomScale)
         .att('zoomScaleNormal', o.zoomScaleNormal)
-        .att('zoomScalePageLayoutView', o.zoomScalePageLayoutView);
+        .att('zoomScalePageLayoutView', o.zoomScalePageLayoutView)
+        .att('showGridLines', o.showGridLines);
 
         let modifiedPaneParams = [];
         Object.keys(o.pane).forEach((k) => {
