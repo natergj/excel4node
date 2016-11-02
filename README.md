@@ -1,3 +1,11 @@
+[![NPM version](https://img.shields.io/npm/v/excel4node.svg)](https://www.npmjs.com/package/excel4node)
+[![License](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
+[![npm](https://img.shields.io/npm/dt/excel4node.svg)](https://www.npmjs.com/package/excel4node)
+[![node](https://img.shields.io/node/v/excel4node.svg)](https://nodejs.org/en/download/)
+[![Build Status](https://travis-ci.org/amekkawi/excel4node.svg?branch=master)](https://travis-ci.org/amekkawi/excel4node)
+[![dependencies Status](https://david-dm.org/amekkawi/excel4node/status.svg)](https://david-dm.org/amekkawi/excel4node)
+[![devDependency Status](https://david-dm.org/amekkawi/excel4node/dev-status.svg)](https://david-dm.org/amekkawi/excel4node#info=devDependencies)
+
 # excel4node
 A full featured xlsx file generation library allowing for the creation of advanced Excel files.
 
