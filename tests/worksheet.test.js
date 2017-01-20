@@ -80,6 +80,7 @@ test('Set WorkSheet options', (t) => {
                 'ySplit': 3 // Vertical position of the split, in 1/20th of a point; 0 (zero) if none. If the pane is frozen, this value indicates the number of rows visible in the left pane.
             },
             'rightToLeft': false, // Flag indicating whether the sheet is in 'right to left' display mode. When in this mode, Column A is on the far right, Column B ;is one column left of Column A, and so on. Also, information in cells is displayed in the Right to Left format.
+            'showGridLines': false, // Flag indicating whether the sheet should have gridlines enabled or disabled during view
             'zoomScale': 110, // Defaults to 100
             'zoomScaleNormal': 120, // Defaults to 100
             'zoomScalePageLayoutView': 130 // Defaults to 100
@@ -170,6 +171,7 @@ test('Set WorkSheet options', (t) => {
         t.equals(sheetView.getAttribute('tabSelected'), '1', 'sheetView tabSelected was set correctly');
         t.equals(sheetView.getAttribute('workbookViewId'), '0', 'sheetView workbookViewId was set correctly');
         t.equals(sheetView.getAttribute('rightToLeft'), 'false', 'sheetView rightToLeft was set correctly');
+        t.equals(sheetView.getAttribute('showGridLines'), 'false', 'sheetView showGridLines was set correctly');
         t.equals(sheetView.getAttribute('zoomScale'), '110', 'sheetView zoomScale was set correctly');
         t.equals(sheetView.getAttribute('zoomScaleNormal'), '120', 'sheetView zoomScaleNormal was set correctly');
         t.equals(sheetView.getAttribute('zoomScalePageLayoutView'), '130', 'sheetView zoomScalePageLayoutView was set correctly');

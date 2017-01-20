@@ -248,6 +248,7 @@ Full Worksheet options. All options are optional.
             'ySplit': Float // Vertical position of the split, in 1/20th of a point; 0 (zero) if none. If the pane is frozen, this value indicates the number of rows visible in the left pane.
         },
         'rightToLeft': Boolean, // Flag indicating whether the sheet is in 'right to left' display mode. When in this mode, Column A is on the far right, Column B ;is one column left of Column A, and so on. Also, information in cells is displayed in the Right to Left format.
+        'showGridLines': Boolean, // Flag indicating whether the sheet should have gridlines enabled or disabled during view
         'zoomScale': Integer, // Defaults to 100
         'zoomScaleNormal': Integer, // Defaults to 100
         'zoomScalePageLayoutView': Integer // Defaults to 100
