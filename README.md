@@ -8,7 +8,7 @@ REFERENCES
 [ECMA-376 Website](http://www.ecma-international.org/publications/standards/Ecma-376.htm)   
 [OpenOffice Excel File Format Reference](http://www.openoffice.org/sc/excelfileformat.pdf)   
 [OpenOffice Anatomy of OOXML explanation](http://officeopenxml.com/anatomyofOOXML-xlsx.php)   
-[MS-XSLX spec (pdf)] (http://download.microsoft.com/download/D/3/3/D334A189-E51B-47FF-B0E8-C0479AFB0E3C/%5BMS-XLSX%5D.pdf)    
+[MS-XSLX spec (pdf)](http://download.microsoft.com/download/D/3/3/D334A189-E51B-47FF-B0E8-C0479AFB0E3C/%5BMS-XLSX%5D.pdf)    
 
 Code references specifications sections from ECMA-376 2nd edition doc   
 ECMA-376, Second Edition, Part 1 - Fundamentals And Markup Language Reference.pdf   
