@@ -4,6 +4,7 @@ const test = _tape(tape);
 const xl = require('../source/index');
 const Picture = require('../source/lib/drawing/picture.js');
 const path = require('path');
+const fs = require('fs');
 
 test('Test adding images', (t) => {
     var wb = new xl.Workbook();
@@ -34,8 +35,9 @@ test('Test adding images', (t) => {
     });
      
     ws.addImage({
-        path: path.resolve(__dirname, '../sampleFiles/logo.png'),
+        image: fs.readFileSync(path.resolve(__dirname, '../sampleFiles/logo.png')),
         type: 'picture',
+        fileName: 'logo.png',
         position: {
             type: 'twoCellAnchor',
             from: {

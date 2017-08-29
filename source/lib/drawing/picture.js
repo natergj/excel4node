@@ -2,19 +2,19 @@ const Drawing = require('./drawing.js');
 const path = require('path');
 const imgsz = require('image-size');
 const mime = require('mime');
+const uniqueId = require('lodash').uniqueId;
 
 const EMU = require('../classes/emu.js');
 const xmlbuilder = require('xmlbuilder');
 
 class Picture extends Drawing {
-
     /**
      * Element representing an Excel Picture subclass of Drawing
      * @property {String} kind Kind of picture (currently only image is supported)
-     * @property {String} contentType Mime type of image
      * @property {String} type ooxml schema
      * @property {String} imagePath Filesystem path to image
-     * @property {String} name Name of image
+     * @property {Buffer} image Buffer with image
+     * @property {String} contentType Mime type of image
      * @property {String} description Description of image
      * @property {String} title Title of image
      * @property {String} id ID of image
@@ -33,10 +33,25 @@ class Picture extends Drawing {
     constructor(opts) {
         super();
         this.kind = 'image';
-        this.contentType = mime.lookup(opts.path);
         this.type = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/image';
         this.imagePath = opts.path;
-        this._name = path.basename(opts.path);
+        this.image = opts.image;
+
+        this._name = this.image
+            ? opts.name || uniqueId('image-')
+            : opts.name || path.basename(this.imagePath);
+
+        const size = imgsz(this.imagePath || this.image);
+
+        this._pxWidth = size.width;
+        this._pxHeight = size.height;
+
+        this._extension = this.image
+            ? size.type
+            : path.extname(this.imagePath);
+
+        this.contentType = mime.lookup(this._extension);
+
         this._descr = null;
         this._title = null;
         this._id;
@@ -92,18 +107,17 @@ class Picture extends Drawing {
     }
 
     get extension() {
-        return path.extname(this.imagePath).substr(1);
+        return this._extension;
     }
+
     get width() {
-        let pxWidth = imgsz(this.imagePath).width;
-        let inWidth = pxWidth / 96;
+        let inWidth = this._pxWidth / 96;
         let emu = new EMU(inWidth + 'in');
         return emu.value;
     }
 
     get height() {
-        let pxHeight = imgsz(this.imagePath).height;
-        let inHeight = pxHeight / 96;
+        let inHeight = this._pxHeight / 96;
         let emu = new EMU(inHeight + 'in');
         return emu.value;
     }

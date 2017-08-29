@@ -593,7 +593,6 @@ oneCellAnchor and twoCellAnchor types will take positional objects:
 position type of oneCellAnchor will take a single "from" position   
 position type of twoCellAnchor will take a "from" and "to" position   
 specifying a twoCellAnchor will automatically adjust the image to fit within the bounds of the two anchors.   
-
 ```javascript
 
 ws.addImage({
@@ -639,5 +638,18 @@ ws.addImage({
         }
     }
 });
+```
 
+You can also pass buffer with loaded to memory image:
+```javascript
+ws.addImage({
+    image: fs.readFileSync(path.resolve(__dirname, '../sampleFiles/logo.png')),
+    name: 'logo', // name is not required param
+    type: 'picture',
+    position: {
+        type: 'absoluteAnchor',
+        x: '1in',
+        y: '2in'
+    }
+});
 ```
