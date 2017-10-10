@@ -11,7 +11,8 @@ let addRootContentTypesXML = (promiseObj) => {
             {
                 'version': '1.0', 
                 'encoding': 'UTF-8', 
-                'standalone': true
+                'standalone': true,
+                'allowSurrogateChars': true
             }
         )
         .att('xmlns', 'http://schemas.openxmlformats.org/package/2006/content-types');
@@ -224,7 +225,8 @@ let addSharedStringsXML = (promiseObj) => {
             {
                 'version': '1.0', 
                 'encoding': 'UTF-8', 
-                'standalone': true
+                'standalone': true,
+                'allowSurrogateChars': true
             }
         )
         .att('count', promiseObj.wb.sharedStrings.length)
@@ -315,7 +317,8 @@ let addStylesXML = (promiseObj) => {
             {
                 'version': '1.0', 
                 'encoding': 'UTF-8', 
-                'standalone': true
+                'standalone': true,
+                'allowSurrogateChars': true
             }
         )
         .att('mc:Ignorable', 'x14ac')
