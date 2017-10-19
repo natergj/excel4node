@@ -5,7 +5,6 @@ module.exports.colorScheme = require('./colorScheme.js');
 module.exports.excelColor = require('./excelColor.js');
 module.exports.fillPattern = require('./fillPattern.js');
 module.exports.fontFamily = require('./fontFamily.js');
-module.exports.index = require('./index.js');
 module.exports.orientation = require('./orientation.js');
 module.exports.pageOrder = require('./pageOrder.js');
 module.exports.pane = require('./pane.js');
