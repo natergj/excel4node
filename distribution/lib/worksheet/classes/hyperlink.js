@@ -78,16 +78,12 @@ var HyperlinkCollection = function () {
     }, {
         key: 'addToXMLele',
         value: function addToXMLele(ele) {
-            var _this = this;
-
             if (this.length > 0) {
-                (function () {
-                    var linksEle = ele.ele('hyperlinks');
-                    _this.links.forEach(function (l) {
-                        l.addToXMLEle(linksEle);
-                    });
-                    linksEle.up();
-                })();
+                var linksEle = ele.ele('hyperlinks');
+                this.links.forEach(function (l) {
+                    l.addToXMLEle(linksEle);
+                });
+                linksEle.up();
             }
         }
     }, {

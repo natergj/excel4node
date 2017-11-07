@@ -1,6 +1,9 @@
 'use strict';
 
 module.exports = {
+    'sheetData': {
+        'spans': true
+    },
     'margins': {
         'bottom': 0.75,
         'footer': 0.3,

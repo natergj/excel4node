@@ -135,6 +135,7 @@ var _addSheetData = function _addSheetData(promiseObj) {
 
         var ele = promiseObj.xml.ele('sheetData');
         var rows = Object.keys(promiseObj.ws.rows);
+        var o = promiseObj.ws.opts.sheetData;
 
         var processRows = function processRows(theseRows) {
             for (var r = 0; r < theseRows.length; r++) {
@@ -144,7 +145,7 @@ var _addSheetData = function _addSheetData(promiseObj) {
                 var rEle = ele.ele('row');
 
                 rEle.att('r', thisRow.r);
-                rEle.att('spans', thisRow.spans);
+                o.spans === true ? rEle.att('spans', thisRow.spans) : null;
                 thisRow.s !== null ? rEle.att('s', thisRow.s) : null;
                 thisRow.customFormat !== null ? rEle.att('customFormat', thisRow.customFormat) : null;
                 thisRow.ht !== null ? rEle.att('ht', thisRow.ht) : null;
@@ -190,24 +191,22 @@ var _addSheetProtection = function _addSheetProtection(promiseObj) {
         });
 
         if (includeSheetProtection) {
-            (function () {
-                // Set required fields with defaults if not specified
-                o.sheet = o.sheet !== null ? o.sheet : true;
-                o.objects = o.objects !== null ? o.objects : true;
-                o.scenarios = o.scenarios !== null ? o.scenarios : true;
+            // Set required fields with defaults if not specified
+            o.sheet = o.sheet !== null ? o.sheet : true;
+            o.objects = o.objects !== null ? o.objects : true;
+            o.scenarios = o.scenarios !== null ? o.scenarios : true;
 
-                var ele = promiseObj.xml.ele('sheetProtection');
-                Object.keys(o).forEach(function (k) {
-                    if (o[k] !== null) {
-                        if (k === 'password') {
-                            ele.att('password', utils.getHashOfPassword(o[k]));
-                        } else {
-                            ele.att(k, utils.boolToInt(o[k]));
-                        }
+            var ele = promiseObj.xml.ele('sheetProtection');
+            Object.keys(o).forEach(function (k) {
+                if (o[k] !== null) {
+                    if (k === 'password') {
+                        ele.att('password', utils.getHashOfPassword(o[k]));
+                    } else {
+                        ele.att(k, utils.boolToInt(o[k]));
                     }
-                });
-                ele.up();
-            })();
+                }
+            });
+            ele.up();
         }
         resolve(promiseObj);
     });
@@ -266,13 +265,11 @@ var _addMergeCells = function _addMergeCells(promiseObj) {
     return new Promise(function (resolve, reject) {
 
         if (promiseObj.ws.mergedCells instanceof Array && promiseObj.ws.mergedCells.length > 0) {
-            (function () {
-                var ele = promiseObj.xml.ele('mergeCells').att('count', promiseObj.ws.mergedCells.length);
-                promiseObj.ws.mergedCells.forEach(function (cr) {
-                    ele.ele('mergeCell').att('ref', cr).up();
-                });
-                ele.up();
-            })();
+            var ele = promiseObj.xml.ele('mergeCells').att('count', promiseObj.ws.mergedCells.length);
+            promiseObj.ws.mergedCells.forEach(function (cr) {
+                ele.ele('mergeCell').att('ref', cr).up();
+            });
+            ele.up();
         }
 
         resolve(promiseObj);

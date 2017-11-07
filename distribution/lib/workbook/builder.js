@@ -1,6 +1,6 @@
 'use strict';
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var xmlbuilder = require('xmlbuilder');
 var JSZip = require('jszip');
@@ -264,12 +264,10 @@ var addStylesXML = function addStylesXML(promiseObj) {
         }).att('mc:Ignorable', 'x14ac').att('xmlns', 'http://schemas.openxmlformats.org/spreadsheetml/2006/main').att('xmlns:mc', 'http://schemas.openxmlformats.org/markup-compatibility/2006').att('xmlns:x14ac', 'http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac');
 
         if (promiseObj.wb.styleData.numFmts.length > 0) {
-            (function () {
-                var nfXML = xml.ele('numFmts').att('count', promiseObj.wb.styleData.numFmts.length);
-                promiseObj.wb.styleData.numFmts.forEach(function (nf) {
-                    nf.addToXMLele(nfXML);
-                });
-            })();
+            var nfXML = xml.ele('numFmts').att('count', promiseObj.wb.styleData.numFmts.length);
+            promiseObj.wb.styleData.numFmts.forEach(function (nf) {
+                nf.addToXMLele(nfXML);
+            });
         }
 
         var fontXML = xml.ele('fonts').att('count', promiseObj.wb.styleData.fonts.length);
@@ -310,38 +308,36 @@ var addDrawingsXML = function addDrawingsXML(promiseObj) {
 
             promiseObj.wb.sheets.forEach(function (ws) {
                 if (!ws.drawingCollection.isEmpty) {
-                    (function () {
 
-                        var drawingRelXML = xmlbuilder.create('Relationships', {
-                            'version': '1.0',
-                            'encoding': 'UTF-8',
-                            'standalone': true
-                        }).att('xmlns', 'http://schemas.openxmlformats.org/package/2006/relationships');
+                    var drawingRelXML = xmlbuilder.create('Relationships', {
+                        'version': '1.0',
+                        'encoding': 'UTF-8',
+                        'standalone': true
+                    }).att('xmlns', 'http://schemas.openxmlformats.org/package/2006/relationships');
 
-                        var drawingsXML = xmlbuilder.create('xdr:wsDr', {
-                            'version': '1.0',
-                            'encoding': 'UTF-8',
-                            'standalone': true
-                        });
-                        drawingsXML.att('xmlns:a', 'http://schemas.openxmlformats.org/drawingml/2006/main').att('xmlns:xdr', 'http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing');
+                    var drawingsXML = xmlbuilder.create('xdr:wsDr', {
+                        'version': '1.0',
+                        'encoding': 'UTF-8',
+                        'standalone': true
+                    });
+                    drawingsXML.att('xmlns:a', 'http://schemas.openxmlformats.org/drawingml/2006/main').att('xmlns:xdr', 'http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing');
 
-                        ws.drawingCollection.drawings.forEach(function (d) {
+                    ws.drawingCollection.drawings.forEach(function (d) {
 
-                            if (d.kind === 'image') {
-                                var target = 'image' + d.id + '.' + d.extension;
-                                promiseObj.xlsx.folder('xl').folder('media').file(target, fs.readFileSync(d.imagePath));
+                        if (d.kind === 'image') {
+                            var target = 'image' + d.id + '.' + d.extension;
+                            promiseObj.xlsx.folder('xl').folder('media').file(target, fs.readFileSync(d.imagePath));
 
-                                drawingRelXML.ele('Relationship').att('Id', d.rId).att('Target', '../media/' + target).att('Type', d.type);
-                            }
+                            drawingRelXML.ele('Relationship').att('Id', d.rId).att('Target', '../media/' + target).att('Type', d.type);
+                        }
 
-                            d.addToXMLele(drawingsXML);
-                        });
+                        d.addToXMLele(drawingsXML);
+                    });
 
-                        var drawingsXMLStr = drawingsXML.doc().end(promiseObj.xmlOutVars);
-                        var drawingRelXMLStr = drawingRelXML.doc().end(promiseObj.xmlOutVars);
-                        promiseObj.xlsx.folder('xl').folder('drawings').file('drawing' + ws.sheetId + '.xml', drawingsXMLStr);
-                        promiseObj.xlsx.folder('xl').folder('drawings').folder('_rels').file('drawing' + ws.sheetId + '.xml.rels', drawingRelXMLStr);
-                    })();
+                    var drawingsXMLStr = drawingsXML.doc().end(promiseObj.xmlOutVars);
+                    var drawingRelXMLStr = drawingRelXML.doc().end(promiseObj.xmlOutVars);
+                    promiseObj.xlsx.folder('xl').folder('drawings').file('drawing' + ws.sheetId + '.xml', drawingsXMLStr);
+                    promiseObj.xlsx.folder('xl').folder('drawings').folder('_rels').file('drawing' + ws.sheetId + '.xml.rels', drawingRelXMLStr);
                 }
             });
         }

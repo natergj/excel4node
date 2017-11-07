@@ -2,7 +2,7 @@
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -204,26 +204,24 @@ function hyperlinkSetter(url, displayStr, tooltip) {
 function mergeCells(cellBlock) {
     var excelRefs = cellBlock.excelRefs;
     if (excelRefs instanceof Array && excelRefs.length > 0) {
-        (function () {
-            excelRefs.sort(utils.sortCellRefs);
+        excelRefs.sort(utils.sortCellRefs);
 
-            var cellRange = excelRefs[0] + ':' + excelRefs[excelRefs.length - 1];
-            var rangeCells = excelRefs;
+        var cellRange = excelRefs[0] + ':' + excelRefs[excelRefs.length - 1];
+        var rangeCells = excelRefs;
 
-            var okToMerge = true;
-            cellBlock.ws.mergedCells.forEach(function (cr) {
-                // Check to see if currently merged cells contain cells in new merge request
-                var curCells = utils.getAllCellsInExcelRange(cr);
-                var intersection = utils.arrayIntersectSafe(rangeCells, curCells);
-                if (intersection.length > 0) {
-                    okToMerge = false;
-                    cellBlock.ws.wb.logger.error('Invalid Range for: ' + cellRange + '. Some cells in this range are already included in another merged cell range: ' + cr + '.');
-                }
-            });
-            if (okToMerge) {
-                cellBlock.ws.mergedCells.push(cellRange);
+        var okToMerge = true;
+        cellBlock.ws.mergedCells.forEach(function (cr) {
+            // Check to see if currently merged cells contain cells in new merge request
+            var curCells = utils.getAllCellsInExcelRange(cr);
+            var intersection = utils.arrayIntersectSafe(rangeCells, curCells);
+            if (intersection.length > 0) {
+                okToMerge = false;
+                cellBlock.ws.wb.logger.error('Invalid Range for: ' + cellRange + '. Some cells in this range are already included in another merged cell range: ' + cr + '.');
             }
-        })();
+        });
+        if (okToMerge) {
+            cellBlock.ws.mergedCells.push(cellRange);
+        }
     } else {
         throw new TypeError(util.format('excelRefs variable sent to mergeCells function must be an array with length > 0'));
     }

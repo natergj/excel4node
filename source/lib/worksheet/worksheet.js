@@ -18,8 +18,8 @@ class Worksheet {
      * @param {Workbook} wb Workbook that the Worksheet will belong to
      * @param {String} name Name of Worksheet
      * @param {Object} opts Worksheet settings
-     * @param {Boolean} opts.rows
-     * @param {Boolean} opts.rows.spans Should spans be added to rows
+     * @param {Boolean} opts.sheetData
+     * @param {Boolean} opts.sheetData.spans Should spans be added to rows
      * @param {Object} opts.margins
      * @param {Number} opts.margins.bottom Bottom margin in inches
      * @param {Number} opts.margins.footer Footer margin in inches
