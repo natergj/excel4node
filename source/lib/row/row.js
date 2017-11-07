@@ -24,6 +24,7 @@ class Row {
      * @property {String} firstColumnAlpha Alpha representation of the first column of the row containing data
      * @property {Number} lastColumn Index of the last column of the row cotaining data
      * @property {String} lastColumnAlpha Alpha representation of the last column of the row containing data
+     * @property {Boolean} spansEnabled States whether the spans optimization is enabled on this row, by default true
      */
     constructor(row, ws) {
         this.ws = ws;
@@ -38,6 +39,7 @@ class Row {
         this.s = null;
         this.thickBot = null;
         this.thickTop = null;
+        this.spansEnabled = true;
     }
 
     set height(h) {

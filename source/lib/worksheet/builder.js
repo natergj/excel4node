@@ -156,7 +156,7 @@ let _addSheetData = (promiseObj) => {
                 let rEle = ele.ele('row');
 
                 rEle.att('r', thisRow.r);
-                rEle.att('spans', thisRow.spans);
+                thisRow.spansEnabled === true ? rEle.att('spans', thisRow.spans) : null;
                 thisRow.s !== null ? rEle.att('s', thisRow.s) : null;
                 thisRow.customFormat !== null ? rEle.att('customFormat', thisRow.customFormat) : null;
                 thisRow.ht !== null ? rEle.att('ht', thisRow.ht) : null;
