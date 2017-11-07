@@ -147,6 +147,7 @@ let _addSheetData = (promiseObj) => {
 
         let ele = promiseObj.xml.ele('sheetData');
         let rows = Object.keys(promiseObj.ws.rows);
+        var o = promiseObj.ws.opts.rows;
 
         let processRows = (theseRows) => {
             for (var r = 0; r < theseRows.length; r++) {
@@ -156,7 +157,7 @@ let _addSheetData = (promiseObj) => {
                 let rEle = ele.ele('row');
 
                 rEle.att('r', thisRow.r);
-                thisRow.spansEnabled === true ? rEle.att('spans', thisRow.spans) : null;
+                (o === null || o.spans === null || o.spans === true) && thisRow.spansEnabled === true ? rEle.att('spans', thisRow.spans) : null;
                 thisRow.s !== null ? rEle.att('s', thisRow.s) : null;
                 thisRow.customFormat !== null ? rEle.att('customFormat', thisRow.customFormat) : null;
                 thisRow.ht !== null ? rEle.att('ht', thisRow.ht) : null;
