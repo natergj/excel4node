@@ -1,6 +1,9 @@
 const types = require('../types/index.js');
 
 const optsTypes = {
+    'rows': {
+        'spans': 'Float'
+    },
     'margins': {
         'bottom': 'Float',
         'footer': 'Float',
