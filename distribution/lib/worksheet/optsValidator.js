@@ -6,7 +6,7 @@ var types = require('../types/index.js');
 
 var optsTypes = {
     'sheetData': {
-        'spans': 'Float'
+        'spans': 'Boolean'
     },
     'margins': {
         'bottom': 'Float',
