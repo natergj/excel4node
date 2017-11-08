@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = {
     'sheetData': {
         'spans': true
@@ -15,7 +17,7 @@ module.exports = {
         'centerVertical': null,
         'printGridLines': null,
         'printHeadings': null
-    
+
     },
     'headerFooter': {
         'evenFooter': null,
@@ -60,7 +62,6 @@ module.exports = {
         'tabSelected': 0,
         'workbookViewId': 0,
         'rightToLeft': 0,
-        'showGridLines': 1,
         'zoomScale': 100,
         'zoomScaleNormal': 100,
         'zoomScalePageLayoutView': 100
@@ -76,7 +77,7 @@ module.exports = {
         'thickTop': null,
         'zeroHeight': null
     },
-    'sheetProtection': {                 // same as "Protect Sheet" in Review tab of Excel 
+    'sheetProtection': { // same as "Protect Sheet" in Review tab of Excel 
         'autoFilter': null,
         'deleteColumns': null,
         'deleteRows': null,
@@ -109,3 +110,4 @@ module.exports = {
         'filters': []
     }
 };
+//# sourceMappingURL=sheet_default_params.js.map

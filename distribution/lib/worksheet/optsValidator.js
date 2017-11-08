@@ -1,6 +1,10 @@
-const types = require('../types/index.js');
+'use strict';
 
-const optsTypes = {
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var types = require('../types/index.js');
+
+var optsTypes = {
     'sheetData': {
         'spans': 'Boolean'
     },
@@ -17,7 +21,7 @@ const optsTypes = {
         'centerVertical': 'Boolean',
         'printGridLines': 'Boolean',
         'printHeadings': 'Boolean'
-    
+
     },
     'pageSetup': {
         'blackAndWhite': 'Boolean',
@@ -62,7 +66,6 @@ const optsTypes = {
         'tabSelected': null,
         'workbookViewId': null,
         'rightToLeft': null,
-        'showGridLines': null,
         'zoomScale': null,
         'zoomScaleNormal': null,
         'zoomScalePageLayoutView': null
@@ -110,12 +113,12 @@ const optsTypes = {
     }
 };
 
-let getObjItem = (obj, key) => {
-    let returnObj = obj;
-    let levels = key.split('.');
+var getObjItem = function getObjItem(obj, key) {
+    var returnObj = obj;
+    var levels = key.split('.');
 
     while (levels.length > 0) {
-        let thisLevelKey = levels.shift();
+        var thisLevelKey = levels.shift();
         try {
             returnObj = returnObj[thisLevelKey];
         } catch (e) {
@@ -125,89 +128,90 @@ let getObjItem = (obj, key) => {
     return returnObj;
 };
 
-let validator = function (key, val, type) {
+var validator = function validator(key, val, type) {
     switch (type) {
 
-    case 'PAPER_SIZE': 
-        let sizes = Object.keys(types.paperSize);
-        if (sizes.indexOf(val) < 0) {
-            throw new TypeError('Invalid value for ' + key + '. Value must be one of ' + sizes.join(', '));
-        }
-        break;
+        case 'PAPER_SIZE':
+            var sizes = Object.keys(types.paperSize);
+            if (sizes.indexOf(val) < 0) {
+                throw new TypeError('Invalid value for ' + key + '. Value must be one of ' + sizes.join(', '));
+            }
+            break;
 
-    case 'PAGE_ORDER':
-        types.pageOrder.validate(val);
-        break;
+        case 'PAGE_ORDER':
+            types.pageOrder.validate(val);
+            break;
 
-    case 'ORIENTATION':
-        types.orientation.validate(val);
-        break;
+        case 'ORIENTATION':
+            types.orientation.validate(val);
+            break;
 
-    case 'POSITIVE_UNIVERSAL_MEASURE': 
-        types.positiveUniversalMeasure.validate(val);
-        break;
+        case 'POSITIVE_UNIVERSAL_MEASURE':
+            types.positiveUniversalMeasure.validate(val);
+            break;
 
-    case 'CELL_COMMENTS':
-        types.cellComment.validate(val);
-        break;
+        case 'CELL_COMMENTS':
+            types.cellComment.validate(val);
+            break;
 
-    case 'PRINT_ERROR': 
-        types.printError.validate(val);
-        break;
+        case 'PRINT_ERROR':
+            types.printError.validate(val);
+            break;
 
-    case 'PANE':
-        types.pane.validate(val);
-        break;
+        case 'PANE':
+            types.pane.validate(val);
+            break;
 
-    case 'PANE_STATE':
-        types.paneState.validate(val);
-        break;
+        case 'PANE_STATE':
+            types.paneState.validate(val);
+            break;
 
-    case 'Boolean':
-        if ([true, false, 1, 0].indexOf(val) < 0) {
-            throw new TypeError(key + ' expects value of true, false, 1 or 0');
-        }
-        break;
+        case 'Boolean':
+            if ([true, false, 1, 0].indexOf(val) < 0) {
+                throw new TypeError(key + ' expects value of true, false, 1 or 0');
+            }
+            break;
 
-    case 'Float': 
-        if (parseFloat(val) !== val) {
-            throw new TypeError(key + ' expects value as a Float number');
-        }
-        break;
+        case 'Float':
+            if (parseFloat(val) !== val) {
+                throw new TypeError(key + ' expects value as a Float number');
+            }
+            break;
 
-    case 'Integer':
-        if (parseInt(val) !== val) {
-            throw new TypeError(key + ' expects value as an Integer');
-        }
-        break;
+        case 'Integer':
+            if (parseInt(val) !== val) {
+                throw new TypeError(key + ' expects value as an Integer');
+            }
+            break;
 
-    case 'String': 
-        if (typeof val !== 'string') {
-            throw new TypeError(key + ' expects value as a String');
-        }
-        break;
+        case 'String':
+            if (typeof val !== 'string') {
+                throw new TypeError(key + ' expects value as a String');
+            }
+            break;
 
-    default:
-        break;
+        default:
+            break;
     }
 };
 
-let traverse = function (o, keyParts, func) {
-    for (let i in o) {
-        let thisKeyParts = keyParts.concat(i);
-        let thisKey = thisKeyParts.join('.');
-        let thisType = getObjItem(optsTypes, thisKey);
+var traverse = function traverse(o, keyParts, func) {
+    for (var i in o) {
+        var thisKeyParts = keyParts.concat(i);
+        var thisKey = thisKeyParts.join('.');
+        var thisType = getObjItem(optsTypes, thisKey);
 
         if (typeof thisType === 'string') {
-            let thisItem = o[i];
-            func(thisKey, thisItem, thisType); 
+            var thisItem = o[i];
+            func(thisKey, thisItem, thisType);
         }
-        if (o[i] !== null && typeof o[i] === 'object') {
+        if (o[i] !== null && _typeof(o[i]) === 'object') {
             traverse(o[i], thisKeyParts, func);
         }
     }
 };
 
-module.exports = (opts) => {
+module.exports = function (opts) {
     traverse(opts, [], validator);
 };
+//# sourceMappingURL=optsValidator.js.map

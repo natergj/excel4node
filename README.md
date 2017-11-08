@@ -192,6 +192,9 @@ Full Worksheet options. All options are optional.
 
 ```
 {
+    'sheetData': {
+        'spans': Boolean
+    },
     'margins': { // Accepts a Double in Inches
         'bottom': Double,
         'footer': Double,

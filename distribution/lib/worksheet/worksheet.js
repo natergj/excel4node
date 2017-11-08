@@ -1,17 +1,22 @@
-const _ = require('lodash');
-const CfRulesCollection = require('./cf/cf_rules_collection');
-const cellAccessor = require('../cell');
-const rowAccessor = require('../row');
-const colAccessor = require('../column');
-const wsDefaultParams = require('./sheet_default_params.js');
-const HyperlinkCollection = require('./classes/hyperlink.js').HyperlinkCollection;
-const DataValidation = require('./classes/dataValidation.js');
-const wsDrawing = require('../drawing/index.js');
-const xmlBuilder = require('./builder.js');
-const optsValidator = require('./optsValidator.js');
+'use strict';
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-class Worksheet {
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var _ = require('lodash');
+var CfRulesCollection = require('./cf/cf_rules_collection');
+var cellAccessor = require('../cell');
+var rowAccessor = require('../row');
+var colAccessor = require('../column');
+var wsDefaultParams = require('./sheet_default_params.js');
+var HyperlinkCollection = require('./classes/hyperlink.js').HyperlinkCollection;
+var DataValidation = require('./classes/dataValidation.js');
+var wsDrawing = require('../drawing/index.js');
+var xmlBuilder = require('./builder.js');
+var optsValidator = require('./optsValidator.js');
+
+var Worksheet = function () {
     /**
      * Create a Worksheet.
      * @class Worksheet
@@ -70,7 +75,6 @@ class Worksheet {
      * @param {String} opts.sheetView.pane.xSplit Horizontal position of the split, in 1/20th of a point; 0 (zero) if none. If the pane is frozen, this value indicates the number of columns visible in the top pane.
      * @param {String} opts.sheetView.pane.ySplit Vertical position of the split, in 1/20th of a point; 0 (zero) if none. If the pane is frozen, this value indicates the number of rows visible in the left pane.
      * @param {Boolean} opts.sheetView.rightToLeft Flag indicating whether the sheet is in 'right to left' display mode. When in this mode, Column A is on the far right, Column B ;is one column left of Column A, and so on. Also, information in cells is displayed in the Right to Left format.
-     * @param {Boolean} opts.sheetView.showGridLines Flag indicating whether the sheet should have gridlines enabled or disabled during view.
      * @param {Number} opts.sheetView.zoomScale  Defaults to 100
      * @param {Number} opts.sheetView.zoomScaleNormal Defaults to 100
      * @param {Number} opts.sheetView.zoomScalePageLayoutView Defaults to 100
@@ -103,8 +107,9 @@ class Worksheet {
      * @param {Boolean} opts.outline.summaryRight Flag indicating whether summary columns appear to the right of detail in an outline, when applying an outline/grouping.
      * @returns {Worksheet}
      */
-    constructor(wb, name, opts) {
-        
+    function Worksheet(wb, name, opts) {
+        _classCallCheck(this, Worksheet);
+
         this.wb = wb;
         this.sheetId = this.wb.sheets.length + 1;
         this.localSheetId = this.wb.sheets.length;
@@ -112,7 +117,7 @@ class Worksheet {
         optsValidator(opts);
 
         this.opts.sheetView.tabSelected = this.sheetId === 1 ? 1 : 0;
-        this.name = name ? name : `Sheet ${this.sheetId}`;
+        this.name = name ? name : 'Sheet ' + this.sheetId;
         this.hasGroupings = false;
         this.cols = {}; // Columns keyed by column, contains column properties
         this.rows = {}; // Rows keyed by row, contains row properties and array of cellRefs
@@ -126,124 +131,148 @@ class Worksheet {
         this.hyperlinkCollection = new HyperlinkCollection();
         this.dataValidationCollection = new DataValidation.DataValidationCollection();
         this.drawingCollection = new wsDrawing.DrawingCollection();
-
     }
 
-    get relationships() {
-        let rels = [];
-        this.hyperlinkCollection.links.forEach((l) => {
-            rels.push(l);
-        });
-        if (!this.drawingCollection.isEmpty) {
-            rels.push('drawing');
+    _createClass(Worksheet, [{
+        key: 'addConditionalFormattingRule',
+
+
+        /**
+         * @func Worksheet.addConditionalFormattingRule
+         * @param {String} sqref Text represetation of Cell range where the conditional formatting will take effect
+         * @param {Object} options Options for conditional formatting
+         * @param {String} options.type Type of conditional formatting
+         * @param {String} options.priority Priority level for this rule
+         * @param {String} options.formula Formula that returns nonzero or 0 value. If not 0 then rule will be applied
+         * @param {Style} options.style Style that should be applied if rule passes
+         * @returns {Worksheet}
+         */
+        value: function addConditionalFormattingRule(sqref, options) {
+            var style = options.style || this.wb.Style();
+            var dxf = this.wb.dxfCollection.add(style);
+            delete options.style;
+            options.dxfId = dxf.id;
+            this.cfRulesCollection.add(sqref, options);
+            return this;
         }
-        return rels;
-    }
+        /**
+         * @func Worksheet.addDataValidation
+         * @desc Add a data validation rule to the Worksheet
+         * @param {Object} opts Options for Data Validation rule
+         * @param {String} opts.sqref Required. Specifies range of cells to apply validate. i.e. "A1:A100"
+         * @param {Boolean} opts.allowBlank Allows cells to be empty
+         * @param {String} opts.errorStyle One of 'stop', 'warning', 'information'. You must specify an error string for this to take effect
+         * @param {String} opts.error Message to show on error
+         * @param {String} opts.errorTitle: String Title of message shown on error
+         * @param {Boolean} opts.showErrorMessage Defaults to true if error or errorTitle is set
+         * @param {String} opts.imeMode Restricts input to a specific set of characters. One of 'noControl', 'off', 'on', 'disabled', 'hiragana', 'fullKatakana', 'halfKatakana', 'fullAlpha', 'halfAlpha', 'fullHangul', 'halfHangul'
+         * @param {String} opts.operator Must be one of 'between', 'notBetween', 'equal', 'notEqual', 'lessThan', 'lessThanOrEqual', 'greaterThan', 'greaterThanOrEqual'
+         * @param {String} opts.prompt Message text of input prompt
+         * @param {String} opts.promptTitle Title of input prompt
+         * @param {Boolean} opts.showInputMessage Defaults to true if prompt or promptTitle is set
+         * @param {Boolean} opts.showDropDown A boolean value indicating whether to display a dropdown combo box for a list type data validation.
+         * @param {String} opts.type One of 'none', 'whole', 'decimal', 'list', 'date', 'time', 'textLength', 'custom'
+         * @param {Array.String} opts.formulas Minimum count 1, maximum count 2. Rules for validation
+         */
 
-    get columnCount() {
-        return Math.max.apply(Math, Object.keys(this.cols));
-    }
+    }, {
+        key: 'addDataValidation',
+        value: function addDataValidation(opts) {
+            var newValidation = this.dataValidationCollection.add(opts);
+            return newValidation;
+        }
+        /**
+         * @func Worksheet.generateRelsXML
+         * @desc When Workbook is being built, generate the XML that will go into the Worksheet .rels file
+         */
 
-    get rowCount() {
-        return Math.max.apply(Math, Object.keys(this.rows));
-    }
+    }, {
+        key: 'generateRelsXML',
+        value: function generateRelsXML() {
+            return xmlBuilder.relsXML(this);
+        }
+        /**
+         * @func Worksheet.generateXML
+         * @desc When Workbook is being built, generate the XML that will go into the Worksheet xml file 
+         */
 
-    /**
-     * @func Worksheet.addConditionalFormattingRule
-     * @param {String} sqref Text represetation of Cell range where the conditional formatting will take effect
-     * @param {Object} options Options for conditional formatting
-     * @param {String} options.type Type of conditional formatting
-     * @param {String} options.priority Priority level for this rule
-     * @param {String} options.formula Formula that returns nonzero or 0 value. If not 0 then rule will be applied
-     * @param {Style} options.style Style that should be applied if rule passes
-     * @returns {Worksheet}
-     */
-    addConditionalFormattingRule(sqref, options) {
-        let style = options.style || this.wb.Style();
-        let dxf = this.wb.dxfCollection.add(style);
-        delete options.style;
-        options.dxfId = dxf.id;
-        this.cfRulesCollection.add(sqref, options);
-        return this;
-    }
-    /**
-     * @func Worksheet.addDataValidation
-     * @desc Add a data validation rule to the Worksheet
-     * @param {Object} opts Options for Data Validation rule
-     * @param {String} opts.sqref Required. Specifies range of cells to apply validate. i.e. "A1:A100"
-     * @param {Boolean} opts.allowBlank Allows cells to be empty
-     * @param {String} opts.errorStyle One of 'stop', 'warning', 'information'. You must specify an error string for this to take effect
-     * @param {String} opts.error Message to show on error
-     * @param {String} opts.errorTitle: String Title of message shown on error
-     * @param {Boolean} opts.showErrorMessage Defaults to true if error or errorTitle is set
-     * @param {String} opts.imeMode Restricts input to a specific set of characters. One of 'noControl', 'off', 'on', 'disabled', 'hiragana', 'fullKatakana', 'halfKatakana', 'fullAlpha', 'halfAlpha', 'fullHangul', 'halfHangul'
-     * @param {String} opts.operator Must be one of 'between', 'notBetween', 'equal', 'notEqual', 'lessThan', 'lessThanOrEqual', 'greaterThan', 'greaterThanOrEqual'
-     * @param {String} opts.prompt Message text of input prompt
-     * @param {String} opts.promptTitle Title of input prompt
-     * @param {Boolean} opts.showInputMessage Defaults to true if prompt or promptTitle is set
-     * @param {Boolean} opts.showDropDown A boolean value indicating whether to display a dropdown combo box for a list type data validation.
-     * @param {String} opts.type One of 'none', 'whole', 'decimal', 'list', 'date', 'time', 'textLength', 'custom'
-     * @param {Array.String} opts.formulas Minimum count 1, maximum count 2. Rules for validation
-     */
-    addDataValidation(opts) {
-        let newValidation = this.dataValidationCollection.add(opts);
-        return newValidation;
-    }
-    /**
-     * @func Worksheet.generateRelsXML
-     * @desc When Workbook is being built, generate the XML that will go into the Worksheet .rels file
-     */
-    generateRelsXML() {
-        return xmlBuilder.relsXML(this);
-    }
-    /**
-     * @func Worksheet.generateXML
-     * @desc When Workbook is being built, generate the XML that will go into the Worksheet xml file 
-     */
-    generateXML() {
-        return xmlBuilder.sheetXML(this);
-    }
+    }, {
+        key: 'generateXML',
+        value: function generateXML() {
+            return xmlBuilder.sheetXML(this);
+        }
+    }, {
+        key: 'row',
+        value: function row(_row) {
+            return rowAccessor(this, _row);
+        }
+    }, {
+        key: 'column',
+        value: function column(col) {
+            return colAccessor(this, col);
+        }
+        /**
+         * @func Worksheet.addImage
+         * @param {Object} opts
+         * @param {String} opts.path File system path of image
+         * @param {String} opts.type Type of image. Currently only 'picture' is supported
+         * @param {Object} opts.position Position object for image
+         * @param {String} opts.position.type Type of positional anchor to use. One of 'absoluteAnchor', 'oneCellAnchor', 'twoCellAnchor'
+         * @param {Object} opts.position.from Object containg position of top left corner of image.  Used with oneCellAnchor and twoCellAchor types
+         * @param {Number} opts.position.from.col Left edge of image will align with left edge of this column
+         * @param {String} opts.position.from.colOff Offset from left edge of column
+         * @param {Number} opts.position.from.row Top edge of image will align with top edge of this row
+         * @param {String} opts.position.from.rowOff Offset from top edge of row
+         * @param {Object} opts.position.to Object containing position of bottom right corner of image
+         * @param {Number} opts.position.to.col Right edge of image will align with Left edge of this column
+         * @param {String} opts.position.to.colOff Offset of left edge of column
+         * @param {Number} opts.position.to.row Bottom edge of image will align with Top edge of this row
+         * @param {String} opts.position.to.rowOff Offset of top edge of row
+         * @param {String} opts.position.x X position of top left corner of image. Used with absoluteAchor type
+         * @param {String} opts.position.y Y position of top left corner of image
+         */
 
-    get cell() {
-        return cellAccessor.bind(this);
-    }
+    }, {
+        key: 'addImage',
+        value: function addImage(opts) {
+            opts = opts ? opts : {};
+            var mediaID = this.wb.mediaCollection.add(opts.path);
+            var newImage = this.drawingCollection.add(opts);
+            newImage.id = mediaID;
 
-    row(row) {
-        return rowAccessor(this, row);
-    }
+            return newImage;
+        }
+    }, {
+        key: 'relationships',
+        get: function get() {
+            var rels = [];
+            this.hyperlinkCollection.links.forEach(function (l) {
+                rels.push(l);
+            });
+            if (!this.drawingCollection.isEmpty) {
+                rels.push('drawing');
+            }
+            return rels;
+        }
+    }, {
+        key: 'columnCount',
+        get: function get() {
+            return Math.max.apply(Math, Object.keys(this.cols));
+        }
+    }, {
+        key: 'rowCount',
+        get: function get() {
+            return Math.max.apply(Math, Object.keys(this.rows));
+        }
+    }, {
+        key: 'cell',
+        get: function get() {
+            return cellAccessor.bind(this);
+        }
+    }]);
 
-    column(col) {
-        return colAccessor(this, col);
-    }
-    /**
-     * @func Worksheet.addImage
-     * @param {Object} opts
-     * @param {String} opts.path File system path of image
-     * @param {String} opts.type Type of image. Currently only 'picture' is supported
-     * @param {Object} opts.position Position object for image
-     * @param {String} opts.position.type Type of positional anchor to use. One of 'absoluteAnchor', 'oneCellAnchor', 'twoCellAnchor'
-     * @param {Object} opts.position.from Object containg position of top left corner of image.  Used with oneCellAnchor and twoCellAchor types
-     * @param {Number} opts.position.from.col Left edge of image will align with left edge of this column
-     * @param {String} opts.position.from.colOff Offset from left edge of column
-     * @param {Number} opts.position.from.row Top edge of image will align with top edge of this row
-     * @param {String} opts.position.from.rowOff Offset from top edge of row
-     * @param {Object} opts.position.to Object containing position of bottom right corner of image
-     * @param {Number} opts.position.to.col Right edge of image will align with Left edge of this column
-     * @param {String} opts.position.to.colOff Offset of left edge of column
-     * @param {Number} opts.position.to.row Bottom edge of image will align with Top edge of this row
-     * @param {String} opts.position.to.rowOff Offset of top edge of row
-     * @param {String} opts.position.x X position of top left corner of image. Used with absoluteAchor type
-     * @param {String} opts.position.y Y position of top left corner of image
-     */
-    addImage(opts) {
-        opts = opts ? opts : {};
-        let mediaID = this.wb.mediaCollection.add(opts.path);
-        let newImage = this.drawingCollection.add(opts);
-        newImage.id = mediaID;
-
-        return newImage;
-    }
-
-}
+    return Worksheet;
+}();
 
 module.exports = Worksheet;
+//# sourceMappingURL=worksheet.js.map

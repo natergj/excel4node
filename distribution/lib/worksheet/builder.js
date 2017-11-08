@@ -1,24 +1,19 @@
-const xml = require('xmlbuilder');
-const utils = require('../utils.js');
-const types = require('../types/index.js');
-const hyperlinks = require('./classes/hyperlink');
-const Picture = require('../drawing/picture.js');
+'use strict';
 
-let _addSheetPr = (promiseObj) => {
+var xml = require('xmlbuilder');
+var utils = require('../utils.js');
+var types = require('../types/index.js');
+var hyperlinks = require('./classes/hyperlink');
+var Picture = require('../drawing/picture.js');
+
+var _addSheetPr = function _addSheetPr(promiseObj) {
     // §18.3.1.82 sheetPr (Sheet Properties)
-    return new Promise((resolve, reject) => {
-        let o = promiseObj.ws.opts;
+    return new Promise(function (resolve, reject) {
+        var o = promiseObj.ws.opts;
 
         // Check if any option that would require the sheetPr element to be added exists
-        if (
-            o.printOptions.fitToHeight !== null || 
-            o.printOptions.fitToWidth !== null || 
-            o.outline.summaryBelow !== null ||
-            o.autoFilter.ref !== null ||
-            o.outline.summaryRight
-
-        ) {
-            let ele = promiseObj.xml.ele('sheetPr');
+        if (o.printOptions.fitToHeight !== null || o.printOptions.fitToWidth !== null || o.outline.summaryBelow !== null || o.autoFilter.ref !== null || o.outline.summaryRight) {
+            var ele = promiseObj.xml.ele('sheetPr');
 
             if (o.autoFilter.ref) {
                 ele.att('enableFormatConditionsCalculation', 1);
@@ -26,7 +21,7 @@ let _addSheetPr = (promiseObj) => {
             }
 
             if (o.outline.summaryBelow !== null || o.outline.summaryRight !== null) {
-                let outlineEle = ele.ele('outlinePr');
+                var outlineEle = ele.ele('outlinePr');
                 outlineEle.att('applyStyles', 1);
                 o.outline.summaryBelow === true ? outlineEle.att('summaryBelow', 1) : null;
                 o.outline.summaryRight === true ? outlineEle.att('summaryRight', 1) : null;
@@ -44,42 +39,35 @@ let _addSheetPr = (promiseObj) => {
     });
 };
 
-let _addDimension = (promiseObj) => {
+var _addDimension = function _addDimension(promiseObj) {
     // §18.3.1.35 dimension (Worksheet Dimensions)
-    return new Promise((resolve, reject) => {
-        let firstCell = 'A1';
-        let lastCell = `${utils.getExcelAlpha(promiseObj.ws.lastUsedCol)}${promiseObj.ws.lastUsedRow}`;
-        let ele = promiseObj.xml.ele('dimension');
-        ele.att('ref', `${firstCell}:${lastCell}`);
+    return new Promise(function (resolve, reject) {
+        var firstCell = 'A1';
+        var lastCell = '' + utils.getExcelAlpha(promiseObj.ws.lastUsedCol) + promiseObj.ws.lastUsedRow;
+        var ele = promiseObj.xml.ele('dimension');
+        ele.att('ref', firstCell + ':' + lastCell);
         ele.up();
 
         resolve(promiseObj);
     });
 };
 
-let _addSheetViews = (promiseObj) => {
+var _addSheetViews = function _addSheetViews(promiseObj) {
     // §18.3.1.88 sheetViews (Sheet Views)
-    return new Promise((resolve, reject) => {
-        let o = promiseObj.ws.opts.sheetView;
-        let ele = promiseObj.xml.ele('sheetViews');
-        let tabSelected = promiseObj.ws.opts;
-        let sv = ele.ele('sheetView')
-        .att('showGridLines', o.showGridLines)
-        .att('tabSelected', o.tabSelected)
-        .att('workbookViewId', o.workbookViewId)
-        .att('rightToLeft', o.rightToLeft)
-        .att('zoomScale', o.zoomScale)
-        .att('zoomScaleNormal', o.zoomScaleNormal)
-        .att('zoomScalePageLayoutView', o.zoomScalePageLayoutView);
+    return new Promise(function (resolve, reject) {
+        var o = promiseObj.ws.opts.sheetView;
+        var ele = promiseObj.xml.ele('sheetViews');
+        var tabSelected = promiseObj.ws.opts;
+        var sv = ele.ele('sheetView').att('tabSelected', o.tabSelected).att('workbookViewId', o.workbookViewId).att('rightToLeft', o.rightToLeft).att('zoomScale', o.zoomScale).att('zoomScaleNormal', o.zoomScaleNormal).att('zoomScalePageLayoutView', o.zoomScalePageLayoutView);
 
-        let modifiedPaneParams = [];
-        Object.keys(o.pane).forEach((k) => {
+        var modifiedPaneParams = [];
+        Object.keys(o.pane).forEach(function (k) {
             if (o.pane[k] !== null) {
                 modifiedPaneParams.push(k);
             }
         });
         if (modifiedPaneParams.length > 0) {
-            let pEle = sv.ele('pane');
+            var pEle = sv.ele('pane');
             o.pane.xSplit !== null ? pEle.att('xSplit', o.pane.xSplit) : null;
             o.pane.ySplit !== null ? pEle.att('ySplit', o.pane.ySplit) : null;
             o.pane.topLeftCell !== null ? pEle.att('topLeftCell', o.pane.topLeftCell) : null;
@@ -93,18 +81,17 @@ let _addSheetViews = (promiseObj) => {
     });
 };
 
-let _addSheetFormatPr = (promiseObj) => {
+var _addSheetFormatPr = function _addSheetFormatPr(promiseObj) {
     // §18.3.1.81 sheetFormatPr (Sheet Format Properties)
-    return new Promise((resolve, reject) => {
-        let o = promiseObj.ws.opts.sheetFormat;
-        let ele = promiseObj.xml.ele('sheetFormatPr');
+    return new Promise(function (resolve, reject) {
+        var o = promiseObj.ws.opts.sheetFormat;
+        var ele = promiseObj.xml.ele('sheetFormatPr');
 
         o.baseColWidth !== null ? ele.att('baseColWidth', o.baseColWidth) : null;
         o.defaultColWidth !== null ? ele.att('defaultColWidth', o.defaultColWidth) : null;
         o.defaultRowHeight !== null ? ele.att('defaultRowHeight', o.defaultRowHeight) : ele.att('defaultRowHeight', 16);
         o.thickBottom !== null ? ele.att('thickBottom', utils.boolToInt(o.thickBottom)) : null;
         o.thickTop !== null ? ele.att('thickTop', utils.boolToInt(o.thickTop)) : null;
-
 
         if (typeof o.defaultRowHeight === 'number') {
             ele.att('customHeight', '1');
@@ -114,17 +101,17 @@ let _addSheetFormatPr = (promiseObj) => {
     });
 };
 
-let _addCols = (promiseObj) => {
+var _addCols = function _addCols(promiseObj) {
     // §18.3.1.17 cols (Column Information)
-    return new Promise((resolve, reject) => {
+    return new Promise(function (resolve, reject) {
 
         if (promiseObj.ws.columnCount > 0) {
-            let colsEle = promiseObj.xml.ele('cols');
+            var colsEle = promiseObj.xml.ele('cols');
 
-            for (let colId in promiseObj.ws.cols) {
-                let col = promiseObj.ws.cols[colId];
-                let colEle = colsEle.ele('col');
-                
+            for (var colId in promiseObj.ws.cols) {
+                var col = promiseObj.ws.cols[colId];
+                var colEle = colsEle.ele('col');
+
                 col.min !== null ? colEle.att('min', col.min) : null;
                 col.max !== null ? colEle.att('max', col.max) : null;
                 col.width !== null ? colEle.att('width', col.width) : null;
@@ -142,23 +129,23 @@ let _addCols = (promiseObj) => {
     });
 };
 
-let _addSheetData = (promiseObj) => {
+var _addSheetData = function _addSheetData(promiseObj) {
     // §18.3.1.80 sheetData (Sheet Data)
-    return new Promise((resolve, reject) => {
+    return new Promise(function (resolve, reject) {
 
-        let ele = promiseObj.xml.ele('sheetData');
-        let rows = Object.keys(promiseObj.ws.rows);
+        var ele = promiseObj.xml.ele('sheetData');
+        var rows = Object.keys(promiseObj.ws.rows);
         var o = promiseObj.ws.opts.sheetData;
 
-        let processRows = (theseRows) => {
+        var processRows = function processRows(theseRows) {
             for (var r = 0; r < theseRows.length; r++) {
-                let thisRow = promiseObj.ws.rows[theseRows[r]];
+                var thisRow = promiseObj.ws.rows[theseRows[r]];
                 thisRow.cellRefs.sort(utils.sortCellRefs);
 
-                let rEle = ele.ele('row');
+                var rEle = ele.ele('row');
 
                 rEle.att('r', thisRow.r);
-                (o.spans === true) ? rEle.att('spans', thisRow.spans) : null;
+                o.spans === true ? rEle.att('spans', thisRow.spans) : null;
                 thisRow.s !== null ? rEle.att('s', thisRow.s) : null;
                 thisRow.customFormat !== null ? rEle.att('customFormat', thisRow.customFormat) : null;
                 thisRow.ht !== null ? rEle.att('ht', thisRow.ht) : null;
@@ -172,15 +159,15 @@ let _addSheetData = (promiseObj) => {
                 for (var i = 0; i < thisRow.cellRefs.length; i++) {
                     promiseObj.ws.cells[thisRow.cellRefs[i]].addToXMLele(rEle);
                 }
-                
+
                 rEle.up();
             }
 
             processNextRows();
         };
 
-        let processNextRows = () => {
-            let theseRows = rows.splice(0, 500);
+        var processNextRows = function processNextRows() {
+            var theseRows = rows.splice(0, 500);
             if (theseRows.length === 0) {
                 ele.up();
                 return resolve(promiseObj);
@@ -189,16 +176,15 @@ let _addSheetData = (promiseObj) => {
         };
 
         processNextRows();
-
     });
 };
 
-let _addSheetProtection = (promiseObj) => {
+var _addSheetProtection = function _addSheetProtection(promiseObj) {
     // §18.3.1.85 sheetProtection (Sheet Protection Options)
-    return new Promise((resolve, reject) => {
-        let o = promiseObj.ws.opts.sheetProtection;
-        let includeSheetProtection = false;
-        Object.keys(o).forEach((k) =>  {
+    return new Promise(function (resolve, reject) {
+        var o = promiseObj.ws.opts.sheetProtection;
+        var includeSheetProtection = false;
+        Object.keys(o).forEach(function (k) {
             if (o[k] !== null) {
                 includeSheetProtection = true;
             }
@@ -210,15 +196,15 @@ let _addSheetProtection = (promiseObj) => {
             o.objects = o.objects !== null ? o.objects : true;
             o.scenarios = o.scenarios !== null ? o.scenarios : true;
 
-            let ele = promiseObj.xml.ele('sheetProtection');
-            Object.keys(o).forEach((k) => {
+            var ele = promiseObj.xml.ele('sheetProtection');
+            Object.keys(o).forEach(function (k) {
                 if (o[k] !== null) {
                     if (k === 'password') {
                         ele.att('password', utils.getHashOfPassword(o[k]));
                     } else {
                         ele.att(k, utils.boolToInt(o[k]));
                     }
-                }            
+                }
             });
             ele.up();
         }
@@ -226,21 +212,21 @@ let _addSheetProtection = (promiseObj) => {
     });
 };
 
-let _addAutoFilter = (promiseObj) => {
+var _addAutoFilter = function _addAutoFilter(promiseObj) {
     // §18.3.1.2 autoFilter (AutoFilter Settings)
-    return new Promise((resolve, reject) => {
-        let o = promiseObj.ws.opts.autoFilter;
+    return new Promise(function (resolve, reject) {
+        var o = promiseObj.ws.opts.autoFilter;
 
         if (typeof o.startRow === 'number') {
-            let ele = promiseObj.xml.ele('autoFilter');
-            let filterRow = promiseObj.ws.rows[o.startRow];
+            var ele = promiseObj.xml.ele('autoFilter');
+            var filterRow = promiseObj.ws.rows[o.startRow];
 
             o.startCol = typeof o.startCol === 'number' ? o.startCol : null;
             o.endCol = typeof o.endCol === 'number' ? o.endCol : null;
 
             if (typeof o.endRow !== 'number') {
-                let firstEmptyRow = undefined;
-                let curRow = o.startRow;
+                var firstEmptyRow = undefined;
+                var curRow = o.startRow;
                 while (firstEmptyRow === undefined) {
                     if (!promiseObj.ws.rows[curRow]) {
                         firstEmptyRow = curRow;
@@ -258,20 +244,15 @@ let _addAutoFilter = (promiseObj) => {
                 o.endCol = filterRow.lastColumn;
             }
 
-            let startCell = utils.getExcelAlpha(o.startCol) + o.startRow;
-            let endCell = utils.getExcelAlpha(o.endCol) + o.endRow;
+            var startCell = utils.getExcelAlpha(o.startCol) + o.startRow;
+            var endCell = utils.getExcelAlpha(o.endCol) + o.endRow;
 
-            ele.att('ref', `${startCell}:${endCell}`);
+            ele.att('ref', startCell + ':' + endCell);
             promiseObj.ws.wb.definedNameCollection.addDefinedName({
                 hidden: 1,
                 localSheetId: promiseObj.ws.localSheetId,
                 name: '_xlnm._FilterDatabase',
-                refFormula: '\'' + promiseObj.ws.name + '\'!' +
-                    '$' + utils.getExcelAlpha(o.startCol) + 
-                    '$' + o.startRow +
-                    ':' +
-                    '$' + utils.getExcelAlpha(o.endCol) + 
-                    '$' + o.endRow
+                refFormula: '\'' + promiseObj.ws.name + '\'!' + '$' + utils.getExcelAlpha(o.startCol) + '$' + o.startRow + ':' + '$' + utils.getExcelAlpha(o.endCol) + '$' + o.endRow
             });
             ele.up();
         }
@@ -279,13 +260,13 @@ let _addAutoFilter = (promiseObj) => {
     });
 };
 
-let _addMergeCells = (promiseObj) => {
+var _addMergeCells = function _addMergeCells(promiseObj) {
     // §18.3.1.55 mergeCells (Merge Cells)
-    return new Promise((resolve, reject) => {
+    return new Promise(function (resolve, reject) {
 
         if (promiseObj.ws.mergedCells instanceof Array && promiseObj.ws.mergedCells.length > 0) {
-            let ele = promiseObj.xml.ele('mergeCells').att('count', promiseObj.ws.mergedCells.length);
-            promiseObj.ws.mergedCells.forEach((cr) => {
+            var ele = promiseObj.xml.ele('mergeCells').att('count', promiseObj.ws.mergedCells.length);
+            promiseObj.ws.mergedCells.forEach(function (cr) {
                 ele.ele('mergeCell').att('ref', cr).up();
             });
             ele.up();
@@ -295,25 +276,25 @@ let _addMergeCells = (promiseObj) => {
     });
 };
 
-let _addConditionalFormatting = (promiseObj) => {
+var _addConditionalFormatting = function _addConditionalFormatting(promiseObj) {
     // §18.3.1.18 conditionalFormatting (Conditional Formatting)
-    return new Promise((resolve, reject) => {
+    return new Promise(function (resolve, reject) {
         promiseObj.ws.cfRulesCollection.addToXMLele(promiseObj.xml);
         resolve(promiseObj);
     });
 };
 
-let _addHyperlinks = (promiseObj) => {
+var _addHyperlinks = function _addHyperlinks(promiseObj) {
     // §18.3.1.48 hyperlinks (Hyperlinks)
-    return new Promise((resolve, reject) => {
+    return new Promise(function (resolve, reject) {
         promiseObj.ws.hyperlinkCollection.addToXMLele(promiseObj.xml);
         resolve(promiseObj);
     });
 };
 
-let _addDataValidations = (promiseObj) => {
+var _addDataValidations = function _addDataValidations(promiseObj) {
     // §18.3.1.33 dataValidations (Data Validations)
-    return new Promise((resolve, reject) => {
+    return new Promise(function (resolve, reject) {
         if (promiseObj.ws.dataValidationCollection.length > 0) {
             promiseObj.ws.dataValidationCollection.addToXMLele(promiseObj.xml);
         }
@@ -321,20 +302,20 @@ let _addDataValidations = (promiseObj) => {
     });
 };
 
-let _addPrintOptions = (promiseObj) => {
+var _addPrintOptions = function _addPrintOptions(promiseObj) {
     // §18.3.1.70 printOptions (Print Options)
-    return new Promise((resolve, reject) => {
+    return new Promise(function (resolve, reject) {
 
-        let addPrintOptions = false;
-        let o = promiseObj.ws.opts.printOptions;
-        Object.keys(o).forEach((k) => {
+        var addPrintOptions = false;
+        var o = promiseObj.ws.opts.printOptions;
+        Object.keys(o).forEach(function (k) {
             if (o[k] !== null) {
                 addPrintOptions = true;
             }
         });
 
         if (addPrintOptions) {
-            let poEle = promiseObj.xml.ele('printOptions');
+            var poEle = promiseObj.xml.ele('printOptions');
             o.centerHorizontal === true ? poEle.att('horizontalCentered', 1) : null;
             o.centerVertical === true ? poEle.att('verticalCentered', 1) : null;
             o.printHeadings === true ? poEle.att('headings', 1) : null;
@@ -349,38 +330,31 @@ let _addPrintOptions = (promiseObj) => {
     });
 };
 
-let _addPageMargins = (promiseObj) => {
+var _addPageMargins = function _addPageMargins(promiseObj) {
     // §18.3.1.62 pageMargins (Page Margins)
-    return new Promise((resolve, reject) => {
-        let o = promiseObj.ws.opts.margins;
+    return new Promise(function (resolve, reject) {
+        var o = promiseObj.ws.opts.margins;
 
-        promiseObj.xml.ele('pageMargins')
-        .att('left', o.left)
-        .att('right', o.right)
-        .att('top', o.top)
-        .att('bottom', o.bottom)
-        .att('header', o.header)
-        .att('footer', o.footer)
-        .up();
+        promiseObj.xml.ele('pageMargins').att('left', o.left).att('right', o.right).att('top', o.top).att('bottom', o.bottom).att('header', o.header).att('footer', o.footer).up();
 
         resolve(promiseObj);
     });
 };
 
-let _addPageSetup = (promiseObj) => {
+var _addPageSetup = function _addPageSetup(promiseObj) {
     // §18.3.1.63 pageSetup (Page Setup Settings)
-    return new Promise((resolve, reject) => {
+    return new Promise(function (resolve, reject) {
 
-        let addPageSetup = false;
-        let o = promiseObj.ws.opts.pageSetup;
-        Object.keys(o).forEach((k) => {
+        var addPageSetup = false;
+        var o = promiseObj.ws.opts.pageSetup;
+        Object.keys(o).forEach(function (k) {
             if (o[k] !== null) {
                 addPageSetup = true;
             }
         });
 
         if (addPageSetup === true) {
-            let psEle = promiseObj.xml.ele('pageSetup');
+            var psEle = promiseObj.xml.ele('pageSetup');
             o.paperSize !== null ? psEle.att('paperSize', types.paperSize[o.paperSize]) : null;
             o.paperHeight !== null ? psEle.att('paperHeight', o.paperHeight) : null;
             o.paperWidth !== null ? psEle.att('paperWidth', o.paperWidth) : null;
@@ -406,20 +380,20 @@ let _addPageSetup = (promiseObj) => {
     });
 };
 
-let _addHeaderFooter = (promiseObj) => {
+var _addHeaderFooter = function _addHeaderFooter(promiseObj) {
     // §18.3.1.46 headerFooter (Header Footer Settings)
-    return new Promise((resolve, reject) => {
+    return new Promise(function (resolve, reject) {
 
-        let addHeaderFooter = false;
-        let o = promiseObj.ws.opts.headerFooter;
-        Object.keys(o).forEach((k) => {
+        var addHeaderFooter = false;
+        var o = promiseObj.ws.opts.headerFooter;
+        Object.keys(o).forEach(function (k) {
             if (o[k] !== null) {
                 addHeaderFooter = true;
             }
         });
 
         if (addHeaderFooter === true) {
-            let hfEle = promiseObj.xml.ele('headerFooter');
+            var hfEle = promiseObj.xml.ele('headerFooter');
 
             o.alignWithMargins !== null ? hfEle.att('alignWithMargins', utils.boolToInt(o.alignWithMargins)) : null;
             o.differentFirst !== null ? hfEle.att('differentFirst', utils.boolToInt(o.differentFirst)) : null;
@@ -439,107 +413,72 @@ let _addHeaderFooter = (promiseObj) => {
     });
 };
 
-let _addDrawing = (promiseObj) => {
+var _addDrawing = function _addDrawing(promiseObj) {
     // §18.3.1.36 drawing (Drawing)
-    return new Promise((resolve, reject) => {
+    return new Promise(function (resolve, reject) {
         if (!promiseObj.ws.drawingCollection.isEmpty) {
-            let dId = promiseObj.ws.relationships.indexOf('drawing') + 1;
+            var dId = promiseObj.ws.relationships.indexOf('drawing') + 1;
             promiseObj.xml.ele('drawing').att('r:id', 'rId' + dId).up();
         }
         resolve(promiseObj);
     });
 };
 
-let sheetXML = (ws) => {
-    return new Promise((resolve, reject) => {
+var sheetXML = function sheetXML(ws) {
+    return new Promise(function (resolve, reject) {
 
-        let xmlProlog = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
-        let xmlString = '';
-        let wsXML = xml.begin((chunk) => {
+        var xmlProlog = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+        var xmlString = '';
+        var wsXML = xml.begin(function (chunk) {
             xmlString += chunk;
-        })
-        .ele('worksheet')
-        .att('mc:Ignorable', 'x14ac')
-        .att('xmlns', 'http://schemas.openxmlformats.org/spreadsheetml/2006/main')
-        .att('xmlns:mc', 'http://schemas.openxmlformats.org/markup-compatibility/2006')
-        .att('xmlns:r', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships')
-        .att('xmlns:x14ac', 'http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac');
+        }).ele('worksheet').att('mc:Ignorable', 'x14ac').att('xmlns', 'http://schemas.openxmlformats.org/spreadsheetml/2006/main').att('xmlns:mc', 'http://schemas.openxmlformats.org/markup-compatibility/2006').att('xmlns:r', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships').att('xmlns:x14ac', 'http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac');
 
         // Excel complains if specific elements on not in the correct order in the XML doc.
-        let promiseObj = { xml: wsXML, ws: ws };
+        var promiseObj = { xml: wsXML, ws: ws };
 
-        _addSheetPr(promiseObj)
-        .then(_addDimension)
-        .then(_addSheetViews)
-        .then(_addSheetFormatPr)
-        .then(_addCols)
-        .then(_addSheetData)
-        .then(_addSheetProtection)
-        .then(_addAutoFilter)
-        .then(_addMergeCells)
-        .then(_addConditionalFormatting)
-        .then(_addDataValidations)
-        .then(_addHyperlinks)
-        .then(_addPrintOptions)
-        .then(_addPageMargins)
-        .then(_addPageSetup)
-        .then(_addHeaderFooter)
-        .then(_addDrawing)
-        .then((promiseObj) => {
-            return new Promise((resolve, reject) => {
+        _addSheetPr(promiseObj).then(_addDimension).then(_addSheetViews).then(_addSheetFormatPr).then(_addCols).then(_addSheetData).then(_addSheetProtection).then(_addAutoFilter).then(_addMergeCells).then(_addConditionalFormatting).then(_addDataValidations).then(_addHyperlinks).then(_addPrintOptions).then(_addPageMargins).then(_addPageSetup).then(_addHeaderFooter).then(_addDrawing).then(function (promiseObj) {
+            return new Promise(function (resolve, reject) {
                 wsXML.end();
                 resolve(xmlString);
             });
-        })
-        .then((xml) => {
+        }).then(function (xml) {
             resolve(xml);
-        })
-        .catch((e) => {
+        }).catch(function (e) {
             throw new Error(e.stack);
         });
     });
 };
 
-let relsXML = (ws) => {
-    return new Promise((resolve, reject) => {
-        let sheetRelRequired = false;
+var relsXML = function relsXML(ws) {
+    return new Promise(function (resolve, reject) {
+        var sheetRelRequired = false;
         if (ws.relationships.length > 0) {
             sheetRelRequired = true;
         }
 
         if (sheetRelRequired === false) {
             resolve();
-        } 
+        }
 
-        let relXML = xml.create(
-            'Relationships',
-            {
-                'version': '1.0', 
-                'encoding': 'UTF-8', 
-                'standalone': true
-            }
-        );
+        var relXML = xml.create('Relationships', {
+            'version': '1.0',
+            'encoding': 'UTF-8',
+            'standalone': true
+        });
         relXML.att('xmlns', 'http://schemas.openxmlformats.org/package/2006/relationships');
 
-        ws.relationships.forEach((r, i) => {
-            let rId = 'rId' + (i + 1);
+        ws.relationships.forEach(function (r, i) {
+            var rId = 'rId' + (i + 1);
             if (r instanceof hyperlinks.Hyperlink) {
-                relXML.ele('Relationship')
-                .att('Id', rId)
-                .att('Target', r.location)
-                .att('TargetMode', 'External')
-                .att('Type', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink');                
+                relXML.ele('Relationship').att('Id', rId).att('Target', r.location).att('TargetMode', 'External').att('Type', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink');
             } else if (r === 'drawing') {
-                relXML.ele('Relationship')
-                .att('Id', rId)
-                .att('Target', '../drawings/drawing' + ws.sheetId + '.xml')
-                .att('Type', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing');
+                relXML.ele('Relationship').att('Id', rId).att('Target', '../drawings/drawing' + ws.sheetId + '.xml').att('Type', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing');
             }
         });
-        let xmlString = relXML.doc().end();
+        var xmlString = relXML.doc().end();
         resolve(xmlString);
     });
 };
 
-module.exports = { sheetXML, relsXML };
-
+module.exports = { sheetXML: sheetXML, relsXML: relsXML };
+//# sourceMappingURL=builder.js.map
