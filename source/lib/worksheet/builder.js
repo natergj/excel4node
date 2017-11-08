@@ -64,6 +64,7 @@ let _addSheetViews = (promiseObj) => {
         let ele = promiseObj.xml.ele('sheetViews');
         let tabSelected = promiseObj.ws.opts;
         let sv = ele.ele('sheetView')
+        .att('showGridLines', o.showGridLines)
         .att('tabSelected', o.tabSelected)
         .att('workbookViewId', o.workbookViewId)
         .att('rightToLeft', o.rightToLeft)
