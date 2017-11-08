@@ -16,6 +16,7 @@ let addRootContentTypesXML = (promiseObj) => {
         )
         .att('xmlns', 'http://schemas.openxmlformats.org/package/2006/content-types');
 
+        let extensionsAdded = [];
         let contentTypesAdded = [];
         let extensionsAdded = [];
         promiseObj.wb.sheets.forEach((s, i) => {
