@@ -21,8 +21,8 @@ test('Test library functions', (t) => {
     t.equals(xl.getExcelCellRef(14, 27), 'AA14', 'Returned correct excel cell reference');
     t.equals(xl.getExcelCellRef(999, 729), 'ABA999', 'Returned correct excel cell reference');
 
-    t.equals(xl.getExcelTS(new Date('2015-01-01T00:00:00.0000Z')), 42004.791666666664, 'Correctly translated date in standard time to excel timestamp');
-    t.equals(xl.getExcelTS(new Date('2015-06-01T00:00:00.0000Z')), 42155.833333333336, 'Correctly translated date in daylight time to excel timestamp');
+    t.equals(xl.getExcelTS(new Date(2014, 11, 31, 19)), 42004.791666666664, 'Correctly translated date in standard time to excel timestamp');
+    t.equals(xl.getExcelTS(new Date(2015, 4, 31, 20)), 42155.833333333336, 'Correctly translated date in daylight time to excel timestamp');
 
     t.end();
 });
