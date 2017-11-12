@@ -405,7 +405,9 @@ let addDrawingsXML = (promiseObj) => {
 
                         if (d.kind === 'image') {
                             let target = 'image' + d.id + '.' + d.extension;
-                            promiseObj.xlsx.folder('xl').folder('media').file(target, fs.readFileSync(d.imagePath));
+
+                            let image = d.imagePath ? fs.readFileSync(d.imagePath) : d.image;
+                            promiseObj.xlsx.folder('xl').folder('media').file(target, image);
 
                             drawingRelXML.ele('Relationship')
                             .att('Id', d.rId)

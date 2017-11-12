@@ -217,6 +217,8 @@ class Worksheet {
      * @func Worksheet.addImage
      * @param {Object} opts
      * @param {String} opts.path File system path of image
+     * @param {Buffer} opts.image Buffer with image (against read file from opts.path)
+     * @param {String} opts.name Name of image
      * @param {String} opts.type Type of image. Currently only 'picture' is supported
      * @param {Object} opts.position Position object for image
      * @param {String} opts.position.type Type of positional anchor to use. One of 'absoluteAnchor', 'oneCellAnchor', 'twoCellAnchor'
@@ -235,7 +237,7 @@ class Worksheet {
      */
     addImage(opts) {
         opts = opts ? opts : {};
-        let mediaID = this.wb.mediaCollection.add(opts.path);
+        let mediaID = this.wb.mediaCollection.add(opts.path || opts.image);
         let newImage = this.drawingCollection.add(opts);
         newImage.id = mediaID;
 

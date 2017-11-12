@@ -5,9 +5,12 @@ class MediaCollection {
         this.items = [];
     }
 
-    add(filePath) {
-        fs.accessSync(filePath, fs.R_OK);
-        this.items.push(filePath);
+    add(item) {
+        if (typeof item === 'string') {
+            fs.accessSync(item, fs.R_OK);
+        }
+
+        this.items.push(item);
         return this.items.length;
     }
 

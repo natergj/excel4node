@@ -28,8 +28,8 @@ let _addSheetPr = (promiseObj) => {
             if (o.outline.summaryBelow !== null || o.outline.summaryRight !== null) {
                 let outlineEle = ele.ele('outlinePr');
                 outlineEle.att('applyStyles', 1);
-                o.outline.summaryBelow === true ? outlineEle.att('summaryBelow', 1) : null;
-                o.outline.summaryRight === true ? outlineEle.att('summaryRight', 1) : null;
+                outlineEle.att('summaryBelow',  o.outline.summaryBelow === true ? 1 : 0);
+                outlineEle.att('summaryRight',  o.outline.summaryRight === true ? 1 : 0);
                 outlineEle.up();
             }
 
