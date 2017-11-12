@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+
 require('source-map-support').install();
 var xl = require('./distribution');
 
@@ -459,7 +462,7 @@ function generateWorkbook() {
      * START final sheet
      *****************************************/
 
-    var funSheet = wb.addWorksheet('fun', {
+    var imageSheet = wb.addWorksheet('images', {
         pageSetup: {
             orientation: 'landscape'
         },
@@ -468,8 +471,8 @@ function generateWorkbook() {
         }
     });
 
-    funSheet.cell(1, 1).string('Release 1.0.0! Finally done.');
-    funSheet.addImage({
+    imageSheet.cell(1, 1).string('Images');
+    imageSheet.addImage({
         path: './sampleFiles/thumbsUp.jpg',
         type: 'picture',
         position: {
@@ -478,7 +481,19 @@ function generateWorkbook() {
             y: '10mm'
         }
     });
-
+    imageSheet.addImage({
+        image: fs.readFileSync(path.resolve(__dirname, './sampleFiles/thumbsUp.jpg')),
+        type: 'picture',
+        position: {
+            type: 'oneCellAnchor',
+            from: {
+                col: 1,
+                colOff: 0,
+                row: 32,
+                rowOff: 0
+            }
+        }
+    });
 
     /*****************************************
      * END final sheet

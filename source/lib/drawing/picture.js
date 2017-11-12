@@ -48,7 +48,7 @@ class Picture extends Drawing {
 
         this._extension = this.image
             ? size.type
-            : path.extname(this.imagePath);
+            : path.extname(this.imagePath).substr(1);
 
         this.contentType = mime.lookup(this._extension);
 
