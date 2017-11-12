@@ -152,8 +152,13 @@ class DataValidation { // §18.3.1.32 dataValidation (Data Validation)
         this.promptTitle !== undefined ? valEle.att('promptTitle', this.promptTitle) : null;
         this.prompt !== undefined ? valEle.att('prompt', this.prompt) : null;
         this.sqref !== undefined ? valEle.att('sqref', this.sqref) : null;
-        this.formula1 !== undefined ? valEle.ele('formula1').text(cleanFormula(this.formula1)) : null;
-        this.formula2 !== undefined ? valEle.ele('formula2').text(cleanFormula(this.formula2)) : null;
+        if (this.formula1 !== undefined) {
+            valEle.ele('formula1').text(cleanFormula(this.formula1));
+            if (this.formula2 !== undefined) {
+                valEle.up();
+                valEle.ele('formula2').text(cleanFormula(this.formula2));
+            }
+        }
         valEle.up();
     }
 }
@@ -178,8 +183,8 @@ class DataValidationCollection { // §18.3.1.33 dataValidations (Data Validation
         let valsEle = ele.ele('dataValidations').att('count', this.length);
         this.items.forEach((val) => {
             val.addToXMLele(valsEle);
+            valsEle.up();
         });
-        valsEle.up();
     }
 }
 
