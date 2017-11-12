@@ -6,7 +6,8 @@ function generateWorkbook() {
         defaultFont: {
             name: 'Verdana',
             size: 12
-        }
+        },
+        dateFormat: 'mm/dd/yyyy hh:mm:ss'
     });
 
     /*****************************************
@@ -412,6 +413,49 @@ function generateWorkbook() {
      *****************************************/
 
     /*****************************************
+     * START date check sheet
+     *****************************************/
+
+    var datesSheet = wb.addWorksheet('dates');
+
+    datesSheet.column(1).setWidth(24);
+    datesSheet.column(2).setWidth(20);
+    datesSheet.column(3).setWidth(45);
+
+    datesSheet.cell(1, 1).string('Dates');
+    datesSheet.cell(1, 2).string('Serial Value');
+    datesSheet.cell(1, 3).string('Date String');
+
+    datesSheet.cell(2, 1).date(new Date('1910-02-03T10:05:54Z'));
+    datesSheet.cell(2, 2).string('3687.4207639');
+    datesSheet.cell(2, 3).string('Correctly translated 1910-02-03T10:05:54Z');
+    datesSheet.cell(3, 1).date(new Date('1900-01-01T12:00:00Z'));
+    datesSheet.cell(3, 2).string('1.5000000');
+    datesSheet.cell(3, 3).string('Correctly translated 1900-01-01T12:00:00Z');
+    datesSheet.cell(4, 1).date(new Date('9999-12-31T23:59:59Z'));
+    datesSheet.cell(4, 2).string('2958465.9999884');
+    datesSheet.cell(4, 3).string('Correctly translated 9999-12-31T23:59:59Z');
+
+
+    datesSheet.cell(5, 1).date(new Date('1900-01-01T00:00:00Z'));
+    datesSheet.cell(5, 2).string('1');
+    datesSheet.cell(5, 3).string('Correctly translated 1900-01-01');
+    datesSheet.cell(6, 1).date(new Date('1910-02-03T00:00:00Z'));
+    datesSheet.cell(6, 2).string('3687');
+    datesSheet.cell(6, 3).string('Correctly translated 1910-02-03');
+    datesSheet.cell(7, 1).date(new Date('2006-02-01T00:00:00Z'))
+    datesSheet.cell(7, 2).string('38749');
+    datesSheet.cell(7, 3).string('Correctly translated 2006-02-01');
+    datesSheet.cell(8, 1).date(new Date('9999-12-31T00:00:00Z'));
+    datesSheet.cell(8, 2).string('2958465');
+    datesSheet.cell(8, 3).string('Correctly translated 9999-12-31');
+
+
+    /*****************************************
+     * END date check sheet
+     *****************************************/
+
+    /*****************************************
      * START final sheet
      *****************************************/
 
@@ -443,18 +487,24 @@ function generateWorkbook() {
     return wb;
 }
 
+
 var wb = generateWorkbook();
+
+/*
 wb.write('Excel1.xlsx');
 console.log('Excel1.xlsx written');
+*/
 
 wb.write('Excel.xlsx', function (err, stats) {
     console.log('Excel.xlsx written and has the following stats');
     console.log(stats);
 });
 
+/*
 var http = require('http');
 http.createServer(function (req, res) {
     wb.write('MyExcel.xlsx', res);
 }).listen(3000, function () {
     console.log('Go to http://localhost:3000 to download a copy of this Workbook');
 });
+*/

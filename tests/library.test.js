@@ -21,8 +21,29 @@ test('Test library functions', (t) => {
     t.equals(xl.getExcelCellRef(14, 27), 'AA14', 'Returned correct excel cell reference');
     t.equals(xl.getExcelCellRef(999, 729), 'ABA999', 'Returned correct excel cell reference');
 
-    t.equals(xl.getExcelTS(new Date('2015-01-01T00:00:00.0000Z')), 42004.791666666664, 'Correctly translated date in standard time to excel timestamp');
-    t.equals(xl.getExcelTS(new Date('2015-06-01T00:00:00.0000Z')), 42155.833333333336, 'Correctly translated date in daylight time to excel timestamp');
+    /**
+     * Tests as defined in §18.17.4.3 of ECMA-376, Second Edition, Part 1 - Fundamentals And Markup Language Reference
+     * The serial value 3687.4207639... represents 1910-02-03T10:05:54Z
+     * The serial value 1.5000000... represents 1900-01-01T12:00:00Z
+     * The serial value 2958465.9999884... represents 9999-12-31T23:59:59Z
+     */
+    t.equals(xl.getExcelTS(new Date('1910-02-03T10:05:54Z')), 3687.4207639, 'Correctly translated date 1910-02-03T10:05:54Z');
+    t.equals(xl.getExcelTS(new Date('1900-01-01T12:00:00Z')), 1.5000000, 'Correctly translated date 1900-01-01T12:00:00Z');
+    t.equals(xl.getExcelTS(new Date('9999-12-31T23:59:59Z')), 2958465.9999884, 'Correctly translated date 9999-12-31T23:59:59Z');
+
+    /**
+     * Tests as defined in §18.17.4.1 of ECMA-376, Second Edition, Part 1 - Fundamentals And Markup Language Reference
+     * The serial value 2.0000000... represents 1900-01-01
+     * The serial value 3687.0000000... represents 1910-02-03
+     * The serial value 38749.0000000... represents 2006-02-01
+     * The serial value 2958465.0000000... represents 9999-12-31
+     */
+    t.equals(xl.getExcelTS(new Date('1900-01-01T00:00:00Z')), 1, 'Correctly translated 1900-01-01');
+    t.equals(xl.getExcelTS(new Date('1910-02-03T00:00:00Z')), 3687, 'Correctly translated 1910-02-03');
+    t.equals(xl.getExcelTS(new Date('2006-02-01T00:00:00Z')), 38749, 'Correctly translated 2006-02-01');
+    t.equals(xl.getExcelTS(new Date('9999-12-31T00:00:00Z')), 2958465, 'Correctly translated 9999-12-31');
+
+    t.equals(xl.getExcelTS(new Date('2017-06-01T00:00:00.000Z')), 42887, 'Correctly translated 2017-06-01');
 
     t.end();
 });
