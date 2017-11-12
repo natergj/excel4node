@@ -2,6 +2,7 @@ const xmlbuilder = require('xmlbuilder');
 const JSZip = require('jszip');
 const fs = require('fs');
 const CTColor = require('../style/classes/ctColor.js');
+const utils = require('../utils');
 
 let addRootContentTypesXML = (promiseObj) => {
     // Required as stated in §12.2
@@ -98,12 +99,51 @@ let addWorkBookXML = (promiseObj) => {
         xml.att('xmlns:r', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships');
         xml.att('xmlns:x15', 'http://schemas.microsoft.com/office/spreadsheetml/2010/11/main');
 
-        let booksViewEle = xml.ele('bookViews');
-        booksViewEle.ele('workbookView')
-        .att('xWindow', '240')
-        .att('yWindow', '15')
-        .att('windowWidth', '8505')
-        .att('windowHeight', '6240');
+        // bookViews (§18.2.1)
+        if (promiseObj.wb.opts.workbookView) {
+            const viewOpts = promiseObj.wb.opts.workbookView;
+            let booksViewEle = xml.ele('bookViews');
+            let workbookViewEle = booksViewEle.ele('workbookView');
+            if (viewOpts.activeTab) {
+                workbookViewEle.att('activeTab', viewOpts.activeTab);
+            }
+            if (viewOpts.autoFilterDateGrouping ) {
+                workbookViewEle.att('autoFilterDateGrouping', utils.boolToInt(viewOpts.autoFilterDateGrouping));
+            }
+            if (viewOpts.firstSheet ) {
+                workbookViewEle.att('firstSheet', viewOpts.firstSheet);
+            }
+            if (viewOpts.minimized ) {
+                workbookViewEle.att('minimized', utils.boolToInt(viewOpts.minimized));
+            }
+            if (viewOpts.showHorizontalScroll ) {
+                workbookViewEle.att('showHorizontalScroll', utils.boolToInt(viewOpts.showHorizontalScroll));
+            }
+            if (viewOpts.showSheetTabs ) {
+                workbookViewEle.att('showSheetTabs', utils.boolToInt(viewOpts.showSheetTabs));
+            }
+            if (viewOpts.showVerticalScroll ) {
+                workbookViewEle.att('showVerticalScroll', utils.boolToInt(viewOpts.showVerticalScroll));
+            }
+            if (viewOpts.tabRatio) {
+                workbookViewEle.att('tabRatio', viewOpts.tabRatio);
+            }
+            if (viewOpts.visibility) {
+                workbookViewEle.att('visibility', viewOpts.visibility);
+            }
+            if (viewOpts.windowWidth) {
+                workbookViewEle.att('windowWidth', viewOpts.windowWidth);
+            }
+            if (viewOpts.windowHeight) {
+                workbookViewEle.att('windowHeight', viewOpts.windowHeight);
+            }
+            if (viewOpts.xWindow) {
+                workbookViewEle.att('xWindow', viewOpts.xWindow);
+            }
+            if (viewOpts.yWindow) {
+                workbookViewEle.att('yWindow', viewOpts.yWindow);
+            }
+        }
 
         let sheetsEle = xml.ele('sheets');
         promiseObj.wb.sheets.forEach((s, i) => {

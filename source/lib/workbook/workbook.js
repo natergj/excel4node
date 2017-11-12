@@ -54,6 +54,19 @@ class Workbook {
      * @param {Number} opts.defaultFont.size Font size. defaults to 12
      * @param {String} opts.defaultFont.family Font family. defaults to roman
      * @param {String} opts.dataFormat Specifies the format for dates in the Workbook. defaults to 'm/d/yy'
+     * @param {Number} opts.workbookView.activeTab Specifies an unsignedInt that contains the index to the active sheet in this book view.
+     * @param {Boolean} opts.workbookView.autoFilterDateGrouping Specifies a boolean value that indicates whether to group dates when presenting the user with filtering options in the user interface.
+     * @param {Number} opts.workbookView.firstSheet Specifies the index to the first sheet in this book view.
+     * @param {Boolean} opts.workbookView.minimized Specifies a boolean value that indicates whether the workbook window is minimized.
+     * @param {Boolean} opts.workbookView.showHorizontalScroll Specifies a boolean value that indicates whether to display the horizontal scroll bar in the user interface.
+     * @param {Boolean} opts.workbookView.showSheetTabs Specifies a boolean value that indicates whether to display the sheet tabs in the user interface.
+     * @param {Boolean} opts.workbookView.showVerticalScroll Specifies a boolean value that indicates whether to display the vertical scroll bar.
+     * @param {Number} opts.workbookView.tabRatio Specifies ratio between the workbook tabs bar and the horizontal scroll bar.
+     * @param {String} opts.workbookView.visibility Specifies visible state of the workbook window. ('hidden', 'veryHidden', 'visible') (§18.18.89)
+     * @param {Number} opts.workbookView.windowHeight Specifies the height of the workbook window. The unit of measurement for this value is twips.
+     * @param {Number} opts.workbookView.windowWidth Specifies the width of the workbook window. The unit of measurement for this value is twips..
+     * @param {Number} opts.workbookView.xWindow Specifies the X coordinate for the upper left corner of the workbook window. The unit of measurement for this value is twips.
+     * @param {Number} opts.workbookView.yWindow Specifies the Y coordinate for the upper left corner of the workbook window. The unit of measurement for this value is twips.
      * @returns {Workbook}
      */
     constructor(opts) {
