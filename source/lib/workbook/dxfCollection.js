@@ -30,7 +30,7 @@ class DXFCollection { // §18.8.15 dxfs (Formats)
 
         let thisItem;
         this.items.forEach((item) => {
-            if (_.equals(item.style.toObject(), style.toObject())) {
+            if (_.isEqual(item.style.toObject(), style.toObject())) {
                 return thisItem = item;
             }
         });

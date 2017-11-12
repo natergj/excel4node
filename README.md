@@ -1,3 +1,11 @@
+[![NPM version](https://img.shields.io/npm/v/excel4node.svg)](https://www.npmjs.com/package/excel4node)
+[![License](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
+[![npm](https://img.shields.io/npm/dt/excel4node.svg)](https://www.npmjs.com/package/excel4node)
+[![node](https://img.shields.io/node/v/excel4node.svg)](https://nodejs.org/en/download/)
+[![Build Status](https://travis-ci.org/natergj/excel4node.svg?branch=master)](https://travis-ci.org/natergj/excel4node)
+[![dependencies Status](https://david-dm.org/natergj/excel4node/status.svg)](https://david-dm.org/natergj/excel4node)
+[![devDependency Status](https://david-dm.org/natergj/excel4node/dev-status.svg)](https://david-dm.org/natergj/excel4node#info=devDependencies)
+
 # excel4node
 A full featured xlsx file generation library allowing for the creation of advanced Excel files.
 
@@ -8,7 +16,7 @@ REFERENCES
 [ECMA-376 Website](http://www.ecma-international.org/publications/standards/Ecma-376.htm)   
 [OpenOffice Excel File Format Reference](http://www.openoffice.org/sc/excelfileformat.pdf)   
 [OpenOffice Anatomy of OOXML explanation](http://officeopenxml.com/anatomyofOOXML-xlsx.php)   
-[MS-XSLX spec (pdf)] (http://download.microsoft.com/download/D/3/3/D334A189-E51B-47FF-B0E8-C0479AFB0E3C/%5BMS-XLSX%5D.pdf)    
+[MS-XSLX spec (pdf)](http://download.microsoft.com/download/D/3/3/D334A189-E51B-47FF-B0E8-C0479AFB0E3C/%5BMS-XLSX%5D.pdf)    
 
 Code references specifications sections from ECMA-376 2nd edition doc   
 ECMA-376, Second Edition, Part 1 - Fundamentals And Markup Language Reference.pdf   
@@ -248,6 +256,7 @@ Full Worksheet options. All options are optional.
             'ySplit': Float // Vertical position of the split, in 1/20th of a point; 0 (zero) if none. If the pane is frozen, this value indicates the number of rows visible in the left pane.
         },
         'rightToLeft': Boolean, // Flag indicating whether the sheet is in 'right to left' display mode. When in this mode, Column A is on the far right, Column B ;is one column left of Column A, and so on. Also, information in cells is displayed in the Right to Left format.
+        'showGridLines': Boolean, // Flag indicating whether the sheet should have gridlines enabled or disabled during view
         'zoomScale': Integer, // Defaults to 100
         'zoomScaleNormal': Integer, // Defaults to 100
         'zoomScalePageLayoutView': Integer // Defaults to 100

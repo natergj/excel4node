@@ -11,3 +11,5 @@ docs
 output
 tmp
 references
+coverage
+.nyc_output

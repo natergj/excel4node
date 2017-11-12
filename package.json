@@ -35,13 +35,13 @@
   },
   "scripts": {
     "test": "NODE_ENV=test ./node_modules/tape/bin/tape -r babel-register ./tests/*.test.js",
+    "cover": "NODE_ENV=test nyc tape -r babel-register ./tests/*.test.js",
     "build": "./node_modules/babel-cli/bin/babel.js source --presets babel-preset-es2015 -s --out-dir distribution",
     "watch": "./node_modules/babel-cli/bin/babel.js source -w --presets babel-preset-es2015 -s --out-dir distribution",
     "document": "jsdoc ./source -r -d docs",
     "prepublish": "npm run build; npm run test"
   },
   "dependencies": {
-    "babel-register": "^6.9.0",
     "colors": "^1.1.2",
     "image-size": "0.5.0",
     "jszip": "^3.0.0",
@@ -52,14 +52,25 @@
   },
   "devDependencies": {
     "babel-cli": "^6.10.1",
+    "babel-plugin-istanbul": "^2.0.3",
     "babel-polyfill": "^6.9.1",
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-es2015-node4": "^2.1.0",
+    "babel-register": "^6.9.0",
     "jsdoc-babel": "^0.2.1",
+    "nyc": "^8.4.0",
     "source-map-support": "^0.4.1",
     "tape": "^4.6.0",
     "tape-promise": "^1.1.0",
     "xmldom": "^0.1.22",
     "xpath.js": "^1.0.6"
+  },
+  "nyc": {
+    "instrument": false,
+    "sourceMap": false,
+    "reporter": [
+      "text-summary",
+      "html"
+    ]
   }
 }

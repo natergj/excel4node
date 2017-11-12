@@ -68,6 +68,7 @@ class Worksheet {
      * @param {String} opts.sheetView.pane.xSplit Horizontal position of the split, in 1/20th of a point; 0 (zero) if none. If the pane is frozen, this value indicates the number of columns visible in the top pane.
      * @param {String} opts.sheetView.pane.ySplit Vertical position of the split, in 1/20th of a point; 0 (zero) if none. If the pane is frozen, this value indicates the number of rows visible in the left pane.
      * @param {Boolean} opts.sheetView.rightToLeft Flag indicating whether the sheet is in 'right to left' display mode. When in this mode, Column A is on the far right, Column B ;is one column left of Column A, and so on. Also, information in cells is displayed in the Right to Left format.
+     * @param {Boolean} opts.sheetView.showGridLines Flag indicating whether the sheet should have gridlines enabled or disabled during view.
      * @param {Number} opts.sheetView.zoomScale  Defaults to 100
      * @param {Number} opts.sheetView.zoomScaleNormal Defaults to 100
      * @param {Number} opts.sheetView.zoomScalePageLayoutView Defaults to 100

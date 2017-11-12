@@ -57,6 +57,7 @@ module.exports = {
         'tabSelected': 0,
         'workbookViewId': 0,
         'rightToLeft': 0,
+        'showGridLines': 1,
         'zoomScale': 100,
         'zoomScaleNormal': 100,
         'zoomScalePageLayoutView': 100

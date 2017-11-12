@@ -141,18 +141,21 @@ let getExcelTS = (date) => {
 
     let thisDt = new Date(date);
     thisDt.setDate(thisDt.getDate() + 1);
-    // Take timezone into account when calculating date
-    thisDt.setMinutes(thisDt.getMinutes() - thisDt.getTimezoneOffset());
 
-    let epoch = new Date(1899, 11, 31);
-    // Take timezone into account when calculating epoch
-    epoch.setMinutes(epoch.getMinutes() - epoch.getTimezoneOffset());
+    let epoch = new Date('1900-01-01T00:00:00.0000Z');
+
+    // Handle legacy leap year offset as described in  §18.17.4.1
+    const legacyLeapDate = new Date('1900-02-28T23:59:59.999Z');
+    if (thisDt - legacyLeapDate > 0) {
+        thisDt.setDate(thisDt.getDate() + 1);
+    } 
 
     // Get milliseconds between date sent to function and epoch 
     let diff2 = thisDt.getTime() - epoch.getTime();
 
     let ts = diff2 / (1000 * 60 * 60 * 24);
-    return ts;
+
+    return parseFloat(ts.toFixed(7));
 };
 
 let sortCellRefs = (a, b) => {
