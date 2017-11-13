@@ -1,4 +1,6 @@
 .idea
+.nyc_output
+coverage
 docs
 references
 npm-debug.log
