@@ -45,7 +45,7 @@
     "image-size": "0.6.1",
     "jszip": "3.1.5",
     "lodash": "4.17.4",
-    "mime": "1.4.1",
+    "mime": "2.0.3",
     "sloth-logger": "1.0.3",
     "xmlbuilder": "9.0.4"
   },
