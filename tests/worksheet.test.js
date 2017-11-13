@@ -1,5 +1,5 @@
 const tape = require('tape');
-const _tape = require('tape-promise');
+const _tape = require('tape-promise').default;
 const test = _tape(tape);
 const xl = require('../source/index');
 const DOMParser = require('xmldom').DOMParser;

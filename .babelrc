@@ -1,5 +1,5 @@
 { 
-	"presets": ["es2015-node4"],
+	"presets": ["env"],
 	"env": {
 		"test": {
 			"plugins": ["istanbul"]
