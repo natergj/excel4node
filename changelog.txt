@@ -1,3 +1,21 @@
+1.3.0
+        Enhancements:
+        merge https://github.com/natergj/excel4node/pull/117 to add option to hide view lines
+        merge https://github.com/natergj/excel4node/pull/109 to add code coverage checking
+        merge https://github.com/natergj/excel4node/pull/138 to allow for image from buffer support
+        commit 1c4a7bf990160b47ad8e0f49c00a536dca7ab672 add options for workbook view
+        commit ff629a225335dc784933c06aabd20ddca5fcdbef fix issue where ony first data validation per sheet would take effect
+
+        Bug fixes:
+        merge https://github.com/natergj/excel4node/pull/99 to fix issue when adding 2nd image of same extension
+        merge https://github.com/natergj/excel4node/pull/115 to fix deprecated lodash function warning
+        merge https://github.com/natergj/excel4node/pull/125 to fix link in README
+        merge https://github.com/natergj/excel4node/pull/119 to remove babel-register runtime dependency
+        merge https://github.com/natergj/excel4node/pull/132 to fix issue with summaryBelow and summaryRight
+        commit 78180e6a0a1f0a50e43b588902da37fdee5be7bb use latest version of mime module
+        commit b96f01a2923e2823377f10c28a97a3fe2c5c5f50 update dependencies
+        commit b3fcb8aa6674c644838f81a9170f2b6d975803b6 fixes date translations to match published spec
+        commit 1c4a7bf990160b47ad8e0f49c00a536dca7ab672 fix issue where workbook would always open as smallest possible window size
 1.2.1
         Fix Workbook#createStyle creating duplicates and slow performance [#100]
 
