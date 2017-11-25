@@ -131,7 +131,9 @@ var wb = new xl.Workbook({
       windowWidth: 28800, // Specifies the width of the workbook window. The unit of measurement for this value is twips..
       xWindow: 0, // Specifies the X coordinate for the upper left corner of the workbook window. The unit of measurement for this value is twips.
       yWindow: 440, // Specifies the Y coordinate for the upper left corner of the workbook window. The unit of measurement for this value is twips.
-});
+    },
+    logLevel: 0, // 0 - 5. 0 suppresses all logs, 1 shows errors only, 5 is for debugging
+);
 ```
 
 #### Methods   
@@ -161,12 +163,14 @@ wb.write('ExcelFile.xlsx'); // Writes the file ExcelFile.xlsx to the process.cwd
 wb.write('ExcelFile.xlsx', function (err, stats) {
 	if (err) {
 		console.error(err);
-	} 
-	console.log(stats); // Prints out an instance of a node.js fs.Stats object
+	}  else {
+        console.log(stats); // Prints out an instance of a node.js fs.Stats object
+    }
 });
 ```
 ```javascript
 // sends Excel file to web client requesting the / route
+// server will respond with 500 error if excel workbook cannot be generated
 var express = require('express');
 var app = express();
 app.get('/', function (req, res) {
@@ -566,10 +570,10 @@ Style Options Object:
         outline: boolean
     },
     fill: { // §18.8.20 fill (Fill)
-        type: string, // Currently only 'pattern' is implimented. Non-implimented option is 'gradient'
+        type: string, // Currently only 'pattern' is implemented. Non-implemented option is 'gradient'
         patternType: string, //§18.18.55 ST_PatternType (Pattern Type)
-        bgColor: string // HTML style hex value. optional. defaults to black
-        fgColor: string // HTML style hex value. required.
+        bgColor: string // HTML style hex value. defaults to black
+        fgColor: string // HTML style hex value. defaults to black.
     },
     numberFormat: integer or string // §18.8.30 numFmt (Number Format)
 });

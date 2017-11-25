@@ -320,7 +320,7 @@ class Style {
         }
 
         if (this.fill instanceof Fill) {
-            this.fill.addToXMLele(thisEle);
+            this.fill.addToXMLele(thisEle.ele('fill'));
         }
 
         if (this.alignment instanceof Alignment) {

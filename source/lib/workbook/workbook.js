@@ -192,7 +192,18 @@ class Workbook {
             }
         })
         .catch((e) => {
-            throw new Error(e.stack);
+            if (handler instanceof http.ServerResponse) {
+                this.logger.error(e.stack);
+                handler.status = 500;
+                handler.setHeader('Content-Type', 'text/plain');
+                handler.end('500 Server Error');
+            }
+            else if(typeof handler === 'function') {
+                handler(e.stack);
+            }
+            else {
+                this.logger.error(e.stack);
+            }
         });
     }
 

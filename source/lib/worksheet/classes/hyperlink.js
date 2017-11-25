@@ -2,7 +2,7 @@
 class Hyperlink { //§18.3.1.47 hyperlink (Hyperlink)
     constructor(opts) {
         opts = opts ? opts : {};
-
+        
         if (opts.ref === undefined) {
             throw new TypeError('ref is a required option when creating a hyperlink');
         }
@@ -36,12 +36,12 @@ class Hyperlink { //§18.3.1.47 hyperlink (Hyperlink)
             thisEle.att('display', this.display);
         }
         if (this.location !== undefined) {
-            thisEle.att('location', this.location);
-        } 
+            thisEle.att('address', this.location);
+        }
         if (this.tooltip !== undefined) {
             thisEle.att('tooltip', this.tooltip);
-        } 
-        thisEle.up();    
+        }
+        thisEle.up();  
     }
 }
 

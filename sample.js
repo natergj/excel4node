@@ -10,7 +10,8 @@ function generateWorkbook() {
             name: 'Verdana',
             size: 12
         },
-        dateFormat: 'mm/dd/yyyy hh:mm:ss'
+        dateFormat: 'mm/dd/yyyy hh:mm:ss',
+        logLevel: 1,
     });
 
     /*****************************************
@@ -507,12 +508,15 @@ var wb = generateWorkbook();
 
 /*
 wb.write('Excel1.xlsx');
-console.log('Excel1.xlsx written');
 */
 
 wb.write('Excel.xlsx', function (err, stats) {
-    console.log('Excel.xlsx written and has the following stats');
-    console.log(stats);
+    if (err) {
+        console.log(err);
+    } else {
+        console.log('Excel.xlsx written and has the following stats');
+        console.log(stats);
+    }
 });
 
 /*

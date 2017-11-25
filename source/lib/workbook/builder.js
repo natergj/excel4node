@@ -512,7 +512,6 @@ let writeToBuffer = (wb) => {
             });
         })
         .catch((e) => {
-            wb.logger.error(e.stack);
             reject(e);
         });
 
