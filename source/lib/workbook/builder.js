@@ -99,11 +99,11 @@ let addWorkBookXML = (promiseObj) => {
         xml.att('xmlns:r', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships');
         xml.att('xmlns:x15', 'http://schemas.microsoft.com/office/spreadsheetml/2010/11/main');
 
+        let booksViewEle = xml.ele('bookViews');
+        let workbookViewEle = booksViewEle.ele('workbookView');
         // bookViews (§18.2.1)
         if (promiseObj.wb.opts.workbookView) {
             const viewOpts = promiseObj.wb.opts.workbookView;
-            let booksViewEle = xml.ele('bookViews');
-            let workbookViewEle = booksViewEle.ele('workbookView');
             if (viewOpts.activeTab) {
                 workbookViewEle.att('activeTab', viewOpts.activeTab);
             }
