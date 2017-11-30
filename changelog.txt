@@ -1,3 +1,7 @@
+1.3.2
+        Bug fixes:
+        resolves https://github.com/natergj/excel4node/issues/152 after 1.3.0 re-introduced issue #84
+        
 1.3.1
         Bug fixes:
         resolves https://github.com/natergj/excel4node/issues/148 for uncatchable thrown errors
