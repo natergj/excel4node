@@ -9,23 +9,24 @@ import wsDrawing from "../drawing/index";
 import * as xmlBuilder from "./builder";
 import optsValidator from "./optsValidator";
 import { merge, cloneDeep } from "lodash";
+import Workbook from "../workbook/workbook";
 
 export default class Worksheet {
-  private wb;
-  private sheetId;
-  private localSheetId;
-  private opts;
-  private name;
-  private hasGroupings;
+  private wb: Workbook;
+  public sheetId: number;
+  private localSheetId: number;
+  public opts;
+  private name: string;
+  private hasGroupings: boolean;
   private cols;
   private rows;
   private cells;
   private mergedCells;
-  private lastUsedRow;
-  private lastUsedCol;
-  private cfRulesCollection;
-  private hyperlinkCollection;
-  private dataValidationCollection;
+  private lastUsedRow: number;
+  private lastUsedCol: number;
+  private cfRulesCollection: CfRulesCollection;
+  private hyperlinkCollection: HyperlinkCollection;
+  private dataValidationCollection: DataValidationCollection;
   private drawingCollection;
 
   /**
@@ -171,7 +172,7 @@ export default class Worksheet {
    * @returns {Worksheet}
    */
   addConditionalFormattingRule(sqref, options) {
-    let style = options.style || this.wb.Style();
+    let style = options.style || this.wb.createStyle();
     let dxf = this.wb.dxfCollection.add(style);
     delete options.style;
     options.dxfId = dxf.id;

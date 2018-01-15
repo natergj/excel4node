@@ -38,16 +38,16 @@ let workbookDefaultOpts = {
   dateFormat: "m/d/yy",
 };
 
-class Workbook {
+export default class Workbook {
   private logger;
   private opts;
-  private sheets;
+  public sheets: Worksheet[];
   private sharedStyles;
   private sharedStrings;
   private styles;
   private stylesLookup;
-  private dxfCollection;
-  private mediaCollection;
+  public dxfCollection;
+  public mediaCollection;
   private definedNameCollection;
   private styleData;
   private styleDataLookup;
@@ -233,7 +233,7 @@ class Workbook {
    * @param {Object} opts Options for the style. See Style class definition
    * @returns {Style}
    */
-  createStyle(opts) {
+  createStyle(opts?) {
     const thisStyle = new Style(this, opts);
     const lookupKey = JSON.stringify(thisStyle.toObject());
 
@@ -260,5 +260,3 @@ class Workbook {
     return this.sharedStrings.indexOf(val);
   }
 }
-
-module.exports = Workbook;

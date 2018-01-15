@@ -52,7 +52,7 @@ export class Hyperlink {
 }
 
 export class HyperlinkCollection {
-  private links;
+  public links;
   //§18.3.1.48 hyperlinks (Hyperlinks)
   constructor() {
     this.links = [];

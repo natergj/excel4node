@@ -19,9 +19,10 @@ import {
   getExcelTS,
 } from "./lib/utils";
 import * as types from "./lib/types/index";
+import Workbook from "./lib/workbook/workbook";
 
 module.exports = {
-  Workbook: require("./lib/workbook/index"),
+  Workbook,
   getExcelRowCol: getExcelRowCol,
   getExcelAlpha: getExcelAlpha,
   getExcelTS: getExcelTS,
