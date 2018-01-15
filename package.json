@@ -50,6 +50,7 @@
     "xmlbuilder": "9.0.4"
   },
   "devDependencies": {
+    "@types/node": "^9.3.0",
     "jsdoc": "^3.5.5",
     "nyc": "11.3.0",
     "source-map-support": "0.5.0",

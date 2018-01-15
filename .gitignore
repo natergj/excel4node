@@ -1,6 +1,6 @@
 .idea
 node_modules
-distribution
+dist
 .DS_Store
 npm-debug.log
 Excel.xlsx
