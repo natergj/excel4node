@@ -1,4 +1,4 @@
-const myUtils = require("../../utils.js");
+import * as myUtils from "../../utils";
 
 let cleanFormula = f => {
   if (typeof f === "number" || f.substr(0, 1) === "=") {
@@ -8,7 +8,7 @@ let cleanFormula = f => {
   }
 };
 
-class DataValidation {
+export class DataValidation {
   public sqref;
   public formula1;
   public formula2;

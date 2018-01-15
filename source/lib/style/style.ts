@@ -1,8 +1,8 @@
-import Alignment from "./classes/alignment.js";
-import Border from "./classes/border.js";
-import Fill from "./classes/fill.js";
-import Font from "./classes/font.js";
-import NumberFormat from "./classes/numberFormat.js";
+import Alignment from "./classes/alignment";
+import Border from "./classes/border";
+import Fill from "./classes/fill";
+import Font from "./classes/font";
+import NumberFormat from "./classes/numberFormat";
 import { merge, isEqual } from "lodash";
 
 let _getFontId = (wb, font) => {

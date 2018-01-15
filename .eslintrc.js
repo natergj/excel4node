@@ -16,6 +16,7 @@ module.exports = {
         'key-spacing': [2, { 'beforeColon': false, 'afterColon': true }],
         'keyword-spacing': 2,
         'linebreak-style': [2, 'unix'],
+        'max-len': ["error", { code: 120 }],
         'no-case-declarations': 0,
         'no-console': 0,
         'no-redeclare': 0,

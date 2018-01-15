@@ -21,7 +21,7 @@ import {
 import * as types from "./lib/types/index";
 import Workbook from "./lib/workbook/workbook";
 
-module.exports = {
+export default {
   Workbook,
   getExcelRowCol: getExcelRowCol,
   getExcelAlpha: getExcelAlpha,

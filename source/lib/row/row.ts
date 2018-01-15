@@ -1,4 +1,4 @@
-import * as utils from "../utils.js";
+import * as utils from "../utils";
 import * as _ from "lodash";
 
 class Row {

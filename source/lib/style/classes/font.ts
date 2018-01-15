@@ -1,4 +1,4 @@
-import * as types from "../../types/index.js";
+import * as types from "../../types/index";
 
 export default class Font {
   private color;

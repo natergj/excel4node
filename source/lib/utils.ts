@@ -1,4 +1,4 @@
-function _bitXOR(a, b) {
+function _bitXOR(a: string, b: string) {
   let maxLength = a.length > b.length ? a.length : b.length;
 
   let padString = "";
@@ -16,15 +16,15 @@ function _bitXOR(a, b) {
   return response;
 }
 
-function _rotateBinary(bin) {
+function _rotateBinary(bin: string) {
   return bin.substr(1, bin.length - 1) + bin.substr(0, 1);
 }
 
-function _getHashForChar(char, hash) {
+function _getHashForChar(char: string, hash: string) {
   hash = hash ? hash : "0000";
   let charCode = char.charCodeAt(0);
   let hashBin = parseInt(hash, 16).toString(2);
-  let charBin = parseInt(charCode, 10).toString(2);
+  let charBin = charCode.toString(2);
   hashBin = String("000000000000000" + hashBin).substr(-15);
   charBin = String("000000000000000" + charBin).substr(-15);
   let nextHash = _bitXOR(hashBin, charBin);
@@ -45,13 +45,13 @@ export function generateRId() {
 }
 
 //  http://www.openoffice.org/sc/excelfileformat.pdf section 4.18.4
-export function getHashOfPassword(str) {
+export function getHashOfPassword(str: string) {
   let curHash = "0000";
   for (let i = str.length - 1; i >= 0; i--) {
     curHash = _getHashForChar(str[i], curHash);
   }
   let curHashBin = parseInt(curHash, 16).toString(2);
-  let charCountBin = parseInt(str.length, 10).toString(2);
+  let charCountBin = str.length.toString(2);
   let saltBin = parseInt("CE4B", 16).toString(2);
 
   let firstXOR = _bitXOR(curHashBin, charCountBin);
@@ -75,7 +75,7 @@ export function getHashOfPassword(str) {
  * // returns B
  * getExcelAlpha(2);
  */
-export function getExcelAlpha(colNum) {
+export function getExcelAlpha(colNum: number) {
   let remaining = colNum;
   let aCharCode = 65;
   let columnName = "";
@@ -90,14 +90,14 @@ export function getExcelAlpha(colNum) {
 /**
  * Translates a column number into the Alpha equivalent used by Excel
  * @function getExcelAlpha
- * @param {Number} rowNum Row number that is to be transalated
- * @param {Number} colNum Column number that is to be transalated
+ * @param {Number} rowNum Row number that is to be translated
+ * @param {Number} colNum Column number that is to be translated
  * @returns {String} The Excel alpha representation of the column number
  * @example
  * // returns B1
  * getExcelCellRef(1, 2);
  */
-export function getExcelCellRef(rowNum, colNum) {
+export function getExcelCellRef(rowNum: number, colNum: number) {
   let remaining = colNum;
   let aCharCode = 65;
   let columnName = "";
@@ -118,7 +118,7 @@ export function getExcelCellRef(rowNum, colNum) {
  * // returns {row: 2, col: 3}
  * getExcelRowCol('C2')
  */
-export function getExcelRowCol(str) {
+export function getExcelRowCol(str: string) {
   let numeric = str.split(/\D/).filter(function(el) {
     return el !== "";
   })[0];
@@ -144,8 +144,8 @@ export function getExcelRowCol(str) {
  * // returns 29810.958333333332
  * getExcelTS(new Date('08/13/1981'));
  */
-export function getExcelTS(date) {
-  let thisDt = new Date(date);
+export function getExcelTS(date: Date | string) {
+  let thisDt = new Date(date.toString());
   thisDt.setDate(thisDt.getDate() + 1);
 
   let epoch = new Date("1900-01-01T00:00:00.0000Z");
@@ -164,7 +164,7 @@ export function getExcelTS(date) {
   return parseFloat(ts.toFixed(7));
 }
 
-export function sortCellRefs(a, b) {
+export function sortCellRefs(a: string, b: string) {
   let aAtt = getExcelRowCol(a);
   let bAtt = getExcelRowCol(b);
   if (aAtt.col === bAtt.col) {
@@ -174,7 +174,7 @@ export function sortCellRefs(a, b) {
   }
 }
 
-export function arrayIntersectSafe(a, b) {
+export function arrayIntersectSafe(a: any[], b: any[]) {
   if (a instanceof Array && b instanceof Array) {
     var ai = 0,
       bi = 0;
@@ -199,7 +199,7 @@ export function arrayIntersectSafe(a, b) {
   }
 }
 
-export function getAllCellsInExcelRange(range) {
+export function getAllCellsInExcelRange(range: string) {
   var cells = range.split(":");
   var cell1props = getExcelRowCol(cells[0]);
   var cell2props = getExcelRowCol(cells[1]);
@@ -211,7 +211,12 @@ export function getAllCellsInExcelRange(range) {
   );
 }
 
-export function getAllCellsInNumericRange(row1, col1, row2, col2) {
+export function getAllCellsInNumericRange(
+  row1: number,
+  col1: number,
+  row2: number,
+  col2: number
+) {
   var response = [];
   row2 = row2 ? row2 : row1;
   col2 = col2 ? col2 : col1;
@@ -223,17 +228,17 @@ export function getAllCellsInNumericRange(row1, col1, row2, col2) {
   return response.sort(sortCellRefs);
 }
 
-export function boolToInt(bool) {
+export function boolToInt(bool: boolean | 0 | 1) {
   if (bool === true) {
     return 1;
   }
   if (bool === false) {
     return 0;
   }
-  if (parseInt(bool) === 1) {
+  if (bool === 1) {
     return 1;
   }
-  if (parseInt(bool) === 0) {
+  if (bool === 0) {
     return 0;
   }
   throw new TypeError("Value sent to boolToInt must be true, false, 1 or 0");

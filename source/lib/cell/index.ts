@@ -1,9 +1,9 @@
 import * as _ from "lodash";
-import Cell from "./cell.js";
-import Row from "../row/row.js";
-import Column from "../column/column.js";
-import Style from "../style/style.js";
-import * as utils from "../utils.js";
+import Cell from "./cell";
+import Row from "../row/row";
+import Column from "../column/column";
+import Style from "../style/style";
+import * as utils from "../utils";
 import * as util from "util";
 
 function stringSetter(val) {

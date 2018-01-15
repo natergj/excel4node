@@ -1,13 +1,13 @@
 import Worksheet from "../worksheet/worksheet";
 import Style from "../style/style";
-import Border from "../style/classes/border.js";
-import Fill from "../style/classes/fill.js";
-import DXFCollection from "./dxfCollection.js";
-import MediaCollection from "./mediaCollection.js";
-import DefinedNameCollection from "../classes/definedNameCollection.js";
+import Border from "../style/classes/border";
+import Fill from "../style/classes/fill";
+import DXFCollection from "./dxfCollection";
+import MediaCollection from "./mediaCollection";
+import DefinedNameCollection from "../classes/definedNameCollection";
 import * as SlothLogger from "sloth-logger";
-import * as types from "../types/index.js";
-import * as builder from "./builder.js";
+import * as types from "../types/index";
+import * as builder from "./builder";
 import * as http from "http";
 import * as fs from "fs";
 import { merge } from "lodash";
@@ -27,15 +27,15 @@ import { merge } from "lodash";
 // Default Options for Workbook
 let workbookDefaultOpts = {
   jszip: {
-    compression: "DEFLATE",
+    compression: "DEFLATE"
   },
   defaultFont: {
     color: "FF000000",
     name: "Calibri",
     size: 12,
-    family: "roman",
+    family: "roman"
   },
-  dateFormat: "m/d/yy",
+  dateFormat: "m/d/yy"
 };
 
 export default class Workbook {
@@ -43,13 +43,13 @@ export default class Workbook {
   private opts;
   public sheets: Worksheet[];
   private sharedStyles;
-  private sharedStrings;
+  public sharedStrings;
   private styles;
   private stylesLookup;
   public dxfCollection;
   public mediaCollection;
   private definedNameCollection;
-  private styleData;
+  public styleData;
   private styleDataLookup;
 
   /**
@@ -78,11 +78,11 @@ export default class Workbook {
    * @param {Number} opts.workbookView.yWindow Specifies the Y coordinate for the upper left corner of the workbook window. The unit of measurement for this value is twips.
    * @returns {Workbook}
    */
-  constructor(opts) {
+  constructor(opts?) {
     opts = opts ? opts : {};
 
     this.logger = new SlothLogger.Logger({
-      logLevel: isNaN(parseInt(opts.logLevel)) ? 0 : parseInt(opts.logLevel),
+      logLevel: isNaN(parseInt(opts.logLevel)) ? 0 : parseInt(opts.logLevel)
     });
 
     this.opts = merge({}, workbookDefaultOpts, opts);
@@ -99,7 +99,7 @@ export default class Workbook {
       fonts: [],
       fills: [
         new Fill({ type: "pattern", patternType: "none" }),
-        new Fill({ type: "pattern", patternType: "gray125" }),
+        new Fill({ type: "pattern", patternType: "gray125" })
       ],
       borders: [new Border()],
       cellXfs: [
@@ -107,9 +107,9 @@ export default class Workbook {
           borderId: null,
           fillId: null,
           fontId: 0,
-          numFmtId: null,
-        },
-      ],
+          numFmtId: null
+        }
+      ]
     };
 
     // Lookups for style components to quickly find existing entries
@@ -124,7 +124,7 @@ export default class Workbook {
       borders: this.styleData.borders.reduce((ret, border, index) => {
         ret[JSON.stringify(border.toObject())] = index;
         return ret;
-      }, {}),
+      }, {})
     };
 
     // Set Default Font and Style
@@ -173,8 +173,7 @@ export default class Workbook {
                 "Content-Length": buffer.length,
                 "Content-Type":
                   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                "Content-Disposition":
-                  'attachment; filename="' + fileName + '"',
+                "Content-Disposition": 'attachment; filename="' + fileName + '"'
               });
               handler.end(buffer);
             } else {
@@ -223,7 +222,7 @@ export default class Workbook {
    * @param {Object} opts Options for Worksheet. See Worksheet class definition
    * @returns {Worksheet}
    */
-  addWorksheet(name, opts) {
+  addWorksheet(name?, opts?) {
     let newLength = this.sheets.push(new Worksheet(this, name, opts));
     return this.sheets[newLength - 1];
   }

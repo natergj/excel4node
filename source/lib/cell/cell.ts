@@ -1,4 +1,4 @@
-import * as utils from "../utils.js";
+import * as utils from "../utils";
 
 // §18.3.1.4 c (Cell)
 export default class Cell {

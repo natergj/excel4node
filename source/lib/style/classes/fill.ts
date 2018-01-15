@@ -1,5 +1,5 @@
 import * as types from "../../types/index";
-import CTColor from "./ctColor.js";
+import CTColor from "./ctColor";
 
 class Stop {
   //§18.8.38

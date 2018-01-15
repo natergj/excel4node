@@ -18,16 +18,16 @@ export default class Worksheet {
   public opts;
   private name: string;
   private hasGroupings: boolean;
-  private cols;
-  private rows;
-  private cells;
+  public cols;
+  public rows;
+  public cells;
   private mergedCells;
   private lastUsedRow: number;
   private lastUsedCol: number;
-  private cfRulesCollection: CfRulesCollection;
-  private hyperlinkCollection: HyperlinkCollection;
-  private dataValidationCollection: DataValidationCollection;
-  private drawingCollection;
+  public cfRulesCollection: CfRulesCollection;
+  public hyperlinkCollection: HyperlinkCollection;
+  public dataValidationCollection: DataValidationCollection;
+  public drawingCollection;
 
   /**
    * Create a Worksheet.
@@ -118,7 +118,7 @@ export default class Worksheet {
    * @param {Boolean} opts.outline.summaryRight Flag indicating whether summary columns appear to the right of detail in an outline, when applying an outline/grouping.
    * @returns {Worksheet}
    */
-  constructor(wb, name, opts) {
+  constructor(wb, name?, opts?) {
     this.wb = wb;
     this.sheetId = this.wb.sheets.length + 1;
     this.localSheetId = this.wb.sheets.length;
