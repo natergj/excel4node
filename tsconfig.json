@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "target": "ES2015",
+    "target": "es2015",
     "module": "commonjs",
     "moduleResolution": "node",
-    "outDir": "dist"
+    "outDir": "dist",
+    "sourceMap": true
   },
   "include": ["source/**/*.ts"]
 }

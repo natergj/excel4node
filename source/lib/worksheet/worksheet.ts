@@ -1,17 +1,20 @@
-import CfRulesCollection from "./cf/cf_rules_collection";
-import cellAccessor from "../cell";
-import rowAccessor from "../row/index";
-import colAccessor from "../column/index";
-import wsDefaultParams from "./sheet_default_params";
-import { HyperlinkCollection } from "./classes/hyperlink";
-import DataValidationCollection from "./classes/dataValidation";
-import wsDrawing from "../drawing/index";
-import * as xmlBuilder from "./builder";
-import optsValidator from "./optsValidator";
-import { merge, cloneDeep } from "lodash";
-import Workbook from "../workbook/workbook";
+import { CfRulesCollection } from './cf/cf_rules_collection';
+import { cellAccessor } from '../cell/index';
+import { Cell } from '../cell/cell';
+import { rowAccessor } from '../row/index';
+import { Row } from '../row/row';
+import { colAccessor } from '../column/index';
+import { Column } from '../column/column';
+import { WORKSHEET_DEFAULT_PARAMS } from './sheet_default_params';
+import { HyperlinkCollection } from './classes/hyperlink';
+import { DataValidationCollection } from './classes/dataValidation';
+import { Drawing, DrawingCollection } from '../drawing/index';
+import * as xmlBuilder from './builder';
+import optsValidator from './optsValidator';
+import { merge, cloneDeep } from 'lodash';
+import { Workbook } from '../workbook/workbook';
 
-export default class Worksheet {
+export class Worksheet {
   private wb: Workbook;
   public sheetId: number;
   private localSheetId: number;
@@ -29,6 +32,7 @@ export default class Worksheet {
   public dataValidationCollection: DataValidationCollection;
   public drawingCollection;
 
+  // tslint:disable:max-line-length
   /**
    * Create a Worksheet.
    * @class Worksheet
@@ -118,11 +122,12 @@ export default class Worksheet {
    * @param {Boolean} opts.outline.summaryRight Flag indicating whether summary columns appear to the right of detail in an outline, when applying an outline/grouping.
    * @returns {Worksheet}
    */
+  // tslint:enable:max-line-length
   constructor(wb, name?, opts?) {
     this.wb = wb;
     this.sheetId = this.wb.sheets.length + 1;
     this.localSheetId = this.wb.sheets.length;
-    this.opts = merge({}, cloneDeep(wsDefaultParams), opts);
+    this.opts = merge({}, cloneDeep(WORKSHEET_DEFAULT_PARAMS), opts);
     optsValidator(opts);
 
     this.opts.sheetView.tabSelected = this.sheetId === 1 ? 1 : 0;
@@ -139,16 +144,16 @@ export default class Worksheet {
     this.cfRulesCollection = new CfRulesCollection();
     this.hyperlinkCollection = new HyperlinkCollection();
     this.dataValidationCollection = new DataValidationCollection();
-    this.drawingCollection = new wsDrawing.DrawingCollection();
+    this.drawingCollection = new DrawingCollection();
   }
 
   get relationships() {
-    let rels = [];
-    this.hyperlinkCollection.links.forEach(l => {
+    const rels = [];
+    this.hyperlinkCollection.links.forEach((l) => {
       rels.push(l);
     });
     if (!this.drawingCollection.isEmpty) {
-      rels.push("drawing");
+      rels.push('drawing');
     }
     return rels;
   }
@@ -172,13 +177,14 @@ export default class Worksheet {
    * @returns {Worksheet}
    */
   addConditionalFormattingRule(sqref, options) {
-    let style = options.style || this.wb.createStyle();
-    let dxf = this.wb.dxfCollection.add(style);
+    const style = options.style || this.wb.createStyle();
+    const dxf = this.wb.dxfCollection.add(style);
     delete options.style;
     options.dxfId = dxf.id;
     this.cfRulesCollection.add(sqref, options);
     return this;
   }
+  // tslint:disable:max-line-length
   /**
    * @func Worksheet.addDataValidation
    * @desc Add a data validation rule to the Worksheet
@@ -198,8 +204,9 @@ export default class Worksheet {
    * @param {String} opts.type One of 'none', 'whole', 'decimal', 'list', 'date', 'time', 'textLength', 'custom'
    * @param {Array.String} opts.formulas Minimum count 1, maximum count 2. Rules for validation
    */
+  // tslint:enable:max-line-length
   addDataValidation(opts) {
-    let newValidation = this.dataValidationCollection.add(opts);
+    const newValidation = this.dataValidationCollection.add(opts);
     return newValidation;
   }
   /**
@@ -228,6 +235,8 @@ export default class Worksheet {
   column(col) {
     return colAccessor(this, col);
   }
+
+  // tslint:disable:max-line-length
   /**
    * @func Worksheet.addImage
    * @param {Object} opts
@@ -250,10 +259,11 @@ export default class Worksheet {
    * @param {String} opts.position.x X position of top left corner of image. Used with absoluteAchor type
    * @param {String} opts.position.y Y position of top left corner of image
    */
-  addImage(opts) {
-    opts = opts ? opts : {};
-    let mediaID = this.wb.mediaCollection.add(opts.path || opts.image);
-    let newImage = this.drawingCollection.add(opts);
+  // tslint:enable:max-line-length
+
+  addImage(opts: any = {}) {
+    const mediaID = this.wb.mediaCollection.add(opts.path || opts.image);
+    const newImage = this.drawingCollection.add(opts);
     newImage.id = mediaID;
 
     return newImage;

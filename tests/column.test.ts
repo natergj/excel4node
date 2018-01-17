@@ -1,37 +1,37 @@
-import * as test from "tape";
-import xl from "../source/index";
-import Column from "../source/lib/column/column";
+import * as test from 'tape';
+import * as xl from '../source/';
+import { Column } from '../source/lib/column/column';
 
-test("Column Tests", t => {
-  let wb = new xl.Workbook();
-  let ws = wb.addWorksheet();
+test('Column Tests', (t) => {
+  const wb = new xl.Workbook();
+  const ws = wb.addWorksheet();
 
-  t.ok(ws.column(2) instanceof Column, "Successfully accessed a column object");
+  t.ok(ws.column(2) instanceof Column, 'Successfully accessed a column object');
   t.ok(
-    ws.cols["2"] instanceof Column,
-    "Column was successfully added to worksheet object"
+    ws.cols['2'] instanceof Column,
+    'Column was successfully added to worksheet object',
   );
 
   ws.column(2).setWidth(40);
-  t.equals(ws.column(2).width, 40, "Column width successfully changed");
+  t.equals(ws.column(2).width, 40, 'Column width successfully changed');
 
   ws.column(2).freeze(4);
   t.equals(
     ws.opts.sheetView.pane.xSplit,
     2,
-    "Worksheet set to freeze pane at column 2"
+    'Worksheet set to freeze pane at column 2',
   );
   t.equals(
     ws.opts.sheetView.pane.topLeftCell,
-    "D1",
-    "Worksheet set to freeze pane at column 2 and scrollTo column 4"
+    'D1',
+    'Worksheet set to freeze pane at column 2 and scrollTo column 4',
   );
 
   ws.row(4).freeze();
   t.equals(
     ws.opts.sheetView.pane.topLeftCell,
-    "D5",
-    "topLeftCell updated when row was also frozen"
+    'D5',
+    'topLeftCell updated when row was also frozen',
   );
 
   t.end();

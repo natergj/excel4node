@@ -1,16 +1,16 @@
-import Worksheet from "../worksheet/worksheet";
-import Style from "../style/style";
-import Border from "../style/classes/border";
-import Fill from "../style/classes/fill";
-import DXFCollection from "./dxfCollection";
-import MediaCollection from "./mediaCollection";
-import DefinedNameCollection from "../classes/definedNameCollection";
-import * as SlothLogger from "sloth-logger";
-import * as types from "../types/index";
-import * as builder from "./builder";
-import * as http from "http";
-import * as fs from "fs";
-import { merge } from "lodash";
+import { Worksheet } from '../worksheet/worksheet';
+import { Style } from '../style/style';
+import { Border } from '../style/classes/border';
+import { Fill } from '../style/classes/fill';
+import { DXFCollection } from './dxfCollection';
+import { MediaCollection } from './mediaCollection';
+import { DefinedNameCollection } from '../classes/definedNameCollection';
+import * as SlothLogger from 'sloth-logger';
+import * as types from '../types/index';
+import * as builder from './builder';
+import * as http from 'http';
+import * as fs from 'fs';
+import { merge } from 'lodash';
 
 /* Available options for Workbook
 {
@@ -25,26 +25,55 @@ import { merge } from "lodash";
 }
 */
 // Default Options for Workbook
-let workbookDefaultOpts = {
+const workbookDefaultOpts = {
   jszip: {
-    compression: "DEFLATE"
+    compression: 'DEFLATE',
   },
   defaultFont: {
-    color: "FF000000",
-    name: "Calibri",
+    color: 'FF000000',
+    name: 'Calibri',
     size: 12,
-    family: "roman"
+    family: 'roman',
   },
-  dateFormat: "m/d/yy"
+  dateFormat: 'm/d/yy',
 };
 
-export default class Workbook {
+interface WorkbookConstructorOpts {
+  jszip?: {
+    compression?: string;
+  };
+  defaultFont?: {
+    color?: string;
+    name?: string;
+    size?: number;
+    family?: string;
+  };
+  dateFormat?: string;
+  workbookView?: {
+    activeTab?: number;
+    autoFilterDateGrouping?: boolean;
+    firstSheet?: number;
+    minimized?: boolean;
+    showHorizontalScroll?: boolean;
+    showSheetTabs?: boolean;
+    showVerticalScroll?: boolean;
+    tabRatio?: number;
+    visibility?: string;
+    windowHeight?: number;
+    windowWidth?: number;
+    xWindow?: number;
+    yWindow?: number;
+  };
+  logLevel?: number;
+}
+
+export class Workbook {
   private logger;
   private opts;
   public sheets: Worksheet[];
   private sharedStyles;
   public sharedStrings;
-  private styles;
+  public styles;
   private stylesLookup;
   public dxfCollection;
   public mediaCollection;
@@ -52,6 +81,7 @@ export default class Workbook {
   public styleData;
   private styleDataLookup;
 
+  // tslint:disable:max-line-length
   /**
    * @class Workbook
    * @param {Object} opts Workbook settings
@@ -62,7 +92,7 @@ export default class Workbook {
    * @param {String} opts.defaultFont.name Font name. defaults to Calibri
    * @param {Number} opts.defaultFont.size Font size. defaults to 12
    * @param {String} opts.defaultFont.family Font family. defaults to roman
-   * @param {String} opts.dataFormat Specifies the format for dates in the Workbook. defaults to 'm/d/yy'
+   * @param {String} opts.dateFormat Specifies the format for dates in the Workbook. defaults to 'm/d/yy'
    * @param {Number} opts.workbookView.activeTab Specifies an unsignedInt that contains the index to the active sheet in this book view.
    * @param {Boolean} opts.workbookView.autoFilterDateGrouping Specifies a boolean value that indicates whether to group dates when presenting the user with filtering options in the user interface.
    * @param {Number} opts.workbookView.firstSheet Specifies the index to the first sheet in this book view.
@@ -78,11 +108,10 @@ export default class Workbook {
    * @param {Number} opts.workbookView.yWindow Specifies the Y coordinate for the upper left corner of the workbook window. The unit of measurement for this value is twips.
    * @returns {Workbook}
    */
-  constructor(opts?) {
-    opts = opts ? opts : {};
-
+  // tslint:enable:max-line-length
+  constructor(opts: WorkbookConstructorOpts = {}) {
     this.logger = new SlothLogger.Logger({
-      logLevel: isNaN(parseInt(opts.logLevel)) ? 0 : parseInt(opts.logLevel)
+      logLevel: isNaN(Number(opts.logLevel)) ? 0 : Number(opts.logLevel),
     });
 
     this.opts = merge({}, workbookDefaultOpts, opts);
@@ -98,8 +127,8 @@ export default class Workbook {
       numFmts: [],
       fonts: [],
       fills: [
-        new Fill({ type: "pattern", patternType: "none" }),
-        new Fill({ type: "pattern", patternType: "gray125" })
+        new Fill({ type: 'pattern', patternType: 'none' }),
+        new Fill({ type: 'pattern', patternType: 'gray125' }),
       ],
       borders: [new Border()],
       cellXfs: [
@@ -107,24 +136,26 @@ export default class Workbook {
           borderId: null,
           fillId: null,
           fontId: 0,
-          numFmtId: null
-        }
-      ]
+          numFmtId: null,
+        },
+      ],
     };
 
     // Lookups for style components to quickly find existing entries
     // - Lookup keys are stringified JSON of a style's toObject result
     // - Lookup values are the indexes for the actual entry in the styleData arrays
+    const fillReducer = (ret, fill, index) => {
+      ret[JSON.stringify(fill.toObject())] = index;
+      return ret;
+    };
+    const borderReducer = (ret, border, index) => {
+      ret[JSON.stringify(border.toObject())] = index;
+      return ret;
+    };
     this.styleDataLookup = {
       fonts: {},
-      fills: this.styleData.fills.reduce((ret, fill, index) => {
-        ret[JSON.stringify(fill.toObject())] = index;
-        return ret;
-      }, {}),
-      borders: this.styleData.borders.reduce((ret, border, index) => {
-        ret[JSON.stringify(border.toObject())] = index;
-        return ret;
-      }, {})
+      fills: this.styleData.fills.reduce(fillReducer, {}),
+      borders: this.styleData.borders.reduce(borderReducer, {}),
     };
 
     // Set Default Font and Style
@@ -136,7 +167,7 @@ export default class Workbook {
    * @param {Number} tab number of sheet that should be displayed when workbook opens. tabs are indexed starting with 1
    **/
   setSelectedTab(id) {
-    this.sheets.forEach(s => {
+    this.sheets.forEach((s) => {
       if (s.sheetId === id) {
         s.opts.sheetView.tabSelected = 1;
       } else {
@@ -167,24 +198,25 @@ export default class Workbook {
         switch (typeof handler) {
           // handler passed as http response object.
 
-          case "object":
+          case 'object':
             if (handler instanceof http.ServerResponse) {
               handler.writeHead(200, {
-                "Content-Length": buffer.length,
-                "Content-Type":
-                  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                "Content-Disposition": 'attachment; filename="' + fileName + '"'
+                'Content-Length': buffer.length,
+                'Content-Type':
+                  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition':
+                  'attachment; filename="' + fileName + '"',
               });
               handler.end(buffer);
             } else {
-              throw new TypeError("Unknown object sent to write function.");
+              throw new TypeError('Unknown object sent to write function.');
             }
             break;
 
           // handler passed as callback function
-          case "function":
-            fs.writeFile(fileName, buffer, function(err) {
-              if (err) {
+          case 'function':
+            fs.writeFile(fileName, buffer, (err?) => {
+              if (err !== null) {
                 handler(err);
               } else {
                 fs.stat(fileName, handler);
@@ -194,21 +226,21 @@ export default class Workbook {
 
           // no handler passed, write file to FS.
           default:
-            fs.writeFile(fileName, buffer, function(err) {
-              if (err) {
+            fs.writeFile(fileName, buffer, (err?) => {
+              if (err !== null) {
                 throw err;
               }
             });
             break;
         }
       })
-      .catch(e => {
+      .catch((e) => {
         if (handler instanceof http.ServerResponse) {
           this.logger.error(e.stack);
           handler.statusCode = 500;
-          handler.setHeader("Content-Type", "text/plain");
-          handler.end("500 Server Error");
-        } else if (typeof handler === "function") {
+          handler.setHeader('Content-Type', 'text/plain');
+          handler.end('500 Server Error');
+        } else if (typeof handler === 'function') {
           handler(e.stack);
         } else {
           this.logger.error(e.stack);
@@ -223,7 +255,7 @@ export default class Workbook {
    * @returns {Worksheet}
    */
   addWorksheet(name?, opts?) {
-    let newLength = this.sheets.push(new Worksheet(this, name, opts));
+    const newLength = this.sheets.push(new Worksheet(this, name, opts));
     return this.sheets[newLength - 1];
   }
 
@@ -248,7 +280,8 @@ export default class Workbook {
   }
 
   /**
-   * Gets the index of a string from the shared string array if exists and adds the string if it does not and returns the new index
+   * Gets the index of a string from the shared string array if exists
+   * and adds the string if it does not and returns the new index
    * @param {String} val Text of string
    * @returns {Number} index of the string in the shared strings array
    */

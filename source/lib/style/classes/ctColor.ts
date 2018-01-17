@@ -1,10 +1,10 @@
-import * as types from "../../types/index";
+import * as types from '../../types/index';
 
-export default class CTColor {
-  //§18.8.3 && §18.8.19
+export class CTColor {
+  // §18.8.3 && §18.8.19
   public type;
   private rgb;
-  private theme; //§20.1.6.2 clrScheme (Color Scheme) : types.colorSchemes
+  private theme; // §20.1.6.2 clrScheme (Color Scheme) : types.colorSchemes
   /**
    * @class CTColor
    * @desc Excel color representation
@@ -17,21 +17,21 @@ export default class CTColor {
   constructor(color) {
     this.type;
     this.rgb;
-    this.theme; //§20.1.6.2 clrScheme (Color Scheme) : types.colorSchemes
+    this.theme; // §20.1.6.2 clrScheme (Color Scheme) : types.colorSchemes
 
-    if (typeof color === "string") {
+    if (typeof color === 'string') {
       if (types.colorScheme[color.toLowerCase()] !== undefined) {
         this.theme = color;
-        this.type = "theme";
+        this.type = 'theme';
       } else {
         try {
           this.rgb = types.excelColor.getColor(color);
-          this.type = "rgb";
+          this.type = 'rgb';
         } catch (e) {
           throw new TypeError(
             `Fill color must be an RGB value, Excel color (${types.excelColor.opts.join(
-              ", "
-            )}) or Excel theme (${types.colorScheme.opts.join(", ")})`
+              ', ',
+            )}) or Excel theme (${types.colorScheme.opts.join(', ')})`,
           );
         }
       }
@@ -54,7 +54,7 @@ export default class CTColor {
    * @param {xmlbuilder.Element} ele Element object of the xmlbuilder module
    */
   addToXMLele(ele) {
-    let colorEle = ele.ele("color");
+    const colorEle = ele.ele('color');
     colorEle.att(this.type, this[this.type]);
   }
 }

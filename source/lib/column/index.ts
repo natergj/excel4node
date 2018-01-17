@@ -1,4 +1,4 @@
-import Column from "../column/column";
+import { Column } from '../column/column';
 
 /**
  * Module repesenting a Column Accessor
@@ -9,7 +9,7 @@ import Column from "../column/column";
  * @param {Number} col Column of top left cell
  * @returns {Column}
  */
-export default function colAccessor(ws, col) {
+export function colAccessor(ws, col) {
   if (!(ws.cols[col] instanceof Column)) {
     ws.cols[col] = new Column(col, ws);
   }

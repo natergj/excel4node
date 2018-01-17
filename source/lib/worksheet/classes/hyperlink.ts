@@ -1,16 +1,20 @@
+interface HyperlinkConstructorOpts {
+  ref?: string;
+  display?: string;
+  location?: string;
+  tooltip?: string;
+}
 export class Hyperlink {
-  //§18.3.1.47 hyperlink (Hyperlink)
+  // §18.3.1.47 hyperlink (Hyperlink)
   public ref;
   public display;
   public location;
   public tooltip;
   public id;
 
-  constructor(opts) {
-    opts = opts ? opts : {};
-
+  constructor(opts: HyperlinkConstructorOpts = {}) {
     if (opts.ref === undefined) {
-      throw new TypeError("ref is a required option when creating a hyperlink");
+      throw new TypeError('ref is a required option when creating a hyperlink');
     }
     this.ref = opts.ref;
 
@@ -31,21 +35,21 @@ export class Hyperlink {
   }
 
   get rId() {
-    return "rId" + this.id;
+    return 'rId' + this.id;
   }
 
   addToXMLEle(ele) {
-    let thisEle = ele.ele("hyperlink");
-    thisEle.att("ref", this.ref);
-    thisEle.att("r:id", this.rId);
+    const thisEle = ele.ele('hyperlink');
+    thisEle.att('ref', this.ref);
+    thisEle.att('r:id', this.rId);
     if (this.display !== undefined) {
-      thisEle.att("display", this.display);
+      thisEle.att('display', this.display);
     }
     if (this.location !== undefined) {
-      thisEle.att("address", this.location);
+      thisEle.att('address', this.location);
     }
     if (this.tooltip !== undefined) {
-      thisEle.att("tooltip", this.tooltip);
+      thisEle.att('tooltip', this.tooltip);
     }
     thisEle.up();
   }
@@ -53,7 +57,7 @@ export class Hyperlink {
 
 export class HyperlinkCollection {
   public links;
-  //§18.3.1.48 hyperlinks (Hyperlinks)
+  // §18.3.1.48 hyperlinks (Hyperlinks)
   constructor() {
     this.links = [];
   }
@@ -63,7 +67,7 @@ export class HyperlinkCollection {
   }
 
   add(opts) {
-    let thisLink = new Hyperlink(opts);
+    const thisLink = new Hyperlink(opts);
     thisLink.id = this.links.length + 1;
     this.links.push(thisLink);
     return thisLink;
@@ -71,8 +75,8 @@ export class HyperlinkCollection {
 
   addToXMLele(ele) {
     if (this.length > 0) {
-      let linksEle = ele.ele("hyperlinks");
-      this.links.forEach(l => {
+      const linksEle = ele.ele('hyperlinks');
+      this.links.forEach((l) => {
         l.addToXMLEle(linksEle);
       });
       linksEle.up();

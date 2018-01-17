@@ -1,8 +1,8 @@
-import CfRule from "./cf_rule";
+import { CfRule } from './cf_rule';
 
 // -----------------------------------------------------------------------------
 
-export default class CfRulesCollection {
+export class CfRulesCollection {
   // §18.3.1.18 conditionalFormatting (Conditional Formatting)
   private rulesBySqref;
 
@@ -16,17 +16,18 @@ export default class CfRulesCollection {
   }
 
   add(sqref, ruleConfig) {
-    let rules = this.rulesBySqref[sqref] || [];
-    let newRule = new CfRule(ruleConfig);
+    const rules =
+      this.rulesBySqref[sqref] !== undefined ? this.rulesBySqref[sqref] : [];
+    const newRule = new CfRule(ruleConfig);
     rules.push(newRule);
     this.rulesBySqref[sqref] = rules;
     return this;
   }
 
   addToXMLele(ele) {
-    Object.keys(this.rulesBySqref).forEach(sqref => {
-      let thisEle = ele.ele("conditionalFormatting").att("sqref", sqref);
-      this.rulesBySqref[sqref].forEach(rule => {
+    Object.keys(this.rulesBySqref).forEach((sqref) => {
+      const thisEle = ele.ele('conditionalFormatting').att('sqref', sqref);
+      this.rulesBySqref[sqref].forEach((rule) => {
         rule.addToXMLele(thisEle);
       });
     });

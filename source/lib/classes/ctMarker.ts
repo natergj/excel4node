@@ -1,6 +1,6 @@
-import EMU from "./emu";
+import { EMU } from './emu';
 
-export default class CTMarker {
+export class CTMarker {
   private _col;
   private _colOff;
   private _row;
@@ -30,7 +30,7 @@ export default class CTMarker {
   }
   set col(val) {
     if (parseInt(val, 10) !== val || val < 0) {
-      throw new TypeError("CTMarker column must be a positive integer");
+      throw new TypeError('CTMarker column must be a positive integer');
     }
     this._col = val;
   }
@@ -40,7 +40,7 @@ export default class CTMarker {
   }
   set row(val) {
     if (parseInt(val, 10) !== val || val < 0) {
-      throw new TypeError("CTMarker row must be a positive integer");
+      throw new TypeError('CTMarker row must be a positive integer');
     }
     this._row = val;
   }

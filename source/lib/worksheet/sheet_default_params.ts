@@ -1,4 +1,4 @@
-export default {
+export const WORKSHEET_DEFAULT_PARAMS = {
   margins: {
     bottom: 0.75,
     footer: 0.3,

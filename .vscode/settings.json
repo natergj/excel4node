@@ -1,5 +1,11 @@
 {
   "editor.rulers": [120],
   "editor.formatOnSave": true,
-  "editor.wordWrapColumn": 120
+  "editor.wordWrapColumn": 120,
+  "prettier.singleQuote": true,
+  "prettier.arrowParens": "always",
+  "prettier.trailingComma": "all",
+  "npm-intellisense.importQuotes": "\"",
+  "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+  "typescript.format.insertSpaceBeforeFunctionParenthesis": true
 }

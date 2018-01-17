@@ -1,14 +1,15 @@
-import CTMarker from "../classes/ctMarker";
-import Point from "../classes/point";
-import EMU from "../classes/emu";
+import { CTMarker } from '../classes/ctMarker';
+import { Point } from '../classes/point';
+import { EMU } from '../classes/emu';
 
-export default class Drawing {
+export class Drawing {
   private _anchorType;
   private _anchorFrom;
   private _anchorTo;
   private _editAs;
   public _position;
 
+  // tslint:disable:max-line-length
   /**
    * Element representing an Excel Drawing superclass
    * @property {String} anchorType Proprty for type of anchor. One of 'absoluteAnchor', 'oneCellAnchor', 'twoCellAnchor'
@@ -18,6 +19,7 @@ export default class Drawing {
    * @property {Point} _position Internal property for position on Excel Worksheet when drawing type is absoluteAnchor
    * @returns {Drawing} Excel Drawing
    */
+  // tslint:enable:max-line-length
   constructor() {
     this._anchorType = null;
     this._anchorFrom = null;
@@ -30,11 +32,11 @@ export default class Drawing {
     return this._anchorType;
   }
   set anchorType(type) {
-    let types = ["absoluteAnchor", "oneCellAnchor", "twoCellAnchor"];
+    const types = ['absoluteAnchor', 'oneCellAnchor', 'twoCellAnchor'];
     if (types.indexOf(type) < 0) {
       throw new TypeError(
-        "Invalid option for anchor type. anchorType must be one of " +
-          types.join(", ")
+        'Invalid option for anchor type. anchorType must be one of ' +
+          types.join(', '),
       );
     }
     this._anchorType = type;
@@ -44,10 +46,10 @@ export default class Drawing {
     return this._editAs;
   }
   set editAs(val) {
-    let types = ["absolute", "oneCell", "twoCell"];
+    const types = ['absolute', 'oneCell', 'twoCell'];
     if (types.indexOf(val) < 0) {
       throw new TypeError(
-        "Invalid option for editAs. editAs must be one of " + types.join(", ")
+        'Invalid option for editAs. editAs must be one of ' + types.join(', '),
       );
     }
     this._editAs = val;
@@ -62,7 +64,7 @@ export default class Drawing {
         obj.col - 1,
         obj.colOff,
         obj.row - 1,
-        obj.rowOff
+        obj.rowOff,
       );
     }
   }
@@ -76,15 +78,16 @@ export default class Drawing {
         obj.col - 1,
         obj.colOff,
         obj.row - 1,
-        obj.rowOff
+        obj.rowOff,
       );
     }
   }
 
+  // tslint:disable:max-line-length
   /**
-   * @alias Drawing.achor
-   * @desc Sets the postion and anchor properties of the Drawing
-   * @func Drawing.achor
+   * @alias Drawing.anchor
+   * @desc Sets the position and anchor properties of the Drawing
+   * @func Drawing.anchor
    * @param {String} type Anchor type of drawing
    * @param {Object} from Properties for achorFrom property
    * @param {Number} from.col Left edge of drawing will align with left edge of this column
@@ -98,12 +101,13 @@ export default class Drawing {
    * @param {String} to.rowOff Offset. Drawing will be shifted down the specified amount. Float followed by measure [0-9]+(\.[0-9]+)?(mm|cm|in|pt|pc|pi). i.e '10.5mm'
    * @returns {Drawing} Excel Drawing with attached methods
    */
+  // tslint:enable:max-line-length
   anchor(type, from, to) {
-    if (type === "twoCellAnchor") {
+    if (type === 'twoCellAnchor') {
       if (from === undefined || to === undefined) {
-        throw new TypeError("twoCellAnchor requires both from and two markers");
+        throw new TypeError('twoCellAnchor requires both from and two markers');
       }
-      this.editAs = "oneCell";
+      this.editAs = 'oneCell';
     }
     this.anchorType = type;
     this.anchorFrom = from;
@@ -119,9 +123,9 @@ export default class Drawing {
    * @param {ST_PositiveUniversalMeasure} cy Postion from top of Worksheet edge
    */
   position(cx, cy) {
-    this.anchorType = "absoluteAnchor";
-    let thisCx = new EMU(cx);
-    let thisCy = new EMU(cy);
+    this.anchorType = 'absoluteAnchor';
+    const thisCx = new EMU(cx);
+    const thisCy = new EMU(cy);
     this._position = new Point(thisCx.value, thisCy.value);
   }
 }

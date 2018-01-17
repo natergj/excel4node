@@ -1,7 +1,7 @@
-import * as utils from "../utils";
+import * as utils from '../utils';
 
 // §18.3.1.4 c (Cell)
-export default class Cell {
+export class Cell {
   private r;
   private s;
   private t;
@@ -27,13 +27,13 @@ export default class Cell {
   }
 
   string(index) {
-    this.t = "s";
+    this.t = 's';
     this.v = index;
     this.f = null;
   }
 
   number(val) {
-    this.t = "n";
+    this.t = 'n';
     this.v = val;
     this.f = null;
   }
@@ -45,7 +45,7 @@ export default class Cell {
   }
 
   bool(val) {
-    this.t = "b";
+    this.t = 'b';
     this.v = val;
     this.f = null;
   }
@@ -65,22 +65,22 @@ export default class Cell {
       return;
     }
 
-    let cEle = ele
-      .ele("c")
-      .att("r", this.r)
-      .att("s", this.s);
+    const cEle = ele
+      .ele('c')
+      .att('r', this.r)
+      .att('s', this.s);
     if (this.t !== null) {
-      cEle.att("t", this.t);
+      cEle.att('t', this.t);
     }
     if (this.f !== null) {
       cEle
-        .ele("f")
+        .ele('f')
         .txt(this.f)
         .up();
     }
     if (this.v !== null) {
       cEle
-        .ele("v")
+        .ele('v')
         .txt(this.v)
         .up();
     }

@@ -1,7 +1,7 @@
-//§18.18.50 ST_Orientation (Orientation)
+// §18.18.50 ST_Orientation (Orientation)
 
 function items() {
-  let opts = ["default", "portrait", "landscape"];
+  const opts = ['default', 'portrait', 'landscape'];
   opts.forEach((o, i) => {
     this[o] = i + 1;
   });
@@ -9,15 +9,15 @@ function items() {
 
 items.prototype.validate = function(val) {
   if (this[val.toLowerCase()] === undefined) {
-    let opts = [];
-    for (let name in this) {
+    const opts = [];
+    for (const name in this) {
       if (this.hasOwnProperty(name)) {
         opts.push(name);
       }
     }
     throw new TypeError(
-      "Invalid value for pageSetup.orientation; Value must be one of " +
-        opts.join(", ")
+      'Invalid value for pageSetup.orientation; Value must be one of ' +
+        opts.join(', '),
     );
   } else {
     return true;

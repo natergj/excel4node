@@ -1,7 +1,7 @@
-import * as utils from "../utils";
-import * as _ from "lodash";
+import * as utils from '../utils';
+import * as _ from 'lodash';
 
-class Row {
+export class Row {
   private ws;
   private cellRefs;
   private collapsed;
@@ -53,11 +53,11 @@ class Row {
   }
 
   set height(h) {
-    if (typeof h === "number") {
+    if (typeof h === 'number') {
       this.ht = h;
       this.customHeight = true;
     } else {
-      throw new TypeError("Row height must be a number");
+      throw new TypeError('Row height must be a number');
     }
   }
   get height() {
@@ -72,11 +72,11 @@ class Row {
    * @returns {Row} Excel Row with attached methods
    */
   setHeight(h) {
-    if (typeof h === "number") {
+    if (typeof h === 'number') {
       this.ht = h;
       this.customHeight = true;
     } else {
-      throw new TypeError("Row height must be a number");
+      throw new TypeError('Row height must be a number');
     }
     return this;
   }
@@ -86,43 +86,38 @@ class Row {
       return `${utils.getExcelRowCol(this.cellRefs[0]).row}:${
         utils.getExcelRowCol(this.cellRefs[this.cellRefs.length - 1]).row
       }`;
-    } else {
-      return `${this.r}:${this.r}`;
     }
+    return `${this.r}:${this.r}`;
   }
 
   get firstColumn() {
     if (this.cellRefs instanceof Array && this.cellRefs.length > 0) {
       return utils.getExcelRowCol(this.cellRefs[0]).col;
-    } else {
-      return 1;
     }
+    return 1;
   }
 
   get firstColumnAlpha() {
     if (this.cellRefs instanceof Array && this.cellRefs.length > 0) {
       return utils.getExcelAlpha(utils.getExcelRowCol(this.cellRefs[0]).col);
-    } else {
-      return "A";
     }
+    return 'A';
   }
 
   get lastColumn() {
     if (this.cellRefs instanceof Array && this.cellRefs.length > 0) {
       return utils.getExcelRowCol(this.cellRefs[this.cellRefs.length - 1]).col;
-    } else {
-      return 1;
     }
+    return 1;
   }
 
   get lastColumnAlpha() {
     if (this.cellRefs instanceof Array && this.cellRefs.length > 0) {
       return utils.getExcelAlpha(
-        utils.getExcelRowCol(this.cellRefs[this.cellRefs.length - 1]).col
+        utils.getExcelRowCol(this.cellRefs[this.cellRefs.length - 1]).col,
       );
-    } else {
-      return "A";
     }
+    return 'A';
   }
 
   /**
@@ -137,18 +132,18 @@ class Row {
    * @returns {Row} Excel Row with attached methods
    */
   filter(opts) {
-    let theseOpts = opts instanceof Object ? opts : {};
-    let theseFilters = opts.filters instanceof Array ? opts.filters : [];
+    const theseOpts = opts instanceof Object ? opts : {};
+    const theseFilters = opts.filters instanceof Array ? opts.filters : [];
 
-    let o = this.ws.opts.autoFilter;
+    const o = this.ws.opts.autoFilter;
     o.startRow = this.r;
-    if (typeof theseOpts.lastRow === "number") {
+    if (typeof theseOpts.lastRow === 'number') {
       o.endRow = theseOpts.lastRow;
     }
 
     if (
-      typeof theseOpts.firstColumn === "number" &&
-      typeof theseOpts.lastColumn === "number"
+      typeof theseOpts.firstColumn === 'number' &&
+      typeof theseOpts.lastColumn === 'number'
     ) {
       o.startCol = theseOpts.firstColumn;
       o.endCol = theseOpts.lastColumn;
@@ -179,21 +174,21 @@ class Row {
    * @returns {Row} Excel Row with attached methods
    */
   group(level, collapsed) {
-    if (parseInt(level) === level) {
+    if (parseInt(level, 10) === level) {
       this.outlineLevel = level;
     } else {
-      throw new TypeError("Row group level must be a positive integer");
+      throw new TypeError('Row group level must be a positive integer');
     }
 
     if (collapsed === undefined) {
       return this;
     }
 
-    if (typeof collapsed === "boolean") {
+    if (typeof collapsed === 'boolean') {
       this.collapsed = collapsed;
       this.hidden = collapsed;
     } else {
-      throw new TypeError("Row group collapse flag must be a boolean");
+      throw new TypeError('Row group collapse flag must be a boolean');
     }
 
     return this;
@@ -207,20 +202,18 @@ class Row {
    * @returns {Row} Excel Row with attached methods
    */
   freeze(jumpTo) {
-    let o = this.ws.opts.sheetView.pane;
-    jumpTo =
-      typeof jumpTo === "number" && jumpTo > this.r ? jumpTo : this.r + 1;
-    o.state = "frozen";
+    const o = this.ws.opts.sheetView.pane;
+    const cleanedJumpTo =
+      typeof jumpTo === 'number' && jumpTo > this.r ? jumpTo : this.r + 1;
+    o.state = 'frozen';
     o.ySplit = this.r;
-    o.activePane = "bottomRight";
+    o.activePane = 'bottomRight';
     o.xSplit === null
-      ? (o.topLeftCell = utils.getExcelCellRef(jumpTo, 1))
+      ? (o.topLeftCell = utils.getExcelCellRef(cleanedJumpTo, 1))
       : (o.topLeftCell = utils.getExcelCellRef(
-          jumpTo,
-          utils.getExcelRowCol(o.topLeftCell).col
+          cleanedJumpTo,
+          utils.getExcelRowCol(o.topLeftCell).col,
         ));
     return this;
   }
 }
-
-export default Row;

@@ -1,4 +1,4 @@
-export default class Point {
+export class Point {
   public x;
   public y;
 

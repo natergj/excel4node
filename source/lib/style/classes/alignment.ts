@@ -1,6 +1,6 @@
-import * as types from "../../types/index";
+import * as types from '../../types/index';
 
-export default class Alignment {
+export class Alignment {
   // §18.8.1 alignment (Alignment)
   private horizontal;
   private vertical;
@@ -12,6 +12,7 @@ export default class Alignment {
   private textRotation;
   private wrapText;
 
+  // tslint:disable:max-line-length
   /**
    * @class Alignment
    * @param {Object} opts Properties of Alignment object
@@ -26,89 +27,89 @@ export default class Alignment {
    * @param {Boolean} opts.wrapText States whether text with newline characters should wrap
    * @returns {Alignment}
    */
+  // tslint:enable:max-line-length
   constructor(opts) {
     if (opts.horizontal !== undefined) {
-      this.horizontal =
-        types.alignment.horizontal.validate(opts.horizontal) === true
-          ? opts.horizontal
-          : null;
+      this.horizontal = types.alignment.horizontal.validate(opts.horizontal)
+        ? opts.horizontal
+        : null;
     }
 
     if (opts.vertical !== undefined) {
-      this.vertical =
-        types.alignment.vertical.validate(opts.vertical) === true
-          ? opts.vertical
-          : null;
+      this.vertical = types.alignment.vertical.validate(opts.vertical)
+        ? opts.vertical
+        : null;
     }
 
     if (opts.readingOrder !== undefined) {
-      this.readingOrder =
-        types.alignment.readingOrders.validate(opts.readingOrder) === true
-          ? opts.readingOrder
-          : null;
+      this.readingOrder = types.alignment.readingOrders.validate(
+        opts.readingOrder,
+      )
+        ? opts.readingOrder
+        : null;
     }
 
     if (opts.indent !== undefined) {
       if (
-        typeof opts.indent === "number" &&
-        parseInt(opts.indent) === opts.indent &&
+        typeof opts.indent === 'number' &&
+        parseInt(opts.indent, 10) === opts.indent &&
         opts.indent > 0
       ) {
         this.indent = opts.indent;
       } else {
-        throw new TypeError("alignment indent must be a positive integer.");
+        throw new TypeError('alignment indent must be a positive integer.');
       }
     }
 
     if (opts.justifyLastLine !== undefined) {
-      if (typeof opts.justifyLastLine === "boolean") {
+      if (typeof opts.justifyLastLine === 'boolean') {
         this.justifyLastLine = opts.justifyLastLine;
       } else {
         throw new TypeError(
-          "justifyLastLine alignment option must be of type boolean"
+          'justifyLastLine alignment option must be of type boolean',
         );
       }
     }
 
     if (opts.relativeIndent !== undefined) {
       if (
-        typeof opts.relativeIndent === "number" &&
-        parseInt(opts.relativeIndent) === opts.relativeIndent &&
+        typeof opts.relativeIndent === 'number' &&
+        parseInt(opts.relativeIndent, 10) === opts.relativeIndent &&
         opts.relativeIndent > 0
       ) {
         this.relativeIndent = opts.relativeIndent;
       } else {
-        throw new TypeError("alignment indent must be a positive integer.");
+        throw new TypeError('alignment indent must be a positive integer.');
       }
     }
 
     if (opts.shrinkToFit !== undefined) {
-      if (typeof opts.shrinkToFit === "boolean") {
+      if (typeof opts.shrinkToFit === 'boolean') {
         this.shrinkToFit = opts.shrinkToFit;
       } else {
         throw new TypeError(
-          "justifyLastLine alignment option must be of type boolean"
+          'justifyLastLine alignment option must be of type boolean',
         );
       }
     }
 
     if (opts.textRotation !== undefined) {
       if (
-        typeof opts.textRotation === "number" &&
-        parseInt(opts.textRotation) === opts.textRotation
+        typeof opts.textRotation === 'number' &&
+        parseInt(opts.textRotation, 10) === opts.textRotation
       ) {
         this.textRotation = opts.textRotation;
       } else if (opts.textRotation !== undefined) {
-        throw new TypeError("alignment indent must be an integer.");
+        throw new TypeError('alignment indent must be an integer.');
       }
     }
 
     if (opts.wrapText !== undefined) {
-      if (typeof opts.wrapText === "boolean") {
+      if (typeof opts.wrapText === 'boolean') {
         this.wrapText = opts.wrapText;
       } else {
         throw new TypeError(
-          "justifyLastLine alignment option must be of type boolean"
+          'justifyLastLine alignment option must be of type boolean',
         );
       }
     }
@@ -120,7 +121,7 @@ export default class Alignment {
    * @returns {Object}
    */
   toObject() {
-    let obj = {} as any;
+    const obj = {} as any;
 
     this.horizontal !== undefined ? (obj.horizontal = this.horizontal) : null;
     this.indent !== undefined ? (obj.indent = this.indent) : null;
@@ -152,23 +153,23 @@ export default class Alignment {
    * @param {xmlbuilder.Element} ele Element object of the xmlbuilder module
    */
   addToXMLele(ele) {
-    let thisEle = ele.ele("alignment");
+    const thisEle = ele.ele('alignment');
     this.horizontal !== undefined
-      ? thisEle.att("horizontal", this.horizontal)
+      ? thisEle.att('horizontal', this.horizontal)
       : null;
-    this.indent !== undefined ? thisEle.att("indent", this.indent) : null;
-    this.justifyLastLine === true ? thisEle.att("justifyLastLine", 1) : null;
+    this.indent !== undefined ? thisEle.att('indent', this.indent) : null;
+    this.justifyLastLine === true ? thisEle.att('justifyLastLine', 1) : null;
     this.readingOrder !== undefined
-      ? thisEle.att("readingOrder", this.readingOrder)
+      ? thisEle.att('readingOrder', this.readingOrder)
       : null;
     this.relativeIndent !== undefined
-      ? thisEle.att("relativeIndent", this.relativeIndent)
+      ? thisEle.att('relativeIndent', this.relativeIndent)
       : null;
-    this.shrinkToFit === true ? thisEle.att("shrinkToFit", 1) : null;
+    this.shrinkToFit === true ? thisEle.att('shrinkToFit', 1) : null;
     this.textRotation !== undefined
-      ? thisEle.att("textRotation", this.textRotation)
+      ? thisEle.att('textRotation', this.textRotation)
       : null;
-    this.vertical !== undefined ? thisEle.att("vertical", this.vertical) : null;
-    this.wrapText === true ? thisEle.att("wrapText", 1) : null;
+    this.vertical !== undefined ? thisEle.att('vertical', this.vertical) : null;
+    this.wrapText === true ? thisEle.att('wrapText', 1) : null;
   }
 }

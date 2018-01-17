@@ -1,6 +1,6 @@
-import * as fs from "fs";
+import * as fs from 'fs';
 
-export default class MediaCollection {
+export class MediaCollection {
   private items;
 
   constructor() {
@@ -8,7 +8,7 @@ export default class MediaCollection {
   }
 
   add(item) {
-    if (typeof item === "string") {
+    if (typeof item === 'string') {
       fs.accessSync(item, fs.constants.R_OK);
     }
 
@@ -19,8 +19,7 @@ export default class MediaCollection {
   get isEmpty() {
     if (this.items.length === 0) {
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 }

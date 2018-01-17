@@ -1,4 +1,4 @@
-import Row from "../row/row";
+import { Row } from './row';
 
 /**
  * Module repesenting a Row Accessor
@@ -9,9 +9,9 @@ import Row from "../row/row";
  * @param {Number} row Row of top left cell
  * @returns {Row}
  */
-export default function rowAccessor(ws, row) {
-  if (typeof row !== "number") {
-    throw new TypeError("Row sent to row accessor was not a number.");
+export function rowAccessor(ws, row) {
+  if (typeof row !== 'number') {
+    throw new TypeError('Row sent to row accessor was not a number.');
   }
 
   if (!(ws.rows[row] instanceof Row)) {

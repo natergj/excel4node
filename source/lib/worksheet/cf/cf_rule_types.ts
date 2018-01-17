@@ -1,13 +1,13 @@
 // Types from xlsx spec:
 //     http://download.microsoft.com/download/D/3/3/D334A189-E51B-47FF-B0E8-C0479AFB0E3C/[MS-XLSX].pdf
 
-export default {
+export const CF_RULE_TYPES = {
   cellIs: {
     supported: false,
   },
   expression: {
     supported: true,
-    requiredProps: ["dxfId", "priority", "formula"],
+    requiredProps: ['dxfId', 'priority', 'formula'],
   },
   colorScale: {
     supported: false,

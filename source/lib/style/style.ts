@@ -1,14 +1,14 @@
-import Alignment from "./classes/alignment";
-import Border from "./classes/border";
-import Fill from "./classes/fill";
-import Font from "./classes/font";
-import NumberFormat from "./classes/numberFormat";
-import { merge, isEqual } from "lodash";
+import { Alignment } from './classes/alignment';
+import { Border } from './classes/border';
+import { Fill } from './classes/fill';
+import { Font } from './classes/font';
+import { NumberFormat } from './classes/numberFormat';
+import { merge, isEqual } from 'lodash';
 
-let _getFontId = (wb, font) => {
+const _getFontId = (wb, font) => {
   // Create the Font and lookup key
-  font = merge({}, wb.opts.defaultFont, font);
-  const thisFont = new Font(font);
+  const fontObj = merge({}, wb.opts.defaultFont, font);
+  const thisFont = new Font(fontObj);
   const lookupKey = JSON.stringify(thisFont.toObject());
 
   // Find an existing entry, creating a new one if it does not exist
@@ -21,7 +21,7 @@ let _getFontId = (wb, font) => {
   return id;
 };
 
-let _getFillId = (wb, fill) => {
+const _getFillId = (wb, fill) => {
   if (fill === undefined) {
     return null;
   }
@@ -40,7 +40,7 @@ let _getFillId = (wb, fill) => {
   return id;
 };
 
-let _getBorderId = (wb, border) => {
+const _getBorderId = (wb, border) => {
   if (border === undefined) {
     return null;
   }
@@ -59,16 +59,16 @@ let _getBorderId = (wb, border) => {
   return id;
 };
 
-let _getNumFmt = (wb, val) => {
+const _getNumFmt = (wb, val) => {
   let fmt;
-  wb.styleData.numFmts.forEach(f => {
+  wb.styleData.numFmts.forEach((f) => {
     if (isEqual(f.formatCode, val)) {
       fmt = f;
     }
   });
 
   if (fmt === undefined) {
-    let fmtId = wb.styleData.numFmts.length + 164;
+    const fmtId = wb.styleData.numFmts.length + 164;
     fmt = new NumberFormat(val);
     fmt.numFmtId = fmtId;
     wb.styleData.numFmts.push(fmt);
@@ -77,71 +77,82 @@ let _getNumFmt = (wb, val) => {
   return fmt;
 };
 
-/*
-    Style Opts
-    {
-        alignment: { // §18.8.1
-            horizontal: ['center', 'centerContinuous', 'distributed', 'fill', 'general', 'justify', 'left', 'right'],
-            indent: integer, // Number of spaces to indent = indent value * 3
-            justifyLastLine: boolean,
-            readingOrder: ['contextDependent', 'leftToRight', 'rightToLeft'], 
-            relativeIndent: integer, // number of additional spaces to indent
-            shrinkToFit: boolean,
-            textRotation: integer, // number of degrees to rotate text counter-clockwise
-            vertical: ['bottom', 'center', 'distributed', 'justify', 'top'],
-            wrapText: boolean
-        },
-        font: { // §18.8.22
-            bold: boolean,
-            charset: integer,
-            color: string,
-            condense: boolean,
-            extend: boolean,
-            family: string,
-            italics: boolean,
-            name: string,
-            outline: boolean,
-            scheme: string, // §18.18.33 ST_FontScheme (Font scheme Styles)
-            shadow: boolean,
-            strike: boolean,
-            size: integer,
-            underline: boolean,
-            vertAlign: string // §22.9.2.17 ST_VerticalAlignRun (Vertical Positioning Location)
-        },
-        border: { // §18.8.4 border (Border)
-            left: {
-                style: string,
-                color: string
-            },
-            right: {
-                style: string,
-                color: string
-            },
-            top: {
-                style: string,
-                color: string
-            },
-            bottom: {
-                style: string,
-                color: string
-            },
-            diagonal: {
-                style: string,
-                color: string
-            },
-            diagonalDown: boolean,
-            diagonalUp: boolean,
-            outline: boolean
-        },
-        fill: { // §18.8.20 fill (Fill)
-            type: 'pattern',
-            patternType: 'solid',
-            color: 'Yellow'
-        },
-        numberFormat: integer or string // §18.8.30 numFmt (Number Format)
-    }
-*/
-export default class Style {
+interface StyleConstructorOpts {
+  alignment?: {
+    // §18.8.1
+    horizontal?:
+      | 'center'
+      | 'centerContinuous'
+      | 'distributed'
+      | 'fill'
+      | 'general'
+      | 'justify'
+      | 'left'
+      | 'right';
+    indent?: number; // Number of spaces to indent = indent value * 3
+    justifyLastLine?: boolean;
+    readingOrder?: 'contextDependent' | 'leftToRight' | 'rightToLeft';
+    relativeIndent?: number; // number of additional spaces to indent
+    shrinkToFit?: boolean;
+    textRotation?: number; // number of degrees to rotate text counter-clockwise
+    vertical?: 'bottom' | 'center' | 'distributed' | 'justify' | 'top';
+    wrapText?: boolean;
+  };
+  font?: {
+    // §18.8.22
+    bold?: boolean;
+    charset?: number;
+    color?: string;
+    condense?: boolean;
+    extend?: boolean;
+    family?: string;
+    italics?: boolean;
+    name?: string;
+    outline?: boolean;
+    scheme?: string; // §18.18.33 ST_FontScheme (Font scheme Styles)
+    shadow?: boolean;
+    strike?: boolean;
+    size?: number;
+    underline?: boolean;
+    vertAlign?: string; // §22.9.2.17 ST_VerticalAlignRun (Vertical Positioning Location)
+  };
+  border?: {
+    // §18.8.4 border (Border)
+    left?: {
+      style?: string;
+      color?: string;
+    };
+    right?: {
+      style?: string;
+      color?: string;
+    };
+    top?: {
+      style?: string;
+      color?: string;
+    };
+    bottom?: {
+      style?: string;
+      color?: string;
+    };
+    diagonal?: {
+      style?: string;
+      color?: string;
+    };
+    diagonalDown?: boolean;
+    diagonalUp?: boolean;
+    outline?: boolean;
+  };
+  fill?: {
+    // §18.8.20 fill (Fill)
+    type?: string;
+    patternType?: string;
+    color?: string;
+  };
+  numberFormat?: number | string; // §18.8.30 numFmt (Number Format)
+  pivotButton?: boolean;
+  quotePrefix?: boolean;
+}
+export class Style {
   private alignment;
   private borderId;
   private border;
@@ -155,7 +166,7 @@ export default class Style {
   private quotePrefix;
   private ids;
 
-  constructor(wb, opts) {
+  constructor(wb, opts: StyleConstructorOpts = {}) {
     /**
      * Excel Style object
      * @class Style
@@ -178,7 +189,6 @@ export default class Style {
      * @property {Number} xf XF id of the Style in the Workbook
      * @returns {Style}
      */
-    opts = opts ? opts : {};
 
     if (opts.alignment !== undefined) {
       this.alignment = new Alignment(opts.alignment);
@@ -199,9 +209,9 @@ export default class Style {
     }
 
     if (opts.numberFormat !== undefined) {
-      if (typeof opts.numberFormat === "number" && opts.numberFormat <= 164) {
+      if (typeof opts.numberFormat === 'number' && opts.numberFormat <= 164) {
         this.numFmtId = opts.numberFormat;
-      } else if (typeof opts.numberFormat === "string") {
+      } else if (typeof opts.numberFormat === 'string') {
         this.numFmt = _getNumFmt(wb, opts.numberFormat);
       }
     }
@@ -218,24 +228,24 @@ export default class Style {
   }
 
   get xf() {
-    let thisXF = {} as any;
+    const thisXF = {} as any;
 
-    if (typeof this.fontId === "number") {
+    if (typeof this.fontId === 'number') {
       thisXF.applyFont = 1;
       thisXF.fontId = this.fontId;
     }
 
-    if (typeof this.fillId === "number") {
+    if (typeof this.fillId === 'number') {
       thisXF.applyFill = 1;
       thisXF.fillId = this.fillId;
     }
 
-    if (typeof this.borderId === "number") {
+    if (typeof this.borderId === 'number') {
       thisXF.applyBorder = 1;
       thisXF.borderId = this.borderId;
     }
 
-    if (typeof this.numFmtId === "number") {
+    if (typeof this.numFmtId === 'number') {
       thisXF.applyNumberFormat = 1;
       thisXF.numFmtId = this.numFmtId;
     } else if (this.numFmt !== undefined && this.numFmt !== null) {
@@ -257,21 +267,21 @@ export default class Style {
    * @returns {Object}
    */
   toObject() {
-    let obj = {} as any;
+    const obj = {} as any;
 
-    if (typeof this.fontId === "number") {
+    if (typeof this.fontId === 'number') {
       obj.font = this.font.toObject();
     }
 
-    if (typeof this.fillId === "number") {
+    if (typeof this.fillId === 'number') {
       obj.fill = this.fill.toObject();
     }
 
-    if (typeof this.borderId === "number") {
+    if (typeof this.borderId === 'number') {
       obj.border = this.border.toObject();
     }
 
-    if (typeof this.numFmtId === "number" && this.numFmtId < 164) {
+    if (typeof this.numFmtId === 'number' && this.numFmtId < 164) {
       obj.numberFormat = this.numFmtId;
     } else if (this.numFmt !== undefined && this.numFmt !== null) {
       obj.numberFormat = this.numFmt.formatCode;
@@ -299,10 +309,10 @@ export default class Style {
    * @param {xmlbuilder.Element} ele Element object of the xmlbuilder module
    */
   addXFtoXMLele(ele) {
-    let thisEle = ele.ele("xf");
-    let thisXF = this.xf;
-    Object.keys(thisXF).forEach(a => {
-      if (a === "alignment") {
+    const thisEle = ele.ele('xf');
+    const thisXF = this.xf;
+    Object.keys(thisXF).forEach((a) => {
+      if (a === 'alignment') {
         thisXF[a].addToXMLele(thisEle);
       } else {
         thisEle.att(a, thisXF[a]);
@@ -310,14 +320,16 @@ export default class Style {
     });
   }
 
+  // tslint:disable:max-line-length
   /**
    * @alias Style.addDXFtoXMLele
    * @desc When generating Workbook output, attaches style to the styles xml file as a dxf for use with conditional formatting rules
    * @func Style.addDXFtoXMLele
    * @param {xmlbuilder.Element} ele Element object of the xmlbuilder module
    */
+  // tslint:enable:max-line-length
   addDXFtoXMLele(ele) {
-    let thisEle = ele.ele("dxf");
+    const thisEle = ele.ele('dxf');
 
     if (this.font instanceof Font) {
       this.font.addToXMLele(thisEle);
@@ -328,7 +340,7 @@ export default class Style {
     }
 
     if (this.fill instanceof Fill) {
-      this.fill.addToXMLele(thisEle.ele("fill"));
+      this.fill.addToXMLele(thisEle.ele('fill'));
     }
 
     if (this.alignment instanceof Alignment) {

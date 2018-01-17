@@ -1,12 +1,16 @@
-import * as types from "../../types/index";
-import CTColor from "./ctColor";
+import * as types from '../../types/index';
+import { Style } from '../style';
+import { CTColor } from './ctColor';
 
+interface BorderOrdinalConstructorOpts {
+  color?: string;
+  style?: Style;
+}
 class BorderOrdinal {
   private color: CTColor;
-  private style;
+  private style: Style;
 
-  constructor(opts) {
-    opts = opts ? opts : {};
+  constructor(opts: BorderOrdinalConstructorOpts = {}) {
     if (opts.color !== undefined) {
       this.color = new CTColor(opts.color);
     }
@@ -17,7 +21,7 @@ class BorderOrdinal {
   }
 
   toObject() {
-    let obj = {} as any;
+    const obj = {} as any;
     if (this.color !== undefined) {
       obj.color = this.color.toObject();
     }
@@ -28,7 +32,7 @@ class BorderOrdinal {
   }
 }
 
-export default class Border {
+export class Border {
   private left;
   private right;
   private top;
@@ -62,8 +66,7 @@ export default class Border {
    * @param {Boolean} opts.diagonalUp States whether diagonal border should go from bottom left to top right
    * @returns {Border}
    */
-  constructor(opts?) {
-    opts = opts ? opts : {};
+  constructor(opts = {}) {
     this.left;
     this.right;
     this.top;
@@ -73,19 +76,19 @@ export default class Border {
     this.diagonalDown;
     this.diagonalUp;
 
-    Object.keys(opts).forEach(opt => {
-      if (["outline", "diagonalDown", "diagonalUp"].indexOf(opt) >= 0) {
-        if (typeof opts[opt] === "boolean") {
+    Object.keys(opts).forEach((opt) => {
+      if (['outline', 'diagonalDown', 'diagonalUp'].indexOf(opt) >= 0) {
+        if (typeof opts[opt] === 'boolean') {
           this[opt] = opts[opt];
         } else {
-          throw new TypeError("Border outline option must be of type Boolean");
+          throw new TypeError('Border outline option must be of type Boolean');
         }
       } else if (
-        ["left", "right", "top", "bottom", "diagonal"].indexOf(opt) < 0
+        ['left', 'right', 'top', 'bottom', 'diagonal'].indexOf(opt) < 0
       ) {
-        //TODO: move logic to types folder
+        // TODO: move logic to types folder
         throw new TypeError(
-          `Invalid key for border declaration ${opt}. Must be one of left, right, top, bottom, diagonal`
+          `Invalid key for border declaration ${opt}. Must be one of left, right, top, bottom, diagonal`,
         );
       } else {
         this[opt] = new BorderOrdinal(opts[opt]);
@@ -99,7 +102,7 @@ export default class Border {
    * @returns {Object}
    */
   toObject() {
-    let obj = {} as any;
+    const obj = {} as any;
     obj.left;
     obj.right;
     obj.top;
@@ -121,11 +124,11 @@ export default class Border {
     if (this.diagonal !== undefined) {
       obj.diagonal = this.diagonal.toObject();
     }
-    typeof this.outline === "boolean" ? (obj.outline = this.outline) : null;
-    typeof this.diagonalDown === "boolean"
+    typeof this.outline === 'boolean' ? (obj.outline = this.outline) : null;
+    typeof this.diagonalDown === 'boolean'
       ? (obj.diagonalDown = this.diagonalDown)
       : null;
-    typeof this.diagonalUp === "boolean"
+    typeof this.diagonalUp === 'boolean'
       ? (obj.diagonalUp = this.diagonalUp)
       : null;
 
@@ -139,22 +142,22 @@ export default class Border {
    * @param {xmlbuilder.Element} ele Element object of the xmlbuilder module
    */
   addToXMLele(borderXML) {
-    let bXML = borderXML.ele("border");
+    const bXML = borderXML.ele('border');
     if (this.outline === true) {
-      bXML.att("outline", "1");
+      bXML.att('outline', '1');
     }
     if (this.diagonalUp === true) {
-      bXML.att("diagonalUp", "1");
+      bXML.att('diagonalUp', '1');
     }
     if (this.diagonalDown === true) {
-      bXML.att("diagonalDown", "1");
+      bXML.att('diagonalDown', '1');
     }
 
-    ["left", "right", "top", "bottom", "diagonal"].forEach(ord => {
-      let thisOEle = bXML.ele(ord);
+    ['left', 'right', 'top', 'bottom', 'diagonal'].forEach((ord) => {
+      const thisOEle = bXML.ele(ord);
       if (this[ord] !== undefined) {
         if (this[ord].style !== undefined) {
-          thisOEle.att("style", this[ord].style);
+          thisOEle.att('style', this[ord].style);
         }
         if (this[ord].color instanceof CTColor) {
           this[ord].color.addToXMLele(thisOEle);

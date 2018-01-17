@@ -1,7 +1,7 @@
-import * as utils from "../utils";
-import * as _ from "lodash";
+import * as utils from '../utils';
+import * as _ from 'lodash';
 
-class Column {
+export class Column {
   private ws;
   private collapsed;
   private customWidth;
@@ -43,11 +43,11 @@ class Column {
   }
 
   set width(w) {
-    if (parseInt(w) === w) {
+    if (parseInt(w, 10) === w) {
       this.colWidth = w;
       this.customWidth = true;
     } else {
-      throw new TypeError("Column width must be a positive integer");
+      throw new TypeError('Column width must be a positive integer');
     }
   }
 
@@ -59,11 +59,11 @@ class Column {
    * @returns {Column} Excel Column with attached methods
    */
   setWidth(w) {
-    if (parseInt(w) === w) {
+    if (parseInt(w, 10) === w) {
       this.colWidth = w;
       this.customWidth = true;
     } else {
-      throw new TypeError("Column width must be a positive integer");
+      throw new TypeError('Column width must be a positive integer');
     }
     return this;
   }
@@ -88,21 +88,21 @@ class Column {
    * @returns {Column} Excel Column with attached methods
    */
   group(level, collapsed) {
-    if (parseInt(level) === level) {
+    if (parseInt(level, 10) === level) {
       this.outlineLevel = level;
     } else {
-      throw new TypeError("Column group level must be a positive integer");
+      throw new TypeError('Column group level must be a positive integer');
     }
 
     if (collapsed === undefined) {
       return this;
     }
 
-    if (typeof collapsed === "boolean") {
+    if (typeof collapsed === 'boolean') {
       this.collapsed = collapsed;
       this.hidden = collapsed;
     } else {
-      throw new TypeError("Column group collapse flag must be a boolean");
+      throw new TypeError('Column group collapse flag must be a boolean');
     }
 
     return this;
@@ -116,20 +116,18 @@ class Column {
    * @returns {Column} Excel Column with attached methods
    */
   freeze(jumpTo) {
-    let o = this.ws.opts.sheetView.pane;
-    jumpTo =
-      typeof jumpTo === "number" && jumpTo > this.min ? jumpTo : this.min + 1;
-    o.state = "frozen";
+    const o = this.ws.opts.sheetView.pane;
+    const cleanedJumpTo =
+      typeof jumpTo === 'number' && jumpTo > this.min ? jumpTo : this.min + 1;
+    o.state = 'frozen';
     o.xSplit = this.min;
-    o.activePane = "bottomRight";
+    o.activePane = 'bottomRight';
     o.ySplit === null
-      ? (o.topLeftCell = utils.getExcelCellRef(1, jumpTo))
+      ? (o.topLeftCell = utils.getExcelCellRef(1, cleanedJumpTo))
       : (o.topLeftCell = utils.getExcelCellRef(
           utils.getExcelRowCol(o.topLeftCell).row,
-          jumpTo
+          cleanedJumpTo,
         ));
     return this;
   }
 }
-
-export default Column;

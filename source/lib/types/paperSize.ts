@@ -68,8 +68,8 @@ function items() {
   this.A3_EXTRA_TRANSVERSE_PAPER = 68; // A3 extra transverse paper (322 mm by 445 mm)
 
   this.opts = [];
-  Object.keys(this).forEach(k => {
-    if (typeof this[k] === "number") {
+  Object.keys(this).forEach((k) => {
+    if (typeof this[k] === 'number') {
       this.opts.push(k);
     }
   });
@@ -77,15 +77,15 @@ function items() {
 
 items.prototype.validate = function(val) {
   if (this[val.toUpperCase()] === undefined) {
-    let opts = [];
-    for (let name in this) {
+    const opts = [];
+    for (const name in this) {
       if (this.hasOwnProperty(name)) {
         opts.push(name);
       }
     }
     throw new TypeError(
-      "Invalid value for PAPER_SIZE; Value must be one of " +
-        this.opts.join(", ")
+      'Invalid value for PAPER_SIZE; Value must be one of ' +
+        this.opts.join(', '),
     );
   } else {
     return true;

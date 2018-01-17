@@ -36,8 +36,8 @@
   "scripts": {
     "test":
       "nyc --reporter=lcov --require ts-node/register tape tests/**/*.test.ts | tap-spec; nyc report ---reporter=text",
-    "cover": "",
     "build": "tsc",
+    "lint": "tslint -p tsconfig.json -c tslint.json './source/**/*.ts'",
     "watch": "tsc -w",
     "document": "jsdoc ./source -r -d docs",
     "prepublishOnly": "npm run build; npm run test"
@@ -59,6 +59,8 @@
     "tape": "4.8.0",
     "tape-promise": "2.0.1",
     "ts-node": "^4.1.0",
+    "tslint": "^5.9.1",
+    "tslint-config-airbnb": "^5.4.2",
     "typescript": "^2.6.2",
     "xmldom": "0.1.27",
     "xpath.js": "1.0.7"

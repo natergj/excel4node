@@ -1,5 +1,5 @@
-import Style from "../style/style";
-import { isEqual } from "lodash";
+import { Style } from '../style/style';
+import { isEqual } from 'lodash';
 
 class DXFItem {
   // §18.8.14 dxf (Formatting)
@@ -21,7 +21,7 @@ class DXFItem {
   }
 }
 
-export default class DXFCollection {
+export class DXFCollection {
   // §18.8.15 dxfs (Formats)
   private wb;
   private items;
@@ -31,18 +31,19 @@ export default class DXFCollection {
   }
 
   add(style) {
+    let styleInstance = style;
     if (!(style instanceof Style)) {
-      style = this.wb.Style(style);
+      styleInstance = this.wb.Style(style);
     }
 
     let thisItem;
-    this.items.forEach(item => {
-      if (isEqual(item.style.toObject(), style.toObject())) {
+    this.items.forEach((item) => {
+      if (isEqual(item.style.toObject(), styleInstance.toObject())) {
         return (thisItem = item);
       }
     });
     if (!thisItem) {
-      thisItem = new DXFItem(style, this.wb);
+      thisItem = new DXFItem(styleInstance, this.wb);
       this.items.push(thisItem);
       thisItem.id = this.items.length - 1;
     }
@@ -54,9 +55,9 @@ export default class DXFCollection {
   }
 
   addToXMLele(ele) {
-    let dxfXML = ele.ele("dxfs").att("count", this.length);
+    const dxfXML = ele.ele('dxfs').att('count', this.length);
 
-    this.items.forEach(item => {
+    this.items.forEach((item) => {
       item.addToXMLele(dxfXML);
     });
   }

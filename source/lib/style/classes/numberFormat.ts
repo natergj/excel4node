@@ -1,4 +1,4 @@
-export default class NumberFormat {
+export class NumberFormat {
   private formatCode;
   private id;
 
@@ -28,9 +28,9 @@ export default class NumberFormat {
   addToXMLele(ele) {
     if (this.formatCode !== undefined) {
       ele
-        .ele("numFmt")
-        .att("formatCode", this.formatCode)
-        .att("numFmtId", this.numFmtId);
+        .ele('numFmt')
+        .att('formatCode', this.formatCode)
+        .att('numFmtId', this.numFmtId);
     }
   }
 }

@@ -1,8 +1,8 @@
-import * as types from "../../types/index";
-import CTColor from "./ctColor";
+import * as types from '../../types/index';
+import { CTColor } from './ctColor';
 
 class Stop {
-  //§18.8.38
+  // §18.8.38
   private color;
   private position;
 
@@ -25,15 +25,15 @@ class Stop {
    * @returns {Object}
    */
   toObject() {
-    let obj = {} as any;
+    const obj = {} as any;
     this.color !== undefined ? (obj.color = this.color.toObject()) : null;
     this.position !== undefined ? (obj.position = this.position) : null;
     return obj;
   }
 }
 
-export default class Fill {
-  //§18.8.20 fill (Fill)
+export class Fill {
+  // §18.8.20 fill (Fill)
   private type;
   private bottom;
   private top;
@@ -45,34 +45,36 @@ export default class Fill {
   private patternType;
   private degree;
 
+  // tslint:disable:max-line-length
   /**
    * @class Fill
    * @desc Excel Fill
    * @param {Object} opts
    * @param {String} opts.type Type of Excel fill (gradient or pattern)
-   * @param {Number} opts.bottom If Gradient fill, the position of the bottom edge of the inner rectange as a percentage in decimal form. (must be between 0 and 1)
-   * @param {Number} opts.top If Gradient fill, the position of the top edge of the inner rectange as a percentage in decimal form. (must be between 0 and 1)
-   * @param {Number} opts.left If Gradient fill, the position of the left edge of the inner rectange as a percentage in decimal form. (must be between 0 and 1)
-   * @param {Number} opts.right If Gradient fill, the position of the right edge of the inner rectange as a percentage in decimal form. (must be between 0 and 1)
+   * @param {Number} opts.bottom If Gradient fill, the position of the bottom edge of the inner rectangle as a percentage in decimal form. (must be between 0 and 1)
+   * @param {Number} opts.top If Gradient fill, the position of the top edge of the inner rectangle as a percentage in decimal form. (must be between 0 and 1)
+   * @param {Number} opts.left If Gradient fill, the position of the left edge of the inner rectangle as a percentage in decimal form. (must be between 0 and 1)
+   * @param {Number} opts.right If Gradient fill, the position of the right edge of the inner rectangle as a percentage in decimal form. (must be between 0 and 1)
    * @param {Number} opts.degree Angle of the Gradient
    * @param {Array.Stop} opts.stops Array of position stops for gradient
    * @returns {Fill}
    */
+  // tslint:enable:max-line-length
   constructor(opts) {
-    if (["gradient", "pattern", "none"].indexOf(opts.type) >= 0) {
+    if (['gradient', 'pattern', 'none'].indexOf(opts.type) >= 0) {
       this.type = opts.type;
     } else {
       throw new TypeError(
-        "Fill type must be one of gradient, pattern or none."
+        'Fill type must be one of gradient, pattern or none.',
       );
     }
 
     switch (this.type) {
-      case "gradient": //§18.8.24
+      case 'gradient': // §18.8.24
         if (opts.bottom !== undefined) {
           if (opts.bottom < 0 || opts.bottom > 1) {
             throw new TypeError(
-              "Values for gradient fill bottom attribute must be a decimal between 0 and 1"
+              'Values for gradient fill bottom attribute must be a decimal between 0 and 1',
             );
           } else {
             this.bottom = opts.bottom;
@@ -80,11 +82,11 @@ export default class Fill {
         }
 
         if (opts.degree !== undefined) {
-          if (typeof opts.degree === "number") {
+          if (typeof opts.degree === 'number') {
             this.degree = opts.degree;
           } else {
             throw new TypeError(
-              "Values of gradient fill degree must be of type number."
+              'Values of gradient fill degree must be of type number.',
             );
           }
         }
@@ -92,7 +94,7 @@ export default class Fill {
         if (opts.left !== undefined) {
           if (opts.left < 0 || opts.left > 1) {
             throw new TypeError(
-              "Values for gradient fill left attribute must be a decimal between 0 and 1"
+              'Values for gradient fill left attribute must be a decimal between 0 and 1',
             );
           } else {
             this.left = opts.left;
@@ -102,7 +104,7 @@ export default class Fill {
         if (opts.right !== undefined) {
           if (opts.right < 0 || opts.right > 1) {
             throw new TypeError(
-              "Values for gradient fill right attribute must be a decimal between 0 and 1"
+              'Values for gradient fill right attribute must be a decimal between 0 and 1',
             );
           } else {
             this.right = opts.right;
@@ -112,7 +114,7 @@ export default class Fill {
         if (opts.top !== undefined) {
           if (opts.top < 0 || opts.top > 1) {
             throw new TypeError(
-              "Values for gradient fill top attribute must be a decimal between 0 and 1"
+              'Values for gradient fill top attribute must be a decimal between 0 and 1',
             );
           } else {
             this.top = opts.top;
@@ -126,14 +128,14 @@ export default class Fill {
             });
           } else {
             throw new TypeError(
-              "Stops for gradient fills must be sent as an Array"
+              'Stops for gradient fills must be sent as an Array',
             );
           }
         }
 
         break;
 
-      case "pattern": //§18.8.32
+      case 'pattern': // §18.8.32
         if (opts.bgColor !== undefined) {
           this.bgColor = new CTColor(opts.bgColor);
         }
@@ -149,8 +151,8 @@ export default class Fill {
         }
         break;
 
-      case "none":
-        this.patternType = "none";
+      case 'none':
+        this.patternType = 'none';
         break;
     }
   }
@@ -161,7 +163,7 @@ export default class Fill {
    * @returns {Object}
    */
   toObject() {
-    let obj = {} as any;
+    const obj = {} as any;
 
     this.type !== undefined ? (obj.type = this.type) : null;
     this.bottom !== undefined ? (obj.bottom = this.bottom) : null;
@@ -177,7 +179,7 @@ export default class Fill {
 
     if (this.stops !== undefined) {
       obj.stop = [];
-      this.stops.forEach(s => {
+      this.stops.forEach((s) => {
         obj.stops.push(s.toObject());
       });
     }
@@ -192,17 +194,17 @@ export default class Fill {
    * @param {xmlbuilder.Element} ele Element object of the xmlbuilder module
    */
   addToXMLele(fXML) {
-    let pFill = fXML.ele("patternFill").att("patternType", this.patternType);
+    const pFill = fXML.ele('patternFill').att('patternType', this.patternType);
 
     if (this.fgColor instanceof CTColor) {
       pFill
-        .ele("fgColor")
+        .ele('fgColor')
         .att(this.fgColor.type, this.fgColor[this.fgColor.type]);
     }
 
     if (this.bgColor instanceof CTColor) {
       pFill
-        .ele("bgColor")
+        .ele('bgColor')
         .att(this.bgColor.type, this.bgColor[this.bgColor.type]);
     }
   }

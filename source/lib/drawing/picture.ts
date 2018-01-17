@@ -1,13 +1,13 @@
-import Drawing from "./drawing";
-import * as path from "path";
-import * as imgsz from "image-size";
-import * as mime from "mime";
-import { uniqueId } from "lodash";
+import { Drawing } from './drawing';
+import * as path from 'path';
+import * as imgsz from 'image-size';
+import * as mime from 'mime';
+import { uniqueId } from 'lodash';
 
-import EMU from "../classes/emu";
-import xmlbuilder from "xmlbuilder";
+import { EMU } from '../classes/emu';
+import xmlbuilder from 'xmlbuilder';
 
-export default class Picture extends Drawing {
+export class Picture extends Drawing {
   private kind;
   private type;
   private imagePath;
@@ -55,15 +55,17 @@ export default class Picture extends Drawing {
    */
   constructor(opts) {
     super();
-    this.kind = "image";
+    this.kind = 'image';
     this.type =
-      "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image";
+      'http://schemas.openxmlformats.org/officeDocument/2006/relationships/image';
     this.imagePath = opts.path;
     this.image = opts.image;
 
     this._name = this.image
-      ? opts.name || uniqueId("image-")
-      : opts.name || path.basename(this.imagePath);
+      ? typeof opts.name === 'string' ? opts.name : uniqueId('image-')
+      : typeof opts.name === 'string'
+        ? opts.name
+        : path.basename(this.imagePath);
 
     const size = imgsz(this.imagePath || this.image);
 
@@ -90,13 +92,13 @@ export default class Picture extends Drawing {
     this.noAdjustHandles;
     this.noChangeArrowheads;
     this.noChangeShapeType;
-    if (["oneCellAnchor", "twoCellAnchor"].indexOf(opts.position.type) >= 0) {
+    if (['oneCellAnchor', 'twoCellAnchor'].indexOf(opts.position.type) >= 0) {
       this.anchor(opts.position.type, opts.position.from, opts.position.to);
-    } else if (opts.position.type === "absoluteAnchor") {
+    } else if (opts.position.type === 'absoluteAnchor') {
       this.position(opts.position.x, opts.position.y);
     } else {
       throw new TypeError(
-        "Invalid option for anchor type. anchorType must be one of oneCellAnchor, twoCellAnchor, or absoluteAnchor"
+        'Invalid option for anchor type. anchorType must be one of oneCellAnchor, twoCellAnchor, or absoluteAnchor',
       );
     }
   }
@@ -115,7 +117,7 @@ export default class Picture extends Drawing {
   }
 
   get rId() {
-    return "rId" + this._id;
+    return 'rId' + this._id;
   }
 
   get description() {
@@ -137,14 +139,14 @@ export default class Picture extends Drawing {
   }
 
   get width() {
-    let inWidth = this._pxWidth / 96;
-    let emu = new EMU(inWidth + "in");
+    const inWidth = this._pxWidth / 96;
+    const emu = new EMU(inWidth + 'in');
     return emu.value;
   }
 
   get height() {
-    let inHeight = this._pxHeight / 96;
-    let emu = new EMU(inHeight + "in");
+    const inHeight = this._pxHeight / 96;
+    const emu = new EMU(inHeight + 'in');
     return emu.value;
   }
 
@@ -155,107 +157,107 @@ export default class Picture extends Drawing {
    * @param {xmlbuilder.Element} ele Element object of the xmlbuilder module
    */
   addToXMLele(ele) {
-    let anchorEle = ele.ele("xdr:" + this.anchorType);
+    const anchorEle = ele.ele('xdr:' + this.anchorType);
 
     if (this.editAs !== null) {
-      anchorEle.att("editAs", this.editAs);
+      anchorEle.att('editAs', this.editAs);
     }
 
-    if (this.anchorType === "absoluteAnchor") {
+    if (this.anchorType === 'absoluteAnchor') {
       anchorEle
-        .ele("xdr:pos")
-        .att("x", this._position.x)
-        .att("y", this._position.y);
+        .ele('xdr:pos')
+        .att('x', this._position.x)
+        .att('y', this._position.y);
     }
 
-    if (this.anchorType !== "absoluteAnchor") {
-      let af = this.anchorFrom;
-      let afEle = anchorEle.ele("xdr:from");
-      afEle.ele("xdr:col").text(af.col);
-      afEle.ele("xdr:colOff").text(af.colOff);
-      afEle.ele("xdr:row").text(af.row);
-      afEle.ele("xdr:rowOff").text(af.rowOff);
+    if (this.anchorType !== 'absoluteAnchor') {
+      const af = this.anchorFrom;
+      const afEle = anchorEle.ele('xdr:from');
+      afEle.ele('xdr:col').text(af.col);
+      afEle.ele('xdr:colOff').text(af.colOff);
+      afEle.ele('xdr:row').text(af.row);
+      afEle.ele('xdr:rowOff').text(af.rowOff);
     }
 
-    if (this.anchorTo && this.anchorType === "twoCellAnchor") {
-      let at = this.anchorTo;
-      let atEle = anchorEle.ele("xdr:to");
-      atEle.ele("xdr:col").text(at.col);
-      atEle.ele("xdr:colOff").text(at.colOff);
-      atEle.ele("xdr:row").text(at.row);
-      atEle.ele("xdr:rowOff").text(at.rowOff);
+    if (this.anchorTo && this.anchorType === 'twoCellAnchor') {
+      const at = this.anchorTo;
+      const atEle = anchorEle.ele('xdr:to');
+      atEle.ele('xdr:col').text(at.col);
+      atEle.ele('xdr:colOff').text(at.colOff);
+      atEle.ele('xdr:row').text(at.row);
+      atEle.ele('xdr:rowOff').text(at.rowOff);
     }
 
     if (
-      this.anchorType === "oneCellAnchor" ||
-      this.anchorType === "absoluteAnchor"
+      this.anchorType === 'oneCellAnchor' ||
+      this.anchorType === 'absoluteAnchor'
     ) {
       anchorEle
-        .ele("xdr:ext")
-        .att("cx", this.width)
-        .att("cy", this.height);
+        .ele('xdr:ext')
+        .att('cx', this.width)
+        .att('cy', this.height);
     }
 
-    let picEle = anchorEle.ele("xdr:pic");
-    let nvPicPrEle = picEle.ele("xdr:nvPicPr");
-    let cNvPrEle = nvPicPrEle.ele("xdr:cNvPr");
-    cNvPrEle.att("descr", this.description);
-    cNvPrEle.att("id", this.id + 1);
-    cNvPrEle.att("name", this.name);
-    cNvPrEle.att("title", this.title);
-    let cNvPicPrEle = nvPicPrEle.ele("xdr:cNvPicPr");
+    const picEle = anchorEle.ele('xdr:pic');
+    const nvPicPrEle = picEle.ele('xdr:nvPicPr');
+    const cNvPrEle = nvPicPrEle.ele('xdr:cNvPr');
+    cNvPrEle.att('descr', this.description);
+    cNvPrEle.att('id', this.id + 1);
+    cNvPrEle.att('name', this.name);
+    cNvPrEle.att('title', this.title);
+    const cNvPicPrEle = nvPicPrEle.ele('xdr:cNvPicPr');
 
-    this.noGrp === true ? cNvPicPrEle.ele("a:picLocks").att("noGrp", 1) : null;
+    this.noGrp === true ? cNvPicPrEle.ele('a:picLocks').att('noGrp', 1) : null;
     this.noSelect === true
-      ? cNvPicPrEle.ele("a:picLocks").att("noSelect", 1)
+      ? cNvPicPrEle.ele('a:picLocks').att('noSelect', 1)
       : null;
-    this.noRot === true ? cNvPicPrEle.ele("a:picLocks").att("noRot", 1) : null;
-    this.noChangeAspect === true
-      ? cNvPicPrEle.ele("a:picLocks").att("noChangeAspect", 1)
+    this.noRot === true ? cNvPicPrEle.ele('a:picLocks').att('noRot', 1) : null;
+    this.noChangeAspect
+      ? cNvPicPrEle.ele('a:picLocks').att('noChangeAspect', 1)
       : null;
     this.noMove === true
-      ? cNvPicPrEle.ele("a:picLocks").att("noMove", 1)
+      ? cNvPicPrEle.ele('a:picLocks').att('noMove', 1)
       : null;
     this.noResize === true
-      ? cNvPicPrEle.ele("a:picLocks").att("noResize", 1)
+      ? cNvPicPrEle.ele('a:picLocks').att('noResize', 1)
       : null;
     this.noEditPoints === true
-      ? cNvPicPrEle.ele("a:picLocks").att("noEditPoints", 1)
+      ? cNvPicPrEle.ele('a:picLocks').att('noEditPoints', 1)
       : null;
     this.noAdjustHandles === true
-      ? cNvPicPrEle.ele("a:picLocks").att("noAdjustHandles", 1)
+      ? cNvPicPrEle.ele('a:picLocks').att('noAdjustHandles', 1)
       : null;
     this.noChangeArrowheads === true
-      ? cNvPicPrEle.ele("a:picLocks").att("noChangeArrowheads", 1)
+      ? cNvPicPrEle.ele('a:picLocks').att('noChangeArrowheads', 1)
       : null;
     this.noChangeShapeType === true
-      ? cNvPicPrEle.ele("a:picLocks").att("noChangeShapeType", 1)
+      ? cNvPicPrEle.ele('a:picLocks').att('noChangeShapeType', 1)
       : null;
 
-    let blipFillEle = picEle.ele("xdr:blipFill");
+    const blipFillEle = picEle.ele('xdr:blipFill');
     blipFillEle
-      .ele("a:blip")
-      .att("r:embed", this.rId)
+      .ele('a:blip')
+      .att('r:embed', this.rId)
       .att(
-        "xmlns:r",
-        "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+        'xmlns:r',
+        'http://schemas.openxmlformats.org/officeDocument/2006/relationships',
       );
-    blipFillEle.ele("a:stretch").ele("a:fillRect");
+    blipFillEle.ele('a:stretch').ele('a:fillRect');
 
-    let spPrEle = picEle.ele("xdr:spPr");
-    let xfrmEle = spPrEle.ele("a:xfrm");
+    const spPrEle = picEle.ele('xdr:spPr');
+    const xfrmEle = spPrEle.ele('a:xfrm');
     xfrmEle
-      .ele("a:off")
-      .att("x", 0)
-      .att("y", 0);
+      .ele('a:off')
+      .att('x', 0)
+      .att('y', 0);
     xfrmEle
-      .ele("a:ext")
-      .att("cx", this.width)
-      .att("cy", this.height);
+      .ele('a:ext')
+      .att('cx', this.width)
+      .att('cy', this.height);
 
-    let prstGeom = spPrEle.ele("a:prstGeom").att("prst", "rect");
-    prstGeom.ele("a:avLst");
+    const prstGeom = spPrEle.ele('a:prstGeom').att('prst', 'rect');
+    prstGeom.ele('a:avLst');
 
-    anchorEle.ele("xdr:clientData");
+    anchorEle.ele('xdr:clientData');
   }
 }

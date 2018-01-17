@@ -1,56 +1,56 @@
-import * as types from "../types/index";
+import * as types from '../types/index';
 
 const optsTypes = {
   margins: {
-    bottom: "Float",
-    footer: "Float",
-    header: "Float",
-    left: "Float",
-    right: "Float",
-    top: "Float",
+    bottom: 'Float',
+    footer: 'Float',
+    header: 'Float',
+    left: 'Float',
+    right: 'Float',
+    top: 'Float',
   },
   printOptions: {
-    centerHorizontal: "Boolean",
-    centerVertical: "Boolean",
-    printGridLines: "Boolean",
-    printHeadings: "Boolean",
+    centerHorizontal: 'Boolean',
+    centerVertical: 'Boolean',
+    printGridLines: 'Boolean',
+    printHeadings: 'Boolean',
   },
   pageSetup: {
-    blackAndWhite: "Boolean",
-    cellComments: "CELL_COMMENTS",
-    copies: "Integer",
-    draft: "Boolean",
-    errors: "PRINT_ERROR",
-    firstPageNumber: "Boolean",
-    fitToHeight: "Integer",
-    fitToWidth: "Integer",
-    horizontalDpi: "Integer",
-    orientation: "ORIENTATION",
-    pageOrder: "PAGE_ORDER",
-    paperHeight: "POSITIVE_UNIVERSAL_MEASURE",
-    paperSize: "PAPER_SIZE",
-    paperWidth: "POSITIVE_UNIVERSAL_MEASURE",
-    scale: "Integer",
-    useFirstPageNumber: "Boolean",
-    usePrinterDefaults: "Boolean",
-    verticalDpi: "Integer",
+    blackAndWhite: 'Boolean',
+    cellComments: 'CELL_COMMENTS',
+    copies: 'Integer',
+    draft: 'Boolean',
+    errors: 'PRINT_ERROR',
+    firstPageNumber: 'Boolean',
+    fitToHeight: 'Integer',
+    fitToWidth: 'Integer',
+    horizontalDpi: 'Integer',
+    orientation: 'ORIENTATION',
+    pageOrder: 'PAGE_ORDER',
+    paperHeight: 'POSITIVE_UNIVERSAL_MEASURE',
+    paperSize: 'PAPER_SIZE',
+    paperWidth: 'POSITIVE_UNIVERSAL_MEASURE',
+    scale: 'Integer',
+    useFirstPageNumber: 'Boolean',
+    usePrinterDefaults: 'Boolean',
+    verticalDpi: 'Integer',
   },
   headerFooter: {
-    evenFooter: "String",
-    evenHeader: "String",
-    firstFooter: "String",
-    firstHeader: "String",
-    oddFooter: "String",
-    oddHeader: "String",
-    alignWithMargins: "Boolean",
-    differentFirst: "Boolean",
-    differentOddEven: "Boolean",
-    scaleWithDoc: "Boolean",
+    evenFooter: 'String',
+    evenHeader: 'String',
+    firstFooter: 'String',
+    firstHeader: 'String',
+    oddFooter: 'String',
+    oddHeader: 'String',
+    alignWithMargins: 'Boolean',
+    differentFirst: 'Boolean',
+    differentOddEven: 'Boolean',
+    scaleWithDoc: 'Boolean',
   },
   sheetView: {
     pane: {
-      activePane: "PANE",
-      state: "PANE_STATE",
+      activePane: 'PANE',
+      state: 'PANE_STATE',
       topLeftCell: null,
       xSplit: null,
       ySplit: null,
@@ -106,84 +106,84 @@ const optsTypes = {
   },
 };
 
-let getObjItem = (obj, key) => {
+const getObjItem = (obj, key) => {
   let returnObj = obj;
-  let levels = key.split(".");
+  const levels = key.split('.');
 
   while (levels.length > 0) {
-    let thisLevelKey = levels.shift();
+    const thisLevelKey = levels.shift();
     try {
       returnObj = returnObj[thisLevelKey];
     } catch (e) {
-      //returnObj = undefined;
+      // returnObj = undefined;
     }
   }
   return returnObj;
 };
 
-let validator = function(key, val, type) {
+const validator = function(key, val, type) {
   switch (type) {
-    case "PAPER_SIZE":
-      let sizes = Object.keys(types.paperSize);
+    case 'PAPER_SIZE':
+      const sizes = Object.keys(types.paperSize);
       if (sizes.indexOf(val) < 0) {
         throw new TypeError(
-          "Invalid value for " +
+          'Invalid value for ' +
             key +
-            ". Value must be one of " +
-            sizes.join(", ")
+            '. Value must be one of ' +
+            sizes.join(', '),
         );
       }
       break;
 
-    case "PAGE_ORDER":
+    case 'PAGE_ORDER':
       types.pageOrder.validate(val);
       break;
 
-    case "ORIENTATION":
+    case 'ORIENTATION':
       types.orientation.validate(val);
       break;
 
-    case "POSITIVE_UNIVERSAL_MEASURE":
+    case 'POSITIVE_UNIVERSAL_MEASURE':
       types.positiveUniversalMeasure.validate(val);
       break;
 
-    case "CELL_COMMENTS":
+    case 'CELL_COMMENTS':
       types.cellComments.validate(val);
       break;
 
-    case "PRINT_ERROR":
+    case 'PRINT_ERROR':
       types.printError.validate(val);
       break;
 
-    case "PANE":
+    case 'PANE':
       types.pane.validate(val);
       break;
 
-    case "PANE_STATE":
+    case 'PANE_STATE':
       types.paneState.validate(val);
       break;
 
-    case "Boolean":
+    case 'Boolean':
       if ([true, false, 1, 0].indexOf(val) < 0) {
-        throw new TypeError(key + " expects value of true, false, 1 or 0");
+        throw new TypeError(key + ' expects value of true, false, 1 or 0');
       }
       break;
 
-    case "Float":
+    case 'Float':
       if (parseFloat(val) !== val) {
-        throw new TypeError(key + " expects value as a Float number");
+        throw new TypeError(key + ' expects value as a Float number');
       }
       break;
 
-    case "Integer":
-      if (parseInt(val) !== val) {
-        throw new TypeError(key + " expects value as an Integer");
+    case 'Integer':
+      if (parseInt(val, 10) !== val) {
+        throw new TypeError(key + ' expects value as an Integer');
       }
       break;
 
-    case "String":
-      if (typeof val !== "string") {
-        throw new TypeError(key + " expects value as a String");
+    case 'String':
+      if (typeof val !== 'string') {
+        throw new TypeError(key + ' expects value as a String');
       }
       break;
 
@@ -192,17 +192,17 @@ let validator = function(key, val, type) {
   }
 };
 
-let traverse = function(o, keyParts, func) {
-  for (let i in o) {
-    let thisKeyParts = keyParts.concat(i);
-    let thisKey = thisKeyParts.join(".");
-    let thisType = getObjItem(optsTypes, thisKey);
+const traverse = function(o, keyParts, func) {
+  for (const i in o) {
+    const thisKeyParts = keyParts.concat(i);
+    const thisKey = thisKeyParts.join('.');
+    const thisType = getObjItem(optsTypes, thisKey);
 
-    if (typeof thisType === "string") {
-      let thisItem = o[i];
+    if (typeof thisType === 'string') {
+      const thisItem = o[i];
       func(thisKey, thisItem, thisType);
     }
-    if (o[i] !== null && typeof o[i] === "object") {
+    if (o[i] !== null && typeof o[i] === 'object') {
       traverse(o[i], thisKeyParts, func);
     }
   }

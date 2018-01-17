@@ -1,4 +1,4 @@
-export default class EMU {
+export class EMU {
   private _value;
 
   /**
@@ -20,30 +20,31 @@ export default class EMU {
   set value(val) {
     if (val === undefined) {
       this._value = 0;
-    } else if (typeof val === "number") {
-      this._value = val ? parseInt(val.toFixed(0)) : 0;
-    } else if (typeof val === "string") {
-      let re = new RegExp("[0-9]+(.[0-9]+)?(mm|cm|in)");
-      if (re.test(val) === true) {
-        let measure = parseFloat(/[0-9]+(\.[0-9]+)?/.exec(val)[0]);
-        let unit = /(mm|cm|in)/.exec(val)[0];
+    } else if (typeof val === 'number') {
+      this._value = Number.isNaN(Number(val)) ? 0 : Number(val);
+    } else if (typeof val === 'string') {
+      const re = new RegExp('[0-9]+(.[0-9]+)?(mm|cm|in)');
+      if (re.test(val)) {
+        const measure = parseFloat(/[0-9]+(\.[0-9]+)?/.exec(val)[0]);
+        const unit = /(mm|cm|in)/.exec(val)[0];
 
         switch (unit) {
-          case "mm":
+          case 'mm':
             this._value = (measure * 36000).toFixed(0);
             break;
 
-          case "cm":
+          case 'cm':
             this._value = (measure * 360000).toFixed(0);
             break;
 
-          case "in":
+          case 'in':
             this._value = (measure * 914400).toFixed(0);
             break;
         }
       } else {
         throw new TypeError(
-          'EMUs must be specified as whole integer EMUs or Floats immediately followed by unit of measure in cm, mm, or in. i.e. "1.5in"'
+          'EMUs must be specified as whole integer EMUs or Floats immediately ' +
+            'followed by unit of measure in cm, mm, or in. i.e. "1.5in"',
         );
       }
     }
