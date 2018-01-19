@@ -80,6 +80,7 @@ class Workbook {
 
         this.sheets = [];
         this.sharedStrings = [];
+        this.sharedStringLookup = {};
         this.styles = [];
         this.stylesLookup = {};
         this.dxfCollection = new DXFCollection(this);
@@ -244,10 +245,14 @@ class Workbook {
      * @returns {Number} index of the string in the shared strings array
      */
     getStringIndex(val) {
-        if (this.sharedStrings.indexOf(val) < 0) {
-            this.sharedStrings.push(val);
+        const target = this.sharedStringLookup[val];
+        if (_.isUndefined(target)) {
+            const index = this.sharedStrings.push(val) - 1;
+            this.sharedStringLookup[val] = index;
+            return index;
+        } else {
+            return target;
         }
-        return this.sharedStrings.indexOf(val);
     }
 }
 
