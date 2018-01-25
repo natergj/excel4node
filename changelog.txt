@@ -1,3 +1,10 @@
+1.3.3
+        Bug fixes:
+        resolves https://github.com/natergj/excel4node/issues/164 to resolve issue adding multiple dataValidations that did not include a formula to a single worksheet
+
+        Enhancements:
+        merge https://github.com/natergj/excel4node/pull/165 to improve performance with shared strings
+        
 1.3.2
         Bug fixes:
         resolves https://github.com/natergj/excel4node/issues/152 after 1.3.0 re-introduced issue #84
