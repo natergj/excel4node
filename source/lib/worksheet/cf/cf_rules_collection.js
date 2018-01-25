@@ -26,6 +26,7 @@ class CfRulesCollection { // §18.3.1.18 conditionalFormatting (Conditional Form
             this.rulesBySqref[sqref].forEach((rule) => {
                 rule.addToXMLele(thisEle);
             });
+            thisEle.up();
         });
     }
 }
