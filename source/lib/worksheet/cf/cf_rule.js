@@ -44,6 +44,7 @@ class CfRule { // §18.3.1.10 cfRule (Conditional Formatting Rule)
 
         if (this.formula !== undefined) {
             thisRule.ele('formula').text(this.formula);
+            thisRule.up();
         }
         thisRule.up();
     }
