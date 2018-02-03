@@ -104,5 +104,6 @@ module.exports = {
         'endCol': null,
         'ref': null,
         'filters': []
-    }
+    },
+    'disableRowSpansOptimization': false,
 };

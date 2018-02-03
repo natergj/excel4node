@@ -71,10 +71,12 @@ class Row {
     }
 
     get spans() {
-        if (this.cellRefs instanceof Array && this.cellRefs.length > 0) {
-            return `${utils.getExcelRowCol(this.cellRefs[0]).row}:${utils.getExcelRowCol(this.cellRefs[this.cellRefs.length - 1]).row}`;
+        if (this.cellRefs.length > 0) {
+            const startCol = utils.getExcelRowCol(this.cellRefs[0]).col;
+            const endCol = utils.getExcelRowCol(this.cellRefs[this.cellRefs.length - 1]).col;
+            return `${startCol}:${endCol}`;
         } else {
-            return `${this.r}:${this.r}`;
+            return null;
         }
     }
 
