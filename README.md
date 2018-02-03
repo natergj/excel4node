@@ -308,7 +308,8 @@ Full Worksheet options. All options are optional.
     'outline': {
         'summaryBelow': Boolean, // Flag indicating whether summary rows appear below detail in an outline, when applying an outline/grouping.
         'summaryRight': Boolean // Flag indicating whether summary columns appear to the right of detail in an outline, when applying an outline/grouping.
-    }
+    },
+    'disableRowSpansOptimization': Boolean // Flag indicating whether to remove the "spans" attribute on row definitions. Including spans in an optimization for Excel file readers but is not necessary
 }
 ```
 
