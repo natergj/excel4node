@@ -1,3 +1,8 @@
+1.3.5
+        Bug Fixes:
+        merge https://github.com/natergj/excel4node/pull/141 to properly handle unicode and emoji
+        merge https://github.com/natergj/excel4node/pull/172 to correct issue with row spans causing errors when opening workbooks with a large number of lines
+        
 1.3.4
         Bug fixes:
         resolved issue where if multiple conditional formatting rules were specified for a single sheet, only the first rule would apply
