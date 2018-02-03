@@ -456,9 +456,12 @@ let sheetXML = (ws) => {
 
         let xmlProlog = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
         let xmlString = '';
-        let wsXML = xml.begin((chunk) => {
+        let wsXML = xml.begin({
+          allowSurrogateChars: true,
+        }, (chunk) => {
             xmlString += chunk;
         })
+        
         .ele('worksheet')
         .att('mc:Ignorable', 'x14ac')
         .att('xmlns', 'http://schemas.openxmlformats.org/spreadsheetml/2006/main')
@@ -517,7 +520,8 @@ let relsXML = (ws) => {
             {
                 'version': '1.0', 
                 'encoding': 'UTF-8', 
-                'standalone': true
+                'standalone': true,
+                'allowSurrogateChars': true
             }
         );
         relXML.att('xmlns', 'http://schemas.openxmlformats.org/package/2006/relationships');
