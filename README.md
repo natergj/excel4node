@@ -133,7 +133,7 @@ var wb = new xl.Workbook({
       yWindow: 440, // Specifies the Y coordinate for the upper left corner of the workbook window. The unit of measurement for this value is twips.
     },
     logLevel: 0, // 0 - 5. 0 suppresses all logs, 1 shows errors only, 5 is for debugging
-);
+});
 ```
 
 #### Methods   
