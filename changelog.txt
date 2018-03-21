@@ -1,3 +1,9 @@
+1.3.6
+        Bug Fixes:
+        resolves https://github.com/natergj/excel4node/issues/182 to allow column widths to be set as floats
+        resolves https://github.com/natergj/excel4node/issues/184 to properly handle setting row autofilter with no arguments
+        merge https://github.com/natergj/excel4node/pull/181 to fix typo in documentation
+
 1.3.5
         Bug Fixes:
         merge https://github.com/natergj/excel4node/pull/141 to properly handle unicode and emoji
