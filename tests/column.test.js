@@ -11,7 +11,10 @@ test('Column Tests', (t) => {
     t.ok(ws.cols['2'] instanceof Column, 'Column was successfully added to worksheet object');
 
     ws.column(2).setWidth(40);
-    t.equals(ws.column(2).width, 40, 'Column width successfully changed');
+    t.equals(ws.column(2).width, 40, 'Column width successfully changed to integer');
+
+    ws.column(2).setWidth(40.5);
+    t.equals(ws.column(2).width, 40.5, 'Column width successfully changed to float');
 
     ws.column(2).freeze(4);
     t.equals(ws.opts.sheetView.pane.xSplit, 2, 'Worksheet set to freeze pane at column 2');
