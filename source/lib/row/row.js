@@ -123,20 +123,19 @@ class Row {
      * @param {Array.DefinedName} opts.filters Array of filter paramaters
      * @returns {Row} Excel Row with attached methods
      */
-    filter(opts) {
+    filter(opts = {}) {
 
-        let theseOpts = opts instanceof Object ? opts : {};
         let theseFilters = opts.filters instanceof Array ? opts.filters : [];
 
         let o = this.ws.opts.autoFilter;
         o.startRow = this.r;
-        if (typeof theseOpts.lastRow === 'number') {
-            o.endRow = theseOpts.lastRow;
+        if (typeof opts.lastRow === 'number') {
+            o.endRow = opts.lastRow;
         }
 
-        if (typeof theseOpts.firstColumn === 'number' && typeof theseOpts.lastColumn === 'number') {
-            o.startCol = theseOpts.firstColumn;
-            o.endCol = theseOpts.lastColumn;
+        if (typeof opts.firstColumn === 'number' && typeof opts.lastColumn === 'number') {
+            o.startCol = opts.firstColumn;
+            o.endCol = opts.lastColumn;
         }
 
         // Programmer Note: DefinedName class is added to workbook during workbook write process for filters
