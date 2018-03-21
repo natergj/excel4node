@@ -13,6 +13,19 @@ test('Row Tests', (t) => {
     rowWS.row(2).setHeight(40);
     t.equals(rowWS.row(2).height, 40, 'Row height successfully changed');
 
+    rowWS.row(2).filter();
+    t.equals(rowWS.opts.autoFilter.startRow, 2, 'Filters added to row 2');
+
+    rowWS.row(3).filter({
+        firstRow: 1,
+        firstColumn: 2,
+        lastRow: 20,
+        lastColumn: 5
+    });
+    t.equals(rowWS.opts.autoFilter.endRow, 20, 'Manual filters set to end at row 20');
+    t.equals(rowWS.opts.autoFilter.endCol, 5, 'Manual filters set to end at column 5');
+    t.equals(rowWS.opts.autoFilter.startCol, 2, 'Manual filters set to start at column 2');
+
     rowWS.row(2).freeze(4);
     t.equals(rowWS.opts.sheetView.pane.ySplit, 2, 'Worksheet set to freeze pane at row 2');
     t.equals(rowWS.opts.sheetView.pane.topLeftCell, 'A4', 'Worksheet set to freeze pane at row 2 and scrollTo row 4');
