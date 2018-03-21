@@ -34,11 +34,11 @@ class Column {
     }
 
     set width(w) {
-        if (parseInt(w) === w) {
+        if (typeof w === 'number') {
             this.colWidth = w;
             this.customWidth = true;
         } else {
-            throw new TypeError('Column width must be a positive integer');
+            throw new TypeError('Column width must be a number');
         }
         return this.colWidth;
     }
@@ -51,12 +51,7 @@ class Column {
      * @returns {Column} Excel Column with attached methods
      */
     setWidth(w) {
-        if (parseInt(w) === w) {
-            this.colWidth = w;
-            this.customWidth = true;
-        } else {
-            throw new TypeError('Column width must be a positive integer');
-        }
+        this.width = w;
         return this;
     }
 
