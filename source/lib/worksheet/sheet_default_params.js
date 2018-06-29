@@ -106,4 +106,5 @@ module.exports = {
         'filters': []
     },
     'disableRowSpansOptimization': false,
+    'hidden': false,
 };

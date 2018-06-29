@@ -114,7 +114,8 @@ test('Set WorkSheet options', (t) => {
         'outline': {
             'summaryBelow': true, // Flag indicating whether summary rows appear below detail in an outline, when applying an outline/grouping.
             'summaryRight': true // Flag indicating whether summary columns appear to the right of detail in an outline, when applying an outline/grouping.
-        }
+        },
+        'hidden': true // Flag indicating whether to not hide the worksheet within the workbook.
     });
     ws.row(2).filter(1, 10);
 
@@ -217,6 +218,11 @@ test('Set WorkSheet options', (t) => {
         t.end();
     });
 
+    wb._generateXML().then((XML) => {
+        let doc = new DOMParser().parseFromString(XML);
+        let sheet = doc.getElementsByTagName('sheet')[0];
+        t.equals(sheet.getAttribute('state'), 'hidden', 'Hidden state properly set');
+    });
 });
 
 test('Verify Invalid Worksheet options fail type validation', (t) => {
@@ -350,6 +356,18 @@ test('Verify Invalid Worksheet options fail type validation', (t) => {
         t.ok(
             e instanceof TypeError,
             'setting invalid sheetView.pane.state property should throw an error'
+        );
+    }
+
+    try {
+        let ws = wb.addWorksheet('sheet', {
+            hidden: 'notBoolean'
+        });
+        t.notOk(typeof ws === 'object', 'Worksheet creation should fail when setting invalid hidden property');
+    } catch (e) {
+        t.ok(
+            e instanceof TypeError,
+            'setting invalid hidden property should throw an error'
         );
     }
 
