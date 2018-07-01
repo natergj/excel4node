@@ -148,10 +148,14 @@ let addWorkBookXML = (promiseObj) => {
 
         let sheetsEle = xml.ele('sheets');
         promiseObj.wb.sheets.forEach((s, i) => {
-            sheetsEle.ele('sheet')
+            const sheet = sheetsEle.ele('sheet')
             .att('name', s.name)
             .att('sheetId', i + 1)
             .att('r:id', `rId${i + 1}`);
+
+            if(s.opts.hidden) {
+                sheet.att('state', 'hidden');
+            }
         });
 
         if (!promiseObj.wb.definedNameCollection.isEmpty) {
@@ -521,4 +525,21 @@ let writeToBuffer = (wb) => {
     });
 };
 
-module.exports = { writeToBuffer };
+/**
+ * @desc Currently only used for testing the XML generated for a Workbook.
+ * @param {*} wb Workbook instance
+ * @return {Promise} resolves with Workbook XML 
+ */
+let workbookXML = (wb) => {
+    let promiseObj = { 
+        wb: wb, 
+        xlsx: new JSZip(),
+        xmlOutVars: {} 
+    };
+
+    return addWorkBookXML(promiseObj).then((result) => {
+            return result.xlsx.files['xl/workbook.xml']._data;
+        });
+}
+
+module.exports = { writeToBuffer, workbookXML };

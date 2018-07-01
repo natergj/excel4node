@@ -100,6 +100,7 @@ class Worksheet {
      * @param {Boolean} opts.outline.summaryBelow Flag indicating whether summary rows appear below detail in an outline, when applying an outline/grouping.
      * @param {Boolean} opts.outline.summaryRight Flag indicating whether summary columns appear to the right of detail in an outline, when applying an outline/grouping.
      * @param {Boolean} opts.disableRowSpansOptimization Flag indicated whether to not include a spans attribute to the row definition in the XML. helps with very large documents.
+     * @param {Boolean} opts.hidden Flag indicating whether to not hide the worksheet within the workbook.
      * @returns {Worksheet}
      */
     constructor(wb, name, opts) {

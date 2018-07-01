@@ -104,7 +104,8 @@ const optsTypes = {
         'startCol': null,
         'endCol': null,
         'filters': null
-    }
+    },
+    'hidden': 'Boolean'
 };
 
 let getObjItem = (obj, key) => {
