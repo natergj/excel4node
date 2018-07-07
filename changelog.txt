@@ -1,3 +1,9 @@
+1.4.0
+        Bug Fixes:
+        resolves https://github.com/natergj/excel4node/issues/196 where unicode filenames could not be used with HTTP Response write handler     
+
+        Enhancements:
+        merge https://github.com/natergj/excel4node/pull/201 to add ability to hide worksheets
 1.3.6
         Bug Fixes:
         resolves https://github.com/natergj/excel4node/issues/182 to allow column widths to be set as floats
