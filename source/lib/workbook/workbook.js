@@ -89,16 +89,20 @@ class Workbook {
         this.styleData = {
             'numFmts': [],
             'fonts': [],
-            'fills': [new Fill({ type: 'pattern', patternType: 'none' }), new Fill({ type: 'pattern', patternType: 'gray125' })],
+            'fills': [new Fill({
+                type: 'pattern',
+                patternType: 'none'
+            }), new Fill({
+                type: 'pattern',
+                patternType: 'gray125'
+            })],
             'borders': [new Border()],
-            'cellXfs': [
-                {
-                    'borderId': null,
-                    'fillId': null,
-                    'fontId': 0,
-                    'numFmtId': null
-                }
-            ]
+            'cellXfs': [{
+                'borderId': null,
+                'fillId': null,
+                'fontId': 0,
+                'numFmtId': null
+            }]
         };
 
         // Lookups for style components to quickly find existing entries
@@ -117,7 +121,9 @@ class Workbook {
         };
 
         // Set Default Font and Style
-        this.createStyle({ font: this.opts.defaultFont });
+        this.createStyle({
+            font: this.opts.defaultFont
+        });
 
     }
 
@@ -153,59 +159,57 @@ class Workbook {
     write(fileName, handler) {
 
         builder.writeToBuffer(this)
-        .then((buffer) => {
-            switch (typeof handler) {
-                // handler passed as http response object.
+            .then((buffer) => {
+                switch (typeof handler) {
+                    // handler passed as http response object.
 
-            case 'object':
-                if (handler instanceof http.ServerResponse) {
-                    handler.writeHead(200, {
-                        'Content-Length': buffer.length,
-                        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                        'Content-Disposition': 'attachment; filename="' + fileName + '"'
-                    });
-                    handler.end(buffer);
-                } else {
-                    throw new TypeError('Unknown object sent to write function.');
+                    case 'object':
+                        if (handler instanceof http.ServerResponse) {
+                            handler.writeHead(200, {
+                                'Content-Length': buffer.length,
+                                'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                                'Content-Disposition': `attachment; filename="${encodeURIComponent(fileName)}"; filename*=utf-8''${encodeURIComponent(fileName)};`,
+                            });
+                            handler.end(buffer);
+                        } else {
+                            throw new TypeError('Unknown object sent to write function.');
+                        }
+                        break;
+
+                        // handler passed as callback function
+                    case 'function':
+                        fs.writeFile(fileName, buffer, function (err) {
+                            if (err) {
+                                handler(err);
+                            } else {
+                                fs.stat(fileName, handler);
+                            }
+                        });
+                        break;
+
+                        // no handler passed, write file to FS.
+                    default:
+
+                        fs.writeFile(fileName, buffer, function (err) {
+                            if (err) {
+                                throw err;
+                            }
+                        });
+                        break;
                 }
-                break;
-
-            // handler passed as callback function
-            case 'function':
-                fs.writeFile(fileName, buffer, function (err) {
-                    if (err) {
-                        handler(err);
-                    } else {
-                        fs.stat(fileName, handler);
-                    }
-                });
-                break;
-
-            // no handler passed, write file to FS.
-            default:
-
-                fs.writeFile(fileName, buffer, function (err) {
-                    if (err) {
-                        throw err;
-                    }
-                });
-                break;
-            }
-        })
-        .catch((e) => {
-            if (handler instanceof http.ServerResponse) {
-                this.logger.error(e.stack);
-                handler.status = 500;
-                handler.setHeader('Content-Type', 'text/plain');
-                handler.end('500 Server Error');
-            }
-            else if(typeof handler === 'function') {
-                handler(e.stack);
-            }
-            else {
-                this.logger.error(e.stack);
-            }
-        });
+            })
+            .catch((e) => {
+                if (handler instanceof http.ServerResponse) {
+                    this.logger.error(e.stack);
+                    handler.status = 500;
+                    handler.setHeader('Content-Type', 'text/plain');
+                    handler.end('500 Server Error');
+                } else if (typeof handler === 'function') {
+                    handler(e.stack);
+                } else {
+                    this.logger.error(e.stack);
+                }
+            });
     }
 
     /**
