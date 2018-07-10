@@ -496,7 +496,7 @@ var complexString = [
   {
     bold: true,
     underline: true,
-    italic: true,
+    italics: true,
     color: "FF0000",
     size: 18,
     name: "Courier",
