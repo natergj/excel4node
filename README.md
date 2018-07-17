@@ -50,7 +50,7 @@ ws.cell(1, 1)
   .number(100)
   .style(style);
 
-// Set value of cell B1 to 300 as a number type styled with paramaters of style
+// Set value of cell B1 to 200 as a number type styled with paramaters of style
 ws.cell(1, 2)
   .number(200)
   .style(style);
