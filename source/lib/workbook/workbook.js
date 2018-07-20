@@ -8,7 +8,6 @@ const Fill = require('../style/classes/fill.js');
 const DXFCollection = require('./dxfCollection.js');
 const MediaCollection = require('./mediaCollection.js');
 const DefinedNameCollection = require('../classes/definedNameCollection.js');
-const SlothLogger = require('sloth-logger');
 const types = require('../types/index.js');
 const builder = require('./builder.js');
 const http = require('http');
