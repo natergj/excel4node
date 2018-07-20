@@ -67,14 +67,20 @@ class Workbook {
      * @param {Number} opts.workbookView.windowWidth Specifies the width of the workbook window. The unit of measurement for this value is twips..
      * @param {Number} opts.workbookView.xWindow Specifies the X coordinate for the upper left corner of the workbook window. The unit of measurement for this value is twips.
      * @param {Number} opts.workbookView.yWindow Specifies the Y coordinate for the upper left corner of the workbook window. The unit of measurement for this value is twips.
+     * @param {Object} opts.logger Logger that supports warn and error method, defaults to console
      * @returns {Workbook}
      */
     constructor(opts) {
         opts = opts ? opts : {};
 
-        this.logger = new SlothLogger.Logger({
-            logLevel: Number.isNaN(parseInt(opts.logLevel)) ? 0 : parseInt(opts.logLevel)
-        });
+        if (opts.logger) {
+            this.logger = opts.logger;
+        } else {
+            this.logger = {
+                warn: console.warn,
+                error: console.error
+            };
+        }
 
         this.opts = _.merge({}, workbookDefaultOpts, opts);
 
