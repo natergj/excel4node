@@ -64,7 +64,11 @@ function generateWorkbook() {
     invoiceWS.column(3).setWidth(35);
     invoiceWS.column(5).setWidth(25);
     invoiceWS.cell(2, 2).string('INVOICE').style(largeText);
-    invoiceWS.cell(2, 3).string('809871').style(largeText).style({ font: { color: '#D4762C' } });
+    invoiceWS.cell(2, 3).string('809871').style(largeText).style({
+        font: {
+            color: '#D4762C'
+        }
+    });
 
     // Add a company logo
     invoiceWS.addImage({
@@ -88,22 +92,54 @@ function generateWorkbook() {
     });
 
     // Add some borders to specific cells
-    invoiceWS.cell(2, 2, 2, 5).style({ border: { bottom: { style: 'thick', color: '#000000' } } });
+    invoiceWS.cell(2, 2, 2, 5).style({
+        border: {
+            bottom: {
+                style: 'thick',
+                color: '#000000'
+            }
+        }
+    });
 
     // Add some data and adjust styles for specific cells
-    invoiceWS.cell(3, 2, 3, 3, true).string('January 1, 2016').style({ border: { bottom: { style: 'thin', color: '#D4762C' } } });
-    invoiceWS.cell(4, 2, 4, 3, true).string('PAYMENT DUE BY: March 1, 2016').style({ font: { bold: true } });
+    invoiceWS.cell(3, 2, 3, 3, true).string('January 1, 2016').style({
+        border: {
+            bottom: {
+                style: 'thin',
+                color: '#D4762C'
+            }
+        }
+    });
+    invoiceWS.cell(4, 2, 4, 3, true).string('PAYMENT DUE BY: March 1, 2016').style({
+        font: {
+            bold: true
+        }
+    });
 
     // style methods can be chained. multiple styles will be merged with last style taking precedence if there is a conflict
-    invoiceWS.cell(3, 5, 4, 5, true).formula('E31').style(currencyStyle).style({ font: { size: 20, color: '#D4762C' }, alignment: { vertical: 'center' } });
-    invoiceWS.cell(4, 2, 4, 5).style({ border: { bottom: { style: 'thin', color: '#000000' } } });
+    invoiceWS.cell(3, 5, 4, 5, true).formula('E31').style(currencyStyle).style({
+        font: {
+            size: 20,
+            color: '#D4762C'
+        },
+        alignment: {
+            vertical: 'center'
+        }
+    });
+    invoiceWS.cell(4, 2, 4, 5).style({
+        border: {
+            bottom: {
+                style: 'thin',
+                color: '#000000'
+            }
+        }
+    });
 
     invoiceWS.row(6).setHeight(75);
     invoiceWS.cell(6, 2, 6, 5).style(multiLineStyle);
 
     // set some strings to have multiple font formats within a single cell
-    invoiceWS.cell(6, 2, 6, 3, true).string([
-        {
+    invoiceWS.cell(6, 2, 6, 3, true).string([{
             bold: true
         },
         'Client Name\n',
@@ -113,8 +149,7 @@ function generateWorkbook() {
         'Company Name Inc.\n1234 First Street\nSomewhere, OR 12345'
     ]);
 
-    invoiceWS.cell(6, 4, 6, 5, true).string([
-        {
+    invoiceWS.cell(6, 4, 6, 5, true).string([{
             bold: true
         },
         'iAmNater.com\n',
@@ -122,14 +157,33 @@ function generateWorkbook() {
             bold: false
         },
         '123 Nowhere Lane\nSomewhere, OR 12345'
-    ]).style({ alignment: { horizontal: 'right' } });
+    ]).style({
+        alignment: {
+            horizontal: 'right'
+        }
+    });
 
-    invoiceWS.cell(8, 2, 8, 5).style({ border: { bottom: { style: 'thick', color: '#000000' } } });
+    invoiceWS.cell(8, 2, 8, 5).style({
+        border: {
+            bottom: {
+                style: 'thick',
+                color: '#000000'
+            }
+        }
+    });
 
     invoiceWS.cell(10, 2).string('QUANTITY');
     invoiceWS.cell(10, 3).string('DETAILS');
-    invoiceWS.cell(10, 4).string('UNIT PRICE').style({ alignment: { horizontal: 'right' } });
-    invoiceWS.cell(10, 5).string('LINE TOTAL').style({ alignment: { horizontal: 'right' } });
+    invoiceWS.cell(10, 4).string('UNIT PRICE').style({
+        alignment: {
+            horizontal: 'right'
+        }
+    });
+    invoiceWS.cell(10, 5).string('LINE TOTAL').style({
+        alignment: {
+            horizontal: 'right'
+        }
+    });
 
     var items = require('./sampleFiles/invoiceData.json').items;
     var i = 0;
@@ -139,7 +193,11 @@ function generateWorkbook() {
         var item = items[i];
         var curRow = rowOffset + i;
         if (item !== undefined) {
-            invoiceWS.cell(curRow, 2).number(item.units).style({ alignment: { horizontal: 'left' } });
+            invoiceWS.cell(curRow, 2).number(item.units).style({
+                alignment: {
+                    horizontal: 'left'
+                }
+            });
             invoiceWS.cell(curRow, 3).string(item.description);
             invoiceWS.cell(curRow, 4).number(item.unitCost).style(currencyStyle);
             invoiceWS.cell(curRow, 5).formula(xl.getExcelCellRef(rowOffset + i, 2) + '*' + xl.getExcelCellRef(rowOffset + 1, 4)).style(currencyStyle);
@@ -155,7 +213,14 @@ function generateWorkbook() {
         }
         i++;
     }
-    invoiceWS.cell(21, 2, 21, 5).style({ border: { bottom: { style: 'thin', color: '#DCD1B3' } } });
+    invoiceWS.cell(21, 2, 21, 5).style({
+        border: {
+            bottom: {
+                style: 'thin',
+                color: '#DCD1B3'
+            }
+        }
+    });
 
     invoiceWS.cell(22, 4).string('Discount');
     invoiceWS.cell(22, 5).number(0.00).style(currencyStyle);
@@ -163,7 +228,14 @@ function generateWorkbook() {
     invoiceWS.cell(23, 4).string('Net Total');
     invoiceWS.cell(23, 5).formula('SUM(E11:E21)').style(currencyStyle);
 
-    invoiceWS.cell(23, 2, 23, 5).style({ border: { bottom: { style: 'thin', color: '#000000' } } });
+    invoiceWS.cell(23, 2, 23, 5).style({
+        border: {
+            bottom: {
+                style: 'thin',
+                color: '#000000'
+            }
+        }
+    });
 
     invoiceWS.row(24).setHeight(20);
     invoiceWS.cell(24, 4, 25, 4, true).string('USD TOTAL').style(medText);
@@ -177,7 +249,9 @@ function generateWorkbook() {
      * START Create a filterable list
      *****************************************/
 
-    var filterSheet = wb.addWorksheet('Filters');
+    var filterSheet = wb.addWorksheet('Filters', {
+        disableRowSpansOptimization: true,
+    });
 
     for (var i = 1; i <= 10; i++) {
         filterSheet.cell(1, i).string('Header' + i);
@@ -189,7 +263,7 @@ function generateWorkbook() {
             filterSheet.cell(r, c).number(parseInt(Math.random() * 100));
         }
     }
-     /*****************************************
+    /*****************************************
      * END Create a filterable list
      *****************************************/
 
@@ -341,7 +415,7 @@ function generateWorkbook() {
     }
     frozenSheet.column(1).freeze();
 
-     /*****************************************
+    /*****************************************
      * END Create Frozen lists
      *****************************************/
 
@@ -366,7 +440,7 @@ function generateWorkbook() {
         }
     }
 
-     /*****************************************
+    /*****************************************
      * END Create Split
      *****************************************/
 
