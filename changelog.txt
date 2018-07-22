@@ -1,3 +1,11 @@
+1.5.0
+        Bug Fixes:
+        resolves https://github.com/natergj/excel4node/issues/156 where an error will be thrown if no Worksheet is specified prior to attempting to write a Workbook
+
+        Enhancements:
+        merge https://github.com/natergj/excel4node/pull/211 & https://github.com/natergj/excel4node/pull/212
+                remove default logger dependency in favor of much smaller simple logger (reduces library dependencies and size)
+                add ability specify custom logger
 1.4.0
         Bug Fixes:
         resolves https://github.com/natergj/excel4node/issues/196 where unicode filenames could not be used with HTTP Response write handler     
