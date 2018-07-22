@@ -255,7 +255,7 @@
         merged pull request https://github.com/natergj/excel4node/pull/11
 
 0.0.9
-        fixed issue where if a WorkSheet was added, but then no cells added, execution would stop
+        fixed issue where if a Worksheet was added, but then no cells added, execution would stop
         fixed issue where workbooks would cause MS Excel for Windows to crash on print preview
         fixed issue where if undefined or 0 value was passed to cell or row function, execution would stop
         added changelog

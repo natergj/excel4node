@@ -1,9 +1,5 @@
 const _ = require('lodash');
-const Cell = require('../cell/cell.js');
 const Row = require('../row/row.js');
-const Column = require('../column/column.js');
-const WorkSheet = require('../worksheet/worksheet.js');
-const utils = require('../utils.js');
 
 /**
  * Module repesenting a Row Accessor
