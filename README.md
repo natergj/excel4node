@@ -27,22 +27,22 @@ found in ECMA-376 2nd edition Part 1 download at [http://www.ecma-international.
 
 ```javascript
 // Require library
-var xl = require("excel4node");
+var xl = require('excel4node');
 
 // Create a new instance of a Workbook class
 var wb = new xl.Workbook();
 
 // Add Worksheets to the workbook
-var ws = wb.addWorksheet("Sheet 1");
-var ws2 = wb.addWorksheet("Sheet 2");
+var ws = wb.addWorksheet('Sheet 1');
+var ws2 = wb.addWorksheet('Sheet 2');
 
 // Create a reusable style
 var style = wb.createStyle({
   font: {
-    color: "#FF0800",
-    size: 12
+    color: '#FF0800',
+    size: 12,
   },
-  numberFormat: "$#,##0.00; ($#,##0.00); -"
+  numberFormat: '$#,##0.00; ($#,##0.00); -',
 });
 
 // Set value of cell A1 to 100 as a number type styled with paramaters of style
@@ -57,24 +57,24 @@ ws.cell(1, 2)
 
 // Set value of cell C1 to a formula styled with paramaters of style
 ws.cell(1, 3)
-  .formula("A1 + B1")
+  .formula('A1 + B1')
   .style(style);
 
 // Set value of cell A2 to 'string' styled with paramaters of style
 ws.cell(2, 1)
-  .string("string")
+  .string('string')
   .style(style);
 
 // Set value of cell A3 to true as a boolean type styled with paramaters of style but with an adjustment to the font size.
 ws.cell(3, 1)
   .bool(true)
   .style(style)
-  .style({ font: { size: 14 } });
+  .style({font: {size: 14}});
 
-wb.write("Excel.xlsx");
+wb.write('Excel.xlsx');
 ```
 
-## excelnode
+## excel4node
 
 excel4node comes with some generic functions and types
 
@@ -82,7 +82,7 @@ xl.getExcelRowCol(cellRef)
 Accepts cell reference (i.e. 'A1') and returns object with corresponding row and column
 
 ```javascript
-xl.getExcelRowCol("B5");
+xl.getExcelRowCol('B5');
 // returns { row: 5, col: 2}
 ```
 
@@ -106,7 +106,7 @@ xl.getExcelTS(date)
 Accepts Date object and returns an Excel timestamp
 
 ```javascript
-var newDate = new Date("2015-01-01T00:00:00.0000Z");
+var newDate = new Date('2015-01-01T00:00:00.0000Z');
 xl.getExcelTS(newDate);
 // Returns 42004.791666666664
 ```
@@ -122,17 +122,17 @@ An instance of the Workbook class contains all data and parameters for the Excel
 Workbook constructor accepts an optional configuration object.
 
 ```javascript
-var xl = require("excel4node");
+var xl = require('excel4node');
 var wb = new xl.Workbook({
   jszip: {
-    compression: "DEFLATE"
+    compression: 'DEFLATE',
   },
   defaultFont: {
     size: 12,
-    name: "Calibri",
-    color: "FFFFFFFF"
+    name: 'Calibri',
+    color: 'FFFFFFFF',
   },
-  dateFormat: "m/d/yy hh:mm:ss",
+  dateFormat: 'm/d/yy hh:mm:ss',
   workbookView: {
     activeTab: 1, // Specifies an unsignedInt that contains the index to the active sheet in this book view.
     autoFilterDateGrouping: true, // Specifies a boolean value that indicates whether to group dates when presenting the user with filtering options in the user interface.
@@ -142,13 +142,13 @@ var wb = new xl.Workbook({
     showSheetTabs: true, // Specifies a boolean value that indicates whether to display the sheet tabs in the user interface.
     showVerticalScroll: true, // Specifies a boolean value that indicates whether to display the vertical scroll bar.
     tabRatio: 600, // Specifies ratio between the workbook tabs bar and the horizontal scroll bar.
-    visibility: "visible", // Specifies visible state of the workbook window. ('hidden', 'veryHidden', 'visible') (§18.18.89)
+    visibility: 'visible', // Specifies visible state of the workbook window. ('hidden', 'veryHidden', 'visible') (§18.18.89)
     windowHeight: 17620, // Specifies the height of the workbook window. The unit of measurement for this value is twips.
     windowWidth: 28800, // Specifies the width of the workbook window. The unit of measurement for this value is twips..
     xWindow: 0, // Specifies the X coordinate for the upper left corner of the workbook window. The unit of measurement for this value is twips.
-    yWindow: 440 // Specifies the Y coordinate for the upper left corner of the workbook window. The unit of measurement for this value is twips.
+    yWindow: 440, // Specifies the Y coordinate for the upper left corner of the workbook window. The unit of measurement for this value is twips.
   },
-  logLevel: 0 // 0 - 5. 0 suppresses all logs, 1 shows errors only, 5 is for debugging
+  logLevel: 0, // 0 - 5. 0 suppresses all logs, 1 shows errors only, 5 is for debugging
 });
 ```
 
@@ -172,13 +172,13 @@ wb.write();
 The write() method can accept a single filename, a filename with callback function or an HTTP response object.
 
 ```javascript
-var xl = require("excel4node");
+var xl = require('excel4node');
 var wb = new xl.Workbook();
-wb.write("ExcelFile.xlsx"); // Writes the file ExcelFile.xlsx to the process.cwd();
+wb.write('ExcelFile.xlsx'); // Writes the file ExcelFile.xlsx to the process.cwd();
 ```
 
 ```javascript
-wb.write("ExcelFile.xlsx", function(err, stats) {
+wb.write('ExcelFile.xlsx', function(err, stats) {
   if (err) {
     console.error(err);
   } else {
@@ -190,13 +190,13 @@ wb.write("ExcelFile.xlsx", function(err, stats) {
 ```javascript
 // sends Excel file to web client requesting the / route
 // server will respond with 500 error if excel workbook cannot be generated
-var express = require("express");
+var express = require('express');
 var app = express();
-app.get("/", function(req, res) {
-  wb.write("ExcelFile.xlsx", res);
+app.get('/', function(req, res) {
+  wb.write('ExcelFile.xlsx', res);
 });
 app.listen(3000, function() {
-  console.log("Example app listening on port 3000!");
+  console.log('Example app listening on port 3000!');
 });
 ```
 
@@ -204,7 +204,7 @@ wb.writeToBuffer();
 The writeToBuffer() method access no parameters and returns a promise that resolves with the nodebuffer generated by the JSZip library. This buffer can then be sent to other streams.
 
 ```javascript
-var xl = require("excel4node");
+var xl = require('excel4node');
 var wb = new xl.Workbook();
 
 wb.writeToBuffer().then(function(buffer) {
@@ -221,17 +221,17 @@ An instance of the Worksheet class contains all information specific to that wor
 Worksheet contructor is called via Workbook class and accepts a name and configuration object
 
 ```javascript
-var xl = require("excel4node");
+var xl = require('excel4node');
 var wb = new xl.Workbook();
 
 var options = {
   margins: {
     left: 1.5,
-    right: 1.5
-  }
+    right: 1.5,
+  },
 };
 
-var ws = wb.addWorksheet("sheetname", options);
+var ws = wb.addWorksheet('sheetname', options);
 ```
 
 Full Worksheet options. All options are optional.
@@ -364,28 +364,28 @@ Accepts a validation options object with these available options. All options ar
 
 ```javascript
 ws.addDataValidation({
-  type: "list",
+  type: 'list',
   allowBlank: true,
-  prompt: "Choose from dropdown",
-  error: "Invalid choice was chosen",
+  prompt: 'Choose from dropdown',
+  error: 'Invalid choice was chosen',
   showDropDown: true,
-  sqref: "X2:X10",
-  formulas: ["value1,value2"]
+  sqref: 'X2:X10',
+  formulas: ['value1,value2'],
 });
 
 ws.addDataValidation({
-  type: "list",
+  type: 'list',
   allowBlank: 1,
-  sqref: "B2:B10",
-  formulas: ["=sheet2!$A$1:$A$2"]
+  sqref: 'B2:B10',
+  formulas: ['=sheet2!$A$1:$A$2'],
 });
 
 ws.addDataValidation({
-  type: "whole",
-  operator: "between",
+  type: 'whole',
+  operator: 'between',
   allowBlank: 1,
-  sqref: "A1:A10",
-  formulas: [0, 100]
+  sqref: 'A1:A10',
+  formulas: [0, 100],
 });
 ```
 
@@ -397,20 +397,20 @@ The following example will highlight all cells between A1 and A10 that contain t
 
 ```javascript
 var wb = new xl.Workbook();
-var ws = wb.addWorksheet("Sheet 1");
+var ws = wb.addWorksheet('Sheet 1');
 var myStyle = wb.createStyle({
   font: {
     bold: true,
-    color: "00FF00"
-  }
+    color: '00FF00',
+  },
 });
 
-ws.addConditionalFormattingRule("A1:A10", {
+ws.addConditionalFormattingRule('A1:A10', {
   // apply ws formatting ref 'A1:A10'
-  type: "expression", // the conditional formatting type
+  type: 'expression', // the conditional formatting type
   priority: 1, // rule priority order (required)
   formula: 'NOT(ISERROR(SEARCH("ok", A1)))', // formula that returns nonzero or 0
-  style: myStyle // a style object containing styles to apply
+  style: myStyle, // a style object containing styles to apply
 });
 ```
 
@@ -443,7 +443,7 @@ ws2.row(1).filter({
   firstRow: 1,
   firstColumn: 1,
   lastRow: 20,
-  lastColumn: 5
+  lastColumn: 5,
 });
 ```
 
@@ -481,50 +481,50 @@ cell method takes two required parameters and 3 optional parameters
 ```javascript
 // ws.cell(startRow, startColumn, [[endRow, endColumn], isMerged]);
 
-ws.cell(1, 1).string("My simple string");
+ws.cell(1, 1).string('My simple string');
 ws.cell(1, 2).number(5);
-ws.cell(1, 3).formula("B1 * 10");
+ws.cell(1, 3).formula('B1 * 10');
 ws.cell(1, 4).date(new Date());
-ws.cell(1, 5).link("http://iamnater.com");
+ws.cell(1, 5).link('http://iamnater.com');
 ws.cell(1, 6).bool(true);
 
-ws.cell(2, 1, 2, 6, true).string("One big merged cell");
+ws.cell(2, 1, 2, 6, true).string('One big merged cell');
 ws.cell(3, 1, 3, 6).number(1); // All 6 cells set to number 1
 
 var complexString = [
-  "Workbook default font String\n",
+  'Workbook default font String\n',
   {
     bold: true,
     underline: true,
     italics: true,
-    color: "FF0000",
+    color: 'FF0000',
     size: 18,
-    name: "Courier",
-    value: "Hello"
+    name: 'Courier',
+    value: 'Hello',
   },
-  " World!",
+  ' World!',
   {
-    color: "000000",
+    color: '000000',
     underline: false,
-    name: "Arial",
-    vertAlign: "subscript"
+    name: 'Arial',
+    vertAlign: 'subscript',
   },
-  " All",
-  " these",
-  " strings",
-  " are",
-  " black subsript,",
+  ' All',
+  ' these',
+  ' strings',
+  ' are',
+  ' black subsript,',
   {
-    color: "0000FF",
-    value: "\nbut",
-    vertAlign: "baseline"
+    color: '0000FF',
+    value: '\nbut',
+    vertAlign: 'baseline',
   },
-  " now are blue"
+  ' now are blue',
 ];
 ws.cell(4, 1).string(complexString);
 ws.cell(5, 1)
-  .string("another simple string")
-  .style({ font: { name: "Helvetica" } });
+  .string('another simple string')
+  .style({font: {name: 'Helvetica'}});
 ```
 
 ## Styles
@@ -601,28 +601,28 @@ Style Options Object:
 */
 
 var wb = new xl.Workbook();
-var ws = wb.addWorksheet("Sheet 1");
+var ws = wb.addWorksheet('Sheet 1');
 var myStyle = wb.createStyle({
   font: {
     bold: true,
-    underline: true
+    underline: true,
   },
   alignment: {
     wrapText: true,
-    horizontal: "center"
-  }
+    horizontal: 'center',
+  },
 });
 
 ws.cell(1, 1)
-  .string("my \n multiline\n string")
+  .string('my \n multiline\n string')
   .style(myStyle);
-ws.cell(2, 1).string("row 2 string");
-ws.cell(3, 1).string("row 3 string");
+ws.cell(2, 1).string('row 2 string');
+ws.cell(3, 1).string('row 3 string');
 ws.cell(2, 1, 3, 1).style(myStyle);
-ws.cell(3, 1).style({ font: { underline: false } });
+ws.cell(3, 1).style({font: {underline: false}});
 ws.cell(4, 1)
   .date(new Date())
-  .style({ numberFormat: "yyyy-mm-dd" });
+  .style({numberFormat: 'yyyy-mm-dd'});
 // Since dates are stored as numbers in Excel, use the numberFormat option of the styles to set the date format as well.
 ```
 
@@ -650,47 +650,47 @@ specifying a twoCellAnchor will automatically adjust the image to fit within the
 
 ```javascript
 ws.addImage({
-  path: "./screenshot2.jpeg",
-  type: "picture",
+  path: './screenshot2.jpeg',
+  type: 'picture',
   position: {
-    type: "absoluteAnchor",
-    x: "1in",
-    y: "2in"
-  }
+    type: 'absoluteAnchor',
+    x: '1in',
+    y: '2in',
+  },
 });
 
 ws.addImage({
-  path: "./screenshot1.jpg",
-  type: "picture",
+  path: './screenshot1.jpg',
+  type: 'picture',
   position: {
-    type: "oneCellAnchor",
+    type: 'oneCellAnchor',
     from: {
       col: 1,
-      colOff: "0.5in",
+      colOff: '0.5in',
       row: 1,
-      rowOff: 0
-    }
-  }
+      rowOff: 0,
+    },
+  },
 });
 
 ws.addImage({
-  path: "./screenshot1.png",
-  type: "picture",
+  path: './screenshot1.png',
+  type: 'picture',
   position: {
-    type: "twoCellAnchor",
+    type: 'twoCellAnchor',
     from: {
       col: 1,
       colOff: 0,
       row: 10,
-      rowOff: 0
+      rowOff: 0,
     },
     to: {
       col: 4,
       colOff: 0,
       row: 13,
-      rowOff: 0
-    }
-  }
+      rowOff: 0,
+    },
+  },
 });
 ```
 
@@ -698,13 +698,13 @@ You can also pass buffer with loaded to memory image:
 
 ```javascript
 ws.addImage({
-  image: fs.readFileSync(path.resolve(__dirname, "../sampleFiles/logo.png")),
-  name: "logo", // name is not required param
-  type: "picture",
+  image: fs.readFileSync(path.resolve(__dirname, '../sampleFiles/logo.png')),
+  name: 'logo', // name is not required param
+  type: 'picture',
   position: {
-    type: "absoluteAnchor",
-    x: "1in",
-    y: "2in"
-  }
+    type: 'absoluteAnchor',
+    x: '1in',
+    y: '2in',
+  },
 });
 ```
