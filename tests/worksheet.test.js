@@ -9,19 +9,19 @@ test('Generate multiple sheets', (t) => {
     let ws = wb.addWorksheet('test');
     let ws2 = wb.addWorksheet('test2');
     let ws3 = wb.addWorksheet('test3');
-    
+
     t.ok(wb.sheets.length === 3, 'Correctly generated multiple sheets');
 
     wb.setSelectedTab(2);
     t.ok(
-        wb.sheets[0].opts.sheetView.tabSelected === 0 && 
+        wb.sheets[0].opts.sheetView.tabSelected === 0 &&
         wb.sheets[1].opts.sheetView.tabSelected === 1 &&
         wb.sheets[2].opts.sheetView.tabSelected === 0, '2nd Tab set to be default tab selected');
 
     t.end();
 });
 
-test('Set WorkSheet options', (t) => {
+test('Set Worksheet options', (t) => {
     let wb = new xl.Workbook();
     let ws = wb.addWorksheet('test 1', {
         'margins': { // Accepts a Double in Inches
@@ -37,7 +37,7 @@ test('Set WorkSheet options', (t) => {
             'centerVertical': true,
             'printGridLines': true,
             'printHeadings': true
-        
+
         },
         'headerFooter': { // Set Header and Footer strings and options. See note below
             'evenFooter': 'Even Footer String',
@@ -398,29 +398,29 @@ test('Check worksheet defaultRowHeight behavior', (t) => {
     ws2.cell(1, 1).string('String');
 
     ws1.generateXML()
-    .then((XML) => {
-        let doc = new DOMParser().parseFromString(XML);
-        let sheetFormatPr = doc.getElementsByTagName('sheetFormatPr')[0];
-        t.equals(sheetFormatPr.getAttribute('defaultRowHeight'), '12', 'Required attribute sheetFormatPr.defalutRowHeight successfully updated with custom row height');
-        t.equals(sheetFormatPr.getAttribute('customHeight'), '1', 'Optional sheetFormatPr.customHeight successfully set to be true');
+        .then((XML) => {
+            let doc = new DOMParser().parseFromString(XML);
+            let sheetFormatPr = doc.getElementsByTagName('sheetFormatPr')[0];
+            t.equals(sheetFormatPr.getAttribute('defaultRowHeight'), '12', 'Required attribute sheetFormatPr.defalutRowHeight successfully updated with custom row height');
+            t.equals(sheetFormatPr.getAttribute('customHeight'), '1', 'Optional sheetFormatPr.customHeight successfully set to be true');
 
-        let firstRow = doc.getElementsByTagName('row')[0];
-        t.equals(firstRow.getAttribute('customHeight'), '1', 'customHeight attribute on row successfully set to 1 since sheet default row height specified');
-    })
-    .then(() => {
-        return ws2.generateXML();
-    })
-    .then((XML) => {
-        let doc = new DOMParser().parseFromString(XML);
-        let sheetFormatPr = doc.getElementsByTagName('sheetFormatPr')[0];
-        t.equals(sheetFormatPr.getAttribute('defaultRowHeight'), '16', 'Required attribute sheetFormatPr.defalutRowHeight successfully set with default value');
-        t.equals(sheetFormatPr.getAttribute('customHeight'), '', 'Optional sheetFormatPr.customHeight not set when sheetFormat.defaultRowHeight not specified');
+            let firstRow = doc.getElementsByTagName('row')[0];
+            t.equals(firstRow.getAttribute('customHeight'), '1', 'customHeight attribute on row successfully set to 1 since sheet default row height specified');
+        })
+        .then(() => {
+            return ws2.generateXML();
+        })
+        .then((XML) => {
+            let doc = new DOMParser().parseFromString(XML);
+            let sheetFormatPr = doc.getElementsByTagName('sheetFormatPr')[0];
+            t.equals(sheetFormatPr.getAttribute('defaultRowHeight'), '16', 'Required attribute sheetFormatPr.defalutRowHeight successfully set with default value');
+            t.equals(sheetFormatPr.getAttribute('customHeight'), '', 'Optional sheetFormatPr.customHeight not set when sheetFormat.defaultRowHeight not specified');
 
-        let firstRow = doc.getElementsByTagName('row')[0];
-        t.equals(firstRow.getAttribute('customHeight'), '', 'customHeight attribute on row successfully not set since sheet default row height not specified');
-    })
-    .then(() => {
-        t.end();
-    });
+            let firstRow = doc.getElementsByTagName('row')[0];
+            t.equals(firstRow.getAttribute('customHeight'), '', 'customHeight attribute on row successfully not set since sheet default row height not specified');
+        })
+        .then(() => {
+            t.end();
+        });
 
 });

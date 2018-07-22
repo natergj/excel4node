@@ -119,7 +119,7 @@ An instance of the Workbook class contains all data and parameters for the Excel
 
 #### Constructor
 
-WorkBook constructor accepts an optional configuration object.
+Workbook constructor accepts an optional configuration object.
 
 ```javascript
 var xl = require("excel4node");
@@ -155,12 +155,12 @@ var wb = new xl.Workbook({
 #### Methods
 
 wb.addWorksheet(name, options);  
-Adds a new WorkSheet to the WorkBook  
-Accepts name of new WorkSheet and options object (see WorkSheet section)  
-Returns a WorkSheet instance
+Adds a new Worksheet to the Workbook  
+Accepts name of new Worksheet and options object (see Worksheet section)  
+Returns a Worksheet instance
 
 wb.setSelectedTab(id);  
-Sets which tab will be selected when the WorkBook is opened  
+Sets which tab will be selected when the Workbook is opened  
 Accepts Sheet ID (1-indexed sheet in order that sheets were added)
 
 wb.createStyle(opts);  
