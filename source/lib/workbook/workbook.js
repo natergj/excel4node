@@ -8,11 +8,10 @@ const Fill = require('../style/classes/fill.js');
 const DXFCollection = require('./dxfCollection.js');
 const MediaCollection = require('./mediaCollection.js');
 const DefinedNameCollection = require('../classes/definedNameCollection.js');
-const SlothLogger = require('sloth-logger');
 const types = require('../types/index.js');
 const builder = require('./builder.js');
 const http = require('http');
-
+const SimpleLogger = require('../logger');
 
 /* Available options for Workbook
 {
@@ -67,14 +66,21 @@ class Workbook {
      * @param {Number} opts.workbookView.windowWidth Specifies the width of the workbook window. The unit of measurement for this value is twips..
      * @param {Number} opts.workbookView.xWindow Specifies the X coordinate for the upper left corner of the workbook window. The unit of measurement for this value is twips.
      * @param {Number} opts.workbookView.yWindow Specifies the Y coordinate for the upper left corner of the workbook window. The unit of measurement for this value is twips.
+     * @param {Object} opts.logger Logger that supports warn and error method, defaults to console
      * @returns {Workbook}
      */
     constructor(opts) {
         opts = opts ? opts : {};
 
-        this.logger = new SlothLogger.Logger({
+        const hasCustomLogger = opts.logger !== undefined;
+        const hasValidCustomLogger = hasCustomLogger && typeof opts.logger.warn === 'function' && typeof opts.logger.error === 'function';
+
+        this.logger = hasValidCustomLogger ? opts.logger : new SimpleLogger({
             logLevel: Number.isNaN(parseInt(opts.logLevel)) ? 0 : parseInt(opts.logLevel)
         });
+        if (hasCustomLogger && !hasValidCustomLogger) {
+            this.logger.log('opts.logger is not a valid logger');
+        }
 
         this.opts = _.merge({}, workbookDefaultOpts, opts);
 
