@@ -1,15 +1,5 @@
-.idea
+lib
 node_modules
-distribution
+.coverage
 .DS_Store
-npm-debug.log
-Excel.xlsx
-dev.js
-dev.xlsx
-dev
-docs
-output
-tmp
-references
-coverage
 .nyc_output

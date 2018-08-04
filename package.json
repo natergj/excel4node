@@ -1,72 +1,50 @@
 {
   "name": "excel4node",
-  "version": "1.5.0",
-  "description": "Library to create Formatted Excel Files.",
-  "engines": {
-    "node": ">4.0.0"
+  "version": "2.0.0-alpha.1",
+  "description": "Library to create formatted MS Excel filies",
+  "main": "./lib/index.js",
+  "scripts": {
+    "test": "NODE_ENV=test mocha --require ts-node/register --watch-extensions ts \"src/**/*.test*\"",
+    "test:watch": "",
+    "lint": "tslint src/**/*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/natergj/excel4node.git"
   },
   "keywords": [
     "excel",
-    "spreadsheet",
-    "xlsx",
     "formatted",
-    "styled",
+    "ooxml",
     "report",
+    "spreadsheet",
+    "styled",
+    "typescript",
     "workbook",
-    "ooxml"
+    "xlsx"
   ],
-  "main": "./distribution/index.js",
   "author": {
-    "name": "Nater",
+    "name": "Nater Jorde",
     "email": "nater@iamnater.com"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://opensource.org/licenses/mit-license.php"
-    }
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/natergj/excel4node.git"
-  },
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/natergj/excel4node/labels/bug"
   },
-  "scripts": {
-    "test": "NODE_ENV=test ./node_modules/tape/bin/tape -r babel-register ./tests/*.test.js",
-    "cover": "NODE_ENV=test nyc tape -r babel-register ./tests/*.test.js",
-    "build": "./node_modules/babel-cli/bin/babel.js source --presets babel-preset-env -s --out-dir distribution",
-    "watch": "./node_modules/babel-cli/bin/babel.js source -w --presets babel-preset-env -s --out-dir distribution",
-    "document": "jsdoc ./source -r -d docs",
-    "prepublish": "npm run build; npm run test"
+  "homepage": "https://github.com/natergj/excel4node#readme",
+  "devDependencies": {
+    "@types/chai": "4.1.4",
+    "@types/mocha": "5.2.5",
+    "chai": "4.1.2",
+    "mocha": "5.2.0",
+    "nyc": "12.0.2",
+    "prettier": "1.14.0",
+    "ts-node": "7.0.0",
+    "tslint": "5.11.0",
+    "typescript": "3.0.1"
   },
   "dependencies": {
-    "image-size": "0.6.3",
     "jszip": "3.1.5",
-    "lodash": "4.17.10",
-    "mime": "2.3.1",
     "xmlbuilder": "10.0.0"
-  },
-  "devDependencies": {
-    "babel-cli": "6.26.0",
-    "babel-plugin-istanbul": "4.1.6",
-    "babel-preset-env": "1.7.0",
-    "babel-register": "6.26.0",
-    "jsdoc": "3.5.5",
-    "nyc": "12.0.2",
-    "source-map-support": "0.5.6",
-    "tape": "4.9.1",
-    "tape-promise": "2.0.1",
-    "xmldom": "0.1.27",
-    "xpath.js": "1.1.0"
-  },
-  "nyc": {
-    "instrument": false,
-    "sourceMap": false,
-    "reporter": [
-      "text-summary",
-      "html"
-    ]
   }
 }
