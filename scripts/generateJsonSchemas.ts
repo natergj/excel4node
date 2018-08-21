@@ -18,9 +18,12 @@ const generator = TJS.buildGenerator(program, settings);
 if (generator) {
   const symbols = generator.getSymbols();
   symbols.forEach(symbol => {
-    if (symbol.fullyQualifiedName.includes('excel4node') && symbol.fullyQualifiedName.includes('types')) {
+    if (
+      symbol.fullyQualifiedName.includes('excel4node') &&
+      symbol.fullyQualifiedName.includes('types') &&
+      !symbol.fullyQualifiedName.includes('node_modules')
+    ) {
       const outFile = getSchemaPath(symbol.fullyQualifiedName);
-      console.log(outFile);
       const schema = TJS.generateSchema(program, symbol.name, settings);
       fs.writeFileSync(outFile, JSON.stringify(schema, null, '  '));
     }

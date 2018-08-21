@@ -5,8 +5,11 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
-    "prebuild": "npm run clean",
+    "prebuild": "npm run clean && npm run generate-json-schemas",
     "build": "tsc",
+    "postbuild": "npm run copySchemas && npm run copyDeclarations",
+    "copyDeclarations": "cd src && find . -name '*.d.ts' | cpio -pdm ../lib",
+    "copySchemas": "cd src && find . -name '*.schema.json' | cpio -pdm ../lib",
     "clean": "rm -rf lib .coverage .nyc_output",
     "lint": "tslint src/**/*",
     "generate-json-schemas": "ts-node ./scripts/generateJsonSchemas.ts",
