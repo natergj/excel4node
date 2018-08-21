@@ -19,4 +19,4 @@ A clear and concise description of what you expected to happen.
  - excel4node Version [e.g. 1.5.0]
 
 **Additional context**
-Add any other context about the problem here.
+Add any other context about the problem here. Log entries related to the issue are good things.
