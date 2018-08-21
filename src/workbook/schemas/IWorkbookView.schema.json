@@ -1,0 +1,60 @@
+{
+  "type": "object",
+  "properties": {
+    "activeTab": {
+      "type": "number"
+    },
+    "autoFilterDateGrouping": {
+      "type": "boolean"
+    },
+    "firstSheet": {
+      "type": "number"
+    },
+    "minimized": {
+      "type": "boolean"
+    },
+    "showHorizontalScroll": {
+      "type": "boolean"
+    },
+    "showSheetTabs": {
+      "type": "boolean"
+    },
+    "showVerticalScroll": {
+      "type": "boolean"
+    },
+    "tabRatio": {
+      "type": "number"
+    },
+    "visibility": {
+      "type": "string"
+    },
+    "windowHeight": {
+      "type": "number"
+    },
+    "windowWidth": {
+      "type": "number"
+    },
+    "xWindow": {
+      "type": "number"
+    },
+    "yWindow": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "activeTab",
+    "autoFilterDateGrouping",
+    "firstSheet",
+    "minimized",
+    "showHorizontalScroll",
+    "showSheetTabs",
+    "showVerticalScroll",
+    "tabRatio",
+    "visibility",
+    "windowHeight",
+    "windowWidth",
+    "xWindow",
+    "yWindow"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

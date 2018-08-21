@@ -3,10 +3,15 @@
   "version": "2.0.0-alpha.1",
   "description": "Library to create formatted MS Excel filies",
   "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "scripts": {
+    "prebuild": "npm run clean",
+    "build": "tsc",
+    "clean": "rm -rf lib .coverage .nyc_output",
+    "lint": "tslint src/**/*",
+    "generate-json-schemas": "ts-node ./scripts/generateJsonSchemas.ts",
     "test": "NODE_ENV=test mocha --require ts-node/register --watch-extensions ts \"src/**/*.test*\"",
-    "test:watch": "",
-    "lint": "tslint src/**/*"
+    "test:watch": ""
   },
   "repository": {
     "type": "git",
@@ -34,6 +39,7 @@
   "homepage": "https://github.com/natergj/excel4node#readme",
   "devDependencies": {
     "@types/chai": "4.1.4",
+    "@types/jszip": "3.1.4",
     "@types/mocha": "5.2.5",
     "chai": "4.1.2",
     "mocha": "5.2.0",
@@ -41,7 +47,8 @@
     "prettier": "1.14.0",
     "ts-node": "7.0.0",
     "tslint": "5.11.0",
-    "typescript": "3.0.1"
+    "typescript": "3.0.1",
+    "typescript-json-schema": "0.31.0"
   },
   "dependencies": {
     "jszip": "3.1.5",

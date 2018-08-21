@@ -1,0 +1,66 @@
+{
+  "type": "object",
+  "properties": {
+    "pane": {
+      "$ref": "#/definitions/Partial<IWorksheetOptsSheetViewPane>"
+    },
+    "rightToLeft": {
+      "type": "boolean"
+    },
+    "showGridLines": {
+      "type": "boolean"
+    },
+    "zoomScale": {
+      "type": "number"
+    },
+    "zoomScaleNormal": {
+      "type": "number"
+    },
+    "zoomScalePageLayoutView": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "pane",
+    "rightToLeft",
+    "showGridLines",
+    "zoomScale",
+    "zoomScaleNormal",
+    "zoomScalePageLayoutView"
+  ],
+  "definitions": {
+    "Partial<IWorksheetOptsSheetViewPane>": {
+      "description": "Make all properties in T optional",
+      "type": "object",
+      "properties": {
+        "activePane": {
+          "enum": [
+            "bottomLeft",
+            "bottomRight",
+            "topLeft",
+            "topRight"
+          ],
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "frozen",
+            "frozenSplit",
+            "split"
+          ],
+          "type": "string"
+        },
+        "topLeftCell": {
+          "type": "string"
+        },
+        "xSplit": {
+          "type": "string"
+        },
+        "ySplit": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

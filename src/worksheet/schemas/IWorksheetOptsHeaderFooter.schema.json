@@ -1,0 +1,48 @@
+{
+  "type": "object",
+  "properties": {
+    "evenFooter": {
+      "type": "string"
+    },
+    "evenHeader": {
+      "type": "string"
+    },
+    "firstFooter": {
+      "type": "string"
+    },
+    "firstHeader": {
+      "type": "string"
+    },
+    "oddFooter": {
+      "type": "string"
+    },
+    "oddHeader": {
+      "type": "string"
+    },
+    "alignWithMargins": {
+      "type": "boolean"
+    },
+    "differentFirst": {
+      "type": "boolean"
+    },
+    "differentOddEven": {
+      "type": "boolean"
+    },
+    "scaleWithDoc": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "alignWithMargins",
+    "differentFirst",
+    "differentOddEven",
+    "evenFooter",
+    "evenHeader",
+    "firstFooter",
+    "firstHeader",
+    "oddFooter",
+    "oddHeader",
+    "scaleWithDoc"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

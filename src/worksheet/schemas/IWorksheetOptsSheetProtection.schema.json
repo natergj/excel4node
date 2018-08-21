@@ -1,0 +1,76 @@
+{
+  "type": "object",
+  "properties": {
+    "autoFilter": {
+      "type": "boolean"
+    },
+    "deleteColumns": {
+      "type": "boolean"
+    },
+    "deleteRows": {
+      "type": "boolean"
+    },
+    "formatCells": {
+      "type": "boolean"
+    },
+    "formatColumns": {
+      "type": "boolean"
+    },
+    "formatRows": {
+      "type": "boolean"
+    },
+    "insertColumns": {
+      "type": "boolean"
+    },
+    "insertHyperlinks": {
+      "type": "boolean"
+    },
+    "insertRows": {
+      "type": "boolean"
+    },
+    "objects": {
+      "type": "boolean"
+    },
+    "password": {
+      "type": "string"
+    },
+    "pivotTables": {
+      "type": "boolean"
+    },
+    "scenarios": {
+      "type": "boolean"
+    },
+    "selectLockedCells": {
+      "type": "boolean"
+    },
+    "selectUnlockedCells": {
+      "type": "boolean"
+    },
+    "sheet": {
+      "type": "boolean"
+    },
+    "sort": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "autoFilter",
+    "deleteColumns",
+    "deleteRows",
+    "formatCells",
+    "formatColumns",
+    "formatRows",
+    "insertColumns",
+    "insertHyperlinks",
+    "insertRows",
+    "objects",
+    "password",
+    "pivotTables",
+    "scenarios",
+    "selectLockedCells",
+    "selectUnlockedCells",
+    "sheet",
+    "sort"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}
