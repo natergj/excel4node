@@ -9,8 +9,9 @@
     ],
     "outDir": "./lib",
     "rootDir": "./src",
-    "strict": true,
-    "esModuleInterop": true  
+    // "strict": true,
+    "esModuleInterop": true,
+    "noImplicitAny": false
   },
   "files": [
     "src/index.ts"

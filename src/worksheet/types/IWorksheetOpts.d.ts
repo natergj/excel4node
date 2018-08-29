@@ -6,8 +6,10 @@ import { IWorksheetOptsSheetView } from './IWorksheetOptsSheetView';
 import { IWorksheetOptsSheetFormat } from './IWorksheetOptsSheetFormat';
 import { IWorksheetOptsSheetProtection } from './IWorksheetOptsSheetProtection';
 import { IWorksheetOptsOutline } from './IWorksheetOptsOutline';
+import { IWorksheetAutoFilter } from './IWorksheetAutoFilter';
 
 export interface IWorksheetOpts {
+  autoFilter: Partial<IWorksheetAutoFilter>;
   margins: Partial<IWorksheetOptsMargins>;
   printOptions: Partial<IWorksheetOptsPrintOptions>;
   headerFooter: Partial<IWorksheetOptsHeaderFooter>;

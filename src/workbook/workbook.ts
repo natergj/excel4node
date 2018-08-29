@@ -1,5 +1,8 @@
 import { Worksheet, IWorksheetOpts } from '../worksheet';
 import { IWorkbookOptions } from '../workbook';
+import buildWorkbook from './builder';
+import SimpleLogger, { LogLevel } from '../utils/logger';
+import Font from '../style/models/font';
 
 // Default Options for Workbook
 const workbookDefaultOpts = {
@@ -14,36 +17,56 @@ const workbookDefaultOpts = {
   },
   dateFormat: 'm/d/yy',
   workbookView: {
-    activeTab: 1,
+    // Defaults defined in §18.2.30
+    activeTab: 0,
     autoFilterDateGrouping: true,
-    firstSheet: 1,
+    firstSheet: 0,
     minimized: false,
     showHorizontalScroll: true,
     showSheetTabs: true,
     showVerticalScroll: true,
-    tabRatio: 1,
+    tabRatio: 600,
     visibility: 'visible',
-    windowHeight: 1000,
-    windowWidth: 1000,
-    xWindow: 100,
-    yWindow: 100,
+    windowHeight: 17440, // default of Excel 2016 for Mac
+    windowWidth: 28040, // default of Excel 2016 for Mac
+    xWindow: 5180, // default of Excel 2016 for Mac
+    yWindow: 3060, // default of Excel 2016 for Mac
   },
 };
 
 export default class Workbook {
   opts: IWorkbookOptions;
-  sheets: Worksheet[];
+  sheets: Map<string, Worksheet>;
+  sharedStrings: Map<string, string | any[]>;
+  definedNameCollection: any;
+  dxfCollection: any[];
+  styles: any[];
+  styleData: any;
 
   constructor(opts: Partial<IWorkbookOptions> = {}) {
     this.opts = {
       ...workbookDefaultOpts,
       ...opts,
+      logger: new SimpleLogger(opts.logLevel || 0),
     };
-    this.sheets = [];
+    this.sheets = new Map();
+    this.sharedStrings = new Map();
+    // TODO implement
+    this.definedNameCollection = {
+      isEmpty: true,
+    };
+    this.styles = [];
+    this.styleData = {
+      numFmts: [],
+      fonts: [],
+      fills: [],
+      borders: [],
+    };
   }
 
-  addWorksheet(name: string, opts: Partial<IWorksheetOpts>) {
-    this.sheets.push(
+  addWorksheet(name: string, opts: Partial<IWorksheetOpts> = {}) {
+    this.sheets.set(
+      name,
       new Worksheet({
         name,
         opts,
@@ -52,7 +75,11 @@ export default class Workbook {
     );
   }
 
-  write() {
-    console.log(this);
+  write(name: string) {
+    try {
+      buildWorkbook(name, this);
+    } catch (err) {
+      console.error('Error building workbook package.', err);
+    }
   }
 }

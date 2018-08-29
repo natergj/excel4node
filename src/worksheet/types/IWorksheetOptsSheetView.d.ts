@@ -1,5 +1,8 @@
 import { IWorksheetOptsSheetViewPane } from './IWorksheetOptsSheetViewPane';
 
+// §18.3.1.87 sheetViews (Sheet Views)
+// TODO supplement
+
 export interface IWorksheetOptsSheetView {
   pane: Partial<IWorksheetOptsSheetViewPane>;
   rightToLeft: boolean; // Flag indicating whether the sheet is in 'right to left' display mode. When in this mode, Column A is on the far right, Column B ;is one column left of Column A, and so on. Also, information in cells is displayed in the Right to Left format.
@@ -7,4 +10,6 @@ export interface IWorksheetOptsSheetView {
   zoomScale: number; // Defaults to 100
   zoomScaleNormal: number; // Defaults to 100
   zoomScalePageLayoutView: number; // Defaults to 100
+  tabSelected: number;
+  workbookViewId: number;
 }

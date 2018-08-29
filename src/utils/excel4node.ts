@@ -1,17 +1,9 @@
-export default {
-  generateRId,
-  getExcelAlpha,
-  getExcelCellRef,
-  getExcelRowCol,
-  getExcelTS,
-};
-
 /**
  * Generates an OOXML style Resource ID
  * @function generateRId
  * @returns {String} Resource ID
  */
-function generateRId(): string {
+export function generateRId(): string {
   const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let text = 'R';
   for (let i = 0; i < 16; i++) {
@@ -29,7 +21,7 @@ function generateRId(): string {
  * // returns B
  * getExcelAlpha(2);
  */
-function getExcelAlpha(colNum: number): string {
+export function getExcelAlpha(colNum: number): string {
   const aCharCode = 65;
   let remaining = colNum;
   let columnName = '';
@@ -53,7 +45,7 @@ function getExcelAlpha(colNum: number): string {
  * // returns B1
  * getExcelCellRef(1, 2);
  */
-function getExcelCellRef(rowNum: number, colNum: number) {
+export function getExcelCellRef(rowNum: number, colNum: number) {
   const aCharCode = 65;
   let remaining = colNum;
   let columnName = '';
@@ -79,7 +71,7 @@ interface IExcelRowColObject {
  * // returns {row: 2, col: 3}
  * getExcelRowCol('C2')
  */
-function getExcelRowCol(str: string): IExcelRowColObject {
+export function getExcelRowCol(str: string): IExcelRowColObject {
   const numeric = str.split(/\D/).filter(el => el !== '')[0];
   const alpha = str.split(/\d/).filter(el => el !== '')[0];
   const row = parseInt(numeric, 10);
@@ -87,7 +79,7 @@ function getExcelRowCol(str: string): IExcelRowColObject {
     .toUpperCase()
     .split('')
     .reduce((a, b, index, arr) => a + (b.charCodeAt(0) - 64) * Math.pow(26, arr.length - index - 1), 0);
-  return {row, col};
+  return { row, col };
 }
 
 /**
@@ -99,7 +91,7 @@ function getExcelRowCol(str: string): IExcelRowColObject {
  * // returns 29810.958333333332
  * getExcelTS(new Date('08/13/1981'));
  */
-function getExcelTS(date: Date | string): number {
+export function getExcelTS(date: Date | string): number {
   let thisDt;
   if (date instanceof Date) {
     thisDt = date;
@@ -122,4 +114,88 @@ function getExcelTS(date: Date | string): number {
   const ts = diff2 / (1000 * 60 * 60 * 24);
 
   return parseFloat(ts.toFixed(7));
+}
+
+export function boolToInt(bool: boolean | 1 | '1' | 0 | '0') {
+  if (bool === true) {
+    return 1;
+  }
+  if (bool === false) {
+    return 0;
+  }
+  if (parseInt(String(bool)) === 1) {
+    return 1;
+  }
+  if (parseInt(String(bool)) === 0) {
+    return 0;
+  }
+  throw new TypeError('Value sent to boolToInt must be true, false, 1 or 0');
+}
+
+export function sortCellRefs(a: string, b: string) {
+  let aAtt = getExcelRowCol(a);
+  let bAtt = getExcelRowCol(b);
+  if (aAtt.col === bAtt.col) {
+    return aAtt.row - bAtt.row;
+  } else {
+    return aAtt.col - bAtt.col;
+  }
+}
+
+function _bitXOR(a, b) {
+  let maxLength = a.length > b.length ? a.length : b.length;
+
+  let padString = '';
+  for (let i = 0; i < maxLength; i++) {
+    padString += '0';
+  }
+
+  a = String(padString + a).substr(-maxLength);
+  b = String(padString + b).substr(-maxLength);
+
+  let response = '';
+  for (let i = 0; i < a.length; i++) {
+    response += a[i] === b[i] ? 0 : 1;
+  }
+  return response;
+}
+
+function _rotateBinary(bin) {
+  return bin.substr(1, bin.length - 1) + bin.substr(0, 1);
+}
+
+function _getHashForChar(char, hash) {
+  hash = hash ? hash : '0000';
+  let charCode = char.charCodeAt(0);
+  let hashBin = parseInt(hash, 16).toString(2);
+  let charBin = parseInt(charCode, 10).toString(2);
+  hashBin = String('000000000000000' + hashBin).substr(-15);
+  charBin = String('000000000000000' + charBin).substr(-15);
+  let nextHash = _bitXOR(hashBin, charBin);
+  nextHash = _rotateBinary(nextHash);
+  nextHash = parseInt(nextHash, 2).toString(16);
+
+  return nextHash;
+}
+
+//  http://www.openoffice.org/sc/excelfileformat.pdf section 4.18.4
+export function getHashOfPassword(str) {
+  let curHash = '0000';
+  for (let i = str.length - 1; i >= 0; i--) {
+    curHash = _getHashForChar(str[i], curHash);
+  }
+  let curHashBin = parseInt(curHash, 16).toString(2);
+  let charCountBin = parseInt(str.length, 10).toString(2);
+  let saltBin = parseInt('CE4B', 16).toString(2);
+
+  let firstXOR = _bitXOR(curHashBin, charCountBin);
+  let finalHashBin = _bitXOR(firstXOR, saltBin);
+  let finalHash = String(
+    '0000' +
+      parseInt(finalHashBin, 2)
+        .toString(16)
+        .toUpperCase()
+  ).slice(-4);
+
+  return finalHash;
 }

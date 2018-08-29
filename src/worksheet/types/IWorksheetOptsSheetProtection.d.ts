@@ -16,4 +16,5 @@ export interface IWorksheetOptsSheetProtection {
   selectUnlockedCells: boolean; // True means that that user will be unable to modify this setting
   sheet: boolean; // True means that that user will be unable to modify this setting
   sort: boolean; // True means that that user will be unable to modify this setting
+  hashValue: string;
 }
