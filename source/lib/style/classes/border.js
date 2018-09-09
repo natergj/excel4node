@@ -1,6 +1,4 @@
-const utils = require('../../utils.js');
 const types = require('../../types/index.js');
-const _ = require('lodash');
 const xmlbuilder = require('xmlbuilder');
 const CTColor = require('./ctColor.js');
 
@@ -70,7 +68,7 @@ class Border {
                 } else {
                     throw new TypeError('Border outline option must be of type Boolean');
                 }
-            } else if (['left', 'right', 'top', 'bottom', 'diagonal'].indexOf(opt) < 0) {  //TODO: move logic to types folder
+            } else if (['left', 'right', 'top', 'bottom', 'diagonal'].indexOf(opt) < 0) { //TODO: move logic to types folder
                 throw new TypeError(`Invalid key for border declaration ${opt}. Must be one of left, right, top, bottom, diagonal`);
             } else {
                 this[opt] = new BorderOrdinal(opts[opt]);

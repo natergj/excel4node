@@ -1,6 +1,4 @@
 const utils = require('../utils.js');
-const _ = require('lodash');
-
 
 class Column {
     /**
@@ -92,7 +90,7 @@ class Column {
             throw new TypeError('Column group collapse flag must be a boolean');
         }
 
-        return this; 
+        return this;
     }
 
     /**
@@ -108,8 +106,8 @@ class Column {
         o.state = 'frozen';
         o.xSplit = this.min;
         o.activePane = 'bottomRight';
-        o.ySplit === null ? 
-            o.topLeftCell = utils.getExcelCellRef(1, jumpTo) : 
+        o.ySplit === null ?
+            o.topLeftCell = utils.getExcelCellRef(1, jumpTo) :
             o.topLeftCell = utils.getExcelCellRef(utils.getExcelRowCol(o.topLeftCell).row, jumpTo);
         return this;
     }

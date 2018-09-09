@@ -1,4 +1,4 @@
-const _ = require('lodash');
+const _isUndefined = require('lodash.isundefined');
 const deepmerge = require('deepmerge');
 const fs = require('fs');
 const utils = require('../utils.js');
@@ -71,8 +71,7 @@ class Workbook {
      * @param {Object} opts.logger Logger that supports warn and error method, defaults to console
      * @returns {Workbook}
      */
-    constructor(opts) {
-        opts = opts ? opts : {};
+    constructor(opts = {}) {
 
         const hasCustomLogger = opts.logger !== undefined;
         const hasValidCustomLogger = hasCustomLogger && typeof opts.logger.warn === 'function' && typeof opts.logger.error === 'function';
@@ -257,7 +256,7 @@ class Workbook {
      */
     getStringIndex(val) {
         const target = this.sharedStringLookup[val];
-        if (_.isUndefined(target)) {
+        if (_isUndefined(target)) {
             const index = this.sharedStrings.push(val) - 1;
             this.sharedStringLookup[val] = index;
             return index;

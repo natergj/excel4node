@@ -1,4 +1,4 @@
-var lodash = require('lodash');
+var deepmerge = require('deepmerge');
 var test = require('tape');
 
 var CfRule = require('../distribution/lib/worksheet/cf/cf_rule');
@@ -16,7 +16,9 @@ test('CfRule init', function (t) {
     t.ok(new CfRule(baseConfig), 'init with valid and support type');
 
     try {
-        var cfr = new CfRule(lodash.extend(baseConfig, { type: 'bogusType' }));
+        var cfr = new CfRule(deepmerge(baseConfig, {
+            type: 'bogusType'
+        }));
     } catch (err) {
         t.ok(
             err instanceof TypeError,
@@ -25,7 +27,9 @@ test('CfRule init', function (t) {
     }
 
     try {
-        var cfr = new CfRule(lodash.extend(baseConfig, { type: 'dataBar' }));
+        var cfr = new CfRule(deepmerge(baseConfig, {
+            type: 'dataBar'
+        }));
     } catch (err) {
         t.ok(
             err instanceof TypeError,
@@ -34,7 +38,9 @@ test('CfRule init', function (t) {
     }
 
     try {
-        var cfr = new CfRule(lodash.extend(baseConfig, { forumla: null }));
+        var cfr = new CfRule(deepmerge(baseConfig, {
+            formula: null
+        }));
     } catch (err) {
         t.ok(
             err instanceof TypeError,

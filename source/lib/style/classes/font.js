@@ -1,5 +1,3 @@
-const utils = require('../../utils.js');
-const _ = require('lodash');
 const xmlbuilder = require('xmlbuilder');
 const types = require('../../types/index.js');
 

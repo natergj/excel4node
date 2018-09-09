@@ -1,5 +1,4 @@
 const utils = require('../utils.js');
-const _ = require('lodash');
 
 class Row {
     /**
@@ -93,7 +92,7 @@ class Row {
             return utils.getExcelAlpha(utils.getExcelRowCol(this.cellRefs[0]).col);
         } else {
             return 'A';
-        }  
+        }
     }
 
     get lastColumn() {
@@ -109,7 +108,7 @@ class Row {
             return utils.getExcelAlpha(utils.getExcelRowCol(this.cellRefs[this.cellRefs.length - 1]).col);
         } else {
             return 'A';
-        }  
+        }
     }
 
     /**
@@ -196,8 +195,8 @@ class Row {
         o.state = 'frozen';
         o.ySplit = this.r;
         o.activePane = 'bottomRight';
-        o.xSplit === null ? 
-            o.topLeftCell = utils.getExcelCellRef(jumpTo, 1) : 
+        o.xSplit === null ?
+            o.topLeftCell = utils.getExcelCellRef(jumpTo, 1) :
             o.topLeftCell = utils.getExcelCellRef(jumpTo, utils.getExcelRowCol(o.topLeftCell).col);
         return this;
     }
