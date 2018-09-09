@@ -8,6 +8,14 @@ const util = require('util');
 
 function stringSetter(val) {
     let logger = this.ws.wb.logger;
+
+    if (typeof (val) !== 'string') {
+        logger.warn('Value sent to String function of cells %s was not a string, it has type of %s',
+            JSON.stringify(this.excelRefs),
+            typeof (val));
+        val = '';
+    }
+
     let chars, chr;
     chars = /[\u0000-\u0008\u000B-\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE-\uFFFF]/;
     chr = val.match(chars);
@@ -15,15 +23,6 @@ function stringSetter(val) {
         logger.warn('Invalid Character for XML "' + chr + '" in string "' + val + '"');
         val = val.replace(chr, '');
     }
-
-    if (typeof(val) !== 'string') {
-        logger.warn('Value sent to String function of cells %s was not a string, it has type of %s', 
-                    JSON.stringify(this.excelRefs), 
-                    typeof(val));
-        val = '';
-    }
-
-    val = val.toString();
     // Remove Control characters, they aren't understood by xmlbuilder
     val = val.replace(/[\u0000-\u0008\u000B-\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE-\uFFFF]/, '');
 
@@ -54,7 +53,7 @@ function numberSetter(val) {
     if (val === undefined || parseFloat(val) !== val) {
         throw new TypeError(util.format('Value sent to Number function of cells %s was not a number, it has type of %s and value of %s',
             JSON.stringify(this.excelRefs),
-            typeof(val),
+            typeof (val),
             val
         ));
     }
@@ -68,14 +67,14 @@ function numberSetter(val) {
         var c = this.cells[0];
         c.number(val);
     }
-    return this;    
+    return this;
 }
 
 function booleanSetter(val) {
     if (val === undefined || typeof (val.toString().toLowerCase() === 'true' || ((val.toString().toLowerCase() === 'false') ? false : val)) !== 'boolean') {
         throw new TypeError(util.format('Value sent to Bool function of cells %s was not a bool, it has type of %s and value of %s',
             JSON.stringify(this.excelRefs),
-            typeof(val),
+            typeof (val),
             val
         ));
     }
@@ -93,8 +92,8 @@ function booleanSetter(val) {
 }
 
 function formulaSetter(val) {
-    if (typeof(val) !== 'string') {
-        throw new TypeError(util.format('Value sent to Formula function of cells %s was not a string, it has type of %s', JSON.stringify(this.excelRefs), typeof(val)));
+    if (typeof (val) !== 'string') {
+        throw new TypeError(util.format('Value sent to Formula function of cells %s was not a string, it has type of %s', JSON.stringify(this.excelRefs), typeof (val)));
     }
     if (this.merged !== true) {
         this.cells.forEach((c, i) => {
