@@ -1,4 +1,4 @@
-const _ = require('lodash');
+const _isEqual = require('lodash.isequal');
 const Style = require('../style');
 const util = require('util');
 
@@ -30,7 +30,7 @@ class DXFCollection { // §18.8.15 dxfs (Formats)
 
         let thisItem;
         this.items.forEach((item) => {
-            if (_.isEqual(item.style.toObject(), style.toObject())) {
+            if (_isEqual(item.style.toObject(), style.toObject())) {
                 return thisItem = item;
             }
         });

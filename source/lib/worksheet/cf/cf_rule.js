@@ -1,4 +1,5 @@
-const _ = require('lodash');
+const _reduce = require('lodash.reduce');
+const _get = require('lodash.get');
 const CF_RULE_TYPES = require('./cf_rule_types');
 
 class CfRule { // §18.3.1.10 cfRule (Conditional Formatting Rule)
@@ -18,8 +19,8 @@ class CfRule { // §18.3.1.10 cfRule (Conditional Formatting Rule)
             throw new TypeError('Conditional formatting type "' + this.type + '" is not yet supported');
         }
 
-        let missingProps = _.reduce(foundType.requiredProps, (list, prop) => {
-            if (_.get(this, prop, null) === null) {
+        let missingProps = _reduce(foundType.requiredProps, (list, prop) => {
+            if (_get(this, prop, null) === null) {
                 list.push(prop);
             }
             return list;

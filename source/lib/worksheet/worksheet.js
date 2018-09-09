@@ -1,4 +1,4 @@
-const _ = require('lodash');
+const deepmerge = require('deepmerge');
 const CfRulesCollection = require('./cf/cf_rules_collection');
 const cellAccessor = require('../cell');
 const rowAccessor = require('../row');
@@ -103,12 +103,12 @@ class Worksheet {
      * @param {Boolean} opts.hidden Flag indicating whether to not hide the worksheet within the workbook.
      * @returns {Worksheet}
      */
-    constructor(wb, name, opts) {
-        
+    constructor(wb, name, opts = {}) {
+
         this.wb = wb;
         this.sheetId = this.wb.sheets.length + 1;
         this.localSheetId = this.wb.sheets.length;
-        this.opts = _.merge({}, _.cloneDeep(wsDefaultParams), opts);
+        this.opts = deepmerge(wsDefaultParams, opts);
         optsValidator(opts);
 
         this.opts.sheetView.tabSelected = this.sheetId === 1 ? 1 : 0;
