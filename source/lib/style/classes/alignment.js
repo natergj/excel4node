@@ -1,6 +1,4 @@
-const utils = require('../../utils.js');
 const types = require('../../types/index.js');
-const _ = require('lodash');
 const xmlbuilder = require('xmlbuilder');
 
 class Alignment { // §18.8.1 alignment (Alignment)
@@ -23,15 +21,15 @@ class Alignment { // §18.8.1 alignment (Alignment)
         if (opts.horizontal !== undefined) {
             this.horizontal = types.alignment.horizontal.validate(opts.horizontal) === true ? opts.horizontal : null;
         }
-        
+
         if (opts.vertical !== undefined) {
             this.vertical = types.alignment.vertical.validate(opts.vertical) === true ? opts.vertical : null;
         }
-        
+
         if (opts.readingOrder !== undefined) {
             this.readingOrder = types.alignment.readingOrder.validate(opts.readingOrder) === true ? opts.readingOrder : null;
         }
-        
+
         if (opts.indent !== undefined) {
             if (typeof opts.indent === 'number' && parseInt(opts.indent) === opts.indent && opts.indent > 0) {
                 this.indent = opts.indent;
@@ -39,7 +37,7 @@ class Alignment { // §18.8.1 alignment (Alignment)
                 throw new TypeError('alignment indent must be a positive integer.');
             }
         }
-        
+
         if (opts.justifyLastLine !== undefined) {
             if (typeof opts.justifyLastLine === 'boolean') {
                 this.justifyLastLine = opts.justifyLastLine;
@@ -47,7 +45,7 @@ class Alignment { // §18.8.1 alignment (Alignment)
                 throw new TypeError('justifyLastLine alignment option must be of type boolean');
             }
         }
-        
+
         if (opts.relativeIndent !== undefined) {
             if (typeof opts.relativeIndent === 'number' && parseInt(opts.relativeIndent) === opts.relativeIndent && opts.relativeIndent > 0) {
                 this.relativeIndent = opts.relativeIndent;
@@ -55,7 +53,7 @@ class Alignment { // §18.8.1 alignment (Alignment)
                 throw new TypeError('alignment indent must be a positive integer.');
             }
         }
-        
+
         if (opts.shrinkToFit !== undefined) {
             if (typeof opts.shrinkToFit === 'boolean') {
                 this.shrinkToFit = opts.shrinkToFit;
@@ -63,7 +61,7 @@ class Alignment { // §18.8.1 alignment (Alignment)
                 throw new TypeError('justifyLastLine alignment option must be of type boolean');
             }
         }
-        
+
         if (opts.textRotation !== undefined) {
             if (typeof opts.textRotation === 'number' && parseInt(opts.textRotation) === opts.textRotation) {
                 this.textRotation = opts.textRotation;
@@ -71,7 +69,7 @@ class Alignment { // §18.8.1 alignment (Alignment)
                 throw new TypeError('alignment indent must be an integer.');
             }
         }
-        
+
         if (opts.wrapText !== undefined) {
             if (typeof opts.wrapText === 'boolean') {
                 this.wrapText = opts.wrapText;
@@ -100,7 +98,7 @@ class Alignment { // §18.8.1 alignment (Alignment)
         this.wrapText !== undefined ? obj.wrapText = this.wrapText : null;
 
         return obj;
-    }    
+    }
 
     /**
      * @alias Alignment.addToXMLele

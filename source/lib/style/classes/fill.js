@@ -1,6 +1,4 @@
-const utils = require('../../utils.js');
 const types = require('../../types/index.js');
-const _ = require('lodash');
 const xmlbuilder = require('xmlbuilder');
 const CTColor = require('./ctColor.js');
 
@@ -55,77 +53,77 @@ class Fill { //§18.8.20 fill (Fill)
         }
 
         switch (this.type) {
-        case 'gradient': //§18.8.24
-            if (opts.bottom !== undefined) {
-                if (opts.bottom < 0 || opts.bottom > 1) {
-                    throw new TypeError('Values for gradient fill bottom attribute must be a decimal between 0 and 1');
-                } else {
-                    this.bottom = opts.bottom;
+            case 'gradient': //§18.8.24
+                if (opts.bottom !== undefined) {
+                    if (opts.bottom < 0 || opts.bottom > 1) {
+                        throw new TypeError('Values for gradient fill bottom attribute must be a decimal between 0 and 1');
+                    } else {
+                        this.bottom = opts.bottom;
+                    }
                 }
-            }
 
-            if (opts.degree !== undefined) {
-                if (typeof opts.degree === 'number') {
-                    this.degree = opts.degree;
-                } else {
-                    throw new TypeError('Values of gradient fill degree must be of type number.');
+                if (opts.degree !== undefined) {
+                    if (typeof opts.degree === 'number') {
+                        this.degree = opts.degree;
+                    } else {
+                        throw new TypeError('Values of gradient fill degree must be of type number.');
+                    }
                 }
-            }
 
 
-            if (opts.left !== undefined) {
-                if (opts.left < 0 || opts.left > 1) {
-                    throw new TypeError('Values for gradient fill left attribute must be a decimal between 0 and 1');
-                } else {
-                    this.left = opts.left;
+                if (opts.left !== undefined) {
+                    if (opts.left < 0 || opts.left > 1) {
+                        throw new TypeError('Values for gradient fill left attribute must be a decimal between 0 and 1');
+                    } else {
+                        this.left = opts.left;
+                    }
                 }
-            }
 
-            if (opts.right !== undefined) {
-                if (opts.right < 0 || opts.right > 1) {
-                    throw new TypeError('Values for gradient fill right attribute must be a decimal between 0 and 1');
-                } else {
-                    this.right = opts.right;
+                if (opts.right !== undefined) {
+                    if (opts.right < 0 || opts.right > 1) {
+                        throw new TypeError('Values for gradient fill right attribute must be a decimal between 0 and 1');
+                    } else {
+                        this.right = opts.right;
+                    }
                 }
-            }
 
-            if (opts.top !== undefined) {
-                if (opts.top < 0 || opts.top > 1) {
-                    throw new TypeError('Values for gradient fill top attribute must be a decimal between 0 and 1');
-                } else {
-                    this.top = opts.top;
+                if (opts.top !== undefined) {
+                    if (opts.top < 0 || opts.top > 1) {
+                        throw new TypeError('Values for gradient fill top attribute must be a decimal between 0 and 1');
+                    } else {
+                        this.top = opts.top;
+                    }
                 }
-            }
 
-            if (opts.stops !== undefined) {
-                if (opts.stops instanceof Array) {
-                    opts.stops.forEach((s, i) => {
-                        this.stops.push(new Stop(s, i));
-                    });
-                } else {
-                    throw new TypeError('Stops for gradient fills must be sent as an Array');
+                if (opts.stops !== undefined) {
+                    if (opts.stops instanceof Array) {
+                        opts.stops.forEach((s, i) => {
+                            this.stops.push(new Stop(s, i));
+                        });
+                    } else {
+                        throw new TypeError('Stops for gradient fills must be sent as an Array');
+                    }
                 }
-            }
 
-            break;
+                break;
 
-        case 'pattern': //§18.8.32
-            if (opts.bgColor !== undefined) {
-                this.bgColor = new CTColor(opts.bgColor);
-            }
+            case 'pattern': //§18.8.32
+                if (opts.bgColor !== undefined) {
+                    this.bgColor = new CTColor(opts.bgColor);
+                }
 
-            if (opts.fgColor !== undefined) {
-                this.fgColor = new CTColor(opts.fgColor);
-            }
+                if (opts.fgColor !== undefined) {
+                    this.fgColor = new CTColor(opts.fgColor);
+                }
 
-            if (opts.patternType !== undefined) {
-                types.fillPattern.validate(opts.patternType) === true ? this.patternType = opts.patternType : null; 
-            }
-            break;
+                if (opts.patternType !== undefined) {
+                    types.fillPattern.validate(opts.patternType) === true ? this.patternType = opts.patternType : null;
+                }
+                break;
 
-        case 'none':
-            this.patternType = 'none';
-            break;
+            case 'none':
+                this.patternType = 'none';
+                break;
         }
     }
 

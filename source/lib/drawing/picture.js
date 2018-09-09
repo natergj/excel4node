@@ -2,7 +2,7 @@ const Drawing = require('./drawing.js');
 const path = require('path');
 const imgsz = require('image-size');
 const mime = require('mime');
-const uniqueId = require('lodash').uniqueId;
+const uniqueId = require('lodash.uniqueid');
 
 const EMU = require('../classes/emu.js');
 const xmlbuilder = require('xmlbuilder');
@@ -37,18 +37,18 @@ class Picture extends Drawing {
         this.imagePath = opts.path;
         this.image = opts.image;
 
-        this._name = this.image
-            ? opts.name || uniqueId('image-')
-            : opts.name || path.basename(this.imagePath);
+        this._name = this.image ?
+            opts.name || uniqueId('image-') :
+            opts.name || path.basename(this.imagePath);
 
         const size = imgsz(this.imagePath || this.image);
 
         this._pxWidth = size.width;
         this._pxHeight = size.height;
 
-        this._extension = this.image
-            ? size.type
-            : path.extname(this.imagePath).substr(1);
+        this._extension = this.image ?
+            size.type :
+            path.extname(this.imagePath).substr(1);
 
         this.contentType = mime.getType(this._extension);
 
@@ -155,7 +155,7 @@ class Picture extends Drawing {
             atEle.ele('xdr:col').text(at.col);
             atEle.ele('xdr:colOff').text(at.colOff);
             atEle.ele('xdr:row').text(at.row);
-            atEle.ele('xdr:rowOff').text(at.rowOff);                            
+            atEle.ele('xdr:rowOff').text(at.rowOff);
         }
 
         if (this.anchorType === 'oneCellAnchor' || this.anchorType === 'absoluteAnchor') {

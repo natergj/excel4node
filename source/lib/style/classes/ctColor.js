@@ -1,6 +1,4 @@
-const utils = require('../../utils.js');
 const types = require('../../types/index.js');
-const _ = require('lodash');
 const xmlbuilder = require('xmlbuilder');
 
 class CTColor { //§18.8.3 && §18.8.19

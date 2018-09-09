@@ -49,6 +49,7 @@
     "lodash.isequal": "4.5.0",
     "lodash.isundefined": "3.0.1",
     "lodash.reduce": "4.6.0",
+    "lodash.uniqueid": "4.0.1",
     "mime": "2.3.1",
     "xmlbuilder": "10.0.0"
   },
