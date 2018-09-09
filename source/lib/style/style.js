@@ -1,5 +1,5 @@
 const utils = require('../utils.js');
-const _ = require('lodash');
+const deepmerge = require('deepmerge');
 
 const Alignment = require('./classes/alignment.js');
 const Border = require('./classes/border.js');
@@ -7,10 +7,10 @@ const Fill = require('./classes/fill.js');
 const Font = require('./classes/font.js');
 const NumberFormat = require('./classes/numberFormat.js');
 
-let _getFontId = (wb, font) => {
+let _getFontId = (wb, font = {}) => {
 
     // Create the Font and lookup key
-    font = _.merge({}, wb.opts.defaultFont, font);
+    font = deepmerge(wb.opts.defaultFont, font);
     const thisFont = new Font(font);
     const lookupKey = JSON.stringify(thisFont.toObject());
 
@@ -65,7 +65,7 @@ let _getBorderId = (wb, border) => {
 let _getNumFmt = (wb, val) => {
     let fmt;
     wb.styleData.numFmts.forEach((f) => {
-        if (_.isEqual(f.formatCode, val)) {
+        if (f.formatCode === val) {
             fmt = f;
         }
     });
@@ -170,26 +170,27 @@ class Style {
          * @returns {Style} 
          */
         opts = opts ? opts : {};
+        opts = deepmerge(wb.styles[0] ? wb.styles[0] : {}, opts);
 
         if (opts.alignment !== undefined) {
             this.alignment = new Alignment(opts.alignment);
         }
 
-        if (opts.border !== undefined) {  
+        if (opts.border !== undefined) {
             this.borderId = _getBorderId(wb, opts.border); // attribute 0 based index
-            this.border = wb.styleData.borders[this.borderId];  
+            this.border = wb.styleData.borders[this.borderId];
         }
-        if (opts.fill !== undefined) {  
+        if (opts.fill !== undefined) {
             this.fillId = _getFillId(wb, opts.fill); // attribute 0 based index
             this.fill = wb.styleData.fills[this.fillId];
         }
 
-        if (opts.font !== undefined) {  
+        if (opts.font !== undefined) {
             this.fontId = _getFontId(wb, opts.font); // attribute 0 based index
             this.font = wb.styleData.fonts[this.fontId];
         }
 
-        if (opts.numberFormat !== undefined) {  
+        if (opts.numberFormat !== undefined) {
             if (typeof opts.numberFormat === 'number' && opts.numberFormat <= 164) {
                 this.numFmtId = opts.numberFormat;
             } else if (typeof opts.numberFormat === 'string') {
@@ -281,7 +282,7 @@ class Style {
             obj.quotePrefix = this.quotePrefix;
         }
 
-        return obj;   
+        return obj;
     }
 
     /**
@@ -299,7 +300,7 @@ class Style {
             } else {
                 thisEle.att(a, thisXF[a]);
             }
-        });        
+        });
     }
 
     /**

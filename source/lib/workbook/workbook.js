@@ -1,10 +1,12 @@
 const _ = require('lodash');
+const deepmerge = require('deepmerge');
 const fs = require('fs');
 const utils = require('../utils.js');
 const Worksheet = require('../worksheet');
 const Style = require('../style');
 const Border = require('../style/classes/border.js');
 const Fill = require('../style/classes/fill.js');
+const Font = require('../style/classes/font');
 const DXFCollection = require('./dxfCollection.js');
 const MediaCollection = require('./mediaCollection.js');
 const DefinedNameCollection = require('../classes/definedNameCollection.js');
@@ -82,7 +84,7 @@ class Workbook {
             this.logger.log('opts.logger is not a valid logger');
         }
 
-        this.opts = _.merge({}, workbookDefaultOpts, opts);
+        this.opts = deepmerge(workbookDefaultOpts, opts);
 
         this.sheets = [];
         this.sharedStrings = [];
@@ -130,7 +132,6 @@ class Workbook {
         this.createStyle({
             font: this.opts.defaultFont
         });
-
     }
 
     /**
