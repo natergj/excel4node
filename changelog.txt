@@ -1,3 +1,12 @@
+1.5.1
+        Bug Fixes:
+        resolves https://github.com/natergj/excel4node/issues/218 where library crashed when null or undefined value was sent to cell string method
+        resolves https://github.com/natergj/excel4node/issues/226 where default font would not be applied to dates when opening workbook in LibreOffice
+        merges https://github.com/natergj/excel4node/pull/225 which removes error when attempting to bundle application with excel4node as dependency
+
+        Enhancements:
+        merges https://github.com/natergj/excel4node/pull/230 which reduces library size by only installed specific lodash functions
+
 1.5.0
         Bug Fixes:
         resolves https://github.com/natergj/excel4node/issues/156 where an error will be thrown if no Worksheet is specified prior to attempting to write a Workbook
