@@ -120,9 +120,10 @@ function dateSetter(val) {
         var c = this.cells[0];
         c.date(thisDate);
     }
-    return styleSetter.bind(this)({
+    const dtStyle = new Style(this.ws.wb, {
         numberFormat: '[$-409]' + this.ws.wb.opts.dateFormat
     });
+    return styleSetter.bind(this)(dtStyle);
 }
 
 function styleSetter(val) {
