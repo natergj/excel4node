@@ -62,7 +62,8 @@ let addRootRelsXML = (promiseObj) => {
         'Relationships', {
           'version': '1.0',
           'encoding': 'UTF-8',
-          'standalone': true
+          'standalone': true,
+          'allowSurrogateChars': true
         }
       )
       .att('xmlns', 'http://schemas.openxmlformats.org/package/2006/relationships');
@@ -88,7 +89,8 @@ let addWorkbookXML = (promiseObj) => {
       'workbook', {
         'version': '1.0',
         'encoding': 'UTF-8',
-        'standalone': true
+        'standalone': true,
+        'allowSurrogateChars': true
       }
     );
     xml.att('mc:Ignorable', 'x15');
@@ -174,7 +176,8 @@ let addWorkbookRelsXML = (promiseObj) => {
         'Relationships', {
           'version': '1.0',
           'encoding': 'UTF-8',
-          'standalone': true
+          'standalone': true,
+          'allowSurrogateChars': true
         }
       )
       .att('xmlns', 'http://schemas.openxmlformats.org/package/2006/relationships');
@@ -424,7 +427,8 @@ let addDrawingsXML = (promiseObj) => {
           let drawingRelXML = xmlbuilder.create('Relationships', {
               'version': '1.0',
               'encoding': 'UTF-8',
-              'standalone': true
+              'standalone': true,
+              'allowSurrogateChars': true
             })
             .att('xmlns', 'http://schemas.openxmlformats.org/package/2006/relationships');
 
@@ -432,7 +436,8 @@ let addDrawingsXML = (promiseObj) => {
             'xdr:wsDr', {
               'version': '1.0',
               'encoding': 'UTF-8',
-              'standalone': true
+              'standalone': true,
+              'allowSurrogateChars': true
             }
           );
           drawingsXML
@@ -477,7 +482,7 @@ let addDrawingsXML = (promiseObj) => {
  * @private
  * @memberof Workbook
  * @param {Workbook} wb Workbook instance
- * @return {Promise} resolves with Buffer 
+ * @return {Promise} resolves with Buffer
  */
 let writeToBuffer = (wb) => {
   return new Promise((resolve, reject) => {
@@ -519,7 +524,7 @@ let writeToBuffer = (wb) => {
 /**
  * @desc Currently only used for testing the XML generated for a Workbook.
  * @param {*} wb Workbook instance
- * @return {Promise} resolves with Workbook XML 
+ * @return {Promise} resolves with Workbook XML
  */
 let workbookXML = (wb) => {
   let promiseObj = {

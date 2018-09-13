@@ -16,15 +16,15 @@ function stringSetter(val) {
         val = '';
     }
 
-    let chars, chr;
-    chars = /[\u0000-\u0008\u000B-\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE-\uFFFF]/;
-    chr = val.match(chars);
+    let invalidXml11Chars, chr;
+    invalidXml11Chars = /[^\u0001-\uD7FF\uE000-\uFFFD\uD800\uDC00-\uDBFF\uDFFF]/u;
+    chr = val.match(invalidXml11Chars);
     if (chr) {
         logger.warn('Invalid Character for XML "' + chr + '" in string "' + val + '"');
         val = val.replace(chr, '');
     }
     // Remove Control characters, they aren't understood by xmlbuilder
-    val = val.replace(/[\u0000-\u0008\u000B-\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE-\uFFFF]/, '');
+    val = val.replace(invalidXml11Chars, '');
 
     if (!this.merged) {
         this.cells.forEach((c) => {
