@@ -155,6 +155,17 @@ let addWorkbookXML = (promiseObj) => {
       if (s.opts.hidden) {
         sheet.att('state', 'hidden');
       }
+
+      if (s.printArea) {
+        const name = s.name;
+        const startCellRef = `$${utils.getExcelAlpha(s.printArea.startCol)}$${s.printArea.startRow}`;
+        const endCellRef = `$${utils.getExcelAlpha(s.printArea.endCol)}$${s.printArea.endRow}`;
+        s.wb.definedNameCollection.addDefinedName({
+          name: '_xlnm.Print_Area',
+          localSheetId: s.localSheetId,
+          refFormula: `'${name}'!${startCellRef}:${endCellRef}`,
+        });
+      }
     });
 
     if (!promiseObj.wb.definedNameCollection.isEmpty) {

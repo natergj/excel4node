@@ -432,6 +432,23 @@ ws.cell(5, 1).string('Last row on this page');
 ws.addPageBreak('row', 5);
 ```
 
+##### Worksheet Print Area
+
+Worksheet print areas can be set
+
+`ws.setPrintArea(startRow, startCol, endRow, endCol)` where parameters are numbers corresponding to print area
+
+```javascript
+
+// Sets print area to include all cells between A1 and C5 including C5
+const wb = new xl.Workbook();
+const ws = wb.addWorksheet('Sheet 1');
+ws.cell(5, 3).string('Included in print area');
+ws.cell(6, 3).string('Outside of print area, not included in printing');
+ws.setPrintArea(1, 1, 5, 3);
+
+```
+
 ## Rows and Columns
 
 Set custom widths and heights of columns/rows

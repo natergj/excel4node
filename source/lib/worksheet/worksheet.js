@@ -122,6 +122,7 @@ class Worksheet {
             row: [],
             column: [],
         };
+        this.printArea = null;
         this.lastUsedRow = 1;
         this.lastUsedCol = 1;
 
@@ -263,6 +264,33 @@ class Worksheet {
         }
         if (this.pageBreaks[type].indexOf(position) < 0) {
             this.pageBreaks[type].push(position);
+        }
+        return this;
+    }
+
+    /**
+     * @method Worksheet.addPrintArea
+     * @param {number} startRow 
+     * @param {number} startCol 
+     * @param {number} endRow 
+     * @param {number} endCol 
+     * @returns {Worksheet}
+     */
+    setPrintArea(startRow, startCol, endRow, endCol) {
+        if (
+            typeof startRow !== 'number' ||
+            typeof startCol !== 'number' ||
+            typeof endRow !== 'number' ||
+            typeof endCol !== 'number'
+        ) {
+            this.wb.logger.warn('invalid option sent to addPrintArea method');
+            return;
+        }
+        this.printArea = {
+            startRow,
+            startCol,
+            endRow,
+            endCol,
         }
         return this;
     }
