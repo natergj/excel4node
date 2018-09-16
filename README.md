@@ -498,6 +498,8 @@ ws.column(4).group(1, true);
 ws.column(5).group(1, true);
 ```
 
+Multiple groupings can be nested as demonstrated in [this gist](https://gist.github.com/natergj/b548fe8d2ea00c5b9fa94597c2cf9fd2)
+
 ## Cells
 
 The cell method accesses a single cell or range of cells to manipulate  

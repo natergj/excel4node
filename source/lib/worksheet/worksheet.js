@@ -259,7 +259,7 @@ class Worksheet {
      */
     addPageBreak(type, position) {
         if ((type !== 'row' && type !== 'column') || typeof position !== 'number') {
-            this.wb.logger.warn('something invalid', type, position);
+            this.wb.logger.warn('invalid option sent to addPageBreak method', type, position);
             return;
         }
         if (this.pageBreaks[type].indexOf(position) < 0) {
@@ -283,7 +283,7 @@ class Worksheet {
             typeof endRow !== 'number' ||
             typeof endCol !== 'number'
         ) {
-            this.wb.logger.warn('invalid option sent to addPrintArea method');
+            this.wb.logger.warn('invalid option sent to setPrintArea method');
             return;
         }
         this.printArea = {
