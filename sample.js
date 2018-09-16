@@ -556,6 +556,7 @@ function generateWorkbook() {
             y: '10mm'
         }
     });
+    imageSheet.cell(30, 1).string('👍');
     imageSheet.addImage({
         image: fs.readFileSync(path.resolve(__dirname, './sampleFiles/thumbsUp.jpg')),
         type: 'picture',
