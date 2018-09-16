@@ -1,3 +1,11 @@
+1.6.0
+        Bug Fixes:
+        merges https://github.com/natergj/excel4node/pull/232 to fix issue where emoji were not being added to worksheets
+
+        Enhancements:
+        addresses https://github.com/natergj/excel4node/issues/194 by adding ability to set Print Area for worksheets
+        addresses https://github.com/natergj/excel4node/issues/233 by adding ability to set Page Breaks for worksheets
+
 1.5.1
         Bug Fixes:
         resolves https://github.com/natergj/excel4node/issues/218 where library crashed when null or undefined value was sent to cell string method
