@@ -424,3 +424,40 @@ test('Check worksheet defaultRowHeight behavior', (t) => {
         });
 
 });
+
+test('Check worksheet addPageBreak behavior', (t) => {
+    let wb = new xl.Workbook({
+        defaultFont: {
+            size: 9,
+            name: 'Arial'
+        }
+    });
+
+    let ws1 = wb.addWorksheet('Sheet1');
+    ws1.cell(1, 1).string('String');
+    ws1.addPageBreak('row', 1);
+    ws1.addPageBreak('row', 6);
+    ws1.addPageBreak('column', 8);
+
+    ws1.generateXML()
+        .then((XML) => {
+            let doc = new DOMParser().parseFromString(XML);
+            let rowBreakXml = doc.getElementsByTagName('rowBreaks')[0];
+            t.equals(rowBreakXml.getAttribute('count'), '2', 'has 2 rowBreak2');
+            t.equals(rowBreakXml.getAttribute('manualBreakCount'), '2', 'has 2 manualBreakCount');
+
+            let firstBrk = rowBreakXml.getElementsByTagName('brk')[0];
+            t.equals(firstBrk.getAttribute('id'), '1', 'first break is at correct position');
+            let secondBrk = rowBreakXml.getElementsByTagName('brk')[1];
+            t.equals(secondBrk.getAttribute('id'), '6', 'second break is at correct position');
+
+            let colBreakXml = doc.getElementsByTagName('colBreaks')[0];
+            t.equals(colBreakXml.getAttribute('count'), '1', 'has 1 column break');
+            let firstColBreak= colBreakXml.getElementsByTagName('brk')[0];
+            t.equals(firstColBreak.getAttribute('id'), '8', 'first column break in correct position');
+        })
+        .then(() => {
+            t.end();
+        });
+
+});

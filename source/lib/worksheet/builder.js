@@ -407,6 +407,37 @@ let _addPageSetup = (promiseObj) => {
     });
 };
 
+let _addPageBreaks = (promiseObj) => {
+    // colBreaks (§18.3.1.14); rowBreaks (§18.3.1.74)
+    const rowBreaks = promiseObj.ws.pageBreaks.row;
+    if (rowBreaks.length > 0) {
+        const rbEle = promiseObj.xml.ele('rowBreaks');
+        rbEle.att('count', rowBreaks.length);
+        rbEle.att('manualBreakCount', rowBreaks.length);
+        rowBreaks.forEach(pos => {
+            const bEle = rbEle.ele('brk');
+            bEle.att('id', pos);
+            bEle.att('man', 1);
+            bEle.up();
+        });
+        rbEle.up();
+    }
+    const colBreaks = promiseObj.ws.pageBreaks.column;
+    if (colBreaks.length > 0) {
+        const cbEle = promiseObj.xml.ele('colBreaks');
+        cbEle.att('count', colBreaks.length);
+        cbEle.att('manualBreakCount', colBreaks.length);
+        colBreaks.forEach(pos => {
+            const bEle = cbEle.ele('brk');
+            bEle.att('id', pos);
+            bEle.att('man', 1);
+            bEle.up();
+        });
+        cbEle.up();
+    }
+    return promiseObj;
+}
+
 let _addHeaderFooter = (promiseObj) => {
     // §18.3.1.46 headerFooter (Header Footer Settings)
     return new Promise((resolve, reject) => {
@@ -487,6 +518,7 @@ let sheetXML = (ws) => {
         .then(_addPrintOptions)
         .then(_addPageMargins)
         .then(_addPageSetup)
+        .then(_addPageBreaks)
         .then(_addHeaderFooter)
         .then(_addDrawing)
         .then((promiseObj) => {

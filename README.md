@@ -417,6 +417,21 @@ ws.addConditionalFormattingRule('A1:A10', {
 **The only conditional formatting type that is currently supported is expression.**  
 When the formula returns zero, conditional formatting is NOT displayed. When the formula returns a nonzero value, conditional formatting is displayed.
 
+##### Worksheet Page Breaks
+
+Worksheet page breaks can be added at rows and columns
+
+`ws.addPageBreak(type, position)` where type is `row` or `column` and position is the last row/column before the page break.
+
+```javascript
+
+// Add page break after row 5
+const wb = new xl.Workbook();
+const ws = wb.addWorksheet('Sheet 1');
+ws.cell(5, 1).string('Last row on this page');
+ws.addPageBreak('row', 5);
+```
+
 ## Rows and Columns
 
 Set custom widths and heights of columns/rows
