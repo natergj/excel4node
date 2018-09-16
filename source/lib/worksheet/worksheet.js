@@ -118,6 +118,10 @@ class Worksheet {
         this.rows = {}; // Rows keyed by row, contains row properties and array of cellRefs
         this.cells = {}; // Cells keyed by Excel ref
         this.mergedCells = [];
+        this.pageBreaks = {
+            row: [],
+            column: [],
+        };
         this.lastUsedRow = 1;
         this.lastUsedCol = 1;
 
@@ -244,6 +248,23 @@ class Worksheet {
         newImage.id = mediaID;
 
         return newImage;
+    }
+
+    /**
+     * @func Worksheet.addPageBreak
+     * @param {string} type 
+     * @param {number} position 
+     * @returns {Worksheet}
+     */
+    addPageBreak(type, position) {
+        if ((type !== 'row' && type !== 'column') || typeof position !== 'number') {
+            this.wb.logger.warn('something invalid', type, position);
+            return;
+        }
+        if (this.pageBreaks[type].indexOf(position) < 0) {
+            this.pageBreaks[type].push(position);
+        }
+        return this;
     }
 
 }
