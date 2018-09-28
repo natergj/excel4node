@@ -6,6 +6,48 @@ const Style = require('../style/style.js');
 const utils = require('../utils.js');
 const util = require('util');
 
+const ampEncoded = {
+    '"': '&quot;',
+    "'": '&apos;',
+    '>': '&gt;',
+    '<': '&lt;',
+    '&': '&amp;'
+};
+const validXml10Char = /[\u0009\u000a\u000d\u0020-\uD7FF\uE000-\uFFFD]/u;
+
+/**
+ * - If a character matches an XML Document character, replace it with the &encoded; version
+ * - If a character does not match the above RegExp for XML 1.0 valid characters, escape it's codepoint numerically.
+ * - Otherwise return it.
+ */
+function escapeCodePoint(cp) {
+    if (ampEncoded.hasOwnProperty(cp)) {
+        return ampEncoded[cp]
+    } else if (!cp.match(validXml10Char)) {
+        return '&#x' + cp.codePointAt(0).toString(16) + ';';
+    } else {
+        return cp;
+    }
+}
+
+/**
+ * Following the MS_XLSX Excel Extensions to the Office Open XML SpreadsheetML File Format
+ * Note that Excel / Open Office documents are XML 1.0, NOT XML 1.1.
+ *
+ * See the following literature:
+ * https://stackoverflow.com/questions/43094662/excel-accepts-some-characters-whereas-openxml-has-error/43141040#43141040
+ * https://stackoverflow.com/questions/43094662/excel-accepts-some-characters-whereas-openxml-has-error
+ * https://www.ecma-international.org/publications/standards/Ecma-376.htm
+ *
+ * NOTE
+ * While the ECMA-376 standard says that ST_Xstring should be escaped using the format '_xHHHH', a number
+ * of apps (including Libre Office and Google Sheets) end up printing the string ex '_x2615_' instead of U+2615, the emoji for 'hot beverage'
+ */
+function escapeString16(str) {
+    const cps = Array.from(str);
+    return cps.map(escapeCodePoint).join('');
+}
+
 function stringSetter(val) {
     let logger = this.ws.wb.logger;
 
@@ -16,15 +58,7 @@ function stringSetter(val) {
         val = '';
     }
 
-    let invalidXml11Chars, chr;
-    invalidXml11Chars = /[^\u0001-\uD7FF\uE000-\uFFFD\uD800\uDC00-\uDBFF\uDFFF]/u;
-    chr = val.match(invalidXml11Chars);
-    if (chr) {
-        logger.warn('Invalid Character for XML "' + chr + '" in string "' + val + '"');
-        val = val.replace(chr, '');
-    }
-    // Remove Control characters, they aren't understood by xmlbuilder
-    val = val.replace(invalidXml11Chars, '');
+    val = escapeString16(val);
 
     if (!this.merged) {
         this.cells.forEach((c) => {
