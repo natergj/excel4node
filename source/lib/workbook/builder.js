@@ -31,6 +31,12 @@ let addRootContentTypesXML = (promiseObj) => {
           }
         });
       }
+      if (Object.keys(s.comments).length > 0) {
+        if (extensionsAdded.indexOf('vml') < 0) {
+          xml.ele('Default').att('Extension', 'vml').att('ContentType', 'application/vnd.openxmlformats-officedocument.vmlDrawing');
+          extensionsAdded.push('vml');
+        }
+      }
     });
     xml.ele('Default').att('ContentType', 'application/xml').att('Extension', 'xml');
     xml.ele('Default').att('ContentType', 'application/vnd.openxmlformats-package.relationships+xml').att('Extension', 'rels');
@@ -45,9 +51,15 @@ let addRootContentTypesXML = (promiseObj) => {
           .att('ContentType', 'application/vnd.openxmlformats-officedocument.drawing+xml')
           .att('PartName', '/xl/drawings/drawing' + s.sheetId + '.xml');
       }
+      if (Object.keys(s.comments).length > 0) {
+        xml.ele('Override')
+          .att('ContentType', 'application/vnd.openxmlformats-officedocument.spreadsheetml.comments+xml')
+          .att('PartName', '/xl/comments' + s.sheetId + '.xml');
+      }
     });
     xml.ele('Override').att('ContentType', 'application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml').att('PartName', '/xl/styles.xml');
     xml.ele('Override').att('ContentType', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml').att('PartName', '/xl/sharedStrings.xml');
+    xml.ele('Override').att('ContentType', 'application/vnd.openxmlformats-package.core-properties+xml').att('PartName', '/docProps/core.xml');
 
     let xmlString = xml.doc().end(promiseObj.xmlOutVars);
     promiseObj.xlsx.file('[Content_Types].xml', xmlString);
@@ -73,6 +85,12 @@ let addRootRelsXML = (promiseObj) => {
       .att('Id', 'rId1')
       .att('Type', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument')
       .att('Target', 'xl/workbook.xml');
+
+    xml
+      .ele('Relationship')
+      .att('Id', 'rId2')
+      .att('Type', 'http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties')
+      .att('Target', 'docProps/core.xml');
 
     let xmlString = xml.doc().end(promiseObj.xmlOutVars);
     promiseObj.xlsx.folder('_rels').file('.rels', xmlString);
@@ -142,6 +160,9 @@ let addWorkbookXML = (promiseObj) => {
       }
       if (viewOpts.yWindow) {
         workbookViewEle.att('yWindow', viewOpts.yWindow);
+      }
+      if (viewOpts.showComments) {
+        workbookViewEle.att('showComments', viewOpts.showComments);
       }
     }
 
@@ -220,6 +241,30 @@ let addWorkbookRelsXML = (promiseObj) => {
   });
 };
 
+let addCorePropertiesXML = (promiseObj) => {
+  let xml = xmlbuilder.create(
+    'cp:coreProperties', {
+      'version': '1.0',
+      'encoding': 'UTF-8',
+      'standalone': true
+    }
+  )
+  .att('xmlns:cp', 'http://schemas.openxmlformats.org/package/2006/metadata/core-properties')
+  .att('xmlns:dc', 'http://purl.org/dc/elements/1.1/')
+  .att('xmlns:dcterms', 'http://purl.org/dc/terms/')
+  .att('xmlns:dcmitype', 'http://purl.org/dc/dcmitype/')
+  .att('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
+
+  xml.ele('dc:creator').text(promiseObj.wb.author);
+  xml.ele('cp:lastModifiedBy').text(promiseObj.wb.author);
+  let dtStr = new Date().toISOString();
+  xml.ele('dcterms:created').att('xsi:type', 'dcterms:W3CDTF').text(dtStr);
+  xml.ele('dcterms:modified').att('xsi:type', 'dcterms:W3CDTF').text(dtStr);
+  let xmlString = xml.doc().end(promiseObj.xmlOutVars);
+  promiseObj.xlsx.folder('docProps').file('core.xml', xmlString);
+  return promiseObj;
+};
+
 let addWorksheetsXML = (promiseObj) => {
   // Required as stated in §12.2
   return new Promise((resolve, reject) => {
@@ -246,6 +291,28 @@ let addWorksheetsXML = (promiseObj) => {
             return new Promise((resolve) => {
               if (xml) {
                 promiseObj.xlsx.folder('xl').folder('worksheets').folder('_rels').file(`sheet${curSheet}.xml.rels`, xml);
+              }
+              resolve();
+            });
+          })
+          .then(() => {
+            return thisSheet.generateCommentsXML();
+          })
+          .then((xml) => {
+            return new Promise((resolve) => {
+              if (xml) {
+                promiseObj.xlsx.folder('xl').file(`comments${curSheet}.xml`, xml);
+              }
+              resolve();
+            });
+          })
+          .then(() => {
+            return thisSheet.generateCommentsVmlXML();
+          })
+          .then((xml) => {
+            return new Promise((resolve) => {
+              if (xml) {
+                promiseObj.xlsx.folder('xl').folder('drawings').file(`commentsVml${curSheet}.vml`, xml);
               }
               resolve();
             });
@@ -512,6 +579,7 @@ let writeToBuffer = (wb) => {
       .then(addRootRelsXML)
       .then(addWorkbookXML)
       .then(addWorkbookRelsXML)
+      .then(addCorePropertiesXML)
       .then(addSharedStringsXML)
       .then(addStylesXML)
       .then(addDrawingsXML)

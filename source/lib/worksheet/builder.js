@@ -11,12 +11,11 @@ let _addSheetPr = (promiseObj) => {
 
         // Check if any option that would require the sheetPr element to be added exists
         if (
-            o.printOptions.fitToHeight !== null ||
-            o.printOptions.fitToWidth !== null ||
+            o.pageSetup.fitToHeight !== null ||
+            o.pageSetup.fitToWidth !== null ||
             o.outline.summaryBelow !== null ||
-            o.autoFilter.ref !== null ||
-            o.outline.summaryRight
-
+            o.outline.summaryRight !== null ||
+            o.autoFilter.ref !== null
         ) {
             let ele = promiseObj.xml.ele('sheetPr');
 
@@ -368,6 +367,22 @@ let _addPageMargins = (promiseObj) => {
     });
 };
 
+let _addLegacyDrawing = (promiseObj) => {
+    return new Promise((resolve, reject) => {
+
+        const rId = promiseObj.ws.relationships.indexOf('commentsVml') + 1;
+        if(rId === 0) {
+            resolve(promiseObj);
+        } else {
+            promiseObj.xml.ele('legacyDrawing')
+            .att('r:id', 'rId' + rId)
+            .up();
+
+            resolve(promiseObj);
+        }
+    })
+}
+
 let _addPageSetup = (promiseObj) => {
     // §18.3.1.63 pageSetup (Page Setup Settings)
     return new Promise((resolve, reject) => {
@@ -500,7 +515,7 @@ let sheetXML = (ws) => {
         .att('xmlns:r', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships')
         .att('xmlns:x14ac', 'http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac');
 
-        // Excel complains if specific elements on not in the correct order in the XML doc.
+        // Excel complains if specific elements on not in the correct order in the XML doc as defined in §M.2.2
         let promiseObj = { xml: wsXML, ws: ws };
 
         _addSheetPr(promiseObj)
@@ -517,6 +532,7 @@ let sheetXML = (ws) => {
         .then(_addHyperlinks)
         .then(_addPrintOptions)
         .then(_addPageMargins)
+        .then(_addLegacyDrawing)
         .then(_addPageSetup)
         .then(_addPageBreaks)
         .then(_addHeaderFooter)
@@ -571,6 +587,16 @@ let relsXML = (ws) => {
                 .att('Id', rId)
                 .att('Target', '../drawings/drawing' + ws.sheetId + '.xml')
                 .att('Type', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing');
+            } else if (r === 'comments') {
+                relXML.ele('Relationship')
+                .att('Id', rId)
+                .att('Target', '../comments' + ws.sheetId + '.xml')
+                .att('Type', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/comments');
+            } else if (r === 'commentsVml') {
+                relXML.ele('Relationship')
+                .att('Id', rId)
+                .att('Target', '../drawings/commentsVml' + ws.sheetId + '.vml')
+                .att('Type', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing');
             }
         });
         let xmlString = relXML.doc().end();
@@ -578,4 +604,81 @@ let relsXML = (ws) => {
     });
 };
 
-module.exports = { sheetXML, relsXML };
+let commentsXML = (ws) => {
+    return new Promise((resolve, reject) => {
+        const commentsXml = xml.create(
+            'comments',
+            {
+                'version': '1.0',
+                'encoding': 'UTF-8',
+                'standalone': true,
+                'allowSurrogateChars': true
+            }
+        );
+        commentsXml.att('xmlns', 'http://schemas.openxmlformats.org/spreadsheetml/2006/main');
+
+        commentsXml.ele('authors').ele('author').text(ws.wb.author);
+
+        const commentList = commentsXml.ele('commentList');
+        Object.keys(ws.comments).forEach(ref => {
+            commentList
+                .ele('comment')
+                .att('ref', ref)
+                .att('authorId', '0')
+                .att('guid', ws.comments[ref].uuid)
+                .ele('text')
+                .ele('t')
+                .text(ws.comments[ref].comment);
+        });
+        let xmlString = commentsXml.doc().end();
+        resolve(xmlString);
+    });
+}
+
+let commentsVmlXML = (ws) => {
+    return new Promise((resolve, reject) => {
+        const vmlXml = xml.create('xml');
+        vmlXml.att('xmlns:v', 'urn:schemas-microsoft-com:vml')
+        vmlXml.att('xmlns:o', 'urn:schemas-microsoft-com:office:office');
+        vmlXml.att('xmlns:x', 'urn:schemas-microsoft-com:office:excel');
+
+        const sl = vmlXml.ele('o:shapelayout').att('v:ext', 'edit');
+        sl.ele('o:idmap').att('v:ext', 'edit').att('data', ws.sheetId);
+
+        const st = vmlXml.ele('v:shapetype')
+            .att('id', '_x0000_t202')
+            .att('coordsize', '21600,21600')
+            .att('o:spt', '202')
+            .att('path', 'm,l,21600r21600,l21600,xe');
+        st.ele('v:stroke').att('joinstyle', 'miter');
+        st.ele('v:path').att('gradientshapeok', 't').att('o:connectortype', 'rect');
+
+        Object.keys(ws.comments).forEach((ref) => {
+            const {row, col, position, marginLeft, marginTop, width, height, zIndex, visibility, fillColor} = ws.comments[ref];
+            const shape = vmlXml.ele('v:shape');
+            shape.att('id', `_${ws.sheetId}_${row}_${col}`);
+            shape.att('type', "#_x0000_t202");
+            shape.att('style', `position:${position};margin-left:${marginLeft};margin-top:${marginTop};width:${width};height:${height};z-index:${zIndex};visibility:${visibility}`);
+            shape.att('fillcolor', fillColor);
+            shape.att('o:insetmode', 'auto');
+
+            shape.ele('v:path').att('o:connecttype', 'none');
+
+            const tb = shape.ele('v:textbox').att('style', 'mso-direction-alt:auto');
+            tb.ele('div').att('style', 'text-align:left');
+
+            const cd = shape.ele('x:ClientData').att('ObjectType', 'Note');
+            cd.ele('x:MoveWithCells');
+            cd.ele('x:SizeWithCells');
+            cd.ele('x:AutoFill').text('False');
+            cd.ele('x:Row').text(row - 1);
+            cd.ele('x:Column').text(col - 1);
+        });
+
+
+        let xmlString = vmlXml.doc().end();
+        resolve(xmlString);
+    });
+}
+
+module.exports = { sheetXML, relsXML, commentsXML, commentsVmlXML };

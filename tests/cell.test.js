@@ -1,5 +1,6 @@
-let test = require('tape');
-let xl = require('../distribution/index');
+const test = require('tape');
+const DOMParser = require('xmldom').DOMParser;
+const xl = require('../distribution/index');
 
 test('Cell coverage', (t) => {
     t.plan(1);
@@ -71,4 +72,18 @@ test('Add Formula to cell', (t) => {
     t.ok(thisCell.v === null, 'cellValue is not set');
     t.ok(typeof (thisCell.f) === 'string', 'cell Formula is a string');
     t.ok(thisCell.f === 'SUM(A1:A10)', 'Cell value value is correct');
+});
+
+test.only('Add Comment to cell', (t) => {
+    let wb = new xl.Workbook();
+    let ws = wb.addWorksheet('test');
+    let cell = ws.cell(1, 1).comment('My test comment');
+    let ref = cell.excelRefs[0];
+    t.ok(ws.comments[ref].comment === 'My test comment');
+    ws.generateCommentsXML().then((XML) => {
+        let doc = new DOMParser().parseFromString(XML);
+        let testComment = doc.getElementsByTagName('commentList')[0];
+        t.ok(testComment.textContent === 'My test comment', 'Verify comment text is correct');
+        t.end()
+    });
 });

@@ -12,6 +12,13 @@ function generateWorkbook() {
         },
         dateFormat: 'mm/dd/yyyy hh:mm:ss',
         logLevel: 1,
+        workbookView: {
+            windowWidth: 28800,
+            windowHeight: 17620,
+            xWindow: 240,
+            yWindow: 480,
+        },
+        author: 'Workbook Author Name'
     });
 
     /*****************************************
@@ -450,8 +457,16 @@ function generateWorkbook() {
     var optionsSheet = wb.addWorksheet('Selectable Options');
 
     optionsSheet.cell(1, 1).string('Booleans');
-    optionsSheet.cell(1, 2).string('Option List');
+    optionsSheet.cell(1, 2).string('Option List').comment('Values from some reference doc');
     optionsSheet.cell(1, 3).string('Numbers 1-10');
+    optionsSheet.cell(1, 3).comment('Comment: Number defined by some other reference doc with comment visible by default', {
+        marginLeft: '300pt',
+        marginTop: '20pt',
+        width: '400px',
+        height: '300px',
+        visibility: 'visible',
+        fillColor: '#afbeda',
+    });
 
     optionsSheet.addDataValidation({
         type: 'list',
