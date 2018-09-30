@@ -81,6 +81,18 @@ class Font {
      */
     addToXMLele(fontXML) {
         let fEle = fontXML.ele('font');
+
+        // Place styling elements first to avoid validation errors with .NET validator
+        this.condense === true ? fEle.ele('condense') : null;
+        this.extend === true ? fEle.ele('extend') : null;
+        this.bold === true ? fEle.ele('b') : null;
+        this.italics === true ? fEle.ele('i') : null;
+        this.outline === true ? fEle.ele('outline') : null;
+        this.shadow === true ? fEle.ele('shadow') : null;
+        this.strike === true ? fEle.ele('strike') : null;
+        this.underline === true ? fEle.ele('u') : null;
+        this.vertAlign === true ? fEle.ele('vertAlign') : null;
+
         fEle.ele('sz').att('val', this.size !== undefined ? this.size : 12);
         fEle.ele('color').att('rgb', this.color !== undefined ? this.color : 'FF000000');
         fEle.ele('name').att('val', this.name !== undefined ? this.name : 'Calibri');
@@ -91,15 +103,6 @@ class Font {
             fEle.ele('scheme').att('val', this.scheme);
         }
 
-        this.condense === true ? fEle.ele('condense') : null;
-        this.extend === true ? fEle.ele('extend') : null;
-        this.bold === true ? fEle.ele('b') : null;
-        this.italics === true ? fEle.ele('i') : null;
-        this.outline === true ? fEle.ele('outline') : null;
-        this.shadow === true ? fEle.ele('shadow') : null;
-        this.strike === true ? fEle.ele('strike') : null;
-        this.underline === true ? fEle.ele('u') : null;
-        this.vertAlign === true ? fEle.ele('vertAlign') : null;
 
         return true;
     }
