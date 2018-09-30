@@ -127,7 +127,7 @@ test('Set Style Properties', (t) => {
     let fontXMLele = xmlbuilder.create('test');
     style.font.addToXMLele(fontXMLele);
     let fontXMLString = fontXMLele.doc().end();
-    t.ok(fontXMLString === '<?xml version="1.0"?><test><font><sz val="14"/><color rgb="FF000000"/><name val="Courier"/><family val="1"/><scheme val="major"/><b/><i/><outline/><shadow/><strike/><u/></font></test>', 'font xml created successfully');
+    t.ok(fontXMLString === '<?xml version="1.0"?><test><font><b/><i/><outline/><shadow/><strike/><u/><sz val="14"/><color rgb="FF000000"/><name val="Courier"/><family val="1"/><scheme val="major"/></font></test>', 'font xml created successfully');
 
     let fillXMLele = xmlbuilder.create('test');
     style.fill.addToXMLele(fillXMLele);
