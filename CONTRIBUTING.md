@@ -28,6 +28,16 @@ npm run test
 npm run test
 ```
 
+- Validate generated sample Excel workbook against the xlsx-validator
+
+__This requires Docker be installed on your system to run the xlsx-validator Docker image__
+
+```
+npm run build
+node sample.js
+./validate.sh Excel.xlsx
+```
+
 - All library code is contained in the source directory. Running 'npm run watch' will start a babel watch process and transpile output to the distribution directory. 
 
 - Document your change in code using [jsdoc] conventions

@@ -22,18 +22,18 @@ test('Escape Unicode Cell Values', (t) => {
         t.ok(wb.sharedStrings[thisCell.v] === testVal, 'Unicode "' + strVal + '" correctly escaped in cell');
     }
 
-    testUnicode('Hi <>', 'Hi &lt;&gt;');
-    testUnicode('😂', '&#x1f602;');
-    testUnicode('hello! 😂', 'hello! &#x1f602;');
+    testUnicode('Hi <>', 'Hi <>');
+    testUnicode('😂', '😂');
+    testUnicode('hello! 😂', 'hello! 😂');
     testUnicode('☕️', '☕️'); // ☕️ is U+2615 which is within the valid range.
-    testUnicode('😂☕️', '&#x1f602;☕️');
-    testUnicode('Good 🤞🏼 Luck', 'Good &#x1f91e;&#x1f3fc; Luck');
-    testUnicode('Fist 🤜🏻🤛🏿 bump', 'Fist &#x1f91c;&#x1f3fb;&#x1f91b;&#x1f3ff; bump');
+    testUnicode('😂☕️', '😂☕️');
+    testUnicode('Good 🤞🏼 Luck', 'Good 🤞🏼 Luck');
+    testUnicode('Fist 🤜🏻🤛🏿 bump', 'Fist 🤜🏻🤛🏿 bump');
     testUnicode('㭩', '㭩');
     testUnicode('I am the Α and the Ω', 'I am the Α and the Ω');
-    testUnicode('𐤶', '&#x10936;'); // Lydian Letter En U+10936
-    testUnicode('𠁆', '&#x20046;'); // Ideograph bik6
-    testUnicode('🚵', '&#x1f6b5'); // Mountain Bicyclist
+    testUnicode('𐤶', '𐤶'); // Lydian Letter En U+10936
+    testUnicode('𠁆', '𠁆'); // Ideograph bik6
+    testUnicode('\u000b', ''); // tab should be removed
 
     t.end();
 });
