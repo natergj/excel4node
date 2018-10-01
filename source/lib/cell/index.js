@@ -17,7 +17,7 @@ const validXmlRegex = /[\u0009\u000a\u000d\u0020-\uD7FF\uE000-\uFFFD]/u;
 function removeInvalidXml(str) {
     return Array.from(str).map(c => {
         const cp = c.codePointAt(0);
-        if (cp >= 65536 && cp < 1114111) {
+        if (cp >= 65536 && cp <= 1114111) {
             return c
         } else if (c.match(validXmlRegex)) {
             return c;
