@@ -8,7 +8,6 @@ const util = require('util');
 
 const validXmlRegex = /[\u0009\u000a\u000d\u0020-\uD7FF\uE000-\uFFFD]/u;
 
-
 /**
  * The list of valid characters is
  * #x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD] | [#x10000-#x10FFFF]
