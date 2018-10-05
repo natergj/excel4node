@@ -534,6 +534,66 @@ function generateWorkbook() {
      *****************************************/
 
     /*****************************************
+     * START valid characters
+     *****************************************/
+    var unicodeSheet = wb.addWorksheet('unicode');
+
+    unicodeSheet.column(1).setWidth(40);
+    unicodeSheet.column(2).setWidth(55);
+    unicodeSheet.column(3).setWidth(65);
+
+    unicodeSheet.cell(1, 1).string('Unicode String');
+    unicodeSheet.cell(1, 2).string('Text Representation');
+    unicodeSheet.cell(1, 3).string('Encoded Representation');
+
+    unicodeSheet.cell(2, 1).string('Hi <>');
+    unicodeSheet.cell(2, 2).string('Hi [less than][greater than]');
+    unicodeSheet.cell(2, 3).string('Hi <>');
+
+    unicodeSheet.cell(3, 1).string('😂');
+    unicodeSheet.cell(3, 2).string('[face with tears of joy]');
+    unicodeSheet.cell(3, 3).string('&#x1f602;');
+
+    unicodeSheet.cell(4, 1).string('hello! 😂');
+    unicodeSheet.cell(4, 2).string('hello! [face with tears of joy]');
+    unicodeSheet.cell(4, 3).string('hello! &#x1f602;');
+
+    unicodeSheet.cell(5, 1).string('☕️');
+    unicodeSheet.cell(5, 2).string('[hot beverage]');
+    unicodeSheet.cell(5, 3).string('☕️ (not escaped)');
+
+    unicodeSheet.cell(6, 1).string('😂☕️');
+    unicodeSheet.cell(6, 2).string('[face with tears of joy][hot beverage]');
+    unicodeSheet.cell(6, 3).string('&#x1f602;☕️ (not eescaped)');
+
+    unicodeSheet.cell(7, 1).string('Good 🤞🏼 Luck');
+    unicodeSheet.cell(7, 2).string('Good [crossed fingers: light skin tone] luck');
+    unicodeSheet.cell(7, 3).string('Good &#x1f91e;&#x1f3fc; Luck');
+
+    unicodeSheet.cell(8, 1).string('Fist 🤜🏻🤛🏿 bump');
+    unicodeSheet.cell(8, 2).string('Fist [right-facing fist: light skin tone][left-facing fist: dark skin tone] bump');
+    unicodeSheet.cell(8, 3).string('Fist &#x1f91c;&#x1f3fb;&#x1f91b;&#x1f3ff; bump');
+
+    unicodeSheet.cell(9, 1).string('I am the Α and the Ω');
+    unicodeSheet.cell(9, 2).string('I am the [greek capital letter alpha] and the [greek capital letter omega]');
+    unicodeSheet.cell(9, 3).string('I am the Α and the Ω (not escaped)');
+
+    unicodeSheet.cell(10, 1).string('𐤶');
+    unicodeSheet.cell(10, 2).string('[lydian letter En]');
+    unicodeSheet.cell(10, 3).string('&#x20046;');
+
+    unicodeSheet.cell(11, 1).string('𠁆');
+    unicodeSheet.cell(11, 2).string('[deograph bik6]');
+    unicodeSheet.cell(11, 3).string('&#x10936;');
+
+    unicodeSheet.cell(11, 1).string(String.fromCodePoint(0x000b));
+    unicodeSheet.cell(11, 2).string('[vertical tab]');
+    unicodeSheet.cell(11, 3).string('');
+    /*****************************************
+     * END valid characters
+     *****************************************/
+
+    /*****************************************
      * START final sheet
      *****************************************/
 

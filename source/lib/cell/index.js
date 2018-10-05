@@ -6,6 +6,27 @@ const Style = require('../style/style.js');
 const utils = require('../utils.js');
 const util = require('util');
 
+const validXmlRegex = /[\u0009\u000a\u000d\u0020-\uD7FF\uE000-\uFFFD]/u;
+
+/**
+ * The list of valid characters is
+ * #x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD] | [#x10000-#x10FFFF]
+ *
+ * We need to test codepoints numerically, instead of regex characters above 65536 (0x10000),
+ */
+function removeInvalidXml(str) {
+    return Array.from(str).map(c => {
+        const cp = c.codePointAt(0);
+        if (cp >= 65536 && cp <= 1114111) {
+            return c
+        } else if (c.match(validXmlRegex)) {
+            return c;
+        } else {
+            return '';
+        }
+    }).join('');
+}
+
 function stringSetter(val) {
     let logger = this.ws.wb.logger;
 
@@ -15,16 +36,7 @@ function stringSetter(val) {
             typeof (val));
         val = '';
     }
-
-    let invalidXml11Chars, chr;
-    invalidXml11Chars = /[^\u0001-\uD7FF\uE000-\uFFFD\uD800\uDC00-\uDBFF\uDFFF]/u;
-    chr = val.match(invalidXml11Chars);
-    if (chr) {
-        logger.warn('Invalid Character for XML "' + chr + '" in string "' + val + '"');
-        val = val.replace(chr, '');
-    }
-    // Remove Control characters, they aren't understood by xmlbuilder
-    val = val.replace(invalidXml11Chars, '');
+    val = removeInvalidXml(val);
 
     if (!this.merged) {
         this.cells.forEach((c) => {
