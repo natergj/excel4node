@@ -169,7 +169,6 @@ test('Set Worksheet options', (t) => {
         t.equals(pageSetup.getAttribute('copies'), '1', 'pageSetup copies was set correctly.');
 
         let sheetView = doc.getElementsByTagName('sheetView')[0];
-        t.equals(sheetView.getAttribute('tabSelected'), '1', 'sheetView tabSelected was set correctly');
         t.equals(sheetView.getAttribute('workbookViewId'), '0', 'sheetView workbookViewId was set correctly');
         t.equals(sheetView.getAttribute('rightToLeft'), 'false', 'sheetView rightToLeft was set correctly');
         t.equals(sheetView.getAttribute('showGridLines'), 'false', 'sheetView showGridLines was set correctly');

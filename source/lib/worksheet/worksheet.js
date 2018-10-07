@@ -110,8 +110,7 @@ class Worksheet {
         this.localSheetId = this.wb.sheets.length;
         this.opts = deepmerge(wsDefaultParams, opts);
         optsValidator(opts);
-
-        this.opts.sheetView.tabSelected = this.sheetId === 1 ? 1 : 0;
+        
         this.name = name ? name : `Sheet ${this.sheetId}`;
         this.hasGroupings = false;
         this.cols = {}; // Columns keyed by column, contains column properties

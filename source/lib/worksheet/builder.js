@@ -61,10 +61,8 @@ let _addSheetViews = (promiseObj) => {
     return new Promise((resolve, reject) => {
         let o = promiseObj.ws.opts.sheetView;
         let ele = promiseObj.xml.ele('sheetViews');
-        let tabSelected = promiseObj.ws.opts;
         let sv = ele.ele('sheetView')
         .att('showGridLines', o.showGridLines)
-        .att('tabSelected', o.tabSelected)
         .att('workbookViewId', o.workbookViewId)
         .att('rightToLeft', o.rightToLeft)
         .att('zoomScale', o.zoomScale)
