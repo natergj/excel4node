@@ -74,7 +74,7 @@ test('Add Formula to cell', (t) => {
     t.ok(thisCell.f === 'SUM(A1:A10)', 'Cell value value is correct');
 });
 
-test.only('Add Comment to cell', (t) => {
+test('Add Comment to cell', (t) => {
     let wb = new xl.Workbook();
     let ws = wb.addWorksheet('test');
     let cell = ws.cell(1, 1).comment('My test comment');

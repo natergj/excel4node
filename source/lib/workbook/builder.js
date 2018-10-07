@@ -122,8 +122,18 @@ let addWorkbookXML = (promiseObj) => {
     // bookViews (§18.2.1)
     if (promiseObj.wb.opts.workbookView) {
       const viewOpts = promiseObj.wb.opts.workbookView;
-      if (viewOpts.activeTab) {
+      if (viewOpts.activeTab !== null && viewOpts.activeTab !== undefined) {
         workbookViewEle.att('activeTab', viewOpts.activeTab);
+      } else {
+        let firstVisibleTab = 0;
+        for (let i = 0; i < promiseObj.wb.sheets.length; i++) {
+          const sheet = promiseObj.wb.sheets[i];
+          if (!sheet.opts.hidden) {
+            firstVisibleTab = i;
+            break;
+          }
+        }
+        workbookViewEle.att('activeTab', firstVisibleTab);
       }
       if (viewOpts.autoFilterDateGrouping) {
         workbookViewEle.att('autoFilterDateGrouping', utils.boolToInt(viewOpts.autoFilterDateGrouping));
