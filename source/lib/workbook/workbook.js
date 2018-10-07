@@ -68,7 +68,9 @@ class Workbook {
      * @param {Number} opts.workbookView.windowWidth Specifies the width of the workbook window. The unit of measurement for this value is twips..
      * @param {Number} opts.workbookView.xWindow Specifies the X coordinate for the upper left corner of the workbook window. The unit of measurement for this value is twips.
      * @param {Number} opts.workbookView.yWindow Specifies the Y coordinate for the upper left corner of the workbook window. The unit of measurement for this value is twips.
+     * @param {Boolean} opts.workbookView
      * @param {Object} opts.logger Logger that supports warn and error method, defaults to console
+     * @param {String} opts.author Name displayed as document's author
      * @returns {Workbook}
      */
     constructor(opts = {}) {
@@ -84,6 +86,7 @@ class Workbook {
         }
 
         this.opts = deepmerge(workbookDefaultOpts, opts);
+        this.author = this.opts.author || 'Microsoft Office User';
 
         this.sheets = [];
         this.sharedStrings = [];

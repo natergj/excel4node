@@ -149,6 +149,7 @@ var wb = new xl.Workbook({
     yWindow: 440, // Specifies the Y coordinate for the upper left corner of the workbook window. The unit of measurement for this value is twips.
   },
   logLevel: 0, // 0 - 5. 0 suppresses all logs, 1 shows errors only, 5 is for debugging
+  author: 'Microsoft Office User', // Name for use in features such as comments
 });
 ```
 
@@ -511,6 +512,7 @@ cell method takes two required parameters and 3 optional parameters
 .link(url, [displayStr, tooltip]) accepts a URL and optionally a displayStr and hover tooltip  
 .bool(value) accepts a boolean (true or false)  
 .style(object) accepts the same object as when creating a new style. When applied to a cell that already has style formatting, the original formatting will be kept and updated with the changes sent to the style function.
+.comment(comment, options) Add a comment to the particular cell
 
 ```javascript
 // ws.cell(startRow, startColumn, [[endRow, endColumn], isMerged]);
@@ -658,6 +660,24 @@ ws.cell(4, 1)
   .date(new Date())
   .style({numberFormat: 'yyyy-mm-dd'});
 // Since dates are stored as numbers in Excel, use the numberFormat option of the styles to set the date format as well.
+```
+
+## Comments
+Comments can be added to cells with some options
+
+```
+var wb = new xl.Workbook();
+var ws = wb.addWorksheet('Sheet 1');
+ws.cell(1, 1).comment('My Basic Comment');
+ws.cell(2, 1).string('Cell A2').comment('My custom comment', {
+  fillColor: '#ABABAB', // default #FFFFE1
+  height: '100pt', // default 69pt
+  width: '160pt', // default 104pt
+  marginLeft: '200pt', // default is calculated from column
+  marginTop: '120pt', // default is calculated from row
+  visibility: 'visible', // default hidden
+  zIndex: '2', // default 1
+})
 ```
 
 ## Images

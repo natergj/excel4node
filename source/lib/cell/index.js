@@ -1,6 +1,7 @@
 const deepmerge = require('deepmerge');
 const Cell = require('./cell.js');
 const Row = require('../row/row.js');
+const Comment = require('../classes/comment');
 const Column = require('../column/column.js');
 const Style = require('../style/style.js');
 const utils = require('../utils.js');
@@ -204,6 +205,18 @@ function hyperlinkSetter(url, displayStr, tooltip) {
             underline: true
         }
     });
+}
+
+function commentSetter(comment, options) {
+    if (this.merged !== true) {
+        this.cells.forEach((c, i) => {
+            this.ws.comments[c.r] = new Comment(c.r, comment, options)
+        });
+    } else {
+        var c = this.cells[0];
+        this.ws.comments[c.r] = new Comment(c.r, comment, options)
+    }
+    return this;
 }
 
 function mergeCells(cellBlock) {
@@ -420,5 +433,7 @@ cellBlock.prototype.date = dateSetter;
  * @returns {cellBlock} Block of cells with attached methods
  */
 cellBlock.prototype.link = hyperlinkSetter;
+
+cellBlock.prototype.comment = commentSetter;
 
 module.exports = cellAccessor;

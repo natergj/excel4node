@@ -1,4 +1,5 @@
 const utils = require('../utils.js');
+const Comment = require('../classes/comment');
 
 // §18.3.1.4 c (Cell)
 class Cell {
@@ -16,6 +17,10 @@ class Cell {
         this.v = null; // 'v' child element for values
         this.row = row; // used internally throughout code. Does not go into XML
         this.col = col; // used internally throughout code. Does not go into XML
+    }
+
+    get comment() {
+        return this.comments[this.r];
     }
 
     string(index) {

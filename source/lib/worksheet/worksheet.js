@@ -131,6 +131,8 @@ class Worksheet {
         this.hyperlinkCollection = new HyperlinkCollection();
         this.dataValidationCollection = new DataValidation.DataValidationCollection();
         this.drawingCollection = new wsDrawing.DrawingCollection();
+        this.comments = {}; // Comments for cells keyed by excel ref
+        this.author = this.wb.author;
 
     }
 
@@ -141,6 +143,10 @@ class Worksheet {
         });
         if (!this.drawingCollection.isEmpty) {
             rels.push('drawing');
+        }
+        if(Object.keys(this.comments).length > 0) {
+            rels.push('comments');
+            rels.push('commentsVml');
         }
         return rels;
     }
@@ -201,6 +207,21 @@ class Worksheet {
     generateRelsXML() {
         return xmlBuilder.relsXML(this);
     }
+
+    generateCommentsXML() {
+        if(Object.keys(this.comments).length === 0) {
+            return;
+        }
+        return xmlBuilder.commentsXML(this);
+    }
+
+    generateCommentsVmlXML() {
+        if(Object.keys(this.comments).length === 0) {
+            return;
+        }
+        return xmlBuilder.commentsVmlXML(this);
+    }
+
     /**
      * @func Worksheet.generateXML
      * @desc When Workbook is being built, generate the XML that will go into the Worksheet xml file 
