@@ -1,3 +1,12 @@
+1.7.0
+        Bug Fixes:
+        resolves https://github.com/natergj/excel4node/issues/238 to fix issue with certain emoji characters
+        merges https://github.com/natergj/excel4node/pull/240 to fix issue with workbook validation using .Net validation library provided by Microsoft
+        resolves https://github.com/natergj/excel4node/issues/236 where first tab will still be shown even if it is hidden
+
+        Enhancements:
+        merges https://github.com/natergj/excel4node/pull/243 to add basic cell comment functionality
+        
 1.6.0
         Bug Fixes:
         merges https://github.com/natergj/excel4node/pull/232 to fix issue where emoji were not being added to worksheets
