@@ -1,5 +1,5 @@
 const _isUndefined = require('lodash.isundefined');
-const deepmerge = require('deepmerge');
+const _merge = require('lodash.merge');
 const fs = require('fs');
 const utils = require('../utils.js');
 const Worksheet = require('../worksheet');
@@ -85,7 +85,7 @@ class Workbook {
             this.logger.log('opts.logger is not a valid logger');
         }
 
-        this.opts = deepmerge(workbookDefaultOpts, opts);
+        this.opts = _merge(workbookDefaultOpts, opts);
         this.author = this.opts.author || 'Microsoft Office User';
 
         this.sheets = [];

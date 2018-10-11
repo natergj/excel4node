@@ -1,4 +1,4 @@
-const deepmerge = require('deepmerge');
+const _merge = require('lodash.merge');
 const Cell = require('./cell.js');
 const Row = require('../row/row.js');
 const Comment = require('../classes/comment');
@@ -180,7 +180,7 @@ function styleSetter(val) {
             c.style(thisCellStyle.ids.cellXfs);
         } else {
             let curStyle = this.ws.wb.styles[c.s];
-            let newStyleOpts = deepmerge(curStyle.toObject(), thisStyle);
+            let newStyleOpts = _merge(curStyle.toObject(), thisStyle);
             let mergedStyle = this.ws.wb.createStyle(newStyleOpts);
             c.style(mergedStyle.ids.cellXfs);
         }

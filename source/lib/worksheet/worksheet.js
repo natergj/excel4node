@@ -1,4 +1,4 @@
-const deepmerge = require('deepmerge');
+const _merge = require('lodash.merge');
 const CfRulesCollection = require('./cf/cf_rules_collection');
 const cellAccessor = require('../cell');
 const rowAccessor = require('../row');
@@ -108,7 +108,7 @@ class Worksheet {
         this.wb = wb;
         this.sheetId = this.wb.sheets.length + 1;
         this.localSheetId = this.wb.sheets.length;
-        this.opts = deepmerge(wsDefaultParams, opts);
+        this.opts = _merge(wsDefaultParams, opts);
         optsValidator(opts);
         
         this.name = name ? name : `Sheet ${this.sheetId}`;

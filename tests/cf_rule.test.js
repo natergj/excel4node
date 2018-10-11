@@ -1,4 +1,4 @@
-var deepmerge = require('deepmerge');
+var _merge = require('lodash.merge');
 var test = require('tape');
 
 var CfRule = require('../distribution/lib/worksheet/cf/cf_rule');
@@ -16,7 +16,7 @@ test('CfRule init', function (t) {
     t.ok(new CfRule(baseConfig), 'init with valid and support type');
 
     try {
-        var cfr = new CfRule(deepmerge(baseConfig, {
+        var cfr = new CfRule(_merge(baseConfig, {
             type: 'bogusType'
         }));
     } catch (err) {
@@ -27,7 +27,7 @@ test('CfRule init', function (t) {
     }
 
     try {
-        var cfr = new CfRule(deepmerge(baseConfig, {
+        var cfr = new CfRule(_merge(baseConfig, {
             type: 'dataBar'
         }));
     } catch (err) {
@@ -38,7 +38,7 @@ test('CfRule init', function (t) {
     }
 
     try {
-        var cfr = new CfRule(deepmerge(baseConfig, {
+        var cfr = new CfRule(_merge(baseConfig, {
             formula: null
         }));
     } catch (err) {

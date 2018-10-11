@@ -1,5 +1,5 @@
 const utils = require('../utils.js');
-const deepmerge = require('deepmerge');
+const _merge = require('lodash.merge');
 
 const Alignment = require('./classes/alignment.js');
 const Border = require('./classes/border.js');
@@ -10,7 +10,7 @@ const NumberFormat = require('./classes/numberFormat.js');
 let _getFontId = (wb, font = {}) => {
 
     // Create the Font and lookup key
-    font = deepmerge(wb.opts.defaultFont, font);
+    font = _merge(wb.opts.defaultFont, font);
     const thisFont = new Font(font);
     const lookupKey = JSON.stringify(thisFont.toObject());
 
@@ -170,7 +170,7 @@ class Style {
          * @returns {Style} 
          */
         opts = opts ? opts : {};
-        opts = deepmerge(wb.styles[0] ? wb.styles[0] : {}, opts);
+        opts = _merge(wb.styles[0] ? wb.styles[0] : {}, opts);
 
         if (opts.alignment !== undefined) {
             this.alignment = new Alignment(opts.alignment);

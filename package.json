@@ -42,12 +42,12 @@
     "prepublish": "npm run build; npm run test"
   },
   "dependencies": {
-    "deepmerge": "2.1.1",
     "image-size": "0.6.3",
     "jszip": "3.1.5",
     "lodash.get": "4.4.2",
     "lodash.isequal": "4.5.0",
     "lodash.isundefined": "3.0.1",
+    "lodash.merge": "4.6.1",
     "lodash.reduce": "4.6.0",
     "lodash.uniqueid": "4.0.1",
     "mime": "2.3.1",
