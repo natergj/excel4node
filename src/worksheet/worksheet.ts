@@ -3,16 +3,17 @@ import { defaultWorksheetOpts } from './defaultWorksheetOptions';
 import { IWorksheetOpts, IWorksheetConstructorOpts } from './types';
 import IWorkbookBuilder from '../workbook/types/IWorkbookBuilder';
 import { addWorksheetFile, addWorksheetRelsFile } from './builder';
-import { cellAccessor } from '../cell';
+import { CellAccessor, Cell } from '../cell';
+import { Row } from '../row';
 
 export default class Worksheet {
   name: string;
   opts: Partial<IWorksheetOpts>;
   wb: Workbook;
-  cells: Map<string, any>;
+  cells: Map<string, Cell>;
   mergedCells: string[];
   columns: any[];
-  rows: any[];
+  rows: Map<number, Row>;
   drawingCollection: any;
   sheetId: number;
   relationships: any[];
@@ -28,7 +29,7 @@ export default class Worksheet {
     this.cells = new Map();
     this.mergedCells = [];
     this.columns = [];
-    this.rows = [];
+    this.rows = new Map();
     this.sheetId = this.wb.sheets.size + 1;
     this.drawingCollection = [];
     this.relationships = [];
@@ -48,7 +49,14 @@ export default class Worksheet {
   }
 
   cell(startRow: number, startCol: number, endRow?: number, endCol?: number, isMerged?: boolean) {
-    return cellAccessor(this, startRow, startCol, endRow, endCol, isMerged);
+    return new CellAccessor(this, startRow, startCol, endRow, endCol, isMerged);
+  }
+
+  row(row: number) {
+    if (!this.rows.has(row)) {
+      this.rows.set(row, new Row(row));
+    }
+    return this.rows.get(row);
   }
 
   addSheetToXlsxPackage(builder: IWorkbookBuilder) {

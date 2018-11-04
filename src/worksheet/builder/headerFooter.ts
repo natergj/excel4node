@@ -4,55 +4,63 @@ import { boolToInt } from '../../utils/excel4node';
 
 export default function addHyperlinks(xml: XMLElementOrXMLNode, ws: Worksheet) {
   // §18.3.1.46 headerFooter (Header Footer Settings)
-  let o = ws.opts.headerFooter;
+  const o = ws.opts.headerFooter;
   const isHeaderFooterRequired = Object.keys(o)
     .map(k => o[k] !== null)
     .includes(true);
 
   if (isHeaderFooterRequired === true) {
-    let hfEle = xml.ele('headerFooter');
+    const hfEle = xml.ele('headerFooter');
 
-    o.alignWithMargins !== null ? hfEle.att('alignWithMargins', boolToInt(o.alignWithMargins)) : null;
-    o.differentFirst !== null ? hfEle.att('differentFirst', boolToInt(o.differentFirst)) : null;
-    o.differentOddEven !== null ? hfEle.att('differentOddEven', boolToInt(o.differentOddEven)) : null;
-    o.scaleWithDoc !== null ? hfEle.att('scaleWithDoc', boolToInt(o.scaleWithDoc)) : null;
+    if (o.alignWithMargins !== null) {
+      hfEle.att('alignWithMargins', boolToInt(o.alignWithMargins));
+    }
+    if (o.differentFirst !== null) {
+      hfEle.att('differentFirst', boolToInt(o.differentFirst));
+    }
+    if (o.differentOddEven !== null) {
+      hfEle.att('differentOddEven', boolToInt(o.differentOddEven));
+    }
+    if (o.scaleWithDoc !== null) {
+      hfEle.att('scaleWithDoc', boolToInt(o.scaleWithDoc));
+    }
 
-    o.oddHeader !== null
-      ? hfEle
-          .ele('oddHeader')
-          .text(o.oddHeader)
-          .up()
-      : null;
-    o.oddFooter !== null
-      ? hfEle
-          .ele('oddFooter')
-          .text(o.oddFooter)
-          .up()
-      : null;
-    o.evenHeader !== null
-      ? hfEle
-          .ele('evenHeader')
-          .text(o.evenHeader)
-          .up()
-      : null;
-    o.evenFooter !== null
-      ? hfEle
-          .ele('evenFooter')
-          .text(o.evenFooter)
-          .up()
-      : null;
-    o.firstHeader !== null
-      ? hfEle
-          .ele('firstHeader')
-          .text(o.firstHeader)
-          .up()
-      : null;
-    o.firstFooter !== null
-      ? hfEle
-          .ele('firstFooter')
-          .text(o.firstFooter)
-          .up()
-      : null;
+    if (o.oddHeader !== null) {
+      hfEle
+        .ele('oddHeader')
+        .text(o.oddHeader)
+        .up();
+    }
+    if (o.oddFooter !== null) {
+      hfEle
+        .ele('oddFooter')
+        .text(o.oddFooter)
+        .up();
+    }
+    if (o.evenHeader !== null) {
+      hfEle
+        .ele('evenHeader')
+        .text(o.evenHeader)
+        .up();
+    }
+    if (o.evenFooter !== null) {
+      hfEle
+        .ele('evenFooter')
+        .text(o.evenFooter)
+        .up();
+    }
+    if (o.firstHeader !== null) {
+      hfEle
+        .ele('firstHeader')
+        .text(o.firstHeader)
+        .up();
+    }
+    if (o.firstFooter !== null) {
+      hfEle
+        .ele('firstFooter')
+        .text(o.firstFooter)
+        .up();
+    }
     hfEle.up();
   }
 }

@@ -1,8 +1,8 @@
 import { Worksheet, IWorksheetOpts } from '../worksheet';
 import { IWorkbookOptions } from '../workbook';
 import buildWorkbook from './builder';
-import SimpleLogger, { LogLevel } from '../utils/logger';
-import Font from '../style/models/font';
+import { SimpleLogger } from '../utils/logger';
+import { StyleCollection } from '../style';
 
 // Default Options for Workbook
 const workbookDefaultOpts = {
@@ -31,13 +31,14 @@ const workbookDefaultOpts = {
     windowWidth: 28040, // default of Excel 2016 for Mac
     xWindow: 5180, // default of Excel 2016 for Mac
     yWindow: 3060, // default of Excel 2016 for Mac
+    showComments: true,
   },
 };
 
 export default class Workbook {
   opts: IWorkbookOptions;
   sheets: Map<string, Worksheet>;
-  sharedStrings: Map<string, string | any[]>;
+  sharedStrings: Map<string | any[], number>;
   definedNameCollection: any;
   dxfCollection: any[];
   styles: any[];
@@ -56,12 +57,7 @@ export default class Workbook {
       isEmpty: true,
     };
     this.styles = [];
-    this.styleData = {
-      numFmts: [],
-      fonts: [],
-      fills: [],
-      borders: [],
-    };
+    this.styleData = new StyleCollection();
   }
 
   addWorksheet(name: string, opts: Partial<IWorksheetOpts> = {}) {
@@ -71,15 +67,16 @@ export default class Workbook {
         name,
         opts,
         wb: this,
-      })
+      }),
     );
+    return this.sheets.get(name);
   }
 
   write(name: string) {
     try {
       buildWorkbook(name, this);
     } catch (err) {
-      console.error('Error building workbook package.', err);
+      this.opts.logger.error('Error building workbook package.', err);
     }
   }
 }

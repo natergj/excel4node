@@ -4,7 +4,7 @@ import { XMLElementOrXMLNode } from 'xmlbuilder';
 // TODO implement
 export default function addPageMargins(xml: XMLElementOrXMLNode, ws: Worksheet) {
   // §18.3.1.62 pageMargins (Page Margins)
-  let o = ws.opts.margins;
+  const o = ws.opts.margins;
 
   xml
     .ele('pageMargins')

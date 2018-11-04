@@ -4,7 +4,7 @@ import { boolToInt, getHashOfPassword } from '../../utils/excel4node';
 
 export default function addSheetProtection(xml: XMLElementOrXMLNode, ws: Worksheet) {
   // §18.3.1.85 sheetProtection (Sheet Protection Options)
-  let o = ws.opts.sheetProtection;
+  const o = ws.opts.sheetProtection;
   let includeSheetProtection = false;
   Object.keys(o).forEach(k => {
     if (o[k] !== null) {
@@ -18,7 +18,7 @@ export default function addSheetProtection(xml: XMLElementOrXMLNode, ws: Workshe
     o.objects = o.objects !== null ? o.objects : true;
     o.scenarios = o.scenarios !== null ? o.scenarios : true;
 
-    let ele = xml.ele('sheetProtection');
+    const ele = xml.ele('sheetProtection');
     Object.keys(o).forEach(k => {
       if (o[k] !== null) {
         if (k === 'password') {

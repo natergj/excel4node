@@ -1,4 +1,4 @@
-//§18.8.18 family (Font Family)
+// §18.8.18 family (Font Family)
 export enum FONT_FAMILY {
   'n/a' = 0,
   'roman' = 1,

@@ -30,7 +30,7 @@ export default function addContentTypes(builder: IWorkbookBuilder) {
     if (ws.drawingCollection.length > 0) {
       ws.drawingCollection.drawings.forEach(d => {
         if (extensionsAdded.indexOf(d.extension) < 0) {
-          let typeRef = d.contentType + '.' + d.extension;
+          const typeRef = d.contentType + '.' + d.extension;
           if (contentTypesAdded.indexOf(typeRef) < 0) {
             this.xml
               .ele('Default')

@@ -1,6 +1,6 @@
 import { JSZipFileOptions } from 'jszip';
 import { IWorkbookView } from './IWorkbookView';
-import Logger, { LogLevel } from '../../utils/logger';
+import { Logger, LogLevel } from '../../utils';
 
 export interface IWorkbookOptions {
   jszip?: JSZipFileOptions;

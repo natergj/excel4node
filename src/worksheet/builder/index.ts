@@ -21,7 +21,6 @@ import addHeaderFooter from './headerFooter';
 import addDrawing from './drawing';
 
 export function addWorksheetFile(builder: IWorkbookBuilder, ws: Worksheet) {
-  ws.wb.opts.logger.debug(`adding worksheet file: ${ws.name}`);
   const dataStream = getDataStream();
   const writer = xmlbuilder.streamWriter(dataStream);
 
@@ -35,13 +34,12 @@ export function addWorksheetFile(builder: IWorkbookBuilder, ws: Worksheet) {
   });
 
   const xml = xmlbuilder
-    .create('Types', {
+    .create('worksheet', {
       version: '1.0',
       encoding: 'UTF-8',
       standalone: true,
       allowSurrogateChars: true,
     })
-    .ele('worksheet')
     .att('mc:Ignorable', 'x14ac')
     .att('xmlns', 'http://schemas.openxmlformats.org/spreadsheetml/2006/main')
     .att('xmlns:mc', 'http://schemas.openxmlformats.org/markup-compatibility/2006')
@@ -95,7 +93,7 @@ export function addWorksheetRelsFile(builder: IWorkbookBuilder, ws: Worksheet) {
   xml.att('xmlns', 'http://schemas.openxmlformats.org/package/2006/relationships');
 
   ws.relationships.forEach((r, i) => {
-    let rId = 'rId' + (i + 1);
+    const rId = 'rId' + (i + 1);
     // TODO implement
     if (r === 'hyperlink') {
       xml

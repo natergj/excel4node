@@ -5,7 +5,7 @@ import { getExcelRowCol } from '../../utils/excel4node';
 // TODO implement
 export default function addAutoFilter(xml: XMLElementOrXMLNode, ws: Worksheet) {
   // §18.3.1.2 autoFilter (AutoFilter Settings)
-  let o = ws.opts.autoFilter;
+  const o = ws.opts.autoFilter;
   if (typeof o.ref !== 'string') {
     return;
   }

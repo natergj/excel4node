@@ -1,6 +1,6 @@
-const utils = require('../utils.js');
+import * as utils from '../utils';
 
-// §18.18.11 ST_CellType (Cell Type)
+// §18.3.1.4 c (Cell)
 enum CellDataType {
   boolean = 'b',
   date = 'd',
@@ -71,7 +71,7 @@ export class Cell {
       return;
     }
 
-    let cEle = ele
+    const cEle = ele
       .ele('c')
       .att('r', this.reference)
       .att('s', this.styleIndex);
@@ -93,5 +93,3 @@ export class Cell {
     cEle.up();
   }
 }
-
-module.exports = Cell;

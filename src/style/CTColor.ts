@@ -2,10 +2,10 @@ import { getColor } from '../style/excelColor';
 import { colorScheme } from '../style/colorScheme';
 
 export default class CTColor {
-  //§18.8.3 && §18.8.19
+  // §18.8.3 && §18.8.19
   type: 'rgb' | 'theme';
   rgb: string;
-  theme: string;
+  theme: string; // §20.1.6.2 clrScheme (Color Scheme) : types.colorSchemes
   /**
    * @class CTColor
    * @desc Excel color representation
@@ -16,10 +16,6 @@ export default class CTColor {
    * @returns {CTColor}
    */
   constructor(color) {
-    this.type;
-    this.rgb;
-    this.theme; //§20.1.6.2 clrScheme (Color Scheme) : types.colorSchemes
-
     if (typeof color === 'string') {
       if (colorScheme[color.toLowerCase()] !== undefined) {
         this.theme = color;
@@ -47,7 +43,7 @@ export default class CTColor {
    * @param {xmlbuilder.Element} ele Element object of the xmlbuilder module
    */
   addToXMLele(ele) {
-    let colorEle = ele.ele('color');
+    const colorEle = ele.ele('color');
     colorEle.att(this.type, this[this.type]);
   }
 }

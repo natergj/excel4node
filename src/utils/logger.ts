@@ -1,4 +1,5 @@
-import * as util from 'util';
+// tslint:disable:no-console
+
 export enum LogLevel {
   'silent' = 0,
   'error' = 1,
@@ -8,7 +9,15 @@ export enum LogLevel {
   'debug' = 5,
 }
 
-export default class SimpleLogger {
+export interface ILogger {
+  debug: (...additionalParams: any[]) => void;
+  log: (msg?: any, ...additionalParams: any[]) => void;
+  info: (msg?: any, ...additionalParams: any[]) => void;
+  warn: (msg?: any, ...additionalParams: any[]) => void;
+  error: (msg?: any, ...additionalParams: any[]) => void;
+}
+
+export class SimpleLogger {
   logLevel: LogLevel;
 
   constructor(logLevel: LogLevel = LogLevel.silent) {
@@ -48,5 +57,3 @@ export default class SimpleLogger {
     }
   }
 }
-
-module.exports = SimpleLogger;

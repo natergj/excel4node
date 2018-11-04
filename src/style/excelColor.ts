@@ -58,6 +58,6 @@ export function getColor(val) {
     return 'FF' + val.substr(1).toUpperCase();
   } else {
     // I don't know what this is, return valid color and console.log error
-    return this['white'];
+    return this.white;
   }
 }

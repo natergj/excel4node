@@ -24,7 +24,7 @@ export default async function buildWorkbook(name: string, wb: Workbook) {
   addWorkbookXml(builder);
   addWorkbookRels(builder);
   addSharedStrings(builder);
-  // addStyles(builder);
+  addStyles(builder);
 
   const xlsxContent = await builder.xlsx.generateAsync({
     type: 'uint8array',

@@ -22,35 +22,35 @@ export default function addContentTypes(builder: IWorkbookBuilder) {
     .att('xmlns:x14ac', 'http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac');
 
   if (wb.styleData.numFmts.length > 0) {
-    let nfXML = xml.ele('numFmts').att('count', wb.styleData.numFmts.length);
+    const nfXML = xml.ele('numFmts').att('count', wb.styleData.numFmts.length);
     wb.styleData.numFmts.forEach(nf => {
       nf.addToXMLele(nfXML);
     });
   }
 
   if (wb.styleData.fonts.length > 0) {
-    let fontXML = xml.ele('fonts').att('count', wb.styleData.fonts.length);
+    const fontXML = xml.ele('fonts').att('count', wb.styleData.fonts.length);
     wb.styleData.fonts.forEach(f => {
       f.addToXMLele(fontXML);
     });
   }
 
   if (wb.styleData.fills.length > 0) {
-    let fillXML = xml.ele('fills').att('count', wb.styleData.fills.length);
+    const fillXML = xml.ele('fills').att('count', wb.styleData.fills.length);
     wb.styleData.fills.forEach(f => {
-      let fXML = fillXML.ele('fill');
+      const fXML = fillXML.ele('fill');
       f.addToXMLele(fXML);
     });
   }
 
   if (wb.styleData.borders.length > 0) {
-    let borderXML = xml.ele('borders').att('count', wb.styleData.borders.length);
+    const borderXML = xml.ele('borders').att('count', wb.styleData.borders.length);
     wb.styleData.borders.forEach(b => {
       b.addToXMLele(borderXML);
     });
   }
 
-  let cellXfsXML = xml.ele('cellXfs').att('count', wb.styles.length);
+  const cellXfsXML = xml.ele('cellXfs').att('count', wb.styles.length);
   wb.styles.forEach(s => {
     s.addXFtoXMLele(cellXfsXML);
   });

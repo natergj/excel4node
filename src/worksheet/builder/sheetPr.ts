@@ -20,7 +20,7 @@ export default function addSheetPr(xml: XMLElementOrXMLNode, ws: Worksheet) {
     }
 
     if (options.outline.summaryBelow || options.outline.summaryRight) {
-      let outlineEle = ele.ele('outlinePr');
+      const outlineEle = ele.ele('outlinePr');
       outlineEle.att('applyStyles', 1);
       outlineEle.att('summaryBelow', options.outline.summaryBelow === true ? 1 : 0);
       outlineEle.att('summaryRight', options.outline.summaryRight === true ? 1 : 0);

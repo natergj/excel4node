@@ -20,42 +20,36 @@ export default function addSharedStrings(builder: IWorkbookBuilder) {
     .att('uniqueCount', wb.sharedStrings.size)
     .att('xmlns', 'http://schemas.openxmlformats.org/spreadsheetml/2006/main');
 
-  wb.sharedStrings.forEach(s => {
-    if (typeof s === 'string') {
+  wb.sharedStrings.forEach((index, str) => {
+    if (typeof str === 'string') {
       xml
         .ele('si')
         .ele('t')
-        .txt(s);
-    } else if (s instanceof Array) {
-      let thisSI = xml.ele('si');
-      let theseRuns = []; // §18.4.4 r (Rich Text Run)
-      let currProps = {};
+        .txt(str);
+    } else if (str instanceof Array) {
+      const thisSI = xml.ele('si');
+      const theseRuns = []; // §18.4.4 r (Rich Text Run)
+      const currProps = {};
       let curRun;
       let i = 0;
-      while (i < s.length) {
-        if (typeof s[i] === 'string') {
+      while (i < str.length) {
+        if (typeof str[i] === 'string') {
           if (curRun === undefined) {
-            theseRuns.push({
-              props: {},
-              text: '',
-            });
+            theseRuns.push({ props: {}, text: '' });
             curRun = theseRuns[theseRuns.length - 1];
           }
-          curRun.text = curRun.text + s[i];
-        } else if (typeof s[i] === 'object') {
-          theseRuns.push({
-            props: {},
-            text: '',
-          });
+          curRun.text = curRun.text + str[i];
+        } else if (typeof str[i] === 'object') {
+          theseRuns.push({ props: {}, text: '' });
           curRun = theseRuns[theseRuns.length - 1];
-          Object.keys(s[i]).forEach(k => {
-            currProps[k] = s[i][k];
+          Object.keys(str[i]).forEach(k => {
+            currProps[k] = str[i][k];
           });
           Object.keys(currProps).forEach(k => {
             curRun.props[k] = currProps[k];
           });
-          if (s[i].value !== undefined) {
-            curRun.text = s[i].value;
+          if (str[i].value !== undefined) {
+            curRun.text = str[i].value;
           }
         }
         i++;
@@ -65,23 +59,45 @@ export default function addSharedStrings(builder: IWorkbookBuilder) {
         if (Object.keys(run).length < 1) {
           thisSI.ele('t', run.text).att('xml:space', 'preserve');
         } else {
-          let thisRun = thisSI.ele('r');
-          let thisRunProps = thisRun.ele('rPr');
-          typeof run.props.name === 'string' ? thisRunProps.ele('rFont').att('val', run.props.name) : null;
-          run.props.bold === true ? thisRunProps.ele('b') : null;
-          run.props.italics === true ? thisRunProps.ele('i') : null;
-          run.props.strike === true ? thisRunProps.ele('strike') : null;
-          run.props.outline === true ? thisRunProps.ele('outline') : null;
-          run.props.shadow === true ? thisRunProps.ele('shadow') : null;
-          run.props.condense === true ? thisRunProps.ele('condense') : null;
-          run.props.extend === true ? thisRunProps.ele('extend') : null;
+          const thisRun = thisSI.ele('r');
+          const thisRunProps = thisRun.ele('rPr');
+          if (typeof run.props.name === 'string') {
+            thisRunProps.ele('rFont').att('val', run.props.name);
+          }
+          if (run.props.bold === true) {
+            thisRunProps.ele('b');
+          }
+          if (run.props.italics === true) {
+            thisRunProps.ele('i');
+          }
+          if (run.props.strike === true) {
+            thisRunProps.ele('strike');
+          }
+          if (run.props.outline === true) {
+            thisRunProps.ele('outline');
+          }
+          if (run.props.shadow === true) {
+            thisRunProps.ele('shadow');
+          }
+          if (run.props.condense === true) {
+            thisRunProps.ele('condense');
+          }
+          if (run.props.extend === true) {
+            thisRunProps.ele('extend');
+          }
           if (typeof run.props.color === 'string') {
-            let thisColor = new CTColor(run.props.color);
+            const thisColor = new CTColor(run.props.color);
             thisColor.addToXMLele(thisRunProps);
           }
-          typeof run.props.size === 'number' ? thisRunProps.ele('sz').att('val', run.props.size) : null;
-          run.props.underline === true ? thisRunProps.ele('u') : null;
-          typeof run.props.vertAlign === 'string' ? thisRunProps.ele('vertAlign').att('val', run.props.vertAlign) : null;
+          if (typeof run.props.size === 'number') {
+            thisRunProps.ele('sz').att('val', run.props.size);
+          }
+          if (run.props.underline === true) {
+            thisRunProps.ele('u');
+          }
+          if (typeof run.props.vertAlign === 'string') {
+            thisRunProps.ele('vertAlign').att('val', run.props.vertAlign);
+          }
           thisRun.ele('t', run.text).att('xml:space', 'preserve');
         }
       });

@@ -22,8 +22,8 @@ export default function addWorkbookXml(builder: IWorkbookBuilder) {
   xml.att('xmlns:x15', 'http://schemas.microsoft.com/office/spreadsheetml/2010/11/main');
 
   // bookViews (§18.2.1)
-  let booksViewEle = xml.ele('bookViews');
-  let workbookViewEle = booksViewEle.ele('workbookView');
+  const booksViewEle = xml.ele('bookViews');
+  const workbookViewEle = booksViewEle.ele('workbookView');
   if (wb.opts.workbookView) {
     const viewOpts = wb.opts.workbookView;
     if (viewOpts.activeTab) {
@@ -67,7 +67,7 @@ export default function addWorkbookXml(builder: IWorkbookBuilder) {
     }
   }
 
-  let sheetsEle = xml.ele('sheets');
+  const sheetsEle = xml.ele('sheets');
   wb.sheets.forEach((ws: Worksheet) => {
     const sheet = sheetsEle
       .ele('sheet')

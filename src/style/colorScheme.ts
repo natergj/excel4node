@@ -1,4 +1,4 @@
-//§20.1.6.2 clrScheme (Color Scheme)
+// §20.1.6.2 clrScheme (Color Scheme)
 export enum colorScheme {
   'dark 1',
   'light 1',

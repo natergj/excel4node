@@ -91,7 +91,8 @@ export interface IWorksheetOptsPageSetup {
 
   /**
    * Use the printer’s defaults settings for page setup values and don't use the default values specified in the schema.
-   * [Example: If dpi is not present or specified in the XML, the application must not assume 600dpi as specified in the schema as a default and instead must let the printer specify the default dpi. end example]
+   * [Example: If dpi is not present or specified in the XML, the application must not assume 600dpi as specified in the schema as a default and instead must
+   * let the printer specify the default dpi. end example]
    */
   usePrinterDefaults: boolean;
 

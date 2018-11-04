@@ -123,18 +123,18 @@ export function boolToInt(bool: boolean | 1 | '1' | 0 | '0') {
   if (bool === false) {
     return 0;
   }
-  if (parseInt(String(bool)) === 1) {
+  if (parseInt(String(bool), 10) === 1) {
     return 1;
   }
-  if (parseInt(String(bool)) === 0) {
+  if (parseInt(String(bool), 10) === 0) {
     return 0;
   }
   throw new TypeError('Value sent to boolToInt must be true, false, 1 or 0');
 }
 
 export function sortCellRefs(a: string, b: string) {
-  let aAtt = getExcelRowCol(a);
-  let bAtt = getExcelRowCol(b);
+  const aAtt = getExcelRowCol(a);
+  const bAtt = getExcelRowCol(b);
   if (aAtt.col === bAtt.col) {
     return aAtt.row - bAtt.row;
   } else {
@@ -143,7 +143,7 @@ export function sortCellRefs(a: string, b: string) {
 }
 
 function _bitXOR(a, b) {
-  let maxLength = a.length > b.length ? a.length : b.length;
+  const maxLength = a.length > b.length ? a.length : b.length;
 
   let padString = '';
   for (let i = 0; i < maxLength; i++) {
@@ -166,7 +166,7 @@ function _rotateBinary(bin) {
 
 function _getHashForChar(char, hash) {
   hash = hash ? hash : '0000';
-  let charCode = char.charCodeAt(0);
+  const charCode = char.charCodeAt(0);
   let hashBin = parseInt(hash, 16).toString(2);
   let charBin = parseInt(charCode, 10).toString(2);
   hashBin = String('000000000000000' + hashBin).substr(-15);
@@ -184,17 +184,17 @@ export function getHashOfPassword(str) {
   for (let i = str.length - 1; i >= 0; i--) {
     curHash = _getHashForChar(str[i], curHash);
   }
-  let curHashBin = parseInt(curHash, 16).toString(2);
-  let charCountBin = parseInt(str.length, 10).toString(2);
-  let saltBin = parseInt('CE4B', 16).toString(2);
+  const curHashBin = parseInt(curHash, 16).toString(2);
+  const charCountBin = parseInt(str.length, 10).toString(2);
+  const saltBin = parseInt('CE4B', 16).toString(2);
 
-  let firstXOR = _bitXOR(curHashBin, charCountBin);
-  let finalHashBin = _bitXOR(firstXOR, saltBin);
-  let finalHash = String(
+  const firstXOR = _bitXOR(curHashBin, charCountBin);
+  const finalHashBin = _bitXOR(firstXOR, saltBin);
+  const finalHash = String(
     '0000' +
       parseInt(finalHashBin, 2)
         .toString(16)
-        .toUpperCase()
+        .toUpperCase(),
   ).slice(-4);
 
   return finalHash;

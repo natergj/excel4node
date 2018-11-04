@@ -1,19 +1,19 @@
 {
-    "defaultSeverity": "error",
-    "extends": [
-        "tslint:recommended"
-    ],
-    "jsRules": {},
-    "rules": {
-        "arrow-parens": false,
-        "max-line-length": 160,
-        "member-access": false,
-        "member-ordering": false,
-        "object-literal-sort-keys": false,
-        "ordered-imports": false,
-        "quotemark": [true, "single", "jsx-double"],
-        "semicolon": [true, "always", "ignore-bound-class-methods"],
-        "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore", "allow-pascal-case" ]
-    },
-    "rulesDirectory": []
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended"
+  ],
+  "jsRules": {},
+  "rules": {
+    "arrow-parens": false,
+    "max-line-length": [true, 160],
+    "member-access": false,
+    "member-ordering": false,
+    "object-literal-sort-keys": false,
+    "ordered-imports": false,
+    "quotemark": [true, "single", "jsx-double"],
+    "semicolon": [true, "always", "ignore-bound-class-methods"],
+    "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore", "allow-pascal-case"]
+  },
+  "rulesDirectory": []
 }

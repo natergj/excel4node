@@ -4,32 +4,51 @@ import { sortCellRefs } from '../../utils/excel4node';
 
 export default function addSheetData(xml: XMLElementOrXMLNode, ws: Worksheet) {
   // §18.3.1.80 sheetData (Sheet Data)
-  let ele = xml.ele('sheetData');
+  const ele = xml.ele('sheetData');
 
   // TODO asynchronous loop
-  for (var r = 0; r < ws.rows.length; r++) {
-    let thisRow = ws.rows[r];
-    thisRow.cellRefs.sort(sortCellRefs);
+  for (let r = 1; r <= ws.rows.size; r++) {
+    const thisRow = ws.row(r);
+    const sortedRefs = Array.from(thisRow.cellRefs).sort(sortCellRefs);
 
-    let rEle = ele.ele('row');
+    const rEle = ele.ele('row');
 
     rEle.att('r', thisRow.r);
     if (ws.opts.disableRowSpansOptimization !== true && thisRow.spans) {
       rEle.att('spans', thisRow.spans);
     }
-    thisRow.s !== null ? rEle.att('s', thisRow.s) : null;
-    thisRow.customFormat !== null ? rEle.att('customFormat', thisRow.customFormat) : null;
-    thisRow.ht !== null ? rEle.att('ht', thisRow.ht) : null;
-    thisRow.hidden !== null ? rEle.att('hidden', thisRow.hidden) : null;
-    thisRow.customHeight === true || typeof ws.opts.sheetFormat.defaultRowHeight === 'number' ? rEle.att('customHeight', 1) : null;
-    thisRow.outlineLevel !== null ? rEle.att('outlineLevel', thisRow.outlineLevel) : null;
-    thisRow.collapsed !== null ? rEle.att('collapsed', thisRow.collapsed) : null;
-    thisRow.thickTop !== null ? rEle.att('thickTop', thisRow.thickTop) : null;
-    thisRow.thickBot !== null ? rEle.att('thickBot', thisRow.thickBot) : null;
 
-    for (var i = 0; i < thisRow.cellRefs.length; i++) {
-      ws.cells[thisRow.cellRefs[i]].addToXMLele(rEle);
+    if (thisRow.s !== undefined) {
+      rEle.att('s', thisRow.s);
     }
+    if (thisRow.customFormat !== undefined) {
+      rEle.att('customFormat', thisRow.customFormat);
+    }
+    if (thisRow.ht !== undefined) {
+      rEle.att('ht', thisRow.ht);
+    }
+    if (thisRow.hidden !== undefined) {
+      rEle.att('hidden', thisRow.hidden);
+    }
+    if (thisRow.customHeight === true || typeof ws.opts.sheetFormat.defaultRowHeight === 'number') {
+      rEle.att('customHeight', 1);
+    }
+    if (thisRow.outlineLevel !== undefined) {
+      rEle.att('outlineLevel', thisRow.outlineLevel);
+    }
+    if (thisRow.collapsed !== undefined) {
+      rEle.att('collapsed', thisRow.collapsed);
+    }
+    if (thisRow.thickTop !== undefined) {
+      rEle.att('thickTop', thisRow.thickTop);
+    }
+    if (thisRow.thickBot !== undefined) {
+      rEle.att('thickBot', thisRow.thickBot);
+    }
+
+    sortedRefs.forEach(ref => {
+      ws.cells.get(ref).addToXMLele(rEle);
+    });
 
     rEle.up();
   }
