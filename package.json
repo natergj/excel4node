@@ -42,7 +42,7 @@
     "prepublish": "npm run build; npm run test"
   },
   "dependencies": {
-    "deepmerge": "2.1.1",
+    "deepmerge": "^3.0.0",
     "image-size": "0.6.3",
     "jszip": "3.1.5",
     "lodash.get": "4.4.2",
