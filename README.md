@@ -217,9 +217,9 @@ wb.writeToBuffer().then(function(buffer) {
 
 An instance of the Worksheet class contains all information specific to that worksheet
 
-#### Contstructor
+#### Constructor
 
-Worksheet contructor is called via Workbook class and accepts a name and configuration object
+Worksheet constructor is called via Workbook class and accepts a name and configuration object
 
 ```javascript
 var xl = require('excel4node');
