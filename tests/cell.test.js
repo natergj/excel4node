@@ -1,6 +1,6 @@
 const test = require('tape');
 const DOMParser = require('xmldom').DOMParser;
-const xl = require('../source/index');
+const xl = require('../distribution/index');
 
 test('Cell coverage', (t) => {
     t.plan(1);
@@ -100,11 +100,11 @@ test('Complex String value should NOT be rewritten from Style', (t) => {
     };
     for (const i in arr) {
         const el = arr[i];
-        style.value = el;
-        ws.cell(1, parseInt(i)+1).string([ style ]);
+        ws.cell(1, parseInt(i)+1).string([ Object.assign({ value: el }, style) ]);
     }
     const cells = ws.cells;
     const values = Object.values(cells).map( e => wb.sharedStrings[e.v][0].value||wb.sharedStrings[e.v] );
+    console.log(values)
     t.ok(values[0]==arr[0], '1 cell value equals 1 array value');
     t.ok(values[1]==arr[1], '2 cell value equals 2 array value');
     t.ok(values[2]==arr[2], '3 cell value equals 3 array value');
