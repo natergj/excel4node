@@ -1,3 +1,5 @@
+const Crypto = require('crypto-js');
+
 let types = require('./types/index.js');
 
 let _bitXOR = (a, b) => {
@@ -226,6 +228,75 @@ let boolToInt = (bool) => {
     throw new TypeError('Value sent to boolToInt must be true, false, 1 or 0');
 };
 
+/**
+ * 
+ * @param {String} str String
+ */
+let generateMd5 = (str) => {
+    return Crypto.MD5(str).toString();
+};
+
+/**
+ * 
+ * @param {Object} obj
+ */
+let reduceObjectToString = (obj, recursion_level = 0) => {
+
+    if(recursion_level > 3){
+        return ''
+    }
+    recursion_level++
+
+    if(typeof obj !== 'object') {
+        return obj; //it's nothing to reduce anymore
+    }
+
+    let accumulator = ''
+
+    const keys = Object.keys(obj).sort( (a, b) => a-b); //`${a}`.localeCompare​(`${b}`, 'i')
+
+    for (let i = 0; i < keys.length; i++) {
+
+        const key = keys[i];
+
+        if(!(key in obj)){
+            continue;
+        }
+        
+        let val = obj[key];
+        if(typeof val === 'obj'){
+            val = reduceObjectToString(val);
+        }
+
+        accumulator += `${key}:${val};`;
+
+    }
+
+    return accumulator
+}
+
+
+/**
+ * 
+ * @param {Array} arr Array of data
+ */
+let reduceComplexStringArrayToString = (arr) => {
+    return arr.reduce(
+        (acc, curr, i) => {
+            return `${acc},,${i},${reduceObjectToString(curr)}`;
+        }, ''
+    );
+};
+
+/**
+ * 
+ * @param {Array} arr Array of data
+ */
+let generateComplexStringMd5 = (arr) => {
+    const str = reduceComplexStringArrayToString(arr)
+    return generateMd5(str)
+}
+
 /*
  * Helper Functions
  */
@@ -241,5 +312,9 @@ module.exports = {
     arrayIntersectSafe,
     getAllCellsInExcelRange,
     getAllCellsInNumericRange,
-    boolToInt
+    boolToInt,
+    reduceObjectToString,
+    reduceComplexStringArrayToString,
+    generateComplexStringMd5,
+    generateMd5
 };
