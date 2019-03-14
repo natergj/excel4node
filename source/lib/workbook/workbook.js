@@ -1,5 +1,6 @@
 const _isUndefined = require('lodash.isundefined');
 const deepmerge = require('deepmerge');
+const uuidv4 = require('uuid/v4');
 const fs = require('fs');
 const utils = require('../utils.js');
 const Worksheet = require('../worksheet');
@@ -254,14 +255,19 @@ class Workbook {
 
     /**
      * Gets the index of a string from the shared string array if exists and adds the string if it does not and returns the new index
-     * @param {String} val Text of string
+     * @param {String|Array} val Text of string, OR Array of Complex String
      * @returns {Number} index of the string in the shared strings array
      */
     getStringIndex(val) {
-        const target = this.sharedStringLookup[val];
+        let _val = val
+        if(typeof val === 'object' && Array.isArray(val)){  // in case of complex string...
+            _val = uuidv4() // no new dependencies -> reduced dist size, better performance 
+                            // BUT unique _val for EVERY (even equal) complex string -> bigger sharedString size
+        }
+        const target = this.sharedStringLookup[_val];
         if (_isUndefined(target)) {
             const index = this.sharedStrings.push(val) - 1;
-            this.sharedStringLookup[val] = index;
+            this.sharedStringLookup[_val] = index;
             return index;
         } else {
             return target;
