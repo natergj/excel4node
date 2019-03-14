@@ -100,7 +100,9 @@ test('Complex String value should NOT be rewritten from Style', (t) => {
     };
     for (const i in arr) {
         const el = arr[i];
-        ws.cell(1, parseInt(i)+1).string([ Object.assign({ value: el }, style) ]);
+        const strarr = JSON.parse(JSON.stringify(style));
+        strarr.value = el;
+        ws.cell(1, parseInt(i)+1).string([ strarr ]);
     }
     const cells = ws.cells;
     const values = Object.values(cells).map( e => wb.sharedStrings[e.v][0].value||wb.sharedStrings[e.v] );
