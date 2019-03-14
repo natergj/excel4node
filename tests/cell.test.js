@@ -105,7 +105,7 @@ test('Complex String value should NOT be rewritten from Style', (t) => {
         ws.cell(1, parseInt(i)+1).string([ strarr ]);
     }
     const cells = ws.cells;
-    const values = Object.values(cells).map( e => wb.sharedStrings[e.v][0].value||wb.sharedStrings[e.v] );
+    const values = Object.keys(cells).map(key => cells[key]).map( e => wb.sharedStrings[e.v][0].value||wb.sharedStrings[e.v] );
     console.log(values)
     t.ok(values[0]==arr[0], '1 cell value equals 1 array value');
     t.ok(values[1]==arr[1], '2 cell value equals 2 array value');
