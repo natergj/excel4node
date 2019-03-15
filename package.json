@@ -20,12 +20,7 @@
     "name": "Nater",
     "email": "nater@iamnater.com"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://opensource.org/licenses/mit-license.php"
-    }
-  ],
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git://github.com/natergj/excel4node.git"
