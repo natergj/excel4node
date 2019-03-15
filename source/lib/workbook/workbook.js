@@ -258,9 +258,9 @@ class Workbook {
      * @returns {Number} index of the string in the shared strings array
      */
     getStringIndex(val) {
-        let _val = val
+        let _val = val;
         if(typeof val === 'object' && Array.isArray(val)){  // in case of complex string...
-            _val = JSON.stringify(val)
+            _val = JSON.stringify(val);
         }
         const target = this.sharedStringLookup[_val];
         if (_isUndefined(target)) {
