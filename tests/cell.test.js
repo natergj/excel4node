@@ -1,6 +1,6 @@
 const test = require('tape');
 const DOMParser = require('xmldom').DOMParser;
-const xl = require('../distribution/index');
+const xl = require('../source/index');
 
 test('Cell coverage', (t) => {
     t.plan(1);

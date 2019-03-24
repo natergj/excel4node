@@ -1,6 +1,6 @@
 let test = require('tape');
-let xl = require('../distribution/index');
-let Font = require('../distribution/lib/style/classes/font.js');
+let xl = require('../source/index');
+let Font = require('../source/lib/style/classes/font.js');
 
 test('Change default workbook options', (t) => {
 

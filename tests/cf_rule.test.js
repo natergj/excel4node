@@ -1,7 +1,7 @@
 var deepmerge = require('deepmerge');
 var test = require('tape');
 
-var CfRule = require('../distribution/lib/worksheet/cf/cf_rule');
+var CfRule = require('../source/lib/worksheet/cf/cf_rule');
 
 test('CfRule init', function (t) {
     t.plan(4);

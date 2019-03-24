@@ -1,6 +1,6 @@
 let test = require('tape');
-let xl = require('../distribution/index');
-let Column = require('../distribution/lib/column/column.js');
+let xl = require('../source/index');
+let Column = require('../source/lib/column/column.js');
 
 test('Column Tests', (t) => {
 

@@ -1,7 +1,7 @@
 const test = require('tape');
-const xl = require('../distribution/index');
+const xl = require('../source/index');
 const DOMParser = require('xmldom').DOMParser;
-const DataValidation = require('../distribution/lib/worksheet/classes/dataValidation.js');
+const DataValidation = require('../source/lib/worksheet/classes/dataValidation.js');
 
 test('DataValidation Tests', (t) => {
     let wb = new xl.Workbook();

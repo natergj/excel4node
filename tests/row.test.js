@@ -1,6 +1,6 @@
 let test = require('tape');
-let xl = require('../distribution/index');
-let Row = require('../distribution/lib/row/row.js');
+let xl = require('../source/index');
+let Row = require('../source/lib/row/row.js');
 
 test('Row Tests', (t) => {
 

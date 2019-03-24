@@ -1,5 +1,5 @@
 let test = require('tape');
-let xl = require('../distribution/index');
+let xl = require('../source/index');
 
 test('Create Hyperlink', (t) => {
     let wb = new xl.Workbook();

@@ -1,5 +1,5 @@
 let test = require('tape');
-let xl = require('../distribution/index');
+let xl = require('../source/index');
 
 test('Test library functions', (t) => {
     t.equals(xl.getExcelRowCol('A1').row, 1, 'Returned correct row from ref lookup');

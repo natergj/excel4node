@@ -1,6 +1,6 @@
 let test = require('tape');
-let xl = require('../distribution/index.js');
-let Style = require('../distribution/lib/style');
+let xl = require('../source/index.js');
+let Style = require('../source/lib/style');
 let xmlbuilder = require('xmlbuilder');
 
 test('Create New Style', (t) => {
