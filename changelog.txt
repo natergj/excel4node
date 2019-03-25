@@ -1,3 +1,10 @@
+1.7.1
+        Bug Fixes:
+        resolves https://github.com/natergj/excel4node/issues/269 to fix issue where multiple complex strings could not be used
+        merges https://github.com/natergj/excel4node/pull/264 to fix README typo
+        merges https://github.com/natergj/excel4node/pull/272 to fix license format
+        merges https://github.com/natergj/excel4node/pull/275 to address https://github.com/natergj/excel4node/issues/258
+
 1.7.0
         Bug Fixes:
         resolves https://github.com/natergj/excel4node/issues/238 to fix issue with certain emoji characters
