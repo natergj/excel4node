@@ -258,10 +258,11 @@ class Workbook {
      * @returns {Number} index of the string in the shared strings array
      */
     getStringIndex(val) {
-        const target = this.sharedStringLookup.get(val);
+        const lookupKey = typeof val === "string" ? val : JSON.stringify(val);
+        const target = this.sharedStringLookup.get(lookupKey);
         if (_isUndefined(target)) {
             const index = this.sharedStrings.push(val) - 1;
-            this.sharedStringLookup.set(val, index);
+            this.sharedStringLookup.set(lookupKey, index);
             return index;
         } else {
             return target;
