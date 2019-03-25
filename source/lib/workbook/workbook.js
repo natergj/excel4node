@@ -90,9 +90,9 @@ class Workbook {
 
         this.sheets = [];
         this.sharedStrings = [];
-        this.sharedStringLookup = {};
+        this.sharedStringLookup = new Map();
         this.styles = [];
-        this.stylesLookup = {};
+        this.stylesLookup = new Map();
         this.dxfCollection = new DXFCollection(this);
         this.mediaCollection = new MediaCollection();
         this.definedNameCollection = new DefinedNameCollection();
@@ -242,11 +242,11 @@ class Workbook {
         const lookupKey = JSON.stringify(thisStyle.toObject());
 
         // Use existing style if one exists
-        if (this.stylesLookup[lookupKey]) {
-            return this.stylesLookup[lookupKey];
+        if (this.stylesLookup.get(lookupKey)) {
+            return this.stylesLookup.get(lookupKey);
         }
 
-        this.stylesLookup[lookupKey] = thisStyle;
+        this.stylesLookup.set(lookupKey, thisStyle);
         const index = this.styles.push(thisStyle) - 1;
         this.styles[index].ids.cellXfs = index;
         return this.styles[index];
@@ -258,10 +258,11 @@ class Workbook {
      * @returns {Number} index of the string in the shared strings array
      */
     getStringIndex(val) {
-        const target = this.sharedStringLookup[val];
+        const lookupKey = typeof val === "string" ? val : JSON.stringify(val);
+        const target = this.sharedStringLookup.get(lookupKey);
         if (_isUndefined(target)) {
             const index = this.sharedStrings.push(val) - 1;
-            this.sharedStringLookup[val] = index;
+            this.sharedStringLookup.set(lookupKey, index);
             return index;
         } else {
             return target;
