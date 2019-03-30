@@ -1,7 +1,7 @@
 import xmlbuilder from 'xmlbuilder';
-import IWorkbookBuilder from '../types/IWorkbookBuilder';
 import { getDataStream } from '../../utils/dataStream';
 import { Worksheet } from '../../worksheet';
+import { IWorkbookBuilder } from '.';
 
 export default function addWorkbookXml(builder: IWorkbookBuilder) {
   const { wb, xlsx } = builder;

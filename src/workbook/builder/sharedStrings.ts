@@ -1,7 +1,7 @@
 import xmlbuilder from 'xmlbuilder';
-import IWorkbookBuilder from '../types/IWorkbookBuilder';
 import { getDataStream } from '../../utils/dataStream';
 import CTColor from '../../style/CTColor';
+import { IWorkbookBuilder } from '.';
 
 export default function addSharedStrings(builder: IWorkbookBuilder) {
   const { wb, xlsx } = builder;

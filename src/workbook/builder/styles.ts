@@ -1,6 +1,6 @@
 import xmlbuilder from 'xmlbuilder';
-import IWorkbookBuilder from '../types/IWorkbookBuilder';
 import { getDataStream } from '../../utils/dataStream';
+import { IWorkbookBuilder } from '.';
 
 // Required as stated in §12.2
 export default function addContentTypes(builder: IWorkbookBuilder) {

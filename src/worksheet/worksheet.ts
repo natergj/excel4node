@@ -1,10 +1,10 @@
 import { Workbook } from '../workbook';
 import { defaultWorksheetOpts } from './defaultWorksheetOptions';
 import { IWorksheetOpts, IWorksheetConstructorOpts } from './types';
-import IWorkbookBuilder from '../workbook/types/IWorkbookBuilder';
 import { addWorksheetFile, addWorksheetRelsFile } from './builder';
 import { CellAccessor, Cell } from '../cell';
 import { Row } from '../row';
+import { IWorkbookBuilder } from '../workbook/builder';
 
 export default class Worksheet {
   name: string;

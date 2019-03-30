@@ -1,6 +1,5 @@
 import xmlbuilder from 'xmlbuilder';
 import Worksheet from '../worksheet';
-import IWorkbookBuilder from '../../workbook/types/IWorkbookBuilder';
 import { getDataStream } from '../../utils/dataStream';
 import addSheetPr from './sheetPr';
 import addDimensions from './dimensions';
@@ -19,6 +18,7 @@ import addPageMargins from './pageMargins';
 import addPageSetup from './pageSetup';
 import addHeaderFooter from './headerFooter';
 import addDrawing from './drawing';
+import { IWorkbookBuilder } from '../../workbook/builder';
 
 export function addWorksheetFile(builder: IWorkbookBuilder, ws: Worksheet) {
   const dataStream = getDataStream();

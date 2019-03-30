@@ -1,8 +1,33 @@
 import { Worksheet, IWorksheetOpts } from '../worksheet';
-import { IWorkbookOptions } from '../workbook';
 import buildWorkbook from './builder';
-import { SimpleLogger } from '../utils/logger';
+import { SimpleLogger, ILogger, LogLevel } from '../utils/logger';
 import { StyleSheet } from '../style';
+import { JSZipFileOptions } from 'jszip';
+
+interface IWorkbookView {
+  activeTab: number;
+  autoFilterDateGrouping: boolean;
+  firstSheet: number;
+  minimized: boolean;
+  showHorizontalScroll: boolean;
+  showSheetTabs: boolean;
+  showVerticalScroll: boolean;
+  tabRatio: number;
+  visibility: string;
+  windowHeight: number;
+  windowWidth: number;
+  xWindow: number;
+  yWindow: number;
+}
+
+interface IWorkbookOptions {
+  jszip?: JSZipFileOptions;
+  logger?: ILogger;
+  logLevel?: LogLevel;
+  defaultFont?: any;
+  dateFormat?: string;
+  workbookView?: IWorkbookView;
+}
 
 // Default Options for Workbook
 const workbookDefaultOpts = {

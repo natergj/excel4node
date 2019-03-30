@@ -9,11 +9,16 @@ import addWorkbookRels from './wokbookRels';
 import addSharedStrings from './sharedStrings';
 import addStyles from './styles';
 
+export interface IWorkbookBuilder {
+  wb: Workbook;
+  xlsx: JSZip;
+}
+
 export default async function buildWorkbook(name: string, wb: Workbook) {
   if (wb.sheets.size === 0) {
     wb.addWorksheet('Sheet 1');
   }
-  const builder = {
+  const builder: IWorkbookBuilder = {
     wb,
     xlsx: new JSZip(),
   };
