@@ -1,3 +1,36 @@
+1.7.1
+        Bug Fixes:
+        resolves https://github.com/natergj/excel4node/issues/269 to fix issue where multiple complex strings could not be used
+        merges https://github.com/natergj/excel4node/pull/264 to fix README typo
+        merges https://github.com/natergj/excel4node/pull/272 to fix license format
+        merges https://github.com/natergj/excel4node/pull/275 to address https://github.com/natergj/excel4node/issues/258
+
+1.7.0
+        Bug Fixes:
+        resolves https://github.com/natergj/excel4node/issues/238 to fix issue with certain emoji characters
+        merges https://github.com/natergj/excel4node/pull/240 to fix issue with workbook validation using .Net validation library provided by Microsoft
+        resolves https://github.com/natergj/excel4node/issues/236 where first tab will still be shown even if it is hidden
+
+        Enhancements:
+        merges https://github.com/natergj/excel4node/pull/243 to add basic cell comment functionality
+        
+1.6.0
+        Bug Fixes:
+        merges https://github.com/natergj/excel4node/pull/232 to fix issue where emoji were not being added to worksheets
+
+        Enhancements:
+        addresses https://github.com/natergj/excel4node/issues/194 by adding ability to set Print Area for worksheets
+        addresses https://github.com/natergj/excel4node/issues/233 by adding ability to set Page Breaks for worksheets
+
+1.5.1
+        Bug Fixes:
+        resolves https://github.com/natergj/excel4node/issues/218 where library crashed when null or undefined value was sent to cell string method
+        resolves https://github.com/natergj/excel4node/issues/226 where default font would not be applied to dates when opening workbook in LibreOffice
+        merges https://github.com/natergj/excel4node/pull/225 which removes error when attempting to bundle application with excel4node as dependency
+
+        Enhancements:
+        merges https://github.com/natergj/excel4node/pull/230 which reduces library size by only installed specific lodash functions
+
 1.5.0
         Bug Fixes:
         resolves https://github.com/natergj/excel4node/issues/156 where an error will be thrown if no Worksheet is specified prior to attempting to write a Workbook

@@ -149,6 +149,7 @@ var wb = new xl.Workbook({
     yWindow: 440, // Specifies the Y coordinate for the upper left corner of the workbook window. The unit of measurement for this value is twips.
   },
   logLevel: 0, // 0 - 5. 0 suppresses all logs, 1 shows errors only, 5 is for debugging
+  author: 'Microsoft Office User', // Name for use in features such as comments
 });
 ```
 
@@ -216,9 +217,9 @@ wb.writeToBuffer().then(function(buffer) {
 
 An instance of the Worksheet class contains all information specific to that worksheet
 
-#### Contstructor
+#### Constructor
 
-Worksheet contructor is called via Workbook class and accepts a name and configuration object
+Worksheet constructor is called via Workbook class and accepts a name and configuration object
 
 ```javascript
 var xl = require('excel4node');
@@ -417,6 +418,38 @@ ws.addConditionalFormattingRule('A1:A10', {
 **The only conditional formatting type that is currently supported is expression.**  
 When the formula returns zero, conditional formatting is NOT displayed. When the formula returns a nonzero value, conditional formatting is displayed.
 
+##### Worksheet Page Breaks
+
+Worksheet page breaks can be added at rows and columns
+
+`ws.addPageBreak(type, position)` where type is `row` or `column` and position is the last row/column before the page break.
+
+```javascript
+
+// Add page break after row 5
+const wb = new xl.Workbook();
+const ws = wb.addWorksheet('Sheet 1');
+ws.cell(5, 1).string('Last row on this page');
+ws.addPageBreak('row', 5);
+```
+
+##### Worksheet Print Area
+
+Worksheet print areas can be set
+
+`ws.setPrintArea(startRow, startCol, endRow, endCol)` where parameters are numbers corresponding to print area
+
+```javascript
+
+// Sets print area to include all cells between A1 and C5 including C5
+const wb = new xl.Workbook();
+const ws = wb.addWorksheet('Sheet 1');
+ws.cell(5, 3).string('Included in print area');
+ws.cell(6, 3).string('Outside of print area, not included in printing');
+ws.setPrintArea(1, 1, 5, 3);
+
+```
+
 ## Rows and Columns
 
 Set custom widths and heights of columns/rows
@@ -466,6 +499,8 @@ ws.column(4).group(1, true);
 ws.column(5).group(1, true);
 ```
 
+Multiple groupings can be nested as demonstrated in [this gist](https://gist.github.com/natergj/b548fe8d2ea00c5b9fa94597c2cf9fd2)
+
 ## Cells
 
 The cell method accesses a single cell or range of cells to manipulate  
@@ -477,6 +512,7 @@ cell method takes two required parameters and 3 optional parameters
 .link(url, [displayStr, tooltip]) accepts a URL and optionally a displayStr and hover tooltip  
 .bool(value) accepts a boolean (true or false)  
 .style(object) accepts the same object as when creating a new style. When applied to a cell that already has style formatting, the original formatting will be kept and updated with the changes sent to the style function.
+.comment(comment, options) Add a comment to the particular cell
 
 ```javascript
 // ws.cell(startRow, startColumn, [[endRow, endColumn], isMerged]);
@@ -624,6 +660,24 @@ ws.cell(4, 1)
   .date(new Date())
   .style({numberFormat: 'yyyy-mm-dd'});
 // Since dates are stored as numbers in Excel, use the numberFormat option of the styles to set the date format as well.
+```
+
+## Comments
+Comments can be added to cells with some options
+
+```
+var wb = new xl.Workbook();
+var ws = wb.addWorksheet('Sheet 1');
+ws.cell(1, 1).comment('My Basic Comment');
+ws.cell(2, 1).string('Cell A2').comment('My custom comment', {
+  fillColor: '#ABABAB', // default #FFFFE1
+  height: '100pt', // default 69pt
+  width: '160pt', // default 104pt
+  marginLeft: '200pt', // default is calculated from column
+  marginTop: '120pt', // default is calculated from row
+  visibility: 'visible', // default hidden
+  zIndex: '2', // default 1
+})
 ```
 
 ## Images

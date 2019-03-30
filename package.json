@@ -42,6 +42,10 @@
     "email": "nater@iamnater.com"
   },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/natergj/excel4node.git"
+  },
   "bugs": {
     "url": "https://github.com/natergj/excel4node/labels/bug"
   },
