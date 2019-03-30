@@ -1,11 +1,4 @@
-import {
-  generateRId,
-  getExcelAlpha,
-  getExcelCellRef,
-  getExcelRowCol,
-  getExcelTS,
-  getHashOfPassword,
-} from '../utils';
+import { generateRId, getExcelAlpha, getExcelCellRef, getExcelRowCol, getExcelTS, getHashOfPassword } from '../utils';
 import { expect } from 'chai';
 
 describe('Utils', () => {

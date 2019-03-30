@@ -63,7 +63,7 @@ export class Row {
   cellRefs: Set<string>;
 
   constructor(row: number, options: Partial<Row> = {}) {
-    Object.keys(options).forEach(o => this[o] = options[o]);
+    Object.keys(options).forEach(o => (this[o] = options[o]));
     this.r = row;
     this.cellRefs = options.cellRefs instanceof Array ? new Set(options.cellRefs) : new Set();
   }
