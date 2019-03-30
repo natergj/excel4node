@@ -1,10 +1,10 @@
 import { JSZipFileOptions } from 'jszip';
 import { IWorkbookView } from './IWorkbookView';
-import { Logger, LogLevel } from '../../utils';
+import { ILogger, LogLevel } from '../../utils';
 
 export interface IWorkbookOptions {
   jszip?: JSZipFileOptions;
-  logger?: Logger;
+  logger?: ILogger;
   logLevel?: LogLevel;
   defaultFont?: any;
   dateFormat?: string;

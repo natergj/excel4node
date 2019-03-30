@@ -17,7 +17,7 @@ export interface ILogger {
   error: (msg?: any, ...additionalParams: any[]) => void;
 }
 
-export class SimpleLogger {
+export class SimpleLogger implements ILogger {
   logLevel: LogLevel;
 
   constructor(logLevel: LogLevel = LogLevel.silent) {
