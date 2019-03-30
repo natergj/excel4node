@@ -2,7 +2,7 @@ import { Worksheet, IWorksheetOpts } from '../worksheet';
 import { IWorkbookOptions } from '../workbook';
 import buildWorkbook from './builder';
 import { SimpleLogger } from '../utils/logger';
-import { StyleCollection } from '../style';
+import { StyleSheet } from '../style';
 
 // Default Options for Workbook
 const workbookDefaultOpts = {
@@ -57,7 +57,7 @@ export default class Workbook {
       isEmpty: true,
     };
     this.styles = [];
-    this.styleData = new StyleCollection();
+    this.styleData = new StyleSheet();
   }
 
   addWorksheet(name: string, opts: Partial<IWorksheetOpts> = {}) {

@@ -4,15 +4,14 @@
   "description": "Library to create formatted MS Excel filies",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
+  "engines": {
+    "node": ">=8.0.0"
+  },
   "scripts": {
-    "prebuild": "npm run clean && npm run generate-json-schemas",
+    "prebuild": "npm run clean",
     "build": "tsc",
-    "postbuild": "npm run copySchemas && npm run copyDeclarations",
-    "copyDeclarations": "cd src && find . -name '*.d.ts' | cpio -pdm ../lib",
-    "copySchemas": "cd src && find . -name '*.schema.json' | cpio -pdm ../lib",
     "clean": "rm -rf lib .coverage .nyc_output",
     "lint": "tslint 'src/**/*.ts'",
-    "generate-json-schemas": "ts-node ./scripts/generateJsonSchemas.ts",
     "sample": "ts-node --project tsconfig.json sample.ts",
     "test": "NODE_ENV=test mocha --require ts-node/register --watch-extensions ts \"src/**/*.test*\"",
     "test:watch": ""
@@ -42,25 +41,19 @@
   },
   "homepage": "https://github.com/natergj/excel4node#readme",
   "devDependencies": {
-    "@types/chai": "4.1.6",
-    "@types/jszip": "^3.1.4",
-    "@types/mocha": "^5.2.5",
-    "@types/xmlbuilder": "0.0.34",
+    "@types/chai": "4.1.7",
+    "@types/jszip": "3.1.5",
+    "@types/mocha": "5.2.6",
     "chai": "4.2.0",
-    "mocha": "^5.2.0",
-    "nyc": "^12.0.2",
-    "prettier": "1.14.3",
-    "ts-json-schema-generator": "^0.32.0",
-    "ts-node": "^7.0.1",
-    "tslint": "^5.11.0",
-    "typedoc": "^0.12.0",
-    "typescript": "3.1.3",
-    "typescript-json-schema": "^0.31.0",
-    "typescript-to-json-schema": "^0.6.0"
+    "mocha": "6.0.2",
+    "nyc": "13.3.0",
+    "prettier": "1.16.4",
+    "ts-node": "8.0.3",
+    "tslint": "5.14.0",
+    "typescript": "3.4.1"
   },
   "dependencies": {
-    "ajv": "^6.5.4",
-    "jszip": "^3.1.5",
-    "xmlbuilder": "10.1.0"
+    "jszip": "3.2.1",
+    "xmlbuilder": "11.0.0"
   }
 }

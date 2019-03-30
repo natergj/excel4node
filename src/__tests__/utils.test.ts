@@ -1,14 +1,21 @@
-import utils from '../utils';
+import {
+  generateRId,
+  getExcelAlpha,
+  getExcelCellRef,
+  getExcelRowCol,
+  getExcelTS,
+  getHashOfPassword,
+} from '../utils';
 import { expect } from 'chai';
 
 describe('Utils', () => {
   describe('generateRId', () => {
     it('should return a string of length 17', () => {
-      expect(utils.generateRId().length).to.equal(17);
+      expect(generateRId().length).to.equal(17);
     });
 
     it('should return a string beginning with R', () => {
-      expect(utils.generateRId().substr(0, 1)).to.equal('R');
+      expect(generateRId().substr(0, 1)).to.equal('R');
     });
   });
 
@@ -24,13 +31,12 @@ describe('Utils', () => {
     ];
     testCases.forEach(t => {
       it(`should return row: ${t.row}, col: ${t.col} for ref: ${t.ref}`, () => {
-        expect(utils.getExcelRowCol(t.ref)).to.eql({ row: t.row, col: t.col });
+        expect(getExcelRowCol(t.ref)).to.eql({ row: t.row, col: t.col });
       });
     });
   });
 
   describe('getExcelAlpha', () => {
-    // prettier-ignore
     const testCases = [
       { col: 1, colStr: 'A' },
       { col: 27, colStr: 'AA' },
@@ -39,22 +45,21 @@ describe('Utils', () => {
     ];
     testCases.forEach(t => {
       it(`should return column string ${t.colStr} for column ${t.col}`, () => {
-        expect(utils.getExcelAlpha(t.col)).to.equal(t.colStr);
+        expect(getExcelAlpha(t.col)).to.equal(t.colStr);
       });
     });
   });
 
   describe('getExcelCellRef', () => {
-    // prettier-ignore
     const testCases = [
-      { row: 1, col: 1, ref: 'A1'},
-      { row: 10, col: 3, ref: 'C10'},
-      { row: 14, col: 27, ref: 'AA14'},
-      { row: 999, col: 729, ref: 'ABA999'},
+      { row: 1, col: 1, ref: 'A1' },
+      { row: 10, col: 3, ref: 'C10' },
+      { row: 14, col: 27, ref: 'AA14' },
+      { row: 999, col: 729, ref: 'ABA999' },
     ];
     testCases.forEach(t => {
       it(`should return excel ref of ${t.ref} for row ${t.row} and col ${t.col}`, () => {
-        expect(utils.getExcelCellRef(t.row, t.col)).to.equal(t.ref);
+        expect(getExcelCellRef(t.row, t.col)).to.equal(t.ref);
       });
     });
   });
@@ -66,9 +71,8 @@ describe('Utils', () => {
      * The serial value 1.5000000... represents 1900-01-01T12:00:00Z
      * The serial value 2958465.9999884... represents 9999-12-31T23:59:59Z
      */
-    // prettier-ignore
     const testCases = [
-      { str: '1910-02-03T10:05:54Z', ts: 3687.4207639},
+      { str: '1910-02-03T10:05:54Z', ts: 3687.4207639 },
       { str: '1900-01-01T12:00:00Z', ts: 1.5 },
       { str: '9999-12-31T23:59:59Z', ts: 2958465.9999884 },
       { str: '1900-01-01T00:00:00Z', ts: 1 },
@@ -79,7 +83,21 @@ describe('Utils', () => {
     ];
     testCases.forEach(t => {
       it(`should return ${t.ts} for date string: ${t.str}`, () => {
-        expect(utils.getExcelTS(t.str)).to.equal(t.ts);
+        expect(getExcelTS(t.str)).to.equal(t.ts);
+      });
+    });
+  });
+
+  describe('getHashOfPassword', () => {
+    const testCases = [
+      { str: 'password', passwd: '83AF' },
+      { str: 'passw0rd', passwd: '946F' },
+      { str: 'pa$sword', passwd: '8117' },
+    ];
+
+    testCases.forEach(t => {
+      it(`should return ${t.passwd} for string: ${t.str}`, () => {
+        expect(getHashOfPassword(t.str)).to.equal(t.passwd);
       });
     });
   });
