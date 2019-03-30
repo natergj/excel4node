@@ -1,7 +1,7 @@
 {
   "name": "excel4node",
   "version": "2.0.0-alpha.1",
-  "description": "Library to create formatted MS Excel filies",
+  "description": "Library to create formatted MS Excel files",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "engines": {
@@ -15,8 +15,8 @@
     "commit:hook": "npm run compile:verify && npm run prettier:verify && npm test",
     "docs:watch": "docsify serve docs",
     "prepublish": "npm run commit:hook && pkg-ok && npm run build",
-    "prettier:verify": "prettier --check src/**/*.ts",
-    "prettier:fix": "prettier --write src/**/*.ts",
+    "prettier:verify": "prettier --check src/**/*.ts docs/**/*.md",
+    "prettier:fix": "prettier --write src/**/*.ts docs/**/*.md",
     "lint": "tslint 'src/**/*.ts'",
     "sample": "ts-node --project tsconfig.json sample.ts",
     "test": "NODE_ENV=test mocha --require ts-node/register --watch-extensions ts \"src/**/*.test*\"",

@@ -12,7 +12,6 @@ excel4node conforms to the ECMA-376 OOXML specification 2nd edition
 [![dependencies Status](https://david-dm.org/natergj/excel4node/status.svg)](https://david-dm.org/natergj/excel4node)
 [![devDependency Status](https://david-dm.org/natergj/excel4node/dev-status.svg)](https://david-dm.org/natergj/excel4node#info=devDependencies)
 
-
 REFERENCES  
 [OpenXML White Paper](http://www.ecma-international.org/news/TC45_current_work/OpenXML%20White%20Paper.pdf)  
 [ECMA-376 Website](http://www.ecma-international.org/publications/standards/Ecma-376.htm)  
