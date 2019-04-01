@@ -762,3 +762,11 @@ ws.addImage({
   },
 });
 ```
+
+## Development tools
+
+### Visual Studio Code
+
+A Visual Studio Code debug configuration named "Debug Current File" has been added to aid in debugging issues during
+development. To use, set breakpoints in the code and run the configuration with code files calling the library. A
+`sample.ts` file is included in the project.
