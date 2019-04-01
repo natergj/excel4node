@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [{
+    "name": "Debug Current File",
+    "type": "node",
+    "request": "launch",
+    "args": ["${relativeFile}"],
+    "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
+    "sourceMaps": true,
+    "cwd": "${workspaceRoot}",
+    "protocol": "inspector",
+  }]
+}
