@@ -14,7 +14,7 @@
     "compile:verify": "tsc --noEmit",
     "commit:hook": "npm run compile:verify && npm run prettier:verify && npm test",
     "docs:watch": "docsify serve docs",
-    "prepublish": "npm run commit:hook && pkg-ok && npm run build",
+    "prepublish": "npm run commit:hook && npm run build",
     "prettier:verify": "prettier --check src/**/*.ts docs/**/*.md",
     "prettier:fix": "prettier --write src/**/*.ts docs/**/*.md",
     "lint": "tslint 'src/**/*.ts'",
@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/natergj/excel4node.git"
+    "url": "git://github.com/natergj/excel4node.git"
   },
   "keywords": [
     "excel",
@@ -42,10 +42,6 @@
     "email": "nater@iamnater.com"
   },
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/natergj/excel4node.git"
-  },
   "bugs": {
     "url": "https://github.com/natergj/excel4node/labels/bug"
   },
@@ -57,9 +53,8 @@
     "chai": "4.2.0",
     "docsify-cli": "4.3.0",
     "husky": "1.3.1",
-    "mocha": "6.0.2",
+    "mocha": "6.1.2",
     "nyc": "13.3.0",
-    "pkg-ok": "2.3.1",
     "prettier": "1.16.4",
     "ts-node": "8.0.3",
     "tslint": "5.14.0",
