@@ -20,36 +20,37 @@ export default function addSharedStrings(builder: IWorkbookBuilder) {
     .att('uniqueCount', wb.sharedStrings.size)
     .att('xmlns', 'http://schemas.openxmlformats.org/spreadsheetml/2006/main');
 
-  wb.sharedStrings.forEach((index, str) => {
-    if (typeof str === 'string') {
+  for ( const str of wb.sharedStrings.keys() ) {
+    const val = JSON.parse(str);
+    if (typeof val === 'string') {
       xml
         .ele('si')
         .ele('t')
-        .txt(str);
-    } else if (str instanceof Array) {
+        .txt(val);
+    } else if (val instanceof Array) {
       const thisSI = xml.ele('si');
       const theseRuns = []; // §18.4.4 r (Rich Text Run)
       const currProps = {};
       let curRun;
       let i = 0;
-      while (i < str.length) {
-        if (typeof str[i] === 'string') {
+      while (i < val.length) {
+        if (typeof val[i] === 'string') {
           if (curRun === undefined) {
             theseRuns.push({ props: {}, text: '' });
             curRun = theseRuns[theseRuns.length - 1];
           }
-          curRun.text = curRun.text + str[i];
-        } else if (typeof str[i] === 'object') {
+          curRun.text = curRun.text + val[i];
+        } else if (typeof val[i] === 'object') {
           theseRuns.push({ props: {}, text: '' });
           curRun = theseRuns[theseRuns.length - 1];
-          Object.keys(str[i]).forEach(k => {
-            currProps[k] = str[i][k];
+          Object.keys(val[i]).forEach(k => {
+            currProps[k] = val[i][k];
           });
           Object.keys(currProps).forEach(k => {
             curRun.props[k] = currProps[k];
           });
-          if (str[i].value !== undefined) {
-            curRun.text = str[i].value;
+          if (val[i].value !== undefined) {
+            curRun.text = val[i].value;
           }
         }
         i++;
@@ -102,7 +103,7 @@ export default function addSharedStrings(builder: IWorkbookBuilder) {
         }
       });
     }
-  });
+  }
 
   xlsx.folder('xl').file('sharedStrings.xml', dataStream);
 

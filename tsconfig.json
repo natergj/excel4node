@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "module": "commonjs",
     "declaration": true,
     "lib": [
@@ -9,9 +9,10 @@
     ],
     "outDir": "./lib",
     "rootDir": "./src",
-    // "strict": true,
     "esModuleInterop": true,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "downlevelIteration": true,
+    "sourceMap": true,
   },
   "files": [
     "src/index.ts"

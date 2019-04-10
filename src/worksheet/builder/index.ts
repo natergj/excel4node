@@ -70,7 +70,7 @@ export function addWorksheetFile(builder: IWorkbookBuilder, ws: Worksheet) {
 }
 
 export function addWorksheetRelsFile(builder: IWorkbookBuilder, ws: Worksheet) {
-  ws.wb.opts.logger.debug(`adding worksheet rels file: ${ws.name}`);
+  ws.wb.logger.debug(`adding worksheet rels file: ${ws.name}`);
   const dataStream = getDataStream();
   const writer = xmlbuilder.streamWriter(dataStream);
 

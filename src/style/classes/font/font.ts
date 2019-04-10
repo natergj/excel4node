@@ -1,6 +1,5 @@
-import { FONT_FAMILY } from '../../../types/fontFamily';
+import { FontFamily, ST_FontScheme } from '../../../types';
 import { getColor, EXCEL_COLOR } from '../../excelColor';
-import { FONT_SCHEME } from '../../../types/fontScheme';
 import { createHash } from 'crypto';
 
 export class Font {
@@ -15,7 +14,7 @@ export class Font {
   /**
    * Font Scheme. defaults to major
    */
-  scheme: FONT_SCHEME;
+  scheme: ST_FontScheme;
   /**
    * Pt size of Font
    */
@@ -23,7 +22,7 @@ export class Font {
   /**
    * Font Family. defaults to roman
    */
-  family: FONT_FAMILY;
+  family: FontFamily;
   /**
    * Specifies font as subscript or superscript
    */
@@ -74,8 +73,8 @@ export class Font {
     this.name = 'Calibri';
     this.size = 12;
     this.color = EXCEL_COLOR.black;
-    this.family = FONT_FAMILY.roman;
-    this.scheme = FONT_SCHEME.minor;
+    this.family = 'roman';
+    this.scheme = 'minor';
 
     if (typeof opts.color === 'string') {
       this.color = getColor(opts.color);
