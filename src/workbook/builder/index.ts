@@ -36,12 +36,13 @@ export default async function buildWorkbook(name: string, wb: Workbook) {
     streamFiles: true,
     mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     compression: 'DEFLATE',
+    ...wb.jszip,
   });
 
   const fd = fs.createWriteStream(name, { encoding: 'utf-8' });
 
   fd.on('finish', () => {
-    wb.opts.logger.info(`${name} file written`);
+    wb.logger.info(`${name} file written`);
   });
   fd.write(xlsxContent);
   fd.end();

@@ -3,6 +3,24 @@ import { Cell } from './cell';
 import { getExcelAlpha, sortCellRefs } from '../utils';
 export * from './cell';
 
+type ComplexString =
+  | string
+  | {
+      name?: string;
+      bold?: boolean;
+      italics?: boolean;
+      strike?: boolean;
+      outline?: boolean;
+      shadow?: boolean;
+      condense?: boolean;
+      extend?: boolean;
+      color?: string;
+      size?: number;
+      underline?: boolean;
+      vertAlign?: string;
+      value?: string;
+    };
+
 export class CellAccessor {
   ws: Worksheet;
   startRow: number;
@@ -98,12 +116,13 @@ export class CellAccessor {
     return lastCol;
   }
 
-  string(str: string) {
+  string(str: string | ComplexString[]) {
     const { sharedStrings } = this.ws.wb;
-    let index = sharedStrings.get(str);
+    const key = JSON.stringify(str);
+    let index = sharedStrings.get(key);
     if (index === undefined) {
       index = sharedStrings.size;
-      sharedStrings.set(str, index);
+      sharedStrings.set(key, index);
     }
     if (this.isMerged) {
       this.ws.cells.get(this.excelRefs[0]).string(index);
