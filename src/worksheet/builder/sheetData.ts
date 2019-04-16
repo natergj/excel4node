@@ -1,6 +1,6 @@
 import Worksheet from '../worksheet';
 import { XMLElementOrXMLNode } from 'xmlbuilder';
-import { sortCellRefs } from '../../utils/excel4node';
+import { sortCellRefs } from '../../utils';
 
 export default function addSheetData(xml: XMLElementOrXMLNode, ws: Worksheet) {
   // §18.3.1.80 sheetData (Sheet Data)

@@ -1,6 +1,6 @@
 import xmlbuilder from 'xmlbuilder';
 import { getDataStream } from '../../utils/dataStream';
-import { boolToInt } from '../../utils/excel4node';
+import { boolToInt } from '../../utils';
 import { Worksheet } from '../../worksheet';
 import { IWorkbookBuilder } from '.';
 

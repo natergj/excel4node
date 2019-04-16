@@ -1,6 +1,6 @@
 import Worksheet from '../worksheet';
 import { XMLElementOrXMLNode } from 'xmlbuilder';
-import { boolToInt, getHashOfPassword } from '../../utils/excel4node';
+import { boolToInt, getHashOfPassword } from '../../utils';
 
 export default function addSheetProtection(xml: XMLElementOrXMLNode, ws: Worksheet) {
   // §18.3.1.85 sheetProtection (Sheet Protection Options)

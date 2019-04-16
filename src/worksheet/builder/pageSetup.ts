@@ -1,7 +1,7 @@
 import Worksheet from '../worksheet';
 import { XMLElementOrXMLNode } from 'xmlbuilder';
 import { PAPER_SIZE } from '../../types/papersize';
-import { boolToInt } from '../../utils/excel4node';
+import { boolToInt } from '../../utils';
 
 export default function addPageSetup(xml: XMLElementOrXMLNode, ws: Worksheet) {
   // §18.3.1.63 pageSetup (Page Setup Settings)
