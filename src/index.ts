@@ -14,3 +14,4 @@
 
 export { Workbook } from './workbook';
 export * from './types';
+export * from './utils';

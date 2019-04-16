@@ -1,6 +1,6 @@
 import Worksheet from '../worksheet';
 import { XMLElementOrXMLNode } from 'xmlbuilder';
-import { getExcelRowCol } from '../../utils/excel4node';
+import { getExcelRowCol } from '../../utils';
 
 // TODO implement
 export default function addAutoFilter(xml: XMLElementOrXMLNode, ws: Worksheet) {

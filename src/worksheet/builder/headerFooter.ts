@@ -1,6 +1,6 @@
 import Worksheet from '../worksheet';
 import { XMLElementOrXMLNode } from 'xmlbuilder';
-import { boolToInt } from '../../utils/excel4node';
+import { boolToInt } from '../../utils';
 
 export default function addHyperlinks(xml: XMLElementOrXMLNode, ws: Worksheet) {
   // §18.3.1.46 headerFooter (Header Footer Settings)

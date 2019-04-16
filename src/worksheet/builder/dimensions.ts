@@ -1,6 +1,6 @@
 import Worksheet from '../worksheet';
 import { XMLElementOrXMLNode } from 'xmlbuilder';
-import { getExcelAlpha } from '../../utils/excel4node';
+import { getExcelAlpha } from '../../utils';
 
 export default function addDimensions(xml: XMLElementOrXMLNode, ws: Worksheet) {
   // §18.3.1.35 dimension (Worksheet Dimensions)
