@@ -635,7 +635,8 @@ let commentsXML = (ws) => {
 
 let commentsVmlXML = (ws) => {
     return new Promise((resolve, reject) => {
-        const vmlXml = xml.create('xml');
+        // do not add XML prolog to document
+        const vmlXml = xml.begin().ele('xml');
         vmlXml.att('xmlns:v', 'urn:schemas-microsoft-com:vml')
         vmlXml.att('xmlns:o', 'urn:schemas-microsoft-com:office:office');
         vmlXml.att('xmlns:x', 'urn:schemas-microsoft-com:office:excel');
@@ -649,7 +650,7 @@ let commentsVmlXML = (ws) => {
             .att('o:spt', '202')
             .att('path', 'm,l,21600r21600,l21600,xe');
         st.ele('v:stroke').att('joinstyle', 'miter');
-        st.ele('v:path').att('gradientshapeok', 't').att('o:connectortype', 'rect');
+        st.ele('v:path').att('gradientshapeok', 't').att('o:connecttype', 'rect');
 
         Object.keys(ws.comments).forEach((ref) => {
             const {row, col, position, marginLeft, marginTop, width, height, zIndex, visibility, fillColor} = ws.comments[ref];
