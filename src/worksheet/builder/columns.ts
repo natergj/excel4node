@@ -1,8 +1,8 @@
 import Worksheet from '../worksheet';
-import { XMLElementOrXMLNode } from 'xmlbuilder';
+import { XMLElement } from 'xmlbuilder';
 import { boolToInt } from '../../utils';
 
-export default function addColumns(xml: XMLElementOrXMLNode, ws: Worksheet) {
+export default function addColumns(xml: XMLElement, ws: Worksheet) {
   // §18.3.1.17 cols (Column Information)
   if (ws.columnCount > 0) {
     const colsEle = xml.ele('cols');

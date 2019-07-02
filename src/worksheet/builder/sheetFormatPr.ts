@@ -1,8 +1,8 @@
 import Worksheet from '../worksheet';
-import { XMLElementOrXMLNode } from 'xmlbuilder';
+import { XMLElement } from 'xmlbuilder';
 import { boolToInt } from '../../utils';
 
-export default function addSheetFormatPr(xml: XMLElementOrXMLNode, ws: Worksheet) {
+export default function addSheetFormatPr(xml: XMLElement, ws: Worksheet) {
   // §18.3.1.81 sheetFormatPr (Sheet Format Properties)
   const o = ws.opts.sheetFormat;
   const ele = xml.ele('sheetFormatPr');

@@ -1,8 +1,8 @@
 import Worksheet from '../worksheet';
-import { XMLElementOrXMLNode } from 'xmlbuilder';
+import { XMLElement } from 'xmlbuilder';
 import { boolToInt, getHashOfPassword } from '../../utils';
 
-export default function addSheetProtection(xml: XMLElementOrXMLNode, ws: Worksheet) {
+export default function addSheetProtection(xml: XMLElement, ws: Worksheet) {
   // §18.3.1.85 sheetProtection (Sheet Protection Options)
   const o = ws.opts.sheetProtection;
   let includeSheetProtection = false;

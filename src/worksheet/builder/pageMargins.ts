@@ -1,8 +1,8 @@
 import Worksheet from '../worksheet';
-import { XMLElementOrXMLNode } from 'xmlbuilder';
+import { XMLElement } from 'xmlbuilder';
 
 // TODO implement
-export default function addPageMargins(xml: XMLElementOrXMLNode, ws: Worksheet) {
+export default function addPageMargins(xml: XMLElement, ws: Worksheet) {
   // §18.3.1.62 pageMargins (Page Margins)
   const o = ws.opts.margins;
 

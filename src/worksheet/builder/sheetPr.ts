@@ -1,7 +1,7 @@
 import Worksheet from '../worksheet';
-import { XMLElementOrXMLNode } from 'xmlbuilder';
+import { XMLElement } from 'xmlbuilder';
 
-export default function addSheetPr(xml: XMLElementOrXMLNode, ws: Worksheet) {
+export default function addSheetPr(xml: XMLElement, ws: Worksheet) {
   // §18.3.1.82 sheetPr (Sheet Properties)
   const options = ws.opts;
 

@@ -14,7 +14,6 @@ export default function addSharedStrings(builder: IWorkbookBuilder) {
       version: '1.0',
       encoding: 'UTF-8',
       standalone: true,
-      allowSurrogateChars: true,
     })
     .att('count', wb.sharedStrings.size)
     .att('uniqueCount', wb.sharedStrings.size)

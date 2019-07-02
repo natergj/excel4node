@@ -1,7 +1,7 @@
 import Worksheet from '../worksheet';
-import { XMLElementOrXMLNode } from 'xmlbuilder';
+import { XMLElement } from 'xmlbuilder';
 
 // TODO implement
-export default function addDrawing(xml: XMLElementOrXMLNode, ws: Worksheet) {
+export default function addDrawing(xml: XMLElement, ws: Worksheet) {
   // §18.3.1.36 drawing (Drawing)
 }

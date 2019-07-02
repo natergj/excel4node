@@ -1,7 +1,7 @@
 import Worksheet from '../worksheet';
-import { XMLElementOrXMLNode } from 'xmlbuilder';
+import { XMLElement } from 'xmlbuilder';
 
-export default function addPrintOptions(xml: XMLElementOrXMLNode, ws: Worksheet) {
+export default function addPrintOptions(xml: XMLElement, ws: Worksheet) {
   // §18.3.1.70 printOptions (Print Options)
 
   const o = ws.opts.printOptions;

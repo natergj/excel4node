@@ -1,4 +1,4 @@
-import { XMLElementOrXMLNode } from 'xmlbuilder';
+import { XMLElement } from 'xmlbuilder';
 
 // §18.3.1.15 color (Data Bar Color)
 
@@ -39,7 +39,7 @@ export class DataBarColor {
     this.tint = color.tint;
   }
 
-  addToXML(ele: XMLElementOrXMLNode) {
+  addToXML(ele: XMLElement) {
     if (this.auto) {
       ele.att('auto', this.auto);
     }

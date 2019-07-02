@@ -1,8 +1,8 @@
 import Worksheet from '../worksheet';
-import { XMLElementOrXMLNode } from 'xmlbuilder';
+import { XMLElement } from 'xmlbuilder';
 import { boolToInt } from '../../utils';
 
-export default function addHyperlinks(xml: XMLElementOrXMLNode, ws: Worksheet) {
+export default function addHyperlinks(xml: XMLElement, ws: Worksheet) {
   // §18.3.1.46 headerFooter (Header Footer Settings)
   const o = ws.opts.headerFooter;
   const isHeaderFooterRequired = Object.keys(o)

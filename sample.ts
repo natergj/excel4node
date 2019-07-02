@@ -5,11 +5,11 @@ const wb = new Workbook({
     windowHeight: 34000,
     activeTab: 1,
   },
-  logLevel: 5,
+  logLevel: 'debug',
 });
 const ws = wb.addWorksheet('sheet 1', {});
 const ws2 = wb.addWorksheet('sheet 2', {});
-ws.cell(1, 1).string('hello');
+ws.cell(1, 1).string('hello 👍👨🏽‍💻');
 
 ws2.cell(1, 1).string('Hello World');
 

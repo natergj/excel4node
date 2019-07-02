@@ -22,7 +22,6 @@ export default function addContentTypes(builder: IWorkbookBuilder) {
       version: '1.0',
       encoding: 'UTF-8',
       standalone: true,
-      allowSurrogateChars: true,
     })
     .att('xmlns', 'http://schemas.openxmlformats.org/package/2006/content-types');
 

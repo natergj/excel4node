@@ -38,7 +38,6 @@ export function addWorksheetFile(builder: IWorkbookBuilder, ws: Worksheet) {
       version: '1.0',
       encoding: 'UTF-8',
       standalone: true,
-      allowSurrogateChars: true,
     })
     .att('mc:Ignorable', 'x14ac')
     .att('xmlns', 'http://schemas.openxmlformats.org/spreadsheetml/2006/main')
@@ -88,7 +87,6 @@ export function addWorksheetRelsFile(builder: IWorkbookBuilder, ws: Worksheet) {
     version: '1.0',
     encoding: 'UTF-8',
     standalone: true,
-    allowSurrogateChars: true,
   });
   xml.att('xmlns', 'http://schemas.openxmlformats.org/package/2006/relationships');
 

@@ -1,5 +1,5 @@
 import { BorderOrdinal } from './borderOrdinal';
-import { XMLElementOrXMLNode } from 'xmlbuilder';
+import { XMLElement } from 'xmlbuilder';
 import { createHash } from 'crypto';
 
 export interface IBorderOptions {
@@ -45,7 +45,7 @@ export class Border {
       .digest('hex');
   }
 
-  addToXML(ele: XMLElementOrXMLNode) {
+  addToXML(ele: XMLElement) {
     if (this.bottom) {
       const bottomEle = ele.ele('bottom');
       if (this.bottom.style) {

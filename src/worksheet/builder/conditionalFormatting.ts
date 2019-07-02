@@ -1,7 +1,7 @@
 import Worksheet from '../worksheet';
-import { XMLElementOrXMLNode } from 'xmlbuilder';
+import { XMLElement } from 'xmlbuilder';
 
 // TODO implement
-export default function addConditionalFormatting(xml: XMLElementOrXMLNode, ws: Worksheet) {
+export default function addConditionalFormatting(xml: XMLElement, ws: Worksheet) {
   // §18.3.1.18 conditionalFormatting (Conditional Formatting)
 }

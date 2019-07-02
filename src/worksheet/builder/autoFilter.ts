@@ -1,9 +1,9 @@
 import Worksheet from '../worksheet';
-import { XMLElementOrXMLNode } from 'xmlbuilder';
+import { XMLElement } from 'xmlbuilder';
 import { getExcelRowCol } from '../../utils';
 
 // TODO implement
-export default function addAutoFilter(xml: XMLElementOrXMLNode, ws: Worksheet) {
+export default function addAutoFilter(xml: XMLElement, ws: Worksheet) {
   // §18.3.1.2 autoFilter (AutoFilter Settings)
   const o = ws.opts.autoFilter;
   if (typeof o.ref !== 'string') {

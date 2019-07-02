@@ -1,7 +1,7 @@
 import Worksheet from '../worksheet';
-import { XMLElementOrXMLNode } from 'xmlbuilder';
+import { XMLElement } from 'xmlbuilder';
 
-export default function addSheetViews(xml: XMLElementOrXMLNode, ws: Worksheet) {
+export default function addSheetViews(xml: XMLElement, ws: Worksheet) {
   // §18.3.1.87 sheetViews (Sheet Views)
   const o = ws.opts.sheetView;
   const ele = xml.ele('sheetViews');

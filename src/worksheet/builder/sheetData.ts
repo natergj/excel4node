@@ -1,8 +1,8 @@
 import Worksheet from '../worksheet';
-import { XMLElementOrXMLNode } from 'xmlbuilder';
+import { XMLElement } from 'xmlbuilder';
 import { sortCellRefs } from '../../utils';
 
-export default function addSheetData(xml: XMLElementOrXMLNode, ws: Worksheet) {
+export default function addSheetData(xml: XMLElement, ws: Worksheet) {
   // §18.3.1.80 sheetData (Sheet Data)
   const ele = xml.ele('sheetData');
 

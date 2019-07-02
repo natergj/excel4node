@@ -1,9 +1,9 @@
 import Worksheet from '../worksheet';
-import { XMLElementOrXMLNode } from 'xmlbuilder';
+import { XMLElement } from 'xmlbuilder';
 import { PAPER_SIZE } from '../../types/papersize';
 import { boolToInt } from '../../utils';
 
-export default function addPageSetup(xml: XMLElementOrXMLNode, ws: Worksheet) {
+export default function addPageSetup(xml: XMLElement, ws: Worksheet) {
   // §18.3.1.63 pageSetup (Page Setup Settings)
 
   const o = ws.opts.pageSetup;
