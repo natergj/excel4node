@@ -1,3 +1,7 @@
+1.7.2
+        Bug Fixes:
+        resolves https://github.com/natergj/excel4node/issues/283 to fix issue when comment drawing changing after save
+        
 1.7.1
         Bug Fixes:
         resolves https://github.com/natergj/excel4node/issues/269 to fix issue where multiple complex strings could not be used
