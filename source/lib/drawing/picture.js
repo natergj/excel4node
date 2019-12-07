@@ -55,6 +55,7 @@ class Picture extends Drawing {
         this._descr = null;
         this._title = null;
         this._id;
+        this._rId;
         // picLocks §20.1.2.2.31 picLocks (Picture Locks)
         this.noGrp;
         this.noSelect;
@@ -89,7 +90,10 @@ class Picture extends Drawing {
     }
 
     get rId() {
-        return 'rId' + this._id;
+      return this._rId;
+    }
+    set rId(rId) {
+      this._rId = 'rId' + rId;
     }
 
     get description() {
