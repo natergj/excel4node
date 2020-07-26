@@ -109,7 +109,7 @@ class Worksheet {
         optsValidator(opts);
 
         this.opts.sheetView.tabSelected = this.sheetId === 1 ? 1 : 0;
-        this.name = name ? name : `Sheet ${this.sheetId}`;
+        this.name = name ? name.substring(0, 31).replace(/[\/\\?*:[\]]/g, '_') : `Sheet ${this.sheetId}`; // https://support.microsoft.com/en-us/office/rename-a-worksheet-3f1f7148-ee83-404d-8ef0-9ff99fbad1f9
         this.hasGroupings = false;
         this.cols = {}; // Columns keyed by column, contains column properties
         this.rows = {}; // Rows keyed by row, contains row properties and array of cellRefs
