@@ -27,7 +27,8 @@ class Alignment { // §18.8.1 alignment (Alignment)
         }
 
         if (opts.readingOrder !== undefined) {
-            this.readingOrder = types.alignment.readingOrder.validate(opts.readingOrder) === true ? opts.readingOrder : null;
+            const value = types.alignment.readingOrder[opts.readingOrder];
+            this.readingOrder = types.alignment.readingOrder.validate(opts.readingOrder) === true ? value: null;
         }
 
         if (opts.indent !== undefined) {
