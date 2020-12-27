@@ -29,10 +29,10 @@
     "url": "https://github.com/natergj/excel4node/labels/bug"
   },
   "scripts": {
-    "test": "NODE_ENV=test ./node_modules/tape/bin/tape -r babel-register ./tests/*.test.js",
-    "cover": "NODE_ENV=test nyc tape -r babel-register ./tests/*.test.js",
-    "build": "./node_modules/babel-cli/bin/babel.js source --presets babel-preset-env -s --out-dir distribution",
-    "watch": "./node_modules/babel-cli/bin/babel.js source -w --presets babel-preset-env -s --out-dir distribution",
+    "test": "node .\\node_modules\\tape\\bin\\tape -r babel-register .\\tests\\*.test.js",
+    "cover": "node nyc tape -r babel-register .\\tests/*.test.js",
+    "build": "node ./node_modules/babel-cli/bin/babel.js source --presets babel-preset-env -s --out-dir distribution",
+    "watch": "node ./node_modules/babel-cli/bin/babel.js source -w --presets babel-preset-env -s --out-dir distribution",
     "document": "jsdoc ./source -r -d docs",
     "prepublish": "npm run build; npm run test"
   },
