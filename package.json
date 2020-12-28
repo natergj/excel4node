@@ -33,8 +33,7 @@
     "cover": "node nyc tape -r babel-register .\\tests/*.test.js",
     "build": "node ./node_modules/babel-cli/bin/babel.js source --presets babel-preset-env -s --out-dir distribution",
     "watch": "node ./node_modules/babel-cli/bin/babel.js source -w --presets babel-preset-env -s --out-dir distribution",
-    "document": "jsdoc ./source -r -d docs",
-    "prepublish": "npm run build; npm run test"
+    "document": "jsdoc ./source -r -d docs"    
   },
   "dependencies": {
     "deepmerge": "3.2.0",
