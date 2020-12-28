@@ -1,5 +1,6 @@
 let Drawing = require('./drawing.js');
 let Picture = require('./picture.js');
+let headerFooterPicture = require('./headerFooterPicture.js')
 
 class DrawingCollection {
     constructor() {
@@ -16,7 +17,10 @@ class DrawingCollection {
             let newPic = new Picture(opts);
             this.drawings.push(newPic);
             return newPic;
-
+        case 'headerFooterPicture':
+            let xPic = new headerFooterPicture(opts);
+            this.drawings.push(xPic );
+            return xPic;
         default:
             throw new TypeError('this option is not yet supported');
         }
@@ -31,4 +35,4 @@ class DrawingCollection {
     }
 }
 
-module.exports = { DrawingCollection, Drawing, Picture };
+module.exports = { DrawingCollection, Drawing, Picture, headerFooterPicture };

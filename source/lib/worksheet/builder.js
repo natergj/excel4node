@@ -484,6 +484,16 @@ let _addHeaderFooter = (promiseObj) => {
     });
 };
 
+let _addlegacyDrawingHeaderFooter = (promiseObj) => {
+    return new Promise((resolve, reject) => {
+        if (!promiseObj.ws.legacyDrawingHeaderFooter.isEmpty) {
+            let dId = promiseObj.ws.relationships.indexOf('legacyDrawingHeaderFooter') + 1;
+            promiseObj.xml.ele('legacyDrawingHF').att('r:id', 'rId' + dId).up();
+        }
+        resolve(promiseObj);
+    });
+};
+
 let _addDrawing = (promiseObj) => {
     // §18.3.1.36 drawing (Drawing)
     return new Promise((resolve, reject) => {
@@ -534,6 +544,7 @@ let sheetXML = (ws) => {
         .then(_addPageSetup)
         .then(_addPageBreaks)
         .then(_addHeaderFooter)
+        .then(_addlegacyDrawingHeaderFooter)
         .then(_addDrawing)
         .then((promiseObj) => {
             return new Promise((resolve, reject) => {
@@ -594,7 +605,12 @@ let relsXML = (ws) => {
                 relXML.ele('Relationship')
                 .att('Id', rId)
                 .att('Target', '../drawings/commentsVml' + ws.sheetId + '.vml')
-                .att('Type', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing');
+                    .att('Type', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing');
+            } else if (r === 'legacyDrawingHeaderFooter') {
+                relXML.ele('Relationship')
+                    .att('Id', rId)
+                    .att('Target', '../drawings/vmlDrawing' + ws.sheetId + '.vml')
+                    .att('Type', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/vmlDrawing');
             }
         });
         let xmlString = relXML.doc().end();

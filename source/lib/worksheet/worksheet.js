@@ -130,6 +130,7 @@ class Worksheet {
         this.hyperlinkCollection = new HyperlinkCollection();
         this.dataValidationCollection = new DataValidation.DataValidationCollection();
         this.drawingCollection = new wsDrawing.DrawingCollection();
+        this.legacyDrawingHeaderFooter = new wsDrawing.DrawingCollection();
         this.comments = {}; // Comments for cells keyed by excel ref
         this.author = this.wb.author;
 
@@ -137,6 +138,9 @@ class Worksheet {
 
     get relationships() {
         let rels = [];
+        if(!this.legacyDrawingHeaderFooter.isEmpty){
+            rels.push('legacyDrawingHeaderFooter')
+        }
         this.hyperlinkCollection.links.forEach((l) => {
             rels.push(l);
         });
@@ -315,6 +319,26 @@ class Worksheet {
         return this;
     }
 
+    /**
+     * @func Worksheet.setHeaderFooterImage
+     * @param {Object} opts
+     * @param {String} opts.path File system path of image
+     * @param {Buffer} opts.image Buffer with image (against read file from opts.path)
+     * @param {String} opts.name Name of image
+     * @param {String} opts.type Type of image. Currently only 'picture' is supported
+     * @param {String} opts.position Position string for image: ['LF','CF', 'RF', 'LH', 'CH', 'RH'] 
+     */
+    addHeaderFooterImage(image, position){
+        const headerFooterPositions = ['LF','CF', 'RF', 'LH', 'CH', 'RH'];
+        if(headerFooterPositions.indexOf(position) < 0){
+            throw new Error('setHeaderFooterImage: Only allowed positions are LH, CH, RH, LF, CF, RF');
+        }
+        if(image.type === 'picture') image.type = 'headerFooterPicture';
+        var mediaId = this.wb.mediaCollection.add(image);
+        var ximg = this.legacyDrawingHeaderFooter.add(image)
+        ximg.position = position;
+        ximg.id = mediaId;
+    }
 }
 
 module.exports = Worksheet;

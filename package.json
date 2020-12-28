@@ -59,6 +59,7 @@
     "source-map-support": "0.5.11",
     "tape": "4.10.1",
     "tape-promise": "2.0.1",
+    "unzipper": "0.10.11",
     "xmldom": "0.1.27",
     "xpath.js": "1.1.0"
   },
