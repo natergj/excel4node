@@ -487,7 +487,6 @@ var addDrawingsXML = function addDrawingsXML(promiseObj) {
 
 var addLegacyHeaderFooterDrawingsXML = function addLegacyHeaderFooterDrawingsXML(promiseObj) {
   return new Promise(function (resolve) {
-    console.log('Mohanad Says hi from addLegacyDrawingHeaderFooterVML');
     if (!promiseObj.wb.mediaCollection.isEmpty) {
 
       promiseObj.wb.sheets.forEach(function (ws) {
@@ -554,7 +553,6 @@ var addLegacyHeaderFooterDrawingsXML = function addLegacyHeaderFooterDrawingsXML
 
           var drawingsXMLStr = drawingsVML.doc().end(promiseObj.xmlOutVars);
           var drawingRelXMLStr = drawingRelXML.doc().end(promiseObj.xmlOutVars);
-          console.log('Genenrating VML Drawing File for ', ws.sheetId);
           promiseObj.xlsx.folder('xl').folder('drawings').file('vmlDrawing' + ws.sheetId + '.vml', drawingsXMLStr);
           promiseObj.xlsx.folder('xl').folder('drawings').folder('_rels').file('vmlDrawing' + ws.sheetId + '.vml.rels', drawingRelXMLStr);
         }
