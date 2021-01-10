@@ -275,6 +275,13 @@ class Worksheet {
         return newImage;
     }
 
+    addChart(opts){
+        let mediaID = this.wb.chartsCollection.add(opts);
+        let newImage = this.drawingCollection.add(opts);
+        newImage.id = mediaID;
+        return newImage;
+    }
+
     /**
      * @func Worksheet.addPageBreak
      * @param {string} type 
