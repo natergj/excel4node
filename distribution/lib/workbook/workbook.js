@@ -17,6 +17,7 @@ var Fill = require('../style/classes/fill.js');
 var Font = require('../style/classes/font');
 var DXFCollection = require('./dxfCollection.js');
 var MediaCollection = require('./mediaCollection.js');
+var ChartsCollection = require('./chartsCollection.js');
 var DefinedNameCollection = require('../classes/definedNameCollection.js');
 var types = require('../types/index.js');
 var builder = require('./builder.js');
@@ -105,6 +106,7 @@ var Workbook = function () {
         this.stylesLookup = new Map();
         this.dxfCollection = new DXFCollection(this);
         this.mediaCollection = new MediaCollection();
+        this.chartsCollection = new ChartsCollection();
         this.definedNameCollection = new DefinedNameCollection();
         this.styleData = {
             'numFmts': [],

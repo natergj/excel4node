@@ -271,6 +271,14 @@ var Worksheet = function () {
 
             return newImage;
         }
+    }, {
+        key: 'addChart',
+        value: function addChart(opts) {
+            var mediaID = this.wb.chartsCollection.add(opts);
+            var newImage = this.drawingCollection.add(opts);
+            newImage.id = mediaID;
+            return newImage;
+        }
 
         /**
          * @func Worksheet.addPageBreak

@@ -75,7 +75,6 @@ let addRootContentTypesXML = (promiseObj) => {
     xml.ele('Override').att('ContentType', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml').att('PartName', '/xl/sharedStrings.xml');
     xml.ele('Override').att('ContentType', 'application/vnd.openxmlformats-package.core-properties+xml').att('PartName', '/docProps/core.xml');
     promiseObj.wb.chartsCollection.items.forEach((s, i) => {
-      console.log('Charts to Content Types')
       xml.ele('Override')
         .att('PartName', `/xl/charts/chart${i + 1}.xml`)
         .att('ContentType', 'application/vnd.openxmlformats-officedocument.drawingml.chart+xml')

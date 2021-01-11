@@ -137,7 +137,6 @@ class Chart extends Drawing {
     }
 
     chartPartXML(xmlcx) {
-        console.log('chartPartXML')
         xmlcx.ele('c:date1904').att('val', 0);
         xmlcx.ele('c:lang').att('val', 'en-US');
         xmlcx.ele('c:roundedCorners').att('val', 0);
@@ -165,10 +164,10 @@ class Chart extends Drawing {
         ml.ele('c:layoutTarget').att('val', 'inner')
         ml.ele('c:xMode').att('val', 'edge')
         ml.ele('c:yMode').att('val', 'edge')
-        ml.ele('c:x').att('val', 0.1165589095638537)
-        ml.ele('c:y').att('val', 0.11177904648711365)
-        ml.ele('c:w').att('val', 0.7404672613266795)
-        ml.ele('c:h').att('val', 0.66684834207044885)
+        ml.ele('c:x').att('val', 0.1)
+        ml.ele('c:y').att('val', 0.1)
+        ml.ele('c:w').att('val', 0.75)
+        ml.ele('c:h').att('val', 0.6)
 
         let barChart = plotArea.ele("c:barChart")
         let catAx = plotArea.ele("c:catAx")
@@ -193,20 +192,20 @@ class Chart extends Drawing {
             if (sx.range) {
                 ser.ele('c:val').ele('c:numRef').ele('c:f', sx.range)
             }
-            // if (sx.catRange){
-            //     ser.ele('c:cat').ele('c:strRef').ele('c:f', sx.catRange);
-            // }
+            if (sx.catRange) {
+                ser.ele('c:cat').ele('c:strRef').ele('c:f', sx.catRange);
+            }
             // ser.ele('c:extLst').ele('xmlns:c16', 'http://schemas.microsoft.com/office/drawing/2014/chart')
             //     .att('uri', this.axExtId1)
             //     .ele('c16:uniqueId').att('val', this.axExtId2)
         }
         let dLbl = barChart.ele('c:dLbls');
-        dLbl.ele('c:showLegendKey').att('val',0)
-        dLbl.ele('c:showVal').att('val',0)
-        dLbl.ele('c:showCatName').att('val',0)
-        dLbl.ele('c:showSerName').att('val',0)
-        dLbl.ele('c:showPercent').att('val',0)
-        dLbl.ele('c:showBubbleSize').att('val',0)
+        dLbl.ele('c:showLegendKey').att('val', 0)
+        dLbl.ele('c:showVal').att('val', 0)
+        dLbl.ele('c:showCatName').att('val', 0)
+        dLbl.ele('c:showSerName').att('val', 0)
+        dLbl.ele('c:showPercent').att('val', 0)
+        dLbl.ele('c:showBubbleSize').att('val', 0)
 
         barChart.ele('c:gapWidth').att('val', 150)
         barChart.ele('c:axId').att('val', 361690304)
@@ -219,13 +218,14 @@ class Chart extends Drawing {
         catAx.ele('c:numFmt').att('formatCode', 'General').att('sourceLinked', 0)
         catAx.ele('c:majorTickMark').att('val', 'out')
         catAx.ele('c:minorTickMark').att('val', 'none')
-        catAx.ele('c:tickLblPos').att('val', 'nextTo')        
-        catAx.ele('c:crossAx').att('val', 1)        
-        catAx.ele('c:crosses').att('val', "autoZero")        
-        catAx.ele('c:auto').att('val', 1)        
-        catAx.ele('c:lblAlgn').att('val', "ctr")        
-        catAx.ele('c:lblOffset').att('val', 100)        
-        catAx.ele('c:noMultiLvlLbl').att('val', 0)        
+        catAx.ele('c:tickLblPos').att('val', 'nextTo')
+        catAx.ele('c:crossAx').att('val', 1)
+        catAx.ele('c:crosses').att('val', "autoZero")
+        catAx.ele('c:auto').att('val', 1)
+        catAx.ele('c:lblAlgn').att('val', "ctr")
+        catAx.ele('c:lblOffset').att('val', 100)
+        catAx.ele('c:noMultiLvlLbl').att('val', 0)
+        genTitleXML(catAx, this.chartData.xlabel)
 
         valAx.ele('c:axId').att('val', 1)
         valAx.ele('c:scaling').ele('c:orientation').att('val', 'minMax')
@@ -234,10 +234,32 @@ class Chart extends Drawing {
         valAx.ele('c:numFmt').att('formatCode', 'General').att('sourceLinked', 1)
         valAx.ele('c:majorTickMark').att('val', 'out')
         valAx.ele('c:minorTickMark').att('val', 'none')
-        valAx.ele('c:tickLblPos').att('val', 'nextTo')        
-        valAx.ele('c:crossAx').att('val', 361690304)        
-        valAx.ele('c:crosses').att('val', "autoZero")        
-        valAx.ele('c:crossBetween').att('val', "between")    
+        valAx.ele('c:tickLblPos').att('val', 'nextTo')
+        valAx.ele('c:crossAx').att('val', 361690304)
+        valAx.ele('c:crosses').att('val', "autoZero")
+        valAx.ele('c:crossBetween').att('val', "between")
+        genTitleXML(valAx, this.chartData.ylabel)
+
+        function genTitleXML(xmlc, txtRun) {
+            let xz_xlabc = xmlc.ele('c:title')
+            let xz_xlab = xz_xlabc.ele('c:tx').ele('c:rich')
+            xz_xlab.ele('a:bodyPr')
+            xz_xlab.ele('a:lstStyle')
+            let xz_xlabp = xz_xlab.ele('a:p');
+            xz_xlabp.ele('a:pPr').ele('a:defRPr').att('sz', txtRun.fontSize * 100)
+                .ele('a:cs').att('typeface', 'Sakkal Majalla').att('pitchFamily', 2).att('charset', '-78')
+            let xz_xlabpr = xz_xlabp.ele('a:r')
+            let title_txt = xz_xlabpr.ele("a:rPr").att("sz", txtRun.fontSize * 100).att('lang', 'ar-SA')
+            title_txt.ele('a:cs').att('typeface', 'Sakkal Majalla').att('pitchFamily', 2).att('charset', '-78')
+            if (txtRun.bold) title_txt.att('b', txtRun.bold);
+            if (txtRun.italic) title_txt.att('i', txtRun.italic);
+            title_txt.att('baseline', 0)
+
+            xz_xlabpr.ele('a:t', txtRun.value)
+            xz_xlabp.ele("a:endParaRPr").att("sz", txtRun.fontSize * 100).att('lang', 'en-US')
+                .ele('a:cs').att('typeface', 'Sakkal Majalla').att('pitchFamily', 2).att('charset', '-78')
+            xz_xlab.ele("c:overlay").att("val", 1)
+        }
 
 
         let legend = xchart.ele("c:legend");

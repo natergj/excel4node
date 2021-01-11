@@ -24,11 +24,13 @@ var addRootContentTypesXML = function addRootContentTypesXML(promiseObj) {
       if (s.drawingCollection.length > 0) {
         s.drawingCollection.drawings.forEach(function (d) {
           if (extensionsAdded.indexOf(d.extension) < 0) {
-            var typeRef = d.contentType + '.' + d.extension;
-            if (contentTypesAdded.indexOf(typeRef) < 0) {
-              xml.ele('Default').att('ContentType', d.contentType).att('Extension', d.extension);
+            if (d.contentType) {
+              var typeRef = d.contentType + '.' + d.extension;
+              if (contentTypesAdded.indexOf(typeRef) < 0) {
+                xml.ele('Default').att('ContentType', d.contentType).att('Extension', d.extension);
+              }
+              extensionsAdded.push(d.extension);
             }
-            extensionsAdded.push(d.extension);
           }
         });
       }
@@ -66,6 +68,9 @@ var addRootContentTypesXML = function addRootContentTypesXML(promiseObj) {
     xml.ele('Override').att('ContentType', 'application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml').att('PartName', '/xl/styles.xml');
     xml.ele('Override').att('ContentType', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml').att('PartName', '/xl/sharedStrings.xml');
     xml.ele('Override').att('ContentType', 'application/vnd.openxmlformats-package.core-properties+xml').att('PartName', '/docProps/core.xml');
+    promiseObj.wb.chartsCollection.items.forEach(function (s, i) {
+      xml.ele('Override').att('PartName', '/xl/charts/chart' + (i + 1) + '.xml').att('ContentType', 'application/vnd.openxmlformats-officedocument.drawingml.chart+xml');
+    });
 
     var xmlString = xml.doc().end(promiseObj.xmlOutVars);
     promiseObj.xlsx.file('[Content_Types].xml', xmlString);
@@ -108,6 +113,7 @@ var addWorkbookXML = function addWorkbookXML(promiseObj) {
     xml.att('xmlns:mc', 'http://schemas.openxmlformats.org/markup-compatibility/2006');
     xml.att('xmlns:r', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships');
     xml.att('xmlns:x15', 'http://schemas.microsoft.com/office/spreadsheetml/2010/11/main');
+    xml.att('xmlns:x', 'http://schemas.openxmlformats.org/spreadsheetml/2006/main');
 
     var booksViewEle = xml.ele('bookViews');
     var workbookViewEle = booksViewEle.ele('workbookView');
@@ -190,6 +196,14 @@ var addWorkbookXML = function addWorkbookXML(promiseObj) {
 
     if (!promiseObj.wb.definedNameCollection.isEmpty) {
       promiseObj.wb.definedNameCollection.addToXMLele(xml);
+    }
+
+    if (promiseObj.wb.opts.calculationProperties) {
+      var calcPr = xml.ele('x:calcPr');
+      if (promiseObj.wb.opts.calculationProperties.fullCalculationOnLoad) {
+        // calcPr.att('calcId', 15234)
+        calcPr.att('fullCalcOnLoad', 1);
+      }
     }
 
     var xmlString = xml.doc().end(promiseObj.xmlOutVars);
@@ -440,7 +454,7 @@ var addStylesXML = function addStylesXML(promiseObj) {
 
 var addDrawingsXML = function addDrawingsXML(promiseObj) {
   return new Promise(function (resolve) {
-    if (!promiseObj.wb.mediaCollection.isEmpty) {
+    if (!promiseObj.wb.mediaCollection.isEmpty || !promiseObj.wb.chartsCollection.isEmpty) {
 
       promiseObj.wb.sheets.forEach(function (ws) {
         if (!ws.drawingCollection.isEmpty) {
@@ -461,7 +475,6 @@ var addDrawingsXML = function addDrawingsXML(promiseObj) {
           drawingsXML.att('xmlns:a', 'http://schemas.openxmlformats.org/drawingml/2006/main').att('xmlns:xdr', 'http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing');
 
           ws.drawingCollection.drawings.forEach(function (d) {
-
             if (d.kind === 'image') {
               var target = 'image' + d.id + '.' + d.extension;
 
@@ -470,7 +483,17 @@ var addDrawingsXML = function addDrawingsXML(promiseObj) {
 
               drawingRelXML.ele('Relationship').att('Id', d.rId).att('Target', '../media/' + target).att('Type', d.type);
             }
+            if (d.kind == 'chart') {
+              var _target = 'chart' + d.id + '.xml';
+              var chartBuilder = xmlbuilder.create('c:chartSpace', {
+                'version': '1.0', 'encoding': 'UTF-8', 'standalone': true
+              }).att('xmlns:c', 'http://schemas.openxmlformats.org/drawingml/2006/chart').att('xmlns:a', 'http://schemas.openxmlformats.org/drawingml/2006/main').att('xmlns:r', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships').att('xmlns:c16r2', 'http://schemas.microsoft.com/office/drawing/2015/06/chart');
 
+              d.chartPartXML(chartBuilder);
+              var chartXMLStr = chartBuilder.doc().end(promiseObj.xmlOutVars);
+              promiseObj.xlsx.folder('xl').folder('charts').file(_target, chartXMLStr);
+              drawingRelXML.ele('Relationship').att('Id', d.rId).att('Target', '../charts/' + _target).att('Type', d.type);
+            }
             d.addToXMLele(drawingsXML);
           });
 

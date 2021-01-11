@@ -7,6 +7,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Drawing = require('./drawing.js');
 var Picture = require('./picture.js');
 var headerFooterPicture = require('./headerFooterPicture.js');
+var Chart = require('./chart.js');
 
 var DrawingCollection = function () {
     function DrawingCollection() {
@@ -27,6 +28,10 @@ var DrawingCollection = function () {
                     var xPic = new headerFooterPicture(opts);
                     this.drawings.push(xPic);
                     return xPic;
+                case 'chart':
+                    var cPic = new Chart(opts);
+                    this.drawings.push(cPic);
+                    return cPic;
                 default:
                     throw new TypeError('this option is not yet supported');
             }
