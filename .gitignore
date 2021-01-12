@@ -1,6 +1,5 @@
 .idea
 node_modules
-distribution
 .DS_Store
 npm-debug.log
 Excel.xlsx
@@ -14,3 +13,6 @@ references
 coverage
 .nyc_output
 package-lock.json
+testzip
+testzip/*
+*.xlsx

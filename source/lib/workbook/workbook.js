@@ -9,6 +9,7 @@ const Fill = require('../style/classes/fill.js');
 const Font = require('../style/classes/font');
 const DXFCollection = require('./dxfCollection.js');
 const MediaCollection = require('./mediaCollection.js');
+const ChartsCollection = require('./chartsCollection.js');
 const DefinedNameCollection = require('../classes/definedNameCollection.js');
 const types = require('../types/index.js');
 const builder = require('./builder.js');
@@ -95,6 +96,7 @@ class Workbook {
         this.stylesLookup = new Map();
         this.dxfCollection = new DXFCollection(this);
         this.mediaCollection = new MediaCollection();
+        this.chartsCollection = new ChartsCollection();
         this.definedNameCollection = new DefinedNameCollection();
         this.styleData = {
             'numFmts': [],

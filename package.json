@@ -29,12 +29,11 @@
     "url": "https://github.com/natergj/excel4node/labels/bug"
   },
   "scripts": {
-    "test": "NODE_ENV=test ./node_modules/tape/bin/tape -r babel-register ./tests/*.test.js",
-    "cover": "NODE_ENV=test nyc tape -r babel-register ./tests/*.test.js",
-    "build": "./node_modules/babel-cli/bin/babel.js source --presets babel-preset-env -s --out-dir distribution",
-    "watch": "./node_modules/babel-cli/bin/babel.js source -w --presets babel-preset-env -s --out-dir distribution",
-    "document": "jsdoc ./source -r -d docs",
-    "prepublish": "npm run build; npm run test"
+    "test": "node .\\node_modules\\tape\\bin\\tape -r babel-register .\\tests\\*.test.js",
+    "cover": "node nyc tape -r babel-register .\\tests/*.test.js",
+    "build": "node ./node_modules/babel-cli/bin/babel.js source --presets babel-preset-env -s --out-dir distribution",
+    "watch": "node ./node_modules/babel-cli/bin/babel.js source -w --presets babel-preset-env -s --out-dir distribution",
+    "document": "jsdoc ./source -r -d docs"
   },
   "dependencies": {
     "deepmerge": "3.2.0",
@@ -59,6 +58,7 @@
     "source-map-support": "0.5.11",
     "tape": "4.10.1",
     "tape-promise": "2.0.1",
+    "unzipper": "0.10.11",
     "xmldom": "0.1.27",
     "xpath.js": "1.1.0"
   },

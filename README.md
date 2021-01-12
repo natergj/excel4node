@@ -337,6 +337,46 @@ Full Worksheet options. All options are optional.
 
 **Note:** headerFooter strings accept [Dynamic Formatting Strings](https://poi.apache.org/apidocs/org/apache/poi/xssf/usermodel/extensions/XSSFHeaderFooter.html). i.e. '&L&A&C&BCompany, Inc. Confidential&B&RPage &P of &N'
 
+### **Header and Footer Images**
+To use header and footer images place the graphics dynamic string in the desired section of your header and footer &G. Then call the addHeaderFooterImage passing the image and type 'picture' and the position as one of 'LF', 'CF', 'RF', 'LH', 'CH', 'RH'. The followingg code adds four images to the worksheet in all the footers and at the center of the header. The scale factor specifies how much the images is scaled.
+
+```
+var ws = wb.addWorksheet("Sheet1", {
+    pageSetup: {
+        fitToWidth: 1,
+        paperSize: 'A4_PAPER', 
+        orientation: 'landscape'
+    },
+    headerFooter: {
+        oddHeader: '&L&G &C&G &R&G',
+        oddFooter: '&L&G &C&G &R&G'
+    },
+    printOptions: { centerHorizontal: true },
+    sheetView: { rightToLeft: true }
+});
+
+ws.cell(1,1).string('Mohanad says hi');
+
+ws.addHeaderFooterImage({
+    image: fs.readFileSync(path.resolve(__dirname, './sampleFiles/logo copy.png')),
+    type: 'picture'
+}, 'LF')
+ws.addHeaderFooterImage({
+    image: fs.readFileSync(path.resolve(__dirname, './sampleFiles/logo copy.png')),
+    type: 'picture'
+}, 'CF')
+ws.addHeaderFooterImage({
+    image: fs.readFileSync(path.resolve(__dirname, './sampleFiles/signatures2.png')),
+    type: 'picture',
+    scale: 0.05
+}, 'RF')
+ws.addHeaderFooterImage({
+    image: fs.readFileSync(path.resolve(__dirname, './sampleFiles/signatures2.png')),
+    type: 'picture',
+    scale: 0.23
+}, 'CH')
+```
+
 #### Methods
 
 ##### Worksheet data validations

@@ -8,13 +8,13 @@ let addRootContentTypesXML = (promiseObj) => {
   // Required as stated in §12.2
   return new Promise((resolve, reject) => {
     let xml = xmlbuilder.create(
-        'Types', {
-          'version': '1.0',
-          'encoding': 'UTF-8',
-          'standalone': true,
-          'allowSurrogateChars': true
-        }
-      )
+      'Types', {
+      'version': '1.0',
+      'encoding': 'UTF-8',
+      'standalone': true,
+      'allowSurrogateChars': true
+    }
+    )
       .att('xmlns', 'http://schemas.openxmlformats.org/package/2006/content-types');
 
     let contentTypesAdded = [];
@@ -23,11 +23,13 @@ let addRootContentTypesXML = (promiseObj) => {
       if (s.drawingCollection.length > 0) {
         s.drawingCollection.drawings.forEach((d) => {
           if (extensionsAdded.indexOf(d.extension) < 0) {
-            let typeRef = d.contentType + '.' + d.extension;
-            if (contentTypesAdded.indexOf(typeRef) < 0) {
-              xml.ele('Default').att('ContentType', d.contentType).att('Extension', d.extension);
+            if (d.contentType) {
+              let typeRef = d.contentType + '.' + d.extension;
+              if (contentTypesAdded.indexOf(typeRef) < 0) {
+                xml.ele('Default').att('ContentType', d.contentType).att('Extension', d.extension);
+              }
+              extensionsAdded.push(d.extension);
             }
-            extensionsAdded.push(d.extension);
           }
         });
       }
@@ -37,29 +39,46 @@ let addRootContentTypesXML = (promiseObj) => {
           extensionsAdded.push('vml');
         }
       }
+
+      if (s.legacyDrawingHeaderFooter.length > 0) {
+        if (extensionsAdded.indexOf('vml') < 0) {
+          xml.ele('Default').att('Extension', 'vml').att('ContentType', 'application/vnd.openxmlformats-officedocument.vmlDrawing');
+          extensionsAdded.push('vml');
+        }
+        if (extensionsAdded.indexOf('png') < 0) {
+          xml.ele('Default').att('Extension', 'png').att('ContentType', 'image/png');
+          extensionsAdded.push('png');
+        }
+      }
     });
-    xml.ele('Default').att('ContentType', 'application/xml').att('Extension', 'xml');
-    xml.ele('Default').att('ContentType', 'application/vnd.openxmlformats-package.relationships+xml').att('Extension', 'rels');
+    xml.ele('Default').att('Extension', 'xml').att('ContentType', 'application/xml');
+    xml.ele('Default').att('Extension', 'rels').att('ContentType', 'application/vnd.openxmlformats-package.relationships+xml');
     xml.ele('Override').att('ContentType', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml').att('PartName', '/xl/workbook.xml');
     promiseObj.wb.sheets.forEach((s, i) => {
       xml.ele('Override')
+        .att('PartName', `/xl/worksheets/sheet${i + 1}.xml`)
         .att('ContentType', 'application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml')
-        .att('PartName', `/xl/worksheets/sheet${i + 1}.xml`);
+
 
       if (s.drawingCollection.length > 0) {
         xml.ele('Override')
+          .att('PartName', '/xl/drawings/drawing' + s.sheetId + '.xml')
           .att('ContentType', 'application/vnd.openxmlformats-officedocument.drawing+xml')
-          .att('PartName', '/xl/drawings/drawing' + s.sheetId + '.xml');
       }
       if (Object.keys(s.comments).length > 0) {
         xml.ele('Override')
+          .att('PartName', '/xl/comments' + s.sheetId + '.xml')
           .att('ContentType', 'application/vnd.openxmlformats-officedocument.spreadsheetml.comments+xml')
-          .att('PartName', '/xl/comments' + s.sheetId + '.xml');
       }
     });
     xml.ele('Override').att('ContentType', 'application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml').att('PartName', '/xl/styles.xml');
     xml.ele('Override').att('ContentType', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml').att('PartName', '/xl/sharedStrings.xml');
     xml.ele('Override').att('ContentType', 'application/vnd.openxmlformats-package.core-properties+xml').att('PartName', '/docProps/core.xml');
+    promiseObj.wb.chartsCollection.items.forEach((s, i) => {
+      xml.ele('Override')
+        .att('PartName', `/xl/charts/chart${i + 1}.xml`)
+        .att('ContentType', 'application/vnd.openxmlformats-officedocument.drawingml.chart+xml')
+    })
 
     let xmlString = xml.doc().end(promiseObj.xmlOutVars);
     promiseObj.xlsx.file('[Content_Types].xml', xmlString);
@@ -71,13 +90,13 @@ let addRootRelsXML = (promiseObj) => {
   // Required as stated in §12.2
   return new Promise((resolve, reject) => {
     let xml = xmlbuilder.create(
-        'Relationships', {
-          'version': '1.0',
-          'encoding': 'UTF-8',
-          'standalone': true,
-          'allowSurrogateChars': true
-        }
-      )
+      'Relationships', {
+      'version': '1.0',
+      'encoding': 'UTF-8',
+      'standalone': true,
+      'allowSurrogateChars': true
+    }
+    )
       .att('xmlns', 'http://schemas.openxmlformats.org/package/2006/relationships');
 
     xml
@@ -105,17 +124,18 @@ let addWorkbookXML = (promiseObj) => {
 
     let xml = xmlbuilder.create(
       'workbook', {
-        'version': '1.0',
-        'encoding': 'UTF-8',
-        'standalone': true,
-        'allowSurrogateChars': true
-      }
+      'version': '1.0',
+      'encoding': 'UTF-8',
+      'standalone': true,
+      'allowSurrogateChars': true
+    }
     );
     xml.att('mc:Ignorable', 'x15');
     xml.att('xmlns', 'http://schemas.openxmlformats.org/spreadsheetml/2006/main');
     xml.att('xmlns:mc', 'http://schemas.openxmlformats.org/markup-compatibility/2006');
     xml.att('xmlns:r', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships');
     xml.att('xmlns:x15', 'http://schemas.microsoft.com/office/spreadsheetml/2010/11/main');
+    xml.att('xmlns:x', 'http://schemas.openxmlformats.org/spreadsheetml/2006/main');
 
     let booksViewEle = xml.ele('bookViews');
     let workbookViewEle = booksViewEle.ele('workbookView');
@@ -203,6 +223,14 @@ let addWorkbookXML = (promiseObj) => {
       promiseObj.wb.definedNameCollection.addToXMLele(xml);
     }
 
+    if(promiseObj.wb.opts.calculationProperties){
+      let calcPr = xml.ele('x:calcPr');
+      if(promiseObj.wb.opts.calculationProperties.fullCalculationOnLoad){
+        // calcPr.att('calcId', 15234)
+        calcPr.att('fullCalcOnLoad', 1)
+      }
+    }
+
     let xmlString = xml.doc().end(promiseObj.xmlOutVars);
     promiseObj.xlsx.folder('xl').file('workbook.xml', xmlString);
     resolve(promiseObj);
@@ -215,13 +243,13 @@ let addWorkbookRelsXML = (promiseObj) => {
   return new Promise((resolve, reject) => {
 
     let xml = xmlbuilder.create(
-        'Relationships', {
-          'version': '1.0',
-          'encoding': 'UTF-8',
-          'standalone': true,
-          'allowSurrogateChars': true
-        }
-      )
+      'Relationships', {
+      'version': '1.0',
+      'encoding': 'UTF-8',
+      'standalone': true,
+      'allowSurrogateChars': true
+    }
+    )
       .att('xmlns', 'http://schemas.openxmlformats.org/package/2006/relationships');
 
     xml
@@ -254,16 +282,16 @@ let addWorkbookRelsXML = (promiseObj) => {
 let addCorePropertiesXML = (promiseObj) => {
   let xml = xmlbuilder.create(
     'cp:coreProperties', {
-      'version': '1.0',
-      'encoding': 'UTF-8',
-      'standalone': true
-    }
+    'version': '1.0',
+    'encoding': 'UTF-8',
+    'standalone': true
+  }
   )
-  .att('xmlns:cp', 'http://schemas.openxmlformats.org/package/2006/metadata/core-properties')
-  .att('xmlns:dc', 'http://purl.org/dc/elements/1.1/')
-  .att('xmlns:dcterms', 'http://purl.org/dc/terms/')
-  .att('xmlns:dcmitype', 'http://purl.org/dc/dcmitype/')
-  .att('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
+    .att('xmlns:cp', 'http://schemas.openxmlformats.org/package/2006/metadata/core-properties')
+    .att('xmlns:dc', 'http://purl.org/dc/elements/1.1/')
+    .att('xmlns:dcterms', 'http://purl.org/dc/terms/')
+    .att('xmlns:dcmitype', 'http://purl.org/dc/dcmitype/')
+    .att('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
 
   xml.ele('dc:creator').text(promiseObj.wb.author);
   xml.ele('cp:lastModifiedBy').text(promiseObj.wb.author);
@@ -352,13 +380,13 @@ let addSharedStringsXML = (promiseObj) => {
   return new Promise((resolve, reject) => {
 
     let xml = xmlbuilder.create(
-        'sst', {
-          'version': '1.0',
-          'encoding': 'UTF-8',
-          'standalone': true,
-          'allowSurrogateChars': true
-        }
-      )
+      'sst', {
+      'version': '1.0',
+      'encoding': 'UTF-8',
+      'standalone': true,
+      'allowSurrogateChars': true
+    }
+    )
       .att('count', promiseObj.wb.sharedStrings.length)
       .att('uniqueCount', promiseObj.wb.sharedStrings.length)
       .att('xmlns', 'http://schemas.openxmlformats.org/spreadsheetml/2006/main');
@@ -443,13 +471,13 @@ let addStylesXML = (promiseObj) => {
   return new Promise((resolve, reject) => {
 
     let xml = xmlbuilder.create(
-        'styleSheet', {
-          'version': '1.0',
-          'encoding': 'UTF-8',
-          'standalone': true,
-          'allowSurrogateChars': true
-        }
-      )
+      'styleSheet', {
+      'version': '1.0',
+      'encoding': 'UTF-8',
+      'standalone': true,
+      'allowSurrogateChars': true
+    }
+    )
       .att('mc:Ignorable', 'x14ac')
       .att('xmlns', 'http://schemas.openxmlformats.org/spreadsheetml/2006/main')
       .att('xmlns:mc', 'http://schemas.openxmlformats.org/markup-compatibility/2006')
@@ -507,33 +535,32 @@ let addStylesXML = (promiseObj) => {
 
 let addDrawingsXML = (promiseObj) => {
   return new Promise((resolve) => {
-    if (!promiseObj.wb.mediaCollection.isEmpty) {
+    if (!promiseObj.wb.mediaCollection.isEmpty || !promiseObj.wb.chartsCollection.isEmpty) {
 
       promiseObj.wb.sheets.forEach((ws) => {
         if (!ws.drawingCollection.isEmpty) {
 
           let drawingRelXML = xmlbuilder.create('Relationships', {
-              'version': '1.0',
-              'encoding': 'UTF-8',
-              'standalone': true,
-              'allowSurrogateChars': true
-            })
+            'version': '1.0',
+            'encoding': 'UTF-8',
+            'standalone': true,
+            'allowSurrogateChars': true
+          })
             .att('xmlns', 'http://schemas.openxmlformats.org/package/2006/relationships');
 
           let drawingsXML = xmlbuilder.create(
             'xdr:wsDr', {
-              'version': '1.0',
-              'encoding': 'UTF-8',
-              'standalone': true,
-              'allowSurrogateChars': true
-            }
+            'version': '1.0',
+            'encoding': 'UTF-8',
+            'standalone': true,
+            'allowSurrogateChars': true
+          }
           );
           drawingsXML
             .att('xmlns:a', 'http://schemas.openxmlformats.org/drawingml/2006/main')
             .att('xmlns:xdr', 'http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing');
 
           ws.drawingCollection.drawings.forEach((d) => {
-
             if (d.kind === 'image') {
               let target = 'image' + d.id + '.' + d.extension;
 
@@ -546,9 +573,25 @@ let addDrawingsXML = (promiseObj) => {
                 .att('Type', d.type);
 
             }
+            if (d.kind == 'chart') {
+              let target = 'chart' + d.id + '.xml';
+              let chartBuilder = xmlbuilder.create('c:chartSpace', {
+                'version': '1.0', 'encoding': 'UTF-8', 'standalone': true
+              })
+                .att('xmlns:c', 'http://schemas.openxmlformats.org/drawingml/2006/chart')
+                .att('xmlns:a', 'http://schemas.openxmlformats.org/drawingml/2006/main')
+                .att('xmlns:r', 'http://schemas.openxmlformats.org/officeDocument/2006/relationships')
+                .att('xmlns:c16r2', 'http://schemas.microsoft.com/office/drawing/2015/06/chart');
 
+              d.chartPartXML(chartBuilder);
+              let chartXMLStr = chartBuilder.doc().end(promiseObj.xmlOutVars);
+              promiseObj.xlsx.folder('xl').folder('charts').file(target, chartXMLStr);
+              drawingRelXML.ele('Relationship')
+                .att('Id', d.rId)
+                .att('Target', '../charts/' + target)
+                .att('Type', d.type);
 
-
+            }
             d.addToXMLele(drawingsXML);
 
           });
@@ -564,6 +607,100 @@ let addDrawingsXML = (promiseObj) => {
     resolve(promiseObj);
   });
 };
+
+let addLegacyHeaderFooterDrawingsXML = (promiseObj) => {
+  return new Promise((resolve) => {
+    if (!promiseObj.wb.mediaCollection.isEmpty) {
+
+      promiseObj.wb.sheets.forEach((ws) => {
+
+        if (!ws.legacyDrawingHeaderFooter.isEmpty) {
+
+          let drawingRelXML = xmlbuilder.create('Relationships', {
+            'version': '1.0',
+            'encoding': 'UTF-8',
+            'standalone': true,
+            'allowSurrogateChars': true
+          })
+            .att('xmlns', 'http://schemas.openxmlformats.org/package/2006/relationships');
+
+          let drawingsVML = xmlbuilder.begin().ele('xml');
+          drawingsVML.att('xmlns:v', 'urn:schemas-microsoft-com:vml')
+          drawingsVML.att('xmlns:o', 'urn:schemas-microsoft-com:office:office');
+          drawingsVML.att('xmlns:x', 'urn:schemas-microsoft-com:office:excel');
+
+          const sl = drawingsVML.ele('o:shapelayout').att('v:ext', 'edit');
+          sl.ele('o:idmap').att('v:ext', 'edit').att('data', ws.sheetId);
+
+          const st = drawingsVML.ele('v:shapetype')
+            .att('id', '_x0000_t75')
+            .att('coordsize', '21600,21600')
+            .att('o:spt', '75')
+            .att('o:preferrelative', 't')
+            .att('path', 'm@4@5l@4@11@9@11@9@5xe')
+            .att('filled', 'f').att('stroked', 'f');
+
+          st.ele('v:stroke').att('joinstyle', 'miter');
+          var vf = st.ele('v:formulas');
+          vf.ele('v:f').att('eqn', "if lineDrawn pixelLineWidth 0")
+          vf.ele('v:f').att('eqn', "sum @0 1 0");
+          vf.ele('v:f').att('eqn', "sum 0 0 @1");
+          vf.ele('v:f').att('eqn', "prod @2 1 2");
+          vf.ele('v:f').att('eqn', "prod @3 21600 pixelWidth");
+          vf.ele('v:f').att('eqn', "prod @3 21600 pixelHeight");
+          vf.ele('v:f').att('eqn', "sum @0 0 1");
+          vf.ele('v:f').att('eqn', "prod @6 1 2");
+          vf.ele('v:f').att('eqn', "prod @7 21600 pixelWidth");
+          vf.ele('v:f').att('eqn', "sum @8 21600 0");
+          vf.ele('v:f').att('eqn', "prod @7 21600 pixelHeight");
+          vf.ele('v:f').att('eqn', "sum @10 21600 0");
+
+          st.ele('v:path')
+            .att('o:extrusionok', 'f')
+            .att('gradientshapeok', 't')
+            .att('o:connecttype', 'rect')
+
+          st.ele('o:lock').att('v:ext', 'edit').att('aspectratio', 't');
+
+          // const sh = drawingsVML.ele('v:shape');
+          // sh.att('id','CF').att('o:spid','_x0000_s1025').att('type', '#_x0000_t75')
+          // .att('style',`position:absolute;margin-left:0;margin-top:0;width:510.75pt;height:45.75pt;z-index:1`);
+          // sh.ele('v:imagedata').att('o:relid','rId1').att('o:title','image1')
+          // sh.ele('o:lock').att('v:ext','edit').att('rotation','t');
+
+          // const textB = sh.ele('v:textbox').text('VML TextBox')
+
+          ws.legacyDrawingHeaderFooter.drawings.forEach((d) => {
+
+            if (d.kind === 'image') {
+              let target = 'image' + d.id + '.' + d.extension;
+
+              let image = d.imagePath ? fs.readFileSync(d.imagePath) : d.image;
+              promiseObj.xlsx.folder('xl').folder('media').file(target, image);
+
+              drawingRelXML.ele('Relationship')
+                .att('Id', d.rId)
+                .att('Target', '../media/' + target)
+                .att('Type', d.type);
+
+            }
+
+            d.addToXMLele(drawingsVML);
+
+          });
+
+          let drawingsXMLStr = drawingsVML.doc().end(promiseObj.xmlOutVars);
+          let drawingRelXMLStr = drawingRelXML.doc().end(promiseObj.xmlOutVars);
+          promiseObj.xlsx.folder('xl').folder('drawings').file('vmlDrawing' + ws.sheetId + '.vml', drawingsXMLStr);
+          promiseObj.xlsx.folder('xl').folder('drawings').folder('_rels').file('vmlDrawing' + ws.sheetId + '.vml.rels', drawingRelXMLStr);
+        }
+      });
+
+    }
+    resolve(promiseObj);
+  });
+};
+
 
 /**
  * Use JSZip to generate file to a node buffer
@@ -593,6 +730,7 @@ let writeToBuffer = (wb) => {
       .then(addSharedStringsXML)
       .then(addStylesXML)
       .then(addDrawingsXML)
+      .then(addLegacyHeaderFooterDrawingsXML)
       .then(() => {
         wb.opts.jszip.type = 'nodebuffer';
         promiseObj.xlsx.generateAsync(wb.opts.jszip)
