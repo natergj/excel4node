@@ -190,6 +190,7 @@ var Chart = function (_Drawing) {
             catAx.ele('c:majorTickMark').att('val', 'out');
             catAx.ele('c:minorTickMark').att('val', 'none');
             catAx.ele('c:tickLblPos').att('val', 'nextTo');
+            if (this.chartData.xlabel.font) genTxPrXML(catAx, this.chart);
             catAx.ele('c:crossAx').att('val', 1);
             catAx.ele('c:crosses').att('val', "autoZero");
             catAx.ele('c:auto').att('val', 1);
@@ -228,6 +229,18 @@ var Chart = function (_Drawing) {
                 xz_xlabpr.ele('a:t', txtRun.value);
                 xz_xlabp.ele("a:endParaRPr").att("sz", txtRun.fontSize * 100).att('lang', 'en-US').ele('a:cs').att('typeface', 'Sakkal Majalla').att('pitchFamily', 2).att('charset', '-78');
                 xz_xlab.ele("c:overlay").att("val", 1);
+            }
+
+            function genTxPrXML(xmlc, txtRun) {
+                var xz_xlab = xmlc.ele('c:txPr');
+
+                xz_xlab.ele('a:bodyPr');
+                xz_xlab.ele('a:lstStyle');
+                var xz_xlabp = xz_xlab.ele('a:p');
+                var fx = xz_xlabp.ele('a:pPr').ele('a:defRPr').att('sz', txtRun.fontSize * 100);
+                fx.ele('a:cs').att('typeface', 'Sakkal Majalla').att('pitchFamily', 2).att('charset', '-78');
+                if (txtRun.bold) fx.att('b', txtRun.bold);
+                if (txtRun.italic) fx.att('i', txtRun.italic);
             }
 
             var legend = xchart.ele("c:legend");
