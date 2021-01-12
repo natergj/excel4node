@@ -510,7 +510,7 @@ if (aca_data.HonorsOrGraduates) {
                 { label: 'العام السابق', pattern: 'smGrid', range: "'Sheet2'!$F$35:$F$39", catRange: "'Sheet2'!$B$35:$B$39" },
                 { label: 'العام الأسبق', pattern: 'wdDnDiag', range: "'Sheet2'!$H$35:$H$39", catRange: "'Sheet2'!$B$35:$B$39" },
             ],
-            xlabel: { fontSize: 14, bold: 1, value: 'الوصف' },
+            xlabel: { fontSize: 14, bold: 1, value: 'الوصف', font: {fontSize: 12, bold: 1} },
             ylabel: { fontSize: 14, bold: 1, value: 'النسبة المئوية' }
         },
         position: {

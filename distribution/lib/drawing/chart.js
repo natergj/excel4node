@@ -190,7 +190,7 @@ var Chart = function (_Drawing) {
             catAx.ele('c:majorTickMark').att('val', 'out');
             catAx.ele('c:minorTickMark').att('val', 'none');
             catAx.ele('c:tickLblPos').att('val', 'nextTo');
-            if (this.chartData.xlabel.font) genTxPrXML(catAx, this.chart);
+            if (this.chartData.xlabel.font) genTxPrXML(catAx, this.chartData.xlabel.font);
             catAx.ele('c:crossAx').att('val', 1);
             catAx.ele('c:crosses').att('val', "autoZero");
             catAx.ele('c:auto').att('val', 1);
