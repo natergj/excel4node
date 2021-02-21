@@ -140,14 +140,14 @@ let getExcelRowCol = (str) => {
 let getExcelTS = (date) => {
 
     let thisDt = new Date(date);
-    thisDt.setDate(thisDt.getDate() + 1);
+    thisDt = new Date(thisDt.getTime() + 24 * 60 * 60 * 1000);
 
     let epoch = new Date('1900-01-01T00:00:00.0000Z');
 
     // Handle legacy leap year offset as described in  §18.17.4.1
     const legacyLeapDate = new Date('1900-02-28T23:59:59.999Z');
     if (thisDt - legacyLeapDate > 0) {
-        thisDt.setDate(thisDt.getDate() + 1);
+        thisDt = new Date(thisDt.getTime() + 24 * 60 * 60 * 1000);
     } 
 
     // Get milliseconds between date sent to function and epoch 
