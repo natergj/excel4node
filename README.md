@@ -450,6 +450,23 @@ ws.setPrintArea(1, 1, 5, 3);
 
 ```
 
+##### Worksheet Print Titles
+
+Worksheet print titles can be set
+
+`ws.setPrintTitles(startRow, endRow)` where parameters are numbers corresponding to print titles
+
+```javascript
+
+// Sets print titles to row 5
+const wb = new xl.Workbook();
+const ws = wb.addWorksheet('Sheet 1');
+ws.cell(5, 3).string('Included in print titles');
+ws.cell(6, 3).string('Outside of print titles');
+ws.setPrintTitles(5, 5);
+
+```
+
 ## Rows and Columns
 
 Set custom widths and heights of columns/rows
