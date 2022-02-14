@@ -26,6 +26,7 @@ let addRootContentTypesXML = (promiseObj) => {
             let typeRef = d.contentType + '.' + d.extension;
             if (contentTypesAdded.indexOf(typeRef) < 0) {
               xml.ele('Default').att('ContentType', d.contentType).att('Extension', d.extension);
+              contentTypesAdded.push(typeRef);
             }
             extensionsAdded.push(d.extension);
           }
@@ -486,6 +487,19 @@ let addStylesXML = (promiseObj) => {
       b.addToXMLele(borderXML);
     });
 
+    let cellStyleXfsXML = xml
+      .ele('cellStyleXfs')
+      .att('count', 1);
+    
+    cellStyleXfsXML.ele('xf')
+      .att('numFmtId', '0')
+      .att('fontId', '0')
+      .att('fillId','0')
+      .att('borderId', '0')
+      .att('applyFont', 'true')
+      .att('applyBorder', 'false')
+      .att('applyAlignment', 'false')
+      .att('applyProtection', 'false');
 
     let cellXfsXML = xml
       .ele('cellXfs')
@@ -493,10 +507,20 @@ let addStylesXML = (promiseObj) => {
     promiseObj.wb.styles.forEach((s) => {
       s.addXFtoXMLele(cellXfsXML);
     });
+    
+
+    // insert default cell style
+    let cellStylesXML = xml
+      .ele('cellStyles')
+      .att('count', 1);
+    cellStylesXML.ele('cellStyle')
+      .att('name', 'Normal')
+      .att('xfId', '0')
+      .att('builtinId', '0');
 
     if (promiseObj.wb.dxfCollection.length > 0) {
       promiseObj.wb.dxfCollection.addToXMLele(xml);
-    }
+    } 
 
     let xmlString = xml.doc().end(promiseObj.xmlOutVars);
     promiseObj.xlsx.folder('xl').file('styles.xml', xmlString);
