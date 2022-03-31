@@ -581,7 +581,7 @@ let writeToBuffer = (wb) => {
     };
 
     if (promiseObj.wb.sheets.length === 0) {
-      promiseObj.wb.Worksheet();
+      promiseObj.wb.addWorksheet();
     }
 
     addRootContentTypesXML(promiseObj)
