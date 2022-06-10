@@ -4,12 +4,14 @@ const Comment = require('../classes/comment');
 // §18.3.1.4 c (Cell)
 class Cell {
     /**
-     * Create an Excel Cell
-     * @private
-     * @param {Number} row Row of cell. 
-     * @param {Number} col Column of cell
-     */
+   * Create an Excel Cell
+   * @private
+   * @param {Number} row Row of cell.
+   * @param {Number} col Column of cell
+   */
     constructor(row, col) {
+        if (row <= 0) throw 'Row parameter must not be zero or negative.';
+        if (col <= 0) throw 'Col parameter must not be zero or negative.';
         this.r = `${utils.getExcelAlpha(col)}${row}`; // 'r' attribute
         this.s = 0; // 's' attribute refering to style index
         this.t = null; // 't' attribute stating Cell data type - §18.18.11 ST_CellType (Cell Type)
@@ -77,4 +79,3 @@ class Cell {
 }
 
 module.exports = Cell;
-
