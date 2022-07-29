@@ -41,8 +41,6 @@ class Alignment { // §18.8.1 alignment (Alignment)
         if (opts.justifyLastLine !== undefined) {
             if (typeof opts.justifyLastLine === 'boolean') {
                 this.justifyLastLine = opts.justifyLastLine;
-            } else {
-                throw new TypeError('justifyLastLine alignment option must be of type boolean');
             }
         }
 
@@ -57,8 +55,6 @@ class Alignment { // §18.8.1 alignment (Alignment)
         if (opts.shrinkToFit !== undefined) {
             if (typeof opts.shrinkToFit === 'boolean') {
                 this.shrinkToFit = opts.shrinkToFit;
-            } else {
-                throw new TypeError('justifyLastLine alignment option must be of type boolean');
             }
         }
 
@@ -73,9 +69,7 @@ class Alignment { // §18.8.1 alignment (Alignment)
         if (opts.wrapText !== undefined) {
             if (typeof opts.wrapText === 'boolean') {
                 this.wrapText = opts.wrapText;
-            } else {
-                throw new TypeError('justifyLastLine alignment option must be of type boolean');
-            }
+            } 
         }
     }
 
