@@ -81,7 +81,7 @@ test('Set Style Properties', (t) => {
     t.ok(styleObj.alignment.horizontal === 'center', 'alignment.horizontal correctly set');
     t.ok(styleObj.alignment.indent === 1, 'alignment.indent correctly set');
     t.ok(styleObj.alignment.justifyLastLine === true, 'alignment.justifyLastLine correctly set');
-    t.ok(styleObj.alignment.readingOrder === 'leftToRight', 'alignment.readingOrder correctly set');
+    t.ok(styleObj.alignment.readingOrder === 1, 'alignment.readingOrder correctly set');
     t.ok(styleObj.alignment.relativeIndent === 1, 'alignment.relativeIndent correctly set');
     t.ok(styleObj.alignment.shrinkToFit === false, 'alignment.shrinkToFit correctly set');
     t.ok(styleObj.alignment.textRotation === 0, 'alignment.textRotation correctly set');
@@ -122,7 +122,7 @@ test('Set Style Properties', (t) => {
     let alignmentXMLele = xmlbuilder.create('test');
     style.alignment.addToXMLele(alignmentXMLele);
     let alignmentXMLString = alignmentXMLele.doc().end();
-    t.ok(alignmentXMLString === '<?xml version="1.0"?><test><alignment horizontal="center" indent="1" justifyLastLine="1" readingOrder="leftToRight" relativeIndent="1" textRotation="0" vertical="bottom" wrapText="1"/></test>', 'Alignment XML generated successfully');
+    t.ok(alignmentXMLString === '<?xml version="1.0"?><test><alignment horizontal="center" indent="1" justifyLastLine="1" readingOrder="1" relativeIndent="1" textRotation="0" vertical="bottom" wrapText="1"/></test>', 'Alignment XML generated successfully');
 
     let fontXMLele = xmlbuilder.create('test');
     style.font.addToXMLele(fontXMLele);
