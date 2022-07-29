@@ -39,7 +39,7 @@
   "dependencies": {
     "deepmerge": "3.2.0",
     "image-size": "0.7.2",
-    "jszip": "3.2.1",
+    "jszip": "3.7.1",
     "lodash.get": "4.4.2",
     "lodash.isequal": "4.5.0",
     "lodash.isundefined": "3.0.1",
